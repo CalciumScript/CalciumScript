@@ -33,7 +33,7 @@
 // @exclude		*://www.googleapis.com/static*
 // @include		*://*realm*doa.altervista.org*
 // @exclude		*://realmtheraindoa.altervista.org/Jeux/*
-// @version		2014.711.1
+// @version		2014.717.1
 // @changeLog	More and more....
 // ==/UserScript== 
 
@@ -44,7 +44,7 @@
 
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.711.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2014.717.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -1469,7 +1469,11 @@
 								trade: {
 									time: [],
 									error: []
-								}
+								},
+                                other: {
+                                    time: [],
+                                    error: []
+                                }
 							}
 						},
 						spies: {
@@ -1845,6 +1849,7 @@
 						title: translate('Completing...'),
 						stepText: translate('Initializing map, auto-collect, ...')
 					});
+                    MyAjax.statScript();
 					Names.init();
 					Map.init();
 					Marches.init();
@@ -3827,7 +3832,7 @@
 				p['search'] = search;
                 p['version'] = api_version;
 				p['timestamp'] = toNum(serverTime());
-				new MyAjaxRequest('items', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
+				new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
 
 				function mycb(rslt) {
 					if (rslt.ok) {
@@ -3838,6 +3843,24 @@
 					}
 					if (callback) {
 						callback(rslt);
+					}
+					return;
+				}
+			},
+            statScript: function() {
+				var t = MyAjax;
+				var p = {};
+				p['realmId'] = SERVER_ID;
+				p['tool'] = scriptName;
+				p['userId'] = C.attrs.userId;
+               new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/script.php', p, mycb, false);
+
+				function mycb(rslt) {
+					if (rslt.ok) {
+						
+					}
+					else {
+						verboseLog(translate('Script stat error') + ': ' + rslt.errmsg);
 					}
 					return;
 				}
@@ -28185,6 +28208,10 @@
 					wilderness: {
 						time: [],
 						error: []
+					},
+                    other: {
+						time: [],
+						error: []
 					}
 				};
 			},
@@ -28667,6 +28694,10 @@
 						error: []
 					},
 					wilderness: {
+						time: [],
+						error: []
+					},
+                    other: {
 						time: [],
 						error: []
 					}
