@@ -645,7 +645,7 @@
 							if (maxWidth < 760) maxWidth = 760;
 							if (window.location.href.indexOf("facebook") !== -1)
 								document.getElementById('hd').parentNode.style.width = maxWidth + 'px';
-							if (swf.id == 'castlemania_swf') swf.style.width = maxWidth + 'px';
+							if (swf.id === 'castlemania_swf') swf.style.width = maxWidth + 'px';
 							swf_object = swf;
 							SWF_CONTAINER = swf.parentNode;
 							SWF_CONTAINER_INNERHTML = SWF_CONTAINER.innerHTML;
@@ -1507,7 +1507,7 @@
 				clearAndReload();
 
 				/* Set the default locale use */
-				if (Data.options.user_language != undefined && Data.options.user_language != null && Data.options.user_language != LANG_CODE) {
+				if (Data.options.user_language !== undefined && Data.options.user_language !== null && Data.options.user_language !== LANG_CODE) {
 					setLanguage(Data.options.user_language);
 				}
 				/* Set blue energy transportable if cheat enabled */
@@ -1576,7 +1576,6 @@
 								verboseLog(error_msg + ' - ' + translate('Retry in :') + waitTime);
 								STARTUP_TIMER = setTimeout(stepStarting, waitTime * 1000, currentStep);
 								return;
-								break;
 							default:
 								break;
 						}
@@ -1744,11 +1743,11 @@
 										clearTimeout(Seed.cityInit[i1].timer);
 									}
 									var current_index = i1;
-									var cityIdx = Seed.cityInit[i1].id;
-									Seed.fetchCity(cityIdx, function(res) {
+									var cityIdx2 = Seed.cityInit[i1].id;
+									Seed.fetchCity(cityIdx2, function(res) {
 										if (res.ok) {
 											wait_time = Math.randRange(2500, 6000);
-											if (current_index == Seed.cityInit.length - 1) {
+											if (current_index === Seed.cityInit.length - 1) {
 												wait_time = 2500;
 											}
 											onSuccess(translate('Outpost') + ' #' + (i1 + 1) + ' ' + translate('data successfully fetched'), wait_time, current_step);
@@ -2357,92 +2356,92 @@
 				script.setAttribute('id',t.scriptid);
 
 				var html=
-				 '//<![CDATA[\n'
-				+'var TeamWork_Socket = {\n'
-				+'	loaded : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_LOADED", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	statusok : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_STATUSOK", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	connected : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_CONNECTED", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	disconnected : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_DISCONNECTED", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	ioError : function(msg) {\n'
-				+'		console.log(" JS Injected : ioError");\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_IOERROR", text: msg }, "*");\n'
-				+'	},\n'
-				+'	securityError : function(msg) {\n'
-				+'		console.log(" JS Injected : securityError");\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_SECURITYERROR", text: msg }, "*");\n'
-				+'	},\n'
-				+'	receive : function(msg) {\n'
-				+'		console.log(" JS Injected : receive. msg = " +  msg);\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_RECEIVE", text: msg }, "*");\n'
-				+'	},\n'
-				+'};\n'
-				+'var EventType = {\n'
-				+'	TEAMWORK_SOCKET_CONNECT : \'connect\',\n'
-				+'	TEAMWORK_SOCKET_CLOSE: \'close\',\n'
-				+'	TEAMWORK_SOCKET_WRITE : \'write\',\n'
-				+'	TEAMWORK_SOCKET_CHECKSTATUS : \'checkstatus\',\n'
-				+'};\n'
-				+'function connect(id,strconnect){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		var args=strconnect.split(":");\n'
-				+'		swf.connect(args[0],args[1]);\n'
-				+'	} else {\n'
-				+'		console.log("connect :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function close(id){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		swf.close();\n'
-				+'	} else {\n'
-				+'		console.log("close :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function write(id,msg){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		swf.write(msg);\n'
-				+'	} else {\n'
-				+'		console.log("write :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function checkstatus(id){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		swf.areyouok();\n'
-				+'	} else {\n'
-				+'		console.log("areyouok :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function init(){\n'
-				+'	window.addEventListener("message", function(event) {\n'
-				+'		if (event.source != window ) {\n'
-				+'			console.log(" JS Injected : Ejected");\n'
-				+'			return;\n'
-				+'		}\n'
-				+'		if (event.data.type && event.data.flashid && event.data.text && EventType[event.data.type]) {\n'
-				+'			var myfunc = EventType[event.data.type];\n'
-				+'			var fn=eval(myfunc);\n'
-				+'			if (typeof fn == \'function\') {\n'
-				+'				fn(event.data.flashid,event.data.text);\n'
-				+'			} else {\n'
-				+'				console.log(myfunc +" is not a function");\n'
-				+'			}\n'
-				+'		}\n'
-				+'	}, false);\n'
-				+'	window.postMessage({ type: "TEAMWORK_SOCKET_SCRIPTREADY", text: "none" }, "*");\n'
-				+'};\n'
-				+'init();\n'
-				+' //]]>';
+				'//<![CDATA[\
+				var TeamWork_Socket = {\
+					loaded : function() {\
+						window.postMessage({ type: "TEAMWORK_SOCKET_LOADED", text: "none" }, "*");\
+					},\
+					statusok : function() {\
+						window.postMessage({ type: "TEAMWORK_SOCKET_STATUSOK", text: "none" }, "*");\
+					},\
+					connected : function() {\
+						window.postMessage({ type: "TEAMWORK_SOCKET_CONNECTED", text: "none" }, "*");\
+					},\
+					disconnected : function() {\
+						window.postMessage({ type: "TEAMWORK_SOCKET_DISCONNECTED", text: "none" }, "*");\
+					},\
+					ioError : function(msg) {\
+						console.log(" JS Injected : ioError");\
+						window.postMessage({ type: "TEAMWORK_SOCKET_IOERROR", text: msg }, "*");\
+					},\
+					securityError : function(msg) {\
+						console.log(" JS Injected : securityError");\
+						window.postMessage({ type: "TEAMWORK_SOCKET_SECURITYERROR", text: msg }, "*");\
+					},\
+					receive : function(msg) {\
+						console.log(" JS Injected : receive. msg = " +  msg);\
+						window.postMessage({ type: "TEAMWORK_SOCKET_RECEIVE", text: msg }, "*");\
+					},\
+				};\
+				var EventType = {\
+					TEAMWORK_SOCKET_CONNECT : \'connect\',\
+					TEAMWORK_SOCKET_CLOSE: \'close\',\
+					TEAMWORK_SOCKET_WRITE : \'write\',\
+					TEAMWORK_SOCKET_CHECKSTATUS : \'checkstatus\',\
+				};\
+				function connect(id,strconnect){\
+					var swf=document.getElementById(id);\
+					if (swf) {\
+						var args=strconnect.split(":");\
+						swf.connect(args[0],args[1]);\
+					} else {\
+						console.log("connect :"+id+" not found");\
+					}\
+				};\
+				function close(id){\
+					var swf=document.getElementById(id);\
+					if (swf) {\
+						swf.close();\
+					} else {\
+						console.log("close :"+id+" not found");\
+					}\
+				};\
+				function write(id,msg){\
+					var swf=document.getElementById(id);\
+					if (swf) {\
+						swf.write(msg);\
+					} else {\
+						console.log("write :"+id+" not found");\
+					}\
+				};\
+				function checkstatus(id){\
+					var swf=document.getElementById(id);\
+					if (swf) {\
+						swf.areyouok();\
+					} else {\
+						console.log("areyouok :"+id+" not found");\
+					}\
+				};\
+				function init(){\
+					window.addEventListener("message", function(event) {\
+						if (event.source != window ) {\
+							console.log(" JS Injected : Ejected");\
+							return;\
+						}\
+						if (event.data.type && event.data.flashid && event.data.text && EventType[event.data.type]) {\
+							var myfunc = EventType[event.data.type];\
+							var fn=eval(myfunc);\
+							if (typeof fn == \'function\') {\
+								fn(event.data.flashid,event.data.text);\
+							} else {\
+								console.log(myfunc +" is not a function");\
+							}\
+						}\
+					}, false);\
+					window.postMessage({ type: "TEAMWORK_SOCKET_SCRIPTREADY", text: "none" }, "*");\
+				};\
+				init();\
+				//]]>';
 
 				script.text=html;
 
@@ -2483,11 +2482,11 @@
 				var t = Socket;
 
 				setUID('TeamWork_Socket_Bridge');
-				var swf_player = document.getElementById(UID['TeamWork_Socket_Bridge']);
+				var swf_player = document.getElementById(UID.TeamWork_Socket_Bridge);
 				if (!swf_player) {
-					var swf_container = document.getElementById(UID['TeamWork_SWF_Container']);
-					var swf_player = document.createElement('div');
-					swf_player.setAttribute('id', UID['TeamWork_Socket_Bridge']);
+					var swf_container = document.getElementById(UID.TeamWork_SWF_Container);
+					swf_player = document.createElement('div');
+					swf_player.setAttribute('id', UID.TeamWork_Socket_Bridge);
 					swf_container.appendChild(swf_player);
 				}
 
@@ -2502,8 +2501,8 @@
 				
 				easyswf({
 					swf: t.SWF_SOCKET_URL,
-					targetDiv: UID['TeamWork_Socket_Bridge'],
-					swfid : UID['TeamWork_SocketBridge'],
+					targetDiv: UID.TeamWork_Socket_Bridge,
+					swfid : UID.TeamWork_SocketBridge,
 					width: 1,
 					height: 1,
 					allowScriptAccess: "always",
@@ -2520,7 +2519,7 @@
 
 			reloadSocketBridge : function() {
 				var t = Socket;
-				document.getElementById(UID['TeamWork_SocketBridge']).remove();
+				document.getElementById(UID.TeamWork_SocketBridge).remove();
 				t.loadSocketBridge();
 			},
 			
@@ -2543,7 +2542,7 @@
 				var ret = false;
 				var boosts = getBoosts();
 				for (var i = 0; i < boosts.length; i++) {
-					if (is_protected() && boosts[i].type == 'safety' && boosts[i].run_at) {
+					if (is_protected() && boosts[i].type === 'safety' && boosts[i].run_at) {
 						if (boosts[i].run_at > serverTime()) {
 							ret = true;
 						}
@@ -2589,7 +2588,7 @@
 				for (var pu in presetUnits) {
 					var numTroops = getTroopNumbers(CAPITAL.id, pu);
 					var unit_max = numTroops.incity + numTroops.indefense;
-					if (unit_max < presetUnits[pu] || presetUnits[pu] == -1) { 
+					if (unit_max < presetUnits[pu] || presetUnits[pu] === -1) { 
 						units[pu] = unit_max;
 					}
 					else  {
@@ -2597,7 +2596,7 @@
 					}
 				}
 				t.apply(units);
-				if(type == 'attack') {
+				if(type === 'attack') {
 					if(Data.options.wall.presets[id].armor !== '' && Data.options.wall.presets[id].scales !== '') {
 						new MyAjax.setCustomization('GreatDragon', Data.options.wall.presets[id].armor, Data.options.wall.presets[id].scales, function(rslt) {});
 					}
@@ -2608,11 +2607,8 @@
 				// Parcours des messages du guet
 				for(var i = 0 ; i < Data.options.messages_tower.length ; i++) {
 					var msg = Data.options.messages_tower[i];
-					// Si X, Y et type de messages coincide on continue 
-					// 
-					if (rpt.report.attacker.location.x == Data.options.messages_tower[i].x 
-					&& rpt.report.attacker.location.y == Data.options.messages_tower[i].y 
-					&& rpt.report.location.terrain == 'City') {
+					// Si X, Y et type de messages coincide on continue
+					if (rpt.report.attacker.location.x === Data.options.messages_tower[i].x && rpt.report.attacker.location.y === Data.options.messages_tower[i].y && rpt.report.location.terrain === 'City') {
 						var results = [];
 						var msgTroups = '';
 						for (var tr in rpt.report.attacker.units) {
@@ -2622,19 +2618,19 @@
 						if (results.length > 0) {
 							msgTroups = results.join(', ');
 						}
-						if(msgTroups == Data.options.messages_tower[i].troups) {
-							 Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
+						if(msgTroups === Data.options.messages_tower[i].troups) {
+							Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
 						}
 					}
 				}
 				if(Data.options.wall.auto.enable && Data.options.wall.auto.hide_troop_after_last) {
 					var detAlert = SoundPlayer.getNbCurrentAlertForAutoWall();
 					// Hide troop at the end of the last attack ?? ==> Gérer dans package Wall ! 
-					if(detAlert.nbAttackInProgress == 0 && detAlert.nbSpyInProgress == 0) {
+					if(detAlert.nbAttackInProgress === 0 && detAlert.nbSpyInProgress === 0) {
 						clearTimeout(Data.options.wall.auto.hide_troop_timeout);
 						var troopInDefense = false;
-						for (var i = 0; i < all_unit_types.length; i++) {
-							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i]);
+						for (var i1 = 0; i < all_unit_types.length; i1++) {
+							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i1]);
 							if(numTroops.indefense > 0) {
 								troopInDefense = true;
 							}
@@ -2651,9 +2647,7 @@
 				for(var i = 0 ; i < Data.options.messages_tower.length ; i++) {
 					var msg = Data.options.messages_tower[i];
 					
-					if (rpt.report.attacker.location.x == Data.options.messages_tower[i].x 
-					&& rpt.report.attacker.location.y == Data.options.messages_tower[i].y 
-					&& rpt.report.location.terrain == 'City') {
+					if (rpt.report.attacker.location.x === Data.options.messages_tower[i].x && rpt.report.attacker.location.y === Data.options.messages_tower[i].y && rpt.report.location.terrain === 'City') {
 						var results = [];
 						var msgTroups = '';
 						for (var tr in rpt.report.attacker.units) {
@@ -2663,19 +2657,19 @@
 						if (results.length > 0) {
 							msgTroups = results.join(', ');
 						}
-						if(msgTroups == Data.options.messages_tower[i].troups) {
-							 Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
+						if(msgTroups === Data.options.messages_tower[i].troups) {
+							Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
 						}
 					}
 				}
 				if(Data.options.wall.auto.enable && Data.options.wall.auto.hide_troop_after_last) {
 					var detAlert = SoundPlayer.getNbCurrentAlertForAutoWall();
 					// Hide troop at the end of the last attack ?? ==> Gérer dans package Wall ! 
-					if(detAlert.nbAttackInProgress == 0 && detAlert.nbSpyInProgress == 0) {
+					if(detAlert.nbAttackInProgress === 0 && detAlert.nbSpyInProgress === 0) {
 						clearTimeout(Data.options.wall.auto.hide_troop_timeout);
 						var troopInDefense = false;
-						for (var i = 0; i < all_unit_types.length; i++) {
-							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i]);
+						for (var i1 = 0; i < all_unit_types.length; i1++) {
+							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i1]);
 							if(numTroops.indefense > 0) {
 								troopInDefense = true;
 							}
@@ -2712,141 +2706,23 @@
 					});
 				}
 			}
-		}
+		};
 		/******************************** END Wall package ***********************/
 		
-		/******************************** CalciumWall package ************************/
-		var CalciumWall = {
-
-			messages: new Array(),
-			all_unit_types: new Array(),
-
-			init: function() {
-				var t = CalciumWall;
-				t.all_unit_types[1] = 'Porter';
-				t.all_unit_types[10] = 'Conscript';
-				t.all_unit_types[20] = 'Spy';
-				t.all_unit_types[30] = 'Halberdsman';
-				t.all_unit_types[40] = 'Minotaur';
-				t.all_unit_types[50] = 'Longbowman';
-				t.all_unit_types[60] = 'SwiftStrikeDragon';
-				t.all_unit_types[70] = 'BattleDragon';
-				t.all_unit_types[100] = 'ArmoredTransport';
-				t.all_unit_types[80] = 'Giant';
-				t.all_unit_types[90] = 'FireMirror';
-				t.all_unit_types[200] = 'PackDragon';
-				t.all_unit_types[300] = 'DarkSlayer';
-				t.all_unit_types[7000] = 'DimensionalRuiner';
-				t.all_unit_types[400] = 'LightningCannon';
-				t.all_unit_types[500] = 'ChargeTroop';
-				t.all_unit_types[600] = 'VengeWyrm';
-				t.all_unit_types[4000] = 'AquaTroop';
-				t.all_unit_types[2000] = 'StoneTroop';
-				t.all_unit_types[1000] = 'FireTroop';
-				t.all_unit_types[800] = 'WindTroop';
-				t.all_unit_types[5000] = 'IceTroop';
-				t.all_unit_types[3000] = 'SwampTroop';
-				t.all_unit_types[900] = 'FrostGiant';
-				t.all_unit_types[6000] = 'ForestTroop';
-				t.all_unit_types[700] = 'DesertTroop';
-				t.all_unit_types[8000] = 'ArcticLeviathan';
-				t.all_unit_types[9000] = 'Harrier';
-				Messages.addAlarmReportListener(t.gotAlarmReport);
-				verboseLog('CalciumWall init successfully');
-			},
-
-			gotAlarmReport: function(rpt_alm, msgid) {
-				var t = CalciumWall;
-				if (!rpt_alm) {
-					return;
-				}
-				if (rpt_alm.report.warnings) {
-					var warn = rpt_alm.report.warnings;
-					if (warn.march_type && warn.march_type == 'SpyMarch') {
-						if (warn.attacker_units) {
-							var x = warn.attacker_coords.x;
-							var y = warn.attacker_coords.y;
-							var city = Seed.cities[CAPITAL.id];
-							var units = {};
-							var nb = 0,
-								numTroops, unit_max = 1,
-								found = false;
-							for (var tr in warn.attacker_units) {
-								nb = warn.attacker_units[tr];
-							}
-							switch (nb) {
-								case 666:
-									units = {};
-									break;
-								case 10000:
-									for (var i = 0; i < all_unit_types.length; i++) {
-										numTroops = getTroopNumbers(city, all_unit_types[i]);
-										unit_max = numTroops.incity + numTroops.indefense;
-										units[all_unit_types[i]] = unit_max;
-									}
-									break;
-								default:
-									if (t.all_unit_types[nb] != undefined) {
-										numTroops = getTroopNumbers(city, t.all_unit_types['' + nb]);
-										unit_max = numTroops.incity + numTroops.indefense;
-										units[t.all_unit_types[nb]] = unit_max;
-									}
-									break;
-							}
-
-							for (var i = 0; i < t.messages.length && !found; i++) {
-								if (t.messages[i] == msgid) {
-									found = true;
-								}
-							}
-
-							if (!found) {
-								t.messages.push(msgid);
-								if ((SERVER_ID == 312 && ((x == 733 && y == 593) || (x == 730 && y == 596))) ||
-									(SERVER_ID == 369 && ((x == 285 && y == 672) || (x == 279 && y == 675)))) {
-									if (nb == 666) {
-										new MyAjax.setDefenseForce(city.id, units, function(rslt) {
-											if (Seed.cities[CAPITAL.id].defended)
-												new MyAjax.switchDefense(city.id, true, function(rslt) {});
-										});
-									} else {
-										new MyAjax.setDefenseForce(city.id, units, function(rslt) {
-											if (!Seed.cities[CAPITAL.id].defended)
-												new MyAjax.switchDefense(city.id, false, function(rslt) {});
-										});
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		/******************************** CalciumWall package ************************/
-
 		/******************************** MyAjax package *****************************/
 		var MyAjax = {
 			addMainParams: function() {
 				var t = MyAjax;
 				var p = {};
-				p['user_id'] = C.attrs.userId;
-				p['dragon_heart'] = C.attrs.dragonHeart;
-				p['_session_id'] = C.attrs.sessionId;
-				p['version'] = api_version;
-				p['timestamp'] = toNum(serverTime());
+				p.user_id = C.attrs.userId;
+				p.dragon_heart = C.attrs.dragonHeart;
+				p._session_id = C.attrs.sessionId;
+				p.version = api_version;
+				p.timestamp = toNum(serverTime());
 				return p;
 			},
 			tradeSell: function(product, nbProduct, price, callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p['offer[product]'] = product;
-				p['offer[units]'] = nbProduct;
-				p['offer[price]'] = price;
-				
-				new MyAjaxRequest('trade', 'trades/sell.json', p, mycb, true);
-				
-				function mycb(rslt) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					} else {
@@ -2854,10 +2730,29 @@
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				}
+				};
+                
+                var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['offer[product]'] = product;
+				p['offer[units]'] = nbProduct;
+				p['offer[price]'] = price;
+				
+				new MyAjaxRequest('trade', 'trades/sell.json', p, mycb, true);
 			},
 			tradeSearch: function(product, nbProduct, upperPrice, callback) { 
-				var t = MyAjax;
+				var mycb = function(rslt) {
+					if (rslt.ok) {
+						
+					} else {
+						verboseLog('Ajax.tradeSearch ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt.dat.result);
+					return;
+				};
+                
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				p['offer[product]'] = product;
@@ -2866,8 +2761,9 @@
 				p['offer[upper_price]'] = upperPrice;
 				
 				new MyAjaxRequest('trade', 'trades/search.json', p, mycb, false);
-
-				function mycb(rslt) {
+			},
+			tradeSearchSell: function(callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					} else {
@@ -2875,9 +2771,8 @@
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				}
-			},
-			tradeSearchSell: function(callback) { 
+				};
+                
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
@@ -2887,25 +2782,9 @@
 				p['offer[upper_price]'] = 251000;
 				
 				new MyAjaxRequest('trade', 'trades.json', p, mycb, false);
-
-				function mycb(rslt) {
-					if (rslt.ok) {
-						
-					} else {
-						verboseLog('Ajax.tradeSearch ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					}
-					if (callback) callback(rslt.dat.result);
-					return;
-				}
 			},
 			tradeBuy: function(idTrade, callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				
-				new MyAjaxRequest('trade', 'trades/' + idTrade + '/buy.json', p, mycb, true);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else {
@@ -2913,16 +2792,16 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			tradeCancel: function(idTrade, callback) {
+				};
+                
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				
-				new MyAjaxRequest('trade', 'trades/' + idTrade + '/cancel.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('trade', 'trades/' + idTrade + '/buy.json', p, mycb, true);
+			},
+			tradeCancel: function(idTrade, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					} else {
@@ -2930,15 +2809,16 @@
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				}
-			},
-			sanctuaryAbilities: function(callback) {
+				};
+                
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('dragonHandle', 'sanctuary_abilities', p, mycb, false);
-
-				function mycb(rslt) {
+				
+				new MyAjaxRequest('trade', 'trades/' + idTrade + '/cancel.json', p, mycb, true);
+			},
+			sanctuaryAbilities: function(callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Data.options.sanctuaryAbilities = rslt.dat.sanctuary_abilities;
 						if (callback) {
@@ -2950,15 +2830,14 @@
 							callback(false);
 						}
 					}
-				}
-			},
-			battleReport: function(report_id, player_id, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('reports_read', 'reports/battle/' + report_id + '/player/' + player_id + '.json', p, mycb, false);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('dragonHandle', 'sanctuary_abilities', p, mycb, false);
+			},
+			battleReport: function(report_id, player_id, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						var msg = rslt.dat.result.report_notification;
 						var rpt = {
@@ -2980,32 +2859,22 @@
 					} else verboseLog('Ajax.battleReport ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			setCustomization: function(unitName, armor, scales, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
-
 				p = t.addMainParams();
-				p['unit_name'] = unitName;
-
-				if (armor) {
-					p['customizations'] = scales + ',' + armor;
-				} else {
-					p['customizations'] = scales;
-				}
-
-				new MyAjaxRequest('customization', 'player_unit_customization/update.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('reports_read', 'reports/battle/' + report_id + '/player/' + player_id + '.json', p, mycb, false);
+			},
+			setCustomization: function(unitName, armor, scales, callback) {
+                var mycb = function(rslt) {
 					if(rslt.dat) {
 						if (rslt.dat.result) {
 							if (rslt.dat.result.success) {
 								var dragon_name = rslt.dat.result.unit_type.substring(rslt.dat.result.unit_type.indexOf('::') + 2);
 								Seed.dragons[dragon_name].slots = rslt.dat.result.slots;
-								if (Seed.dragons[dragon_name].slots.scales == undefined)
+								if (Seed.dragons[dragon_name].slots.scales === undefined)
 									Seed.dragons[dragon_name].slots.scales = "GreenScales";
-								if (Seed.dragons[dragon_name].slots.armor == undefined)
+								if (Seed.dragons[dragon_name].slots.armor === undefined)
 									Seed.dragons[dragon_name].slots.armor = "GreenArmor";
 
 							}
@@ -3017,16 +2886,23 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			buildingUpgrade: function(cityId, buildingId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
-				p = t.addMainParams();
-				p['_method'] = 'put';
-				new MyAjaxRequest('building', 'cities/' + cityId + '/buildings/' + buildingId + '.json', p, mycb, true);
 
-				function mycb(rslt) {
+				p = t.addMainParams();
+				p.unit_name = unitName;
+
+				if (armor) {
+					p.customizations = scales + ',' + armor;
+				} else {
+					p.customizations = scales;
+				}
+
+				new MyAjaxRequest('customization', 'player_unit_customization/update.json', p, mycb, true);
+			},
+			buildingUpgrade: function(cityId, buildingId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
 							Seed.checkAddJob(rslt.dat.result.job);
@@ -3034,17 +2910,15 @@
 					} else verboseLog('Ajax.buildingUpgrade ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			cancelTraining: function(jobId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['job_id'] = jobId;
-				p['_method'] = 'delete';
-				new MyAjaxRequest('canceljob', 'jobs/' + jobId + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p._method = 'put';
+				new MyAjaxRequest('building', 'cities/' + cityId + '/buildings/' + buildingId + '.json', p, mycb, true);
+			},
+			cancelTraining: function(jobId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
 							delete(Seed.jobs[rslt.dat.result.job.city_id][rslt.dat.result.job.id]);
@@ -3053,17 +2927,16 @@
 					} else verboseLog('Ajax.cancelTraining ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			claimQuest: function(questName, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['quest_name'] = questName;
-				p['_method'] = 'put';
-				new MyAjaxRequest('claim', 'player_quests/claim.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.job_id = jobId;
+				p._method = 'delete';
+				new MyAjaxRequest('canceljob', 'jobs/' + jobId + '.json', p, mycb, true);
+			},
+			claimQuest: function(questName, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.quests.claimed) Seed.player.quests.claimed = cloneProps(rslt.dat.quests.claimed);
@@ -3074,56 +2947,52 @@
 					} else verboseLog(translate('could-not-claim') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			collectResources: function(cityId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('collect', 'cities/' + cityId + '/move_resources.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.quest_name = questName;
+				p._method = 'put';
+				new MyAjaxRequest('claim', 'player_quests/claim.json', p, mycb, true);
+			},
+			collectResources: function(cityId, callback) {
+                var mycb = function (rslt) {
 					if (rslt.ok) Seed.updateCity(rslt.dat.city);
 					else verboseLog(translate('Auto-Collect Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				}
-			},
-			dragonBreeding: function(male_id, female_id, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'put';
-				p['male_id'] = male_id;
-				p['female_id'] = female_id;
-				new MyAjaxRequest('breeding', 'dragons', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('collect', 'cities/' + cityId + '/move_resources.json', p, mycb, true);
+			},
+			dragonBreeding: function(male_id, female_id, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.checkAddJob(rslt.dat.result.breeding_job);
 					} else verboseLog('Ajax.dragonBreeding ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
+				};
+                var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p._method = 'put';
+				p.male_id = male_id;
+				p.female_id = female_id;
+				new MyAjaxRequest('breeding', 'dragons', p, mycb, true);
 			},
 			dragonHandle: function(options, callback) {
 				/* options : { dragon_id, method, building_id }
-		 method delete = Dismiss a dragon
-		 method put = Remove a dragon from roost
-		 method put + a roost building id = Set a dragon in the roost (boosts activated) */
-				if (!options.dragon_id) return;
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p['_method'] = (options.method || 'put');
-				if (options && options.building_id) p['building_id'] = options.building_id;
-				new MyAjaxRequest('dragonHandle', 'dragons/' + options.dragon_id, p, mycb, true);
-
-				function mycb(rslt) {
+					method delete = Dismiss a dragon
+					method put = Remove a dragon from roost
+					method put + a roost building id = Set a dragon in the roost (boosts activated) */
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
-							if (options.method == 'delete') {
+							if (options.method === 'delete') {
 								delete(Seed.sanctuary_dragons[options.dragon_id]);
 								if (Data.options.sanctuary.feeding[options.dragon_id]) delete(Data.options.sanctuary.feeding[options.dragon_id]);
 							} else {
@@ -3132,48 +3001,48 @@
 									for (var i in rslt.dat.result.dragon) {
 										var dragon = cloneProps(rslt.dat.result.dragon[i]);
 										var dragon_name = dragon.type.substring(dragon.type.indexOf('::') + 2);
-										dragon_name = (dragon_name == 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
+										dragon_name = (dragon_name === 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
 										dragon.name = dragon_name;
 										var dragon_rank = sanctuaryDragonRank[dragon.rank];
 										dragon.type = dragon.gender + '-' + dragon_rank;
-										dragon.subtype = ((i == 'city_great_dragon') ? 'great_dragon' : i).replace(/ |_/g, '-');
+										dragon.subtype = ((i === 'city_great_dragon') ? 'great_dragon' : i).replace(/ |_/g, '-');
 										Seed.sanctuary_dragons[dragon.id] = cloneProps(dragon);
 									}
 								} catch (e) {
 									rslt.ok = false;
 									rslt.errmsg = 'Exception - ' + e.toString();
-									verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg)
+									verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 								}
 							}
 						}
 					} else verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			dragonFeeding: function(dragon_id, callback) {
+				};
+				if (!options.dragon_id) return;
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('feeding', 'dragons/' + dragon_id + '/feed', p, mycb, true);
-
-				function mycb(rslt) {
+				p._method = (options.method || 'put');
+				if (options && options.building_id) p.building_id = options.building_id;
+				new MyAjaxRequest('dragonHandle', 'dragons/' + options.dragon_id, p, mycb, true);
+			},
+			dragonFeeding: function(dragon_id, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.checkAddJob(rslt.dat.result.feeding_job);
 					} else verboseLog('Ajax.dragonFeeding ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			getMinigame: function(type, callback) {
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['ticket_type'] = type;
-				new MyAjaxRequest('minigame', 'minigames/index.json', p, mycb, false);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('feeding', 'dragons/' + dragon_id + '/feed', p, mycb, true);
+			},
+			getMinigame: function(type, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (callback) {
 							callback({
@@ -3188,70 +3057,38 @@
 					} else verboseLog('Ajax.getMinigame ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			marchRecall: function(cityId, marchId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				new MyAjaxRequest('cancelmarch', 'cities/' + cityId + '/marches/' + marchId + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.ticket_type = type;
+				new MyAjaxRequest('minigame', 'minigames/index.json', p, mycb, false);
+			},
+			marchRecall: function(cityId, marchId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.updateCity(rslt.dat.result.city);
 					} else verboseLog('Ajax.marchRecall ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p._method = 'delete';
+				new MyAjaxRequest('cancelmarch', 'cities/' + cityId + '/marches/' + marchId + '.json', p, mycb, true);
 			},
 			marchBusy: false,
 			marchSend: function(cityId, x, y, generalId, units, ownerId, callback) {
-				var t = MyAjax;
-
-				t.marchBusy = true;
-				var dragon_type = null;
-				var found_in_list = false;
-				var u = {}
-				var mt = false;
-				var sendTroops = "{";
-				for (var pu in units) {
-					if (units[pu] > 0) {
-						for (var gd = 0; gd < Seed.dragonList.length && !found_in_list; gd++) {
-							if (Seed.dragonList[gd].type == units[pu]) {
-								found_in_list = true;
-								dragon_type = units[pu];
-							}
-						}
-						u[pu] = units[pu];
-						if (mt == true) {
-							sendTroops += ',';
-						}
-						sendTroops += '"' + pu + '":' + units[pu];
-						mt = true;
-					}
-				}
-				sendTroops += "}";
-
-				var p = {};
-				p = t.addMainParams();
-				p['march[x]'] = x;
-				p['march[y]'] = y;
-				p['_method'] = 'post';
-				p['march[units]'] = sendTroops;
-				p['march[general_id]'] = generalId;
-				p['march[march_type]'] = 'attack'; /* Fix to send only spies in attack */
-				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-
-				function mycb(rslt) {
+				var mycb = function(rslt) {
 					t.marchBusy = false;
 					if (rslt.ok) {
 						try {
 							rslt.dat.result.job.ownerId = ownerId;
 							if (rslt.dat.result.city.marches) {
 								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
+									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
 										rslt.dat.result.city.marches[i].ownerId = ownerId;
 								}
 							}
@@ -3264,19 +3101,71 @@
 					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
+				};
+                var t = MyAjax;
+				t.marchBusy = true;
+				var dragon_type = null;
+				var found_in_list = false;
+				var u = {};
+				var mt = false;
+				var sendTroops = "{";
+				for (var pu in units) {
+					if (units[pu] > 0) {
+						for (var gd = 0; gd < Seed.dragonList.length && !found_in_list; gd++) {
+							if (Seed.dragonList[gd].type === units[pu]) {
+								found_in_list = true;
+								dragon_type = units[pu];
+							}
+						}
+						u[pu] = units[pu];
+						if (mt === true) {
+							sendTroops += ',';
+						}
+						sendTroops += '"' + pu + '":' + units[pu];
+						mt = true;
+					}
 				}
+				sendTroops += "}";
+
+				var p = {};
+				p = t.addMainParams();
+				p['march[x]'] = x;
+				p['march[y]'] = y;
+				p._method = 'post';
+				p['march[units]'] = sendTroops;
+				p['march[general_id]'] = generalId;
+				p['march[march_type]'] = 'attack'; /* Fix to send only spies in attack */
+				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
 			},
 			marchSpy: function(cityId, x, y, units, ownerId, callback) {
-				var t = MyAjax;
-
+				var mycb = function(rslt) {
+					t.marchBusy = false;
+					if (rslt.ok) {
+						try {
+							rslt.dat.result.job.ownerId = ownerId;
+							if (rslt.dat.result.city.marches) {
+								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
+									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
+										rslt.dat.result.city.marches[i].ownerId = ownerId;
+								}
+							}
+							Seed.updateCity(rslt.dat.result.city);
+						} catch (e) {
+							debugLog('***********' + e);
+						}
+					} else verboseLog('Ajax.marchSpy ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				};
+                var t = MyAjax;
 				t.marchBusy = true;
-				var u = {}
+				var u = {};
 				var mt = false;
 				var sendTroops = "{";
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						u[pu] = units[pu];
-						if (mt == true) {
+						if (mt === true) {
 							sendTroops += ',';
 						}
 						sendTroops += '"' + pu + '":' + units[pu];
@@ -3290,66 +3179,31 @@
 				p['march[march_type]'] = 'spy';
 				p['march[y]'] = y;
 				p['march[units]'] = sendTroops;
-				p['_method'] = 'post';
+				p._method = 'post';
 				p['march[x]'] = x;
 				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-
-				function mycb(rslt) {
-					t.marchBusy = false;
-					if (rslt.ok) {
-						try {
-							rslt.dat.result.job.ownerId = ownerId;
-							if (rslt.dat.result.city.marches) {
-								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
-										rslt.dat.result.city.marches[i].ownerId = ownerId;
-								}
-							}
-							Seed.updateCity(rslt.dat.result.city);
-						} catch (e) {
-							debugLog('***********' + e);
-						}
-					} else verboseLog('Ajax.marchSpy ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				}
 			},
 			membership: function(alliance_id, id, method, callback) {
+                var mycb = function(rslt) {
+					if (!rslt.ok) verboseLog('Ajax.membership ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				};
 				var t = MyAjax;
 				var p = {}, json = 'alliances/' + alliance_id + '/memberships';
 				p = t.addMainParams();
-				if (method == 'put')
+				if (method === 'put')
 					p['alliance_membership[approved]'] = 'true';
-				if (method == 'invite')
+				if (method === 'invite')
 					p['alliance_membership[player_id]'] = id;
 				else {
 					json += '/' + id;
-					p['_method'] = method;
+					p._method = method;
 				}
 				new MyAjaxRequest('membership', json, p, mycb, true);
-
-				function mycb(rslt) {
-					if (!rslt.ok) verboseLog('Ajax.membership ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) {
-						/*new Ajax.Request('script.calciumscript.com/finder.php', {
-							method: 'post',
-							parameters: {
-								result: rslt,
-								type: 'membership'
-							}
-						});*/
-						callback(rslt);
-					}
-					return;
-				}
 			},
 			messageDetail: function(id, callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				new MyAjaxRequest('reports_read', 'reports/' + id + '.json', p, mycb, false);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						var msg = rslt.dat.result.report_notification;
 						var d = {
@@ -3361,8 +3215,7 @@
 							unread: (is_null(msg.read_at) ? true : false),
 							report: (rslt.dat.result.report ? rslt.dat.result.report : null)
 						};
-						if (Messages.details[msg.id])
-							Messages.details[msg.id].mergeWith(d);
+						if (Messages.details[msg.id]) Messages.details[msg.id].mergeWith(d);
 						else Messages.details[msg.id] = cloneProps(d);
 						Messages.updateUnreadCount();
 						if (callback) {
@@ -3372,17 +3225,14 @@
 					} else verboseLog('Ajax.messageDetail ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			messageDelete: function(ids, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				p['ids'] = ids.join('|');
-				new MyAjaxRequest('reports_del', 'reports/bulk_delete.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('reports_read', 'reports/' + id + '.json', p, mycb, false);
+			},
+			messageDelete: function(ids, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						for (var i = 0; i < ids.length; i++) {
 							if (Messages.details[ids[i]]) delete(Messages.details[ids[i]]);
@@ -3391,22 +3241,16 @@
 					} else verboseLog('Ajax.messageDelete ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				}
-			},
-			messageList: function(cat, numpage, count, callback) {
+				};
 				var t = MyAjax;
-				if (!cat) {
-					cat = 'all';
-				}
-				var npage = (numpage == -1 ? 1 : numpage);
 				var p = {};
 				p = t.addMainParams();
-				p['count'] = count;
-				p['category'] = cat;
-				p['page'] = npage;
-				new MyAjaxRequest('reports', 'reports.json', p, mycb, false);
-
-				function mycb(rslt) {
+				p._method = 'delete';
+				p.ids = ids.join('|');
+				new MyAjaxRequest('reports_del', 'reports/bulk_delete.json', p, mycb, true);
+			},
+			messageList: function(cat, numpage, count, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Messages.total_count = rslt.dat.result.total;
 						if (rslt.dat.result.report_notifications) {
@@ -3431,20 +3275,19 @@
 					} else verboseLog('Ajax.messageList ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			messageSend: function(subject, body, id, to_player, callback) {
+				};
 				var t = MyAjax;
+				if (!cat) cat = 'all';
+				var npage = (numpage === -1 ? 1 : numpage);
 				var p = {};
 				p = t.addMainParams();
-				if (to_player)
-					p['player_id'] = id;
-				else p['alliance_id'] = id;
-				p['message[subject]'] = subject;
-				p['message[message]'] = body;
-				new MyAjaxRequest('message', 'messages.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.count = count;
+				p.category = cat;
+				p.page = npage;
+				new MyAjaxRequest('reports', 'reports.json', p, mycb, false);
+			},
+			messageSend: function(subject, body, id, to_player, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (callback) {
 							callback(rslt.dat.result);
@@ -3452,14 +3295,18 @@
 						}
 					} else verboseLog('Ajax.messageSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
-				}
-			},
-			pollingList: function(callback) {
+				};
 				var t = MyAjax;
 				var p = {};
-				new MyAjaxRequest('reports', 'poll.json', p, mycb, false);
-
-				function mycb(rslt) {
+				p = t.addMainParams();
+				if (to_player) p.player_id = id;
+				else p.alliance_id = id;
+				p['message[subject]'] = subject;
+				p['message[message]'] = body;
+				new MyAjaxRequest('message', 'messages.json', p, mycb, true);
+			},
+			pollingList: function(callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (callback) {
 							callback(rslt.dat.result); /* should find unread_count (number) and next_attack (number) */
@@ -3468,17 +3315,20 @@
 					} else verboseLog('Ajax.pollingList ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				new MyAjaxRequest('reports', 'poll.json', p, mycb, false);
 			},
 			researchStart: function(cityId, researchType, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'post';
+				p._method = 'post';
 				p['research[research_type]'] = researchType;
 				new MyAjaxRequest('research', 'cities/' + cityId + '/researches.json', p, mycb, true);
 
-				function mycb(rslt) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						Seed.updateCity(rslt.dat.result.city);
 						Seed.checkAddJob(rslt.dat.result.job);
@@ -3488,27 +3338,19 @@
 				}
 			},
 			save_sound: function(callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p['cookie'] = '{"DoALocalSoundKey":{"sound":0,"music":0}}';
-				new MyAjaxRequest('cookie', 'cookie/save.json', p, mycb, true);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (!rslt.ok) verboseLog('Ajax.save_sound ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				}
-			},
-			saveMinigame: function(id, type, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['ticket_type'] = type;
-				p['minigame_timestamp'] = id;
-				new MyAjaxRequest('save_minigame', 'minigames/save_result.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.cookie = '{"DoALocalSoundKey":{"sound":0,"music":0}}';
+				new MyAjaxRequest('cookie', 'cookie/save.json', p, mycb, true);
+			},
+			saveMinigame: function(id, type, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) Seed.player.items = cloneProps(rslt.dat.result.items);
@@ -3529,31 +3371,16 @@
 					} else verboseLog(translate('Save minigame Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			setDefenseForce: function(cityId, units, callback) {
+				};
 				var t = MyAjax;
-				var u = {};
-				var mt = false;
-				var defenseForce = "{";
-				for (var pu in units) {
-					if (units[pu] > 0) {
-						u[pu] = units[pu];
-						if (mt == true) {
-							defenseForce += ',';
-						}
-						defenseForce += '"' + pu + '":' + units[pu];
-						mt = true;
-					}
-				}
-				defenseForce += "}";
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'put';
-				p['defense_force[units]'] = defenseForce;
-				new MyAjaxRequest('defense', 'cities/' + cityId + '/defense_force.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.ticket_type = type;
+				p.minigame_timestamp = id;
+				new MyAjaxRequest('save_minigame', 'minigames/save_result.json', p, mycb, true);
+			},
+			setDefenseForce: function(cityId, units, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							Seed.updateCity(rslt.dat.result.city);
@@ -3563,47 +3390,83 @@
 					} else verboseLog('Ajax.setDefenseForce ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			switchDefensiveTower: function(cityId, onOff, callback) {
+				};
 				var t = MyAjax;
+				var u = {};
+				var mt = false;
+				var defenseForce = "{";
+				for (var pu in units) {
+					if (units[pu] > 0) {
+						u[pu] = units[pu];
+						if (mt === true) {
+							defenseForce += ',';
+						}
+						defenseForce += '"' + pu + '":' + units[pu];
+						mt = true;
+					}
+				}
+				defenseForce += "}";
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'put';
-				p['defensive_tower'] = onOff ? '0' : '1';
-				new MyAjaxRequest('defended', 'cities/' + cityId + '/defensive_tower', p, mycb, true);
-				
-				function mycb(rslt) {
+				p._method = 'put';
+				p['defense_force[units]'] = defenseForce;
+				new MyAjaxRequest('defense', 'cities/' + cityId + '/defense_force.json', p, mycb, true);
+			},
+			switchDefensiveTower: function(cityId, onOff, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						verboseLog(translate('switchDefensiveTower OK'));
 						Seed.updateCity(rslt.dat.city);
 					} else verboseLog(translate('switchDefensiveTower Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-				
-			},
-			switchDefense: function(cityId, onOff, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['callback'] = 'function Function() {}';
-				p['_method'] = 'put';
-				p['defended'] = onOff ? '0' : '1';
-				new MyAjaxRequest('defended', 'cities/' + cityId + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p._method = 'put';
+				p.defensive_tower = onOff ? '0' : '1';
+				new MyAjaxRequest('defended', 'cities/' + cityId + '/defensive_tower', p, mycb, true);
+			},
+			switchDefense: function(cityId, onOff, callback) {
+                var mycb = function (rslt) {
 					if (rslt.ok) {
 						verboseLog(translate('switchDefense OK'));
 						Seed.updateCity(rslt.dat.city);
 					} else verboseLog(translate('switchDefense Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p.callback = 'function Function() {}';
+				p._method = 'put';
+				p.defended = onOff ? '0' : '1';
+				new MyAjaxRequest('defended', 'cities/' + cityId + '.json', p, mycb, true);
 			},
 			TransportMarch: function(cityId, x, y, units, resources, ownerId, callback) {
 				var t = MyAjax;
-
+                var mycb = function(rslt) {
+					t.marchBusy = false;
+					if (rslt.ok) {
+						try {
+							rslt.dat.result.job.ownerId = ownerId;
+							if (rslt.dat.result.city.marches) {
+								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
+									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
+										rslt.dat.result.city.marches[i].ownerId = ownerId;
+								}
+							}
+							Seed.updateCity(rslt.dat.result.city);
+							Data.marches.ressources[rslt.dat.result.job.march_id] = cloneProps(resources);
+						} catch (e) {
+							debugLog('***********' + e);
+						}
+					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				};
 				t.marchBusy = true;
 				var r = {};
 				var trs = false;
@@ -3611,7 +3474,7 @@
 				for (var pr in resources) {
 					if (resources[pr] > 0) {
 						r[pr] = resources[pr];
-						if (trs == true) {
+						if (trs === true) {
 							sendResources += ',';
 						}
 						sendResources += '"' + pr + '":' + resources[pr];
@@ -3625,7 +3488,7 @@
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						u[pu] = units[pu];
-						if (mt == true) {
+						if (mt === true) {
 							sendTroops += ',';
 						}
 						sendTroops += '"' + pu + '":' + units[pu];
@@ -3640,74 +3503,44 @@
 				p['march[y]'] = y;
 				p['march[resources]'] = sendResources;
 				p['march[units]'] = sendTroops;
-				p['_method'] = 'post';
+				p._method = 'post';
 				p['march[x]'] = x;
 				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-
-				function mycb(rslt) {
-					t.marchBusy = false;
-					if (rslt.ok) {
-						try {
-							rslt.dat.result.job.ownerId = ownerId;
-							if (rslt.dat.result.city.marches) {
-								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
-										rslt.dat.result.city.marches[i].ownerId = ownerId;
-								}
-							}
-							Seed.updateCity(rslt.dat.result.city);
-							Data.marches.ressources[rslt.dat.result.job.march_id] = cloneProps(resources);
-						} catch (e) {
-							debugLog('***********' + e);
-						}
-					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				}
 			},
 			troopTraining: function(troopType, troopQty, cityId, callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p['_method'] = 'post';
-				p['units[quantity]'] = troopQty;
-				p['units[unit_type]'] = troopType;
-				new MyAjaxRequest('training', 'cities/' + cityId + '/units.json', p, mycb, true);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Seed.updateCity(rslt.dat.result.city);
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else verboseLog('Ajax.troopTraining ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			troopReviving: function(troopType, troopQty, cityId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
+				p._method = 'post';
 				p['units[quantity]'] = troopQty;
-				p['_method'] = 'post';
 				p['units[unit_type]'] = troopType;
-				new MyAjaxRequest('resurrect', 'cities/' + cityId + '/units/resurrect.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('training', 'cities/' + cityId + '/units.json', p, mycb, true);
+			},
+			troopReviving: function(troopType, troopQty, cityId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) Seed.checkAddJob(rslt.dat.result.job);
 					else verboseLog('Ajax.troopReviving ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			useItem: function(cityId, url, jobId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['job_id'] = jobId;
-				p['_method'] = 'delete';
-				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p['units[quantity]'] = troopQty;
+				p._method = 'post';
+				p['units[unit_type]'] = troopType;
+				new MyAjaxRequest('resurrect', 'cities/' + cityId + '/units/resurrect.json', p, mycb, true);
+			},
+			useItem: function(cityId, url, jobId, callback) {
+                var mycb = function (rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) Seed.player.items = cloneProps(rslt.dat.result.items);
@@ -3719,23 +3552,22 @@
 					} else verboseLog(translate('March speedup Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			useSingleItem: function(url, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				p['quantity'] = 1;
+				p.job_id = jobId;
+				p._method = 'delete';
 				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+			},
+			useSingleItem: function(url, callback) {
+                var mycb = function (rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) {
 								var tabIt = [];
 								for(var it in rslt.dat.result.items) {
-									if(rslt.dat.result.items[it] != Seed.player.items[it]) {
+									if(rslt.dat.result.items[it] !== Seed.player.items[it]) {
 										verboseLog('Push : ' + translate(it));
 										tabIt.push(it);
 									}
@@ -3751,23 +3583,22 @@
 					} else verboseLog(translate('Single item usage Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			useMoreItem: function(url, nb, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				p['quantity'] = nb;
+				p._method = 'delete';
+				p.quantity = 1;
 				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+			},
+			useMoreItem: function(url, nb, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) {
 								var tabIt = [];
 								for(var it in rslt.dat.result.items) {
-									if(rslt.dat.result.items[it] != Seed.player.items[it]) {
+									if(rslt.dat.result.items[it] !== Seed.player.items[it]) {
 										verboseLog('Push : ' + translate(it));
 										tabIt.push(it);
 									}
@@ -3783,49 +3614,47 @@
 					} else verboseLog(translate('More item usage Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-            searchCPT: function(type, search, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
-				p['realmId'] = SERVER_ID;
-				p['type'] = type;
-				p['search'] = search;
-                p['version'] = api_version;
-				p['timestamp'] = toNum(serverTime());
-                
-				new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
-
-				function mycb(rslt) {
-					if (rslt.ok) {
-						
-					}
-					else {
+				p = t.addMainParams();
+				p._method = 'delete';
+				p.quantity = nb;
+				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
+			},
+            searchCPT: function(type, search, callback) {
+                var mycb = function (rslt) {
+					if (!rslt.ok) {
 						verboseLog(translate('CPT Search error') + ': ' + rslt.errmsg);
 					}
 					if (callback) {
 						callback(rslt);
 					}
 					return;
-				}
-			},
-            statScript: function() {
+                };
 				var t = MyAjax;
 				var p = {};
-				p['realmId'] = SERVER_ID;
-				p['tool'] = scriptName;
-				p['userId'] = C.attrs.userId;
-               new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/script.php', p, mycb, false);
-
-				function mycb(rslt) {
-					if (rslt.ok) {
-						
-					}
-					else {
+				p.realmId = SERVER_ID;
+				p.type = type;
+				p.search = search;
+                p.version = api_version;
+				p.timestamp = toNum(serverTime());
+                
+				new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
+			},
+            statScript: function() {
+                var mycb = function(rslt) {
+					if (!rslt.ok) {
 						verboseLog(translate('Script stat error') + ': ' + rslt.errmsg);
 					}
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				p.realmId = SERVER_ID;
+				p.tool = scriptName;
+				p.userId = C.attrs.userId;
+               new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/script.php', p, mycb, false);
 			}
 		};
 		/******************************** MyAjax package *****************************/
@@ -3852,8 +3681,13 @@
 			},
 
 			doit: function() {
-				var t = AutoCollect,
-					offset = 0;
+                var collect = function (cityIdx, delay) {
+					setTimeout(function() {
+						MyAjax.collectResources(Seed.cities[cityIdx].id);
+						actionLog(translate('Collected resources at outpost') + ' <B>#' + cityIdx + '</B>');
+					}, delay);
+				};
+				var t = AutoCollect, offset = 0;
 				Data.options.autoCollect.last_time = serverTime();
 				if (Seed.player.boosts && Seed.player.boosts.collect_resources) { /* Do not collect from OP if nano collector is running */
 					actionLog(translate('Collected resources at outpost') + ' : ' + translate('pause').initCap() + ' (' + translate('boost-collect-week') + ')');
@@ -3867,13 +3701,6 @@
 				}
 				var delay_time = ((Data.options.autoCollect.delay * Data.options.autoCollect.unit) + (Math.random() * 120)) * 1000;
 				t.timer = setTimeout(t.doit, delay_time);
-
-				function collect(cityIdx, delay) {
-					setTimeout(function() {
-						MyAjax.collectResources(Seed.cities[cityIdx].id);
-						actionLog(translate('Collected resources at outpost') + ' <B>#' + cityIdx + '</B>');
-					}, delay);
-				}
 			}
 		};
 		/******************************** Auto-collect package ***********************/
@@ -3922,7 +3749,7 @@
 					t.timer = setTimeout(t.onTimeout, 30000);
 				}
 			}
-		}
+		};
 		/******************************** Falsh auto-refresh package *****************/
 
 		/******************************** Buildings package **************************/
@@ -3957,14 +3784,14 @@
 			},
 			getById: function(cityIdx, bid) {
 				for (var i = 0; i < Seed.cities[cityIdx].buildings.length; i++) {
-					if (Seed.cities[cityIdx].buildings[i].id == bid) return (Seed.cities[cityIdx].buildings[i]);
+					if (Seed.cities[cityIdx].buildings[i].id === bid) return (Seed.cities[cityIdx].buildings[i]);
 				}
 				return null;
 			},
 			setLevel: function(city_id, bid, level) {
 				var cityIdx = Seed.cityIdx[city_id];
 				for (var i = 0; i < Seed.cities[cityIdx].buildings.length; i++) {
-					if (Seed.cities[cityIdx].buildings[i].id == bid) Seed.cities[cityIdx].buildings[i].level = level;
+					if (Seed.cities[cityIdx].buildings[i].id === bid) Seed.cities[cityIdx].buildings[i].level = level;
 				}
 				Tabs.Jobs.buildRefreshLvl = false;
 				return null;
@@ -3987,19 +3814,19 @@
 					Data.defaults.mergeWith(obj || {});
 					for (var item_name in obj) {
 						/* Checks if the object is already defined in the Data Object */
-						if (typeof(Data[item_name]) == 'undefined') {
+						if (typeof(Data[item_name]) === 'undefined') {
 							/* Assign default object properties, if defined, otherwise an empty object */
-							Data[item_name] = typeof(obj[item_name]) != 'undefined' ? cloneProps(obj[item_name]) : {};
+							Data[item_name] = typeof(obj[item_name]) !== 'undefined' ? cloneProps(obj[item_name]) : {};
 						}
 						/* Load the data stored, of the current item from localStorage */
 						var stored_object = Data.getObject(item_name);
 						/* Clean removed values from stored object ( max depth 2 ) */
-						if (stored_object != null && typeof(stored_object) == 'object') {
+						if (stored_object !== null && typeof(stored_object) === 'object') {
 							verboseLog('Clean Removed Vars from : [ ' + name + ' ]');
 							stored_object.cleanRemoved(Data[item_name], 1);
 						}
 						/* Check if the default object is really an object */
-						if (Data[item_name] !== null && typeof(Data[item_name]) == 'object') {
+						if (Data[item_name] !== null && typeof(Data[item_name]) === 'object') {
 							/* Assign the properties of stored objeto into the default object, overwriting the values */
 							Data[item_name].mergeWith(stored_object);
 						} else {
@@ -4013,10 +3840,9 @@
 					return false;
 				}
 			},
-
 			clearStorage: function(keep_map) {
-				if (keep_map) {
-					var temp_storage = {};
+				var temp_storage = {};
+                if (keep_map) {
 					var keys = getKeys(Data.defaults);
 					for (var i = 0; i < keys.length; i++) {
 						if (/(map|dynamic)/i.test(keys[i])) {
@@ -4026,15 +3852,15 @@
 					}
 				}
 				localStorage.clear();
-				for (var item_name in Data.defaults) {
-					Data[item_name] = cloneProps(Data.defaults[item_name]);
+				for (var item_name2 in Data.defaults) {
+					Data[item_name2] = cloneProps(Data.defaults[item_name2]);
 				}
 				if (keep_map) {
-					var keys = getKeys(temp_storage);
-					for (var i = 0; i < keys.length; i++) {
-						var item_name = keys[i];
-						Data[item_name] = cloneProps(temp_storage[item_name]);
-						Data.setObject(item_name, Data[item_name]);
+					var keys2 = getKeys(temp_storage);
+					for (var i2 = 0; i2 < keys2.length; i2++) {
+						var item_name3 = keys2[i2];
+						Data[item_name3] = cloneProps(temp_storage[item_name3]);
+						Data.setObject(item_name3, Data[item_name3]);
 					}
 				}
 				consoleLog('localStorage Deleted!');
@@ -4045,7 +3871,7 @@
 				return (item || '').charAt(0) === '{' ? JSON.parse(item || '{}') : eval(item);
 			},
 			setObject: function(key, value) {
-				if (key == 'log') return;
+				if (key === 'log') return;
 				try {
 					/*logit('save setting ['+SERVER_ID+', '+USER_ID+', '+key+' = '+JSON.stringify( value ) );*/
 					localStorage.setItem([SERVER_ID, USER_ID, key].join('_'), JSON.stringify(value));
@@ -4074,77 +3900,29 @@
 				for (var req_type in Data.stats.requests.ajax_type) {
 					for (var i = 0; i < Data.stats.requests.ajax_type[req_type].time.length; i++)
 						if (toNum(serverTime()) - Data.stats.requests.ajax_type[req_type].time[i] >= 3600) Data.stats.requests.ajax_type[req_type].time.splice(i, 1);
-					for (var i = 0; i < Data.stats.requests.ajax_type[req_type].error.length; i++)
-						if (toNum(serverTime()) - Data.stats.requests.ajax_type[req_type].error[i] >= 3600) Data.stats.requests.ajax_type[req_type].error.splice(i, 1);
+					for (var i2 = 0; i2 < Data.stats.requests.ajax_type[req_type].error.length; i2++)
+						if (toNum(serverTime()) - Data.stats.requests.ajax_type[req_type].error[i2] >= 3600) Data.stats.requests.ajax_type[req_type].error.splice(i2, 1);
 				}
 			},
-
 			setDefaultValues: function(tab) {
-				switch (tab) {
-					case 'alliance':
-						setAllianceDefaults();
-						break;
-					case 'attacks':
-						setAttacksDefaults();
-						break;
-					case 'bookmark':
-						setBookmarksDefaults();
-						break;
-					case 'jobs':
-						setJobsDefaults();
-						break;
-					case 'multiple':
-						setMultipleDefaults();
-						break;
-					case 'options':
-						setOptionsDefaults();
-						break;
-					case 'search':
-						setSearchDefaults();
-						break;
-					case 'spies':
-						setSpiesDefaults();
-						break;
-					case 'waves':
-						setWavesDefaults();
-						break;
-					case 'wheel':
-						setWheelDefaults();
-						break;
-					case 'all':
-						setAllianceDefaults();
-						setAttacksDefaults();
-						setBookmarksDefaults();
-						setJobsDefaults();
-						setMultipleDefaults();
-						setOptionsDefaults();
-						setSearchDefaults();
-						setSpiesDefaults();
-						setWavesDefaults();
-						setWheelDefaults();
-						break;
-					default:
-						break;
-				}
-
-				function setAllianceDefaults() {
+                var setAllianceDefaults = function() {
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.alliance.auto.max_marches))
 						Data.options.alliance.auto.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				}
+				};
 
-				function setAttacksDefaults() {
+				var setAttacksDefaults = function() {
 					for (var x = 1; x <= 11; x++) {
 						if (!Data.options.attacks.units[x])
 							Data.options.attacks.units[x] = {};
 						/* check if troops have been entered. Is not, set to default */
 						var exists = false;
-						for (var j = 0; j < attack_unit_types.length && !exists; j++) {
-							if (Data.options.attacks.units[x][attack_unit_types[j]] && Data.options.attacks.units[x][attack_unit_types[j]] > 0)
+						for (var j2 = 0; j2 < attack_unit_types.length && !exists; j2++) {
+							if (Data.options.attacks.units[x][attack_unit_types[j2]] && Data.options.attacks.units[x][attack_unit_types[j2]] > 0)
 								exists = true;
 						}
 						if (!exists) {
 							for (var j = 0; j < attack_unit_types.length; j++) {
-								var num = 0
+								var num = 0;
 								switch (x) {
 									case 1:
 										switch (attack_unit_types[j]) {
@@ -4297,22 +4075,22 @@
 							}
 						}
 					}
-					for (var x = 1; x <= 11; x++) {
-						if (!Data.options.attacks.except_great_dragon[x])
-							Data.options.attacks.except_great_dragon[x] = {};
-						if (is_null(Data.options.attacks.except_great_dragon[x])) {
-							for (var j = 0; j < Seed.dragonList.length; j++) {
-								var dragon = Seed.dragonList[j];
-								Data.options.attacks.except_great_dragon[x][dragon.type] = false;
+					for (var x1 = 1; x1 <= 11; x1++) {
+						if (!Data.options.attacks.except_great_dragon[x1])
+							Data.options.attacks.except_great_dragon[x1] = {};
+						if (is_null(Data.options.attacks.except_great_dragon[x1])) {
+							for (var j3 = 0; j3 < Seed.dragonList.length; j3++) {
+								var dragon = Seed.dragonList[j3];
+								Data.options.attacks.except_great_dragon[x1][dragon.type] = false;
 							}
 						}
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.attacks.max_marches)) {
 						Data.options.attacks.max_marches = Seed.cities[CAPITAL.id].figures.marches.maximum;
 					}
-				}
+				};
 
-				function setBookmarksDefaults() {
+				var setBookmarksDefaults = function() {
 					if (!Data.options.bookmarks.new_bookmark.dragons)
 						Data.options.bookmarks.new_bookmark.dragons = {};
 					if (is_null(Data.options.bookmarks.new_bookmark.dragons)) {
@@ -4323,13 +4101,13 @@
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.bookmarks.max_marches))
 						Data.options.bookmarks.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				}
+				};
 
-				function setJobsDefaults() {
+				var setJobsDefaults = function() {
 					/* Training initialization */
 					var initDefault_units = all_unit_types;
 					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-						if (cityIdx != SPECTRAL_OUTPOST.id && cityIdx != SKY_OUTPOST.id  && cityIdx != LUNA_OUTPOST.id) {
+						if (cityIdx !== SPECTRAL_OUTPOST.id && cityIdx !== SKY_OUTPOST.id  && cityIdx !== LUNA_OUTPOST.id) {
 							if (!Data.options.training.city[cityIdx]) Data.options.training.city[cityIdx] = {};
 							if (!Data.options.training.city[cityIdx].units) Data.options.training.city[cityIdx].units = [];
 							var exists = false;
@@ -4338,119 +4116,41 @@
 									exists = true;
 							}
 							if (!exists) {
-								for (var tt = 0; tt < initDefault_units.length; tt++) {
-									Data.options.training.city[cityIdx].units[tt] = 0;
-									/* User defined initialization for units */
-									/* Just change the troops number and activate the lines to have always the same settings when cleaning the cache */
-
-									/* -Remove this line to activate-
-							switch (initDefault_units[tt]) {
-								case 'Porter'			: num = 0; break;
-								case 'Conscript'		: num = 1000; break;
-								case 'Spy'				: num = 2000; break;
-								case 'Halberdsman'		: num = 3000; break;
-								case 'Minotaur'			: num = 4000; break;
-								case 'Longbowman'		: num = 2500; break;
-								case 'SwiftStrikeDragon': num = 2000; break;
-								case 'BattleDragon'		: num = 1150; break;
-								case 'ArmoredTransport'	: num = 2000; break;
-								case 'Giant'			: num = 1125; break;
-								case 'FireMirror'		: num = 1000; break;
-								case 'PackDragon'		: num = 1000; break;
-								case 'DarkSlayer'		: num = 750; break;
-								case 'DimensionalRuiner': num = 1000; break;
-								case 'LightningCannon'	: num = 900; break;
-								case 'ChargeTroop'		: num = 1250; break;
-								case 'VengeWyrm'		: num = 1200; break;
-								case 'AquaTroop'		: num = 1000; break;
-								case 'StoneTroop'		: num = 1250; break;
-								case 'FireTroop'		: num = 900;  break;
-								case 'WindTroop'		: num = 1600; break;
-								case 'IceTroop'			: num = 1400; break;
-								case 'SwampTroop'		: num = 2000; break;
-								case 'FrostGiant'		: num = 1125; break;
-								case 'ForestTroop'		: num = 700; break;
-								case 'DesertTroop'		: num = 1600; break;
-								case 'ArcticLeviathan'	: num = 500; break;
-								default : num = 0; break;
-							}
-							if (num > 0 && isTrainable (cityIdx, initDefault_units[tt])) Data.options.training.city[cityIdx].units[tt] = num;
-							// */
-
+								for (var tt4 = 0; tt4 < initDefault_units.length; tt4++) {
+									Data.options.training.city[cityIdx].units[tt4] = 0;
 								}
 							}
 							if (!Data.options.training.city[cityIdx].cap) Data.options.training.city[cityIdx].cap = [];
 
-							var exists = false;
-							for (var tt = 0; tt < all_unit_types.length && !exists; tt++) {
-								if (Data.options.training.city[cityIdx].cap[tt] && Data.options.training.city[cityIdx].cap[tt] > 0)
+							exists = false;
+							for (var tt3 = 0; tt3 < all_unit_types.length && !exists; tt3++) {
+								if (Data.options.training.city[cityIdx].cap[tt3] && Data.options.training.city[cityIdx].cap[tt3] > 0)
 									exists = true;
 							}
 							if (!exists) {
-								for (var tt = 0; tt < all_unit_types.length; tt++) {
-									Data.options.training.city[cityIdx].cap[tt] = 0;
-
-									/* User defined cap initialization */
-									/* Just change the troops cap and activate the lines */
-									/* to have always the same cap settings when cleaning the cache */
-
-									/* -Remove this line to activate-
-							switch (all_unit_types[tt]) {
-								case 'Porter'			: num = 10; break;
-								case 'Conscript'		: num = 2000000; break;
-								case 'Spy'				: num = 2000000; break;
-								case 'Halberdsman'		: num = 2000000; break;
-								case 'Minotaur'			: num = 2000000; break;
-								case 'Longbowman'		: num = 2000000; break;
-								case 'SwiftStrikeDragon': num = 500000; break;
-								case 'BattleDragon'		: num = 500000; break;
-								case 'ArmoredTransport'	: num = 0; break;
-								case 'Giant'			: num = 500000; break;
-								case 'FireMirror'		: num = 100000; break;
-								case 'PackDragon'		: num = 0; break;
-								case 'DarkSlayer'		: num = 1000000; break;
-								case 'DimensionalRuiner': num = 100000; break;
-								case 'LightningCannon'	: num = 100000; break;
-								case 'ChargeTroop'		: num = 1000000; break;
-								case 'VengeWyrm'		: num = 1000000; break;
-								case 'AquaTroop'		: num = 1000000; break;
-								case 'StoneTroop'		: num = 0; break;
-								case 'FireTroop'		: num = 0; break;
-								case 'WindTroop'		: num = 1000000; break;
-								case 'IceTroop'			: num = 1000000; break;
-								case 'SwampTroop'		: num = 1000000; break;
-								case 'FrostGiant'		: num = 1000000; break;
-								case 'ForestTroop'		: num = 1000000; break;
-								case 'DesertTroop'		: num = 1000000; break;
-								case 'ArcticLeviathan'	: num = 100000; break;
-								default : num = 0; break;
-							}
-							Data.options.training.city[cityIdx].cap[tt] = num;
-							// */
+								for (var tt2 = 0; tt2 < all_unit_types.length; tt2++) {
+									Data.options.training.city[cityIdx].cap[tt2] = 0;
 								}
 							}
 						}
 					}
-					/* Build initilization */
-					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-						if (!Data.options.building.level_enable[cityIdx]) Data.options.building.level_enable[cityIdx] = {};
-						if (!Data.options.building.level_cap[cityIdx]) Data.options.building.level_cap[cityIdx] = {};
-					}
-					/* Research initialization */
-					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-						if (!Data.options.research.res_enable[cityIdx]) Data.options.research.res_enable[cityIdx] = {};
-						if (!Data.options.research.res_cap[cityIdx]) Data.options.research.res_cap[cityIdx] = {};
-					}
-					/* Resurrection initialization */
-					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-						if (!Data.options.resurrect.res_enable[cityIdx]) Data.options.resurrect.res_enable[cityIdx] = {};
-						if (!Data.options.resurrect.res_max[cityIdx]) Data.options.resurrect.res_max[cityIdx] = {};
-						for (tt = 0; tt < all_unit_types.length; tt++) {
-							if (!Data.options.resurrect.res_max[cityIdx][all_unit_types[tt]]) {
-								Data.options.resurrect.res_max[cityIdx][all_unit_types[tt]] = 0;
+					for (var cityIdx2 = 0; cityIdx2 < Seed.cities.length; ++cityIdx2) {
+						/* Build initilization */
+                        if (!Data.options.building.level_enable[cityIdx2]) Data.options.building.level_enable[cityIdx2] = {};
+						if (!Data.options.building.level_cap[cityIdx2]) Data.options.building.level_cap[cityIdx2] = {};
+                        /* Research initialization */
+                        if (!Data.options.research.res_enable[cityIdx2]) Data.options.research.res_enable[cityIdx2] = {};
+						if (!Data.options.research.res_cap[cityIdx2]) Data.options.research.res_cap[cityIdx2] = {};
+                        /* Resurrection initialization */
+                        if (!Data.options.resurrect.res_enable[cityIdx2]) Data.options.resurrect.res_enable[cityIdx2] = {};
+						if (!Data.options.resurrect.res_max[cityIdx2]) Data.options.resurrect.res_max[cityIdx2] = {};
+						for (var tt5 = 0; tt5 < all_unit_types.length; tt5++) {
+							if (!Data.options.resurrect.res_max[cityIdx2][all_unit_types[tt5]]) {
+								Data.options.resurrect.res_max[cityIdx2][all_unit_types[tt5]] = 0;
 							}
 						}
-					}
+                    }
+                    
 					/* Sanctuary dragons feeding initialization */
 					if (!Data.options.sanctuary.feeding) Data.options.sanctuary.feeding = {};
 					for (var i in Seed.sanctuary_dragons)
@@ -4458,9 +4158,9 @@
 							enable: false,
 							cap: 9
 						};
-				}
+				};
 
-				function setMultipleDefaults() {
+				var setMultipleDefaults = function() {
 					if (!Data.options.multiple.target.dragons_1) Data.options.multiple.target.dragons_1 = {};
 					if (!Data.options.multiple.target.dragons_2) Data.options.multiple.target.dragons_2 = {};
 					if (is_null(Data.options.multiple.target.dragons_1)) {
@@ -4470,9 +4170,9 @@
 						}
 					}
 					if (is_null(Data.options.multiple.target.dragons_2)) {
-						for (var j = 0; j < Seed.dragonList.length; j++) {
-							var dragon = Seed.dragonList[j];
-							Data.options.multiple.target.dragons_2[dragon.type] = false;
+						for (var j2 = 0; j2 < Seed.dragonList.length; j2++) {
+							var dragon2 = Seed.dragonList[j2];
+							Data.options.multiple.target.dragons_2[dragon2.type] = false;
 						}
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum) {
@@ -4481,14 +4181,14 @@
 						if (is_null(Data.options.multiple.max_secondary))
 							Data.options.multiple.max_secondary = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
 					}
-				}
+				};
 
-				function setOptionsDefaults() {
+				var setOptionsDefaults = function() {
 					checkDelay();
-				}
+				};
 
-				function setSearchDefaults() {
-					if (!Data.options.search.target.x || Data.options.search.target.x == 999) {
+				var setSearchDefaults = function() {
+					if (!Data.options.search.target.x || Data.options.search.target.x === 999) {
 						Data.options.search.target.x = Seed.cities[CAPITAL.id].x;
 						Data.options.search.target.y = Seed.cities[CAPITAL.id].y;
 					}
@@ -4498,14 +4198,14 @@
 					if (is_null(Data.options.search.sort_list)) Data.options.search.sort_list = '0';
 					if (is_null(Data.options.search.min_level)) Data.options.search.min_level = 1;
 					if (is_null(Data.options.search.max_level)) Data.options.search.max_level = 10;
-				}
+				};
 
-				function setSpiesDefaults() {
+				var setSpiesDefaults = function() {
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.spies.max_marches))
 						Data.options.spies.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				}
+				};
 
-				function setWavesDefaults() {
+				var setWavesDefaults = function() {
 					if (!Data.options.waves.target.dragons) Data.options.waves.target.dragons = {};
 					if (is_null(Data.options.waves.target.dragons)) {
 						for (var j = 0; j < Seed.dragonList.length; j++) {
@@ -4515,9 +4215,56 @@
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.waves.max_marches))
 						Data.options.waves.max_marches = Seed.cities[CAPITAL.id].figures.marches.maximum;
-				}
+				};
 
-				function setWheelDefaults() {}
+				var setWheelDefaults = function() {};
+
+				switch (tab) {
+					case 'alliance':
+						setAllianceDefaults();
+						break;
+					case 'attacks':
+						setAttacksDefaults();
+						break;
+					case 'bookmark':
+						setBookmarksDefaults();
+						break;
+					case 'jobs':
+						setJobsDefaults();
+						break;
+					case 'multiple':
+						setMultipleDefaults();
+						break;
+					case 'options':
+						setOptionsDefaults();
+						break;
+					case 'search':
+						setSearchDefaults();
+						break;
+					case 'spies':
+						setSpiesDefaults();
+						break;
+					case 'waves':
+						setWavesDefaults();
+						break;
+					case 'wheel':
+						setWheelDefaults();
+						break;
+					case 'all':
+						setAllianceDefaults();
+						setAttacksDefaults();
+						setBookmarksDefaults();
+						setJobsDefaults();
+						setMultipleDefaults();
+						setOptionsDefaults();
+						setSearchDefaults();
+						setSpiesDefaults();
+						setWavesDefaults();
+						setWheelDefaults();
+						break;
+					default:
+						break;
+				}
 			}
 		};
 		/******************************** Data package *******************************/
@@ -4528,14 +4275,14 @@
 				var cid = Seed.cities[cityIdx].id;
 				var jobs = Seed.jobs[cid];
 				for (var p in jobs) {
-					if (jobs[p] == job) delete jobs[p];
+					if (jobs[p] === job) delete jobs[p];
 				}
 			},
 			getBuildingJob: function(cityIdx) {
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue == 'building') return ({
+					if (job.queue === 'building') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4558,7 +4305,7 @@
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue == 'build_tower') return ({
+					if (job.queue === 'build_tower') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4573,23 +4320,23 @@
 					if (cid) {
 						for (var p in Seed.jobs[cid]) {
 							var job = Seed.jobs[cid][p];
-							if (job.queue == queue) {
+							if (job.queue === queue) {
 								ret.push(job);
 								if (get_first) return ret;
 							}
 						}
 					}
-				} else if (cityIdx == -1) {
+				} else if (cityIdx === -1) {
 					for (var city_idx = 0; city_idx < Seed.cities.length; city_idx++) {
-						if (!Data.options.Rcheat_enabled && city_idx != CAPITAL.id && queue == 'research') continue;
-						if (Seed.cities[city_idx] && city_idx != undefined && !isNaN(city_idx) && city_idx >= 0 && city_idx < Seed.cities.length &&
-							((city_idx != SPECTRAL_OUTPOST.id && city_idx != SKY_OUTPOST.id && city_idx != CAVE_OUTPOST.id && city_idx != LUNA_OUTPOST.id && queue == 'research') || queue != 'research')) {
-							var cid = Seed.cities[city_idx].id;
-							if (cid) {
-								for (var p in Seed.jobs[cid]) {
-									var job = Seed.jobs[cid][p];
-									if (job.queue == queue) {
-										ret.push(job);
+						if (!Data.options.Rcheat_enabled && city_idx !== CAPITAL.id && queue === 'research') continue;
+						if (Seed.cities[city_idx] && city_idx !== undefined && !isNaN(city_idx) && city_idx >= 0 && city_idx < Seed.cities.length &&
+							((city_idx !== SPECTRAL_OUTPOST.id && city_idx !== SKY_OUTPOST.id && city_idx !== CAVE_OUTPOST.id && city_idx !== LUNA_OUTPOST.id && queue === 'research') || queue !== 'research')) {
+							var cid2 = Seed.cities[city_idx].id;
+							if (cid2) {
+								for (var p2 in Seed.jobs[cid2]) {
+									var job2 = Seed.jobs[cid2][p2];
+									if (job2.queue === queue) {
+										ret.push(job2);
 										if (get_first) return ret;
 									}
 								}
@@ -4610,22 +4357,22 @@
 				button.value = time_item_list[itemId].text;
 				if (num > 0) {
 					button.disabled = false;
-					button.className = UID['btn_green'] + ' thin';
+					button.className = UID.btn_green + ' thin';
 					button.addEventListener('click', function(event) {
 						var self = event.target;
 						self.disabled = true;
-						self.className = UID['btn_disabled'] + ' thin';
+						self.className = UID.btn_disabled + ' thin';
 						logit('' + self.getAttribute('ref'));
 						var ids = self.getAttribute('ref').split('_');
 						var found = false;
 						var confirmation = false;
 						var jobs = Seed.cities[ids[1]].jobs;
 						for (var x = 0; x < jobs.length && !found; x++)
-							if (jobs[x].id == ids[2]) found = true;
+							if (jobs[x].id === ids[2]) found = true;
 						if (!found) return;
 
 						for (var i = 0; i < time_item_list.length; i++) {
-							if (time_item_list[i].name == ids[0]) {
+							if (time_item_list[i].name === ids[0]) {
 								confirmation = time_item_list[i].confirmation;
 								break;
 							}
@@ -4645,7 +4392,7 @@
 													var found = false;
 													var jobs = Seed.cities[ids[1]].jobs;
 													for (var x = 0; x < jobs.length && !found; x++) {
-														if (jobs[x].id == itmResp.id) {
+														if (jobs[x].id === itmResp.id) {
 															found = true;
 															jobs[x].run_at = itmResp.run_at;
 															jobs[x].duration = itmResp.duration;
@@ -4660,7 +4407,7 @@
 												var num = toNum(Seed.player.items[ids[0]]);
 												if (num > 0) {
 													button.disabled = false;
-													button.className = UID['btn_green'] + ' thin';
+													button.className = UID.btn_green + ' thin';
 												}
 											}
 										}
@@ -4680,7 +4427,7 @@
 											var found = false;
 											var jobs = Seed.cities[ids[1]].jobs;
 											for (var x = 0; x < jobs.length && !found; x++) {
-												if (jobs[x].id == itmResp.id) {
+												if (jobs[x].id === itmResp.id) {
 													found = true;
 													jobs[x].run_at = itmResp.run_at;
 													jobs[x].duration = itmResp.duration;
@@ -4695,7 +4442,7 @@
 										var num = toNum(Seed.player.items[ids[0]]);
 										if (num > 0) {
 											button.disabled = false;
-											button.className = UID['btn_green'] + ' thin';
+											button.className = UID.btn_green + ' thin';
 										}
 									}
 								}
@@ -4706,13 +4453,13 @@
 					}, false);
 				} else {
 					button.disabled = true;
-					button.className = UID['btn_disabled'] + ' thin';
+					button.className = UID.btn_disabled + ' thin';
 				}
 				nCell.appendChild(button);
 			},
 			addSpeedUpButtons: function(table, tableid, jobtype, id) {
 				var tot = 0;
-				var mtClass = UID['row_marchMine'];
+				var mtClass = UID.row_marchMine;
 				for (var i = 0; i < time_item_list.length; i++)
 					tot += toNum(Seed.player.items[time_item_list[i].name]);
 				if (tot > 0) {
@@ -4722,37 +4469,37 @@
 					iCell.style.textAlign = 'left';
 					iCell.style.width = '100%';
 					iCell.setAttribute('colspan', '4');
-					iCell.innerHTML = '<table id=' + setUID(tableid) + ' class=' + UID['table'] + '></table>';
+					iCell.innerHTML = '<table id=' + setUID(tableid) + ' class=' + UID.table + '></table>';
 					var jRow, jCell;
 					jRow = document.getElementById(UID[tableid]).insertRow(-1);
 					jRow.className = mtClass;
-					for (var i = 0; i < time_item_list.length; i++) {
-						var num = toNum(Seed.player.items[time_item_list[i].name]);
-						if (num > 0 && Jobs.checkItemType(i, jobtype)) {
+					for (var i2 = 0; i2 < time_item_list.length; i2++) {
+						var num = toNum(Seed.player.items[time_item_list[i2].name]);
+						if (num > 0 && Jobs.checkItemType(i2, jobtype)) {
 							jCell = jRow.insertCell(-1);
 							jCell.style.textAlign = 'right';
 							jCell.innerHTML = '&nbsp;';
 							var type = 'N';
-							if ((jobtype == 'jobs' && time_item_list[i].type.indexOf('J') == -1) ||
-								(jobtype == 'units' && time_item_list[i].type.indexOf('T') == -1) ||
-								(jobtype == 'resurrection' && time_item_list[i].type.indexOf('R') == -1)) type = 'C';
-							Jobs.addSingleButton(i, type, jCell, id, num);
+							if ((jobtype === 'jobs' && time_item_list[i2].type.indexOf('J') === -1) ||
+								(jobtype === 'units' && time_item_list[i2].type.indexOf('T') === -1) ||
+								(jobtype === 'resurrection' && time_item_list[i2].type.indexOf('R') === -1)) type = 'C';
+							Jobs.addSingleButton(i2, type, jCell, id, num);
 						}
 					}
 				}
 			},
 			checkItemType: function(item, chkType) {
 				var type = time_item_list[item].type;
-				if ((type.indexOf('T') >= 0 && chkType == 'units') ||
-					(type.indexOf('R') >= 0 && chkType == 'resurrection') ||
-					(type.indexOf('J') >= 0 && chkType == 'jobs')
+				if ((type.indexOf('T') >= 0 && chkType === 'units') ||
+					(type.indexOf('R') >= 0 && chkType === 'resurrection') ||
+					(type.indexOf('J') >= 0 && chkType === 'jobs')
 				) return (true);
 				else return (false);
 			},
 			updateBuildTable: function(table) {
 				var now = toNum(serverTime()),
 					idle_cities = [];
-				var mtClass = UID['row_marchMine'];
+				var mtClass = UID.row_marchMine;
 				/* Clear table */
 				for (var row = 0; row < table.rows.length; row++) {
 					table.deleteRow(row);
@@ -4768,19 +4515,19 @@
 						var jobs = Jobs.getJobs('building', true, cityIdx);
 						var jobsTD = Jobs.getJobs('build_tower', true, cityIdx);
 						
-						if (jobs.length == 0 && jobsTD.length == 0)
+						if (jobs.length === 0 && jobsTD.length === 0)
 							idle_cities.push(cityIdx);
 						else {
-							if(jobs.length != 0) {
+							if(jobs.length !== 0) {
 								var iRow, iCell;
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '20%';
-								iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+								iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 								var timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
-								if (timeRemaining == 0) {
+								if (timeRemaining === 0) {
 									/*  If we have a job and the timeRemaining is negative or zero we delete the job
 								and fetch the Seed - although this does not always work because the server
 								is laggy and may not return the correct information */
@@ -4788,8 +4535,8 @@
 									iCell.setAttribute('colspan', '3');
 									iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 									Jobs.deleteJob(cityIdx, jobs[0]);
-									if (Tabs.Jobs.buildStatFetch == false) {
-										if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+									if (Tabs.Jobs.buildStatFetch === false) {
+										if (cityIdx !== 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 										options.cities.push(city.id);
 										Seed.fetchPlayer(options);
 										Tabs.Jobs.buildStatFetch = true;
@@ -4809,13 +4556,13 @@
 									button.value = 'X';
 									if (jobs[0].cancelled) {
 										button.disabled = true;
-										button.className = UID['btn_disabled'] + ' thin';
+										button.className = UID.btn_disabled + ' thin';
 									} else {
-										button.className = UID['btn_red'] + ' thin';
+										button.className = UID.btn_red + ' thin';
 										button.addEventListener('click', function(event) {
 											var self = event.target;
 											self.disabled = true;
-											self.className = UID['btn_disabled'] + ' thin';
+											self.className = UID.btn_disabled + ' thin';
 											var ids = self.getAttribute('ref').split('_');
 											var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
 											if (job) {
