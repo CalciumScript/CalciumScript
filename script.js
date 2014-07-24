@@ -128,13 +128,10 @@
 						if (iframe.tagName === 'DIV')
 							iframe.style.width = '100%';
 					}
-					document.getElementById('rightCol').style.display = 'none';
-					document.getElementById('rightCol').style.display = 'none';
-					document.getElementById('blueBarHolder').style.display = 'none';
-					document.getElementById('blueBar').style.display = 'none';
-					document.getElementById('pageHead').style.display = 'none';
-					document.getElementById('jewelContainer').style.display = 'none';
-					document.getElementById('headNav').style.display = 'none';
+                    var idFbToHide = ['rightCol','blueBarDOMInspector'];
+                    idFbToHide.forEach(function(element, index, array) {
+                        document.getElementById(element).style.display = 'none';
+                    });
 					document.getElementById('contentCol').style.margin = '0px';
 					document.getElementById('contentCol').style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					var contentColChild = document.getElementById('contentCol').childNodes;
@@ -4527,11 +4524,11 @@
 						var confirmation = false;
 						var jobs = Seed.cities[ids[1]].jobs;
 						for (var x = 0; x < jobs.length && !found; x++)
-							if (jobs[x].id == ids[2]) found = true;
+							if (jobs[x].id === ids[2]) found = true;
 						if (!found) return;
 
 						for (var i = 0; i < time_item_list.length; i++) {
-							if (time_item_list[i].name == ids[0]) {
+							if (time_item_list[i].name === ids[0]) {
 								confirmation = time_item_list[i].confirmation;
 								break;
 							}
@@ -4551,7 +4548,7 @@
 													var found = false;
 													var jobs = Seed.cities[ids[1]].jobs;
 													for (var x = 0; x < jobs.length && !found; x++) {
-														if (jobs[x].id == itmResp.id) {
+														if (jobs[x].id === itmResp.id) {
 															found = true;
 															jobs[x].run_at = itmResp.run_at;
 															jobs[x].duration = itmResp.duration;
@@ -4566,7 +4563,7 @@
 												var num = toNum(Seed.player.items[ids[0]]);
 												if (num > 0) {
 													button.disabled = false;
-													button.className = UID['btn_green'] + ' thin';
+													button.className = UID.btn_green + ' thin';
 												}
 											}
 										}
@@ -4586,7 +4583,7 @@
 											var found = false;
 											var jobs = Seed.cities[ids[1]].jobs;
 											for (var x = 0; x < jobs.length && !found; x++) {
-												if (jobs[x].id == itmResp.id) {
+												if (jobs[x].id === itmResp.id) {
 													found = true;
 													jobs[x].run_at = itmResp.run_at;
 													jobs[x].duration = itmResp.duration;
@@ -4601,7 +4598,7 @@
 										var num = toNum(Seed.player.items[ids[0]]);
 										if (num > 0) {
 											button.disabled = false;
-											button.className = UID['btn_green'] + ' thin';
+											button.className = UID.btn_green + ' thin';
 										}
 									}
 								}
@@ -4612,14 +4609,14 @@
 					}, false);
 				} else {
 					button.disabled = true;
-					button.className = UID['btn_disabled'] + ' thin';
+					button.className = UID.btn_disabled + ' thin';
 				}
 				nCell.appendChild(button);
 			},
 			addSpeedUpButtons: function(table, tableid, jobtype, id) {
-				var tot = 0;
-				var mtClass = UID['row_marchMine'];
-				for (var i = 0; i < time_item_list.length; i++)
+				var tot = 0, i = 0;
+				var mtClass = UID.row_marchMine;
+				for (i = 0; i < time_item_list.length; i++)
 					tot += toNum(Seed.player.items[time_item_list[i].name]);
 				if (tot > 0) {
 					iRow = table.insertRow(-1);
@@ -4628,20 +4625,19 @@
 					iCell.style.textAlign = 'left';
 					iCell.style.width = '100%';
 					iCell.setAttribute('colspan', '4');
-					iCell.innerHTML = '<table id=' + setUID(tableid) + ' class=' + UID['table'] + '></table>';
+					iCell.innerHTML = '<table id=' + setUID(tableid) + ' class=' + UID.table + '></table>';
 					var jRow, jCell;
 					jRow = document.getElementById(UID[tableid]).insertRow(-1);
 					jRow.className = mtClass;
-					for (var i = 0; i < time_item_list.length; i++) {
+					for (i = 0; i < time_item_list.length; i++) {
 						var num = toNum(Seed.player.items[time_item_list[i].name]);
 						if (num > 0 && Jobs.checkItemType(i, jobtype)) {
 							jCell = jRow.insertCell(-1);
 							jCell.style.textAlign = 'right';
 							jCell.innerHTML = '&nbsp;';
 							var type = 'N';
-							if ((jobtype == 'jobs' && time_item_list[i].type.indexOf('J') == -1) ||
-								(jobtype == 'units' && time_item_list[i].type.indexOf('T') == -1) ||
-								(jobtype == 'resurrection' && time_item_list[i].type.indexOf('R') == -1)) type = 'C';
+							if ((jobtype === 'jobs' && time_item_list[i].type.indexOf('J') === -1) || (jobtype === 'units' && time_item_list[i].type.indexOf('T') === -1) || (jobtype === 'resurrection' && time_item_list[i].type.indexOf('R') === -1))
+                                type = 'C';
 							Jobs.addSingleButton(i, type, jCell, id, num);
 						}
 					}
@@ -4649,44 +4645,44 @@
 			},
 			checkItemType: function(item, chkType) {
 				var type = time_item_list[item].type;
-				if ((type.indexOf('T') >= 0 && chkType == 'units') ||
-					(type.indexOf('R') >= 0 && chkType == 'resurrection') ||
-					(type.indexOf('J') >= 0 && chkType == 'jobs')
-				) return (true);
-				else return (false);
+				if ((type.indexOf('T') >= 0 && chkType === 'units') || (type.indexOf('R') >= 0 && chkType === 'resurrection') || (type.indexOf('J') >= 0 && chkType === 'jobs'))
+                    return (true);
+				else
+                    return (false);
 			},
 			updateBuildTable: function(table) {
 				var now = toNum(serverTime()),
 					idle_cities = [];
-				var mtClass = UID['row_marchMine'];
+				var mtClass = UID.row_marchMine;
 				/* Clear table */
 				for (var row = 0; row < table.rows.length; row++) {
 					table.deleteRow(row);
 					row--;
 				}
-				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+                var cityIdx, city, iRow, iCell;
+				for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 					if (Seed.cities[cityIdx]) {
 						var options = {
 							noPlayer: true,
 							cities: []
 						};
-						var city = Seed.cities[cityIdx];
+						city = Seed.cities[cityIdx];
 						var jobs = Jobs.getJobs('building', true, cityIdx);
 						var jobsTD = Jobs.getJobs('build_tower', true, cityIdx);
 						
-						if (jobs.length == 0 && jobsTD.length == 0)
+						if (jobs.length === 0 && jobsTD.length === 0)
 							idle_cities.push(cityIdx);
 						else {
-							if(jobs.length != 0) {
-								var iRow, iCell;
+                            var timeRemaining, button;
+							if(jobs.length !== 0) {
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '20%';
-								iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
-								var timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
-								if (timeRemaining == 0) {
+								iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+								timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
+								if (timeRemaining === 0) {
 									/*
 									 * If we have a job and the timeRemaining is
 									 * negative or zero we delete the job and
@@ -4699,8 +4695,8 @@
 									iCell.setAttribute('colspan', '3');
 									iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 									Jobs.deleteJob(cityIdx, jobs[0]);
-									if (Tabs.Jobs.buildStatFetch == false) {
-										if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+									if (Tabs.Jobs.buildStatFetch === false) {
+										if (cityIdx !== 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 										options.cities.push(city.id);
 										Seed.fetchPlayer(options);
 										Tabs.Jobs.buildStatFetch = true;
@@ -4714,19 +4710,19 @@
 									/* Building cancel Button */
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
-									var button = document.createElement('input');
+									button = document.createElement('input');
 									button.type = 'button';
 									button.setAttribute('ref', cityIdx + '_' + jobs[0].id);
 									button.value = 'X';
 									if (jobs[0].cancelled) {
 										button.disabled = true;
-										button.className = UID['btn_disabled'] + ' thin';
+										button.className = UID.btn_disabled + ' thin';
 									} else {
-										button.className = UID['btn_red'] + ' thin';
+										button.className = UID.btn_red + ' thin';
 										button.addEventListener('click', function(event) {
 											var self = event.target;
 											self.disabled = true;
-											self.className = UID['btn_disabled'] + ' thin';
+											self.className = UID.btn_disabled + ' thin';
 											var ids = self.getAttribute('ref').split('_');
 											var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
 											if (job) {
@@ -4759,16 +4755,15 @@
 								iCell.style.width = '20%';
 								iCell.innerHTML = '&nbsp;';
 							}
-							if(jobsTD.length != 0) {
-								var iRow, iCell;
+							if(jobsTD.length !== 0) {
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '20%';
-								iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
-								var timeRemaining = ((jobsTD[0].run_at - serverTime()) > 0) ? timestr(jobsTD[0].run_at - serverTime()) : 0;
-								if (timeRemaining == 0) {
+								iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+								timeRemaining = ((jobsTD[0].run_at - serverTime()) > 0) ? timestr(jobsTD[0].run_at - serverTime()) : 0;
+								if (timeRemaining === 0) {
 									/*
 									 * If we have a job and the timeRemaining is
 									 * negative or zero we delete the job and
@@ -4781,8 +4776,8 @@
 									iCell.setAttribute('colspan', '3');
 									iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 									Jobs.deleteJob(cityIdx, jobsTD[0]);
-									if (Tabs.Jobs.buildStatFetch == false) {
-										if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+									if (Tabs.Jobs.buildStatFetch === false) {
+										if (cityIdx !== 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 										options.cities.push(city.id);
 										Seed.fetchPlayer(options);
 										Tabs.Jobs.buildStatFetch = true;
@@ -4796,19 +4791,19 @@
 									/* Building cancel Button */
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
-									var button = document.createElement('input');
+									button = document.createElement('input');
 									button.type = 'button';
 									button.setAttribute('ref', cityIdx + '_' + jobsTD[0].id);
 									button.value = 'X';
 									if (jobsTD[0].cancelled) {
 										button.disabled = true;
-										button.className = UID['btn_disabled'] + ' thin';
+										button.className = UID.btn_disabled + ' thin';
 									} else {
-										button.className = UID['btn_red'] + ' thin';
+										button.className = UID.btn_red + ' thin';
 										button.addEventListener('click', function(event) {
 											var self = event.target;
 											self.disabled = true;
-											self.className = UID['btn_disabled'] + ' thin';
+											self.className = UID.btn_disabled + ' thin';
 											var ids = self.getAttribute('ref').split('_');
 											var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
 											if (job) {
@@ -4844,16 +4839,15 @@
 						}
 					}
 				}
-				for (var cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
+				for (cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
 					if (Seed.cities[idle_cities[cityIdx]]) {
-						var city = Seed.cities[idle_cities[cityIdx]];
-						var iRow, iCell;
+						city = Seed.cities[idle_cities[cityIdx]];
 						iRow = table.insertRow(-1);
 						iRow.className = mtClass;
 						iCell = iRow.insertCell(-1);
 						iCell.style.textAlign = 'left';
 						iCell.style.width = '20%';
-						iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+						iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 						iCell = iRow.insertCell(-1);
 						iCell.innerHTML = translate('Idle');
 					}
@@ -4862,31 +4856,31 @@
 			updateDragonTable: function(table) {
 				var now = toNum(serverTime()),
 					idle_cities = [];
-				var mtClass = UID['row_marchMine'];
+				var mtClass = UID.row_marchMine;
 				/* Clear table */
 				for (var row = 0; row < table.rows.length; row++) {
 					table.deleteRow(row);
 					row--;
 				}
-				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+                var cityIdx, city, iRow, iCell;
+				for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 					if (Seed.cities[cityIdx]) {
 						var options = {
 							noPlayer: true,
 							cities: []
 						};
-						var city = Seed.cities[cityIdx];
+						city = Seed.cities[cityIdx];
 						var jobs = Jobs.getJobs('dragon', true, cityIdx);
 						
-						if(jobs.length != 0) {
-							var iRow, iCell;
+						if(jobs.length !== 0) {
 							iRow = table.insertRow(-1);
 							iRow.className = mtClass;
 							iCell = iRow.insertCell(-1);
 							iCell.style.textAlign = 'left';
 							iCell.style.width = '20%';
-							iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+							iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 							var timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
-							if (timeRemaining == 0) {
+							if (timeRemaining === 0) {
 								/*
 								 * If we have a job and the timeRemaining is
 								 * negative or zero we delete the job and fetch
@@ -4898,7 +4892,8 @@
 								iCell.setAttribute('colspan', '3');
 								iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 								Jobs.deleteJob(cityIdx, jobs[0]);
-								if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+								if (cityIdx !== 0)
+                                    options.cities.push(Seed.cities[CAPITAL.id].id);
 								options.cities.push(city.id);
 								Seed.fetchPlayer(options);
 							} else {
@@ -4910,48 +4905,12 @@
 								/* Building cancel Button */
 								iCell = iRow.insertCell(-1);
 								iCell.style.width = '10%';
-								/*
-								 * var button = document.createElement('input');
-								 * button.type = 'button';
-								 * button.setAttribute('ref', cityIdx + '_' +
-								 * jobs[0].id); button.value = 'X'; if
-								 * (jobs[0].cancelled) { button.disabled = true;
-								 * button.className = UID['btn_disabled'] + '
-								 * thin'; } else { button.className =
-								 * UID['btn_red'] + ' thin';
-								 * button.addEventListener('click',
-								 * function(event) { var self = event.target;
-								 * self.disabled = true; self.className =
-								 * UID['btn_disabled'] + ' thin'; var ids =
-								 * self.getAttribute('ref').split('_'); var job =
-								 * Seed.jobs[Seed.cities[ids[0]].id][ids[1]]; if
-								 * (job) { job.cancelled = true; var desc =
-								 * translate(job.city_building_type) + ' ' +
-								 * job.level; MyAjax.cancelTraining(ids[1],
-								 * function(r) { if (r.ok &&
-								 * r.dat.result.success) {
-								 * verboseLog(translate('Building job
-								 * cancelled') + ' (' + desc + ')'); } }); } },
-								 * false); } iCell.appendChild(button);
-								 */
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '25%';
 								iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timeRemaining + '</font>';
 								if (!jobs[0].cancelled && Data.options.jobs_speedups_enabled)
 									Jobs.addSpeedUpButtons(table, 'tabJobsDragon_speedups_0', 'jobs', cityIdx + '_' + jobs[0].id);
-
-								// Tabs.Jobs.buildStatFetch = false;
-								try {
-									// document.getElementById(UID['tabJobDragon_FB_'
-									// + cityIdx + '_' +
-									// jobs[0].city_building_type]).innerHTML =
-									// '<font color=#000>' +
-									// translate('Building') + ': ' +
-									// translate(jobs[0].city_building_type) + '
-									// ' + translate('Level').toLowerCase() + '
-									// ' + jobs[0].level + '</font>';
-								} catch (e) {}
 							}
 							iRow = table.insertRow(-1);
 							iCell = iRow.insertCell(-1);
@@ -4961,16 +4920,15 @@
 						}
 					}
 				}
-				for (var cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
+				for (cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
 					if (Seed.cities[idle_cities[cityIdx]]) {
-						var city = Seed.cities[idle_cities[cityIdx]];
-						var iRow, iCell;
+						city = Seed.cities[idle_cities[cityIdx]];
 						iRow = table.insertRow(-1);
 						iRow.className = mtClass;
 						iCell = iRow.insertCell(-1);
 						iCell.style.textAlign = 'left';
 						iCell.style.width = '20%';
-						iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+						iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 						iCell = iRow.insertCell(-1);
 						iCell.innerHTML = translate('Idle');
 					}
