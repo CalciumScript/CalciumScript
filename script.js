@@ -21,7 +21,7 @@
 			var child_list = tag.childNodes;
 			var found = false;
 			for (var x = 0; x < child_list.length && !found; x++) {
-				if (child_list[x].id && child_list[x].id == game_container) found = true;
+				if (child_list[x].id && child_list[x].id === game_container) found = true;
 				else found = content_dependant(child_list[x]);
 			}
 			return found;
@@ -30,7 +30,7 @@
 			var child_elements = body.childNodes;
 			for (var c = 0; c < child_elements.length; c++) {
 				var child = child_elements[c];
-				if (child.id && child.id == game_container) {
+				if (child.id && child.id === game_container) {
 					child.style.width = '100%';
 					child.style.margin = '0';
 					child.style.border = '0';
@@ -38,12 +38,12 @@
 				} else {
 					var depend = content_dependant(child);
 					if (!depend) {
-						if (child.tagName == 'DIV' || child.tagName == 'IFRAME' || child.tagName == 'TABLE') {
+						if (child.tagName === 'DIV' || child.tagName === 'IFRAME' || child.tagName === 'TABLE') {
 							child.style.width = '0%';
 							child.style.display = 'none';
 						} else hide_all(child, game_container);
 					} else {
-						if (child.tagName == 'DIV' || child.tagName == 'IFRAME' || child.tagName == 'TABLE' || child.tagName == 'TD') {
+						if (child.tagName === 'DIV' || child.tagName === 'IFRAME' || child.tagName === 'TABLE' || child.tagName === 'TD') {
 							child.style.padding = '0px';
 							child.style.width = '100%';
 							child.style.margin = '0';
@@ -61,7 +61,7 @@
 		if (element.parentNode) {
 			var parent_element = element.parentNode;
 			setHD(parent_element);
-			if (parent_element.tagName == 'DIV' || parent_element.tagName == 'IFRAME' || parent_element.tagName == 'TABLE' || parent_element.tagName == 'TD') {
+			if (parent_element.tagName === 'DIV' || parent_element.tagName === 'IFRAME' || parent_element.tagName === 'TABLE' || parent_element.tagName === 'TD') {
 				parent_element.style.width = '100%';
 				parent_element.style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 			}
@@ -95,10 +95,8 @@
 		return;
 	}
 
-
-
 	if (window.top === window.self) {
-		function setWide() {
+		var setWide = function() {
 			if (window.location.href.indexOf('facebook') !== -1) {
 				iframe = document.getElementById('iframe_canvas');
 				platform = 'facebook';
@@ -122,11 +120,12 @@
 				return;
 			}
 			var background_118446 = localStorage.getItem('118446_background');
-			var USE_BACKGROUND = (background_118446 && background_118446 != undefined && background_118446 != null) ? eval(background_118446) : true;
+			var USE_BACKGROUND = (background_118446 && background_118446 !== undefined && background_118446 !== null) ? eval(background_118446) : true;
+            var el = 0;
 			switch (platform) {
 				case 'facebook':
-					while ((iframe = iframe.parentNode) != null) {
-						if (iframe.tagName == 'DIV')
+					while ((iframe = iframe.parentNode) !== null) {
+						if (iframe.tagName === 'DIV')
 							iframe.style.width = '100%';
 					}
 					document.getElementById('rightCol').style.display = 'none';
@@ -140,12 +139,12 @@
 					document.getElementById('contentCol').style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					var contentColChild = document.getElementById('contentCol').childNodes;
 					for (var i = 0; i < contentColChild.length; i++)
-						if (contentColChild[i].tagName == 'DIV')
+						if (contentColChild[i].tagName === 'DIV')
 							contentColChild[i].style.margin = '0px';
 					document.scrollTop = '42px';
 					if (USE_BACKGROUND) {
 						var body_elements = document.getElementsByTagName('body');
-						for (var el = 0; el < body_elements.length; el++)
+						for (el = 0; el < body_elements.length; el++)
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					}
 					break;
@@ -157,8 +156,8 @@
 						iframe.style.backgroundColor = 'transparent';
 					else
 						iframe.style.backgroundColor = 'white';
-					while ((iframe = iframe.parentNode) != null) {
-						if (iframe.tagName == 'DIV') {
+					while ((iframe = iframe.parentNode) !== null) {
+						if (iframe.tagName === 'DIV') {
 							iframe.style.width = '100%';
 							iframe.style.margin = '0';
 							iframe.style.border = '0';
@@ -179,7 +178,7 @@
 						ss.media = "screen";
 						ss.href = "https://kabam1-a.akamaihd.net/castle/stylesheets/chomped/common_258783ec84eaa8c2ad74bf6168ec24317be52dab.css";
 						document.getElementsByTagName('head')[0].appendChild(ss);
-						var ss = document.createElement("link");
+						ss = document.createElement("link");
 						ss.type = "text/css";
 						ss.rel = "stylesheet";
 						ss.media = "screen";
@@ -187,7 +186,7 @@
 						document.getElementsByTagName('head')[0].appendChild(ss);
 					}
 					var centers = document.getElementsByTagName('center');
-					for (var el = 0; el < centers.length; el++) {
+					for (el = 0; el < centers.length; el++) {
 						var old_elem = centers[el];
 						var new_elem = document.createElement('div');
 						new_elem.id = 'altervista_div' + el;
@@ -199,11 +198,11 @@
 					if (object) initScript(object);
 					break;
 				default:
-					if (platform == 'kongregate') setTimeout(function() {
-						make_space_for_kongregate(document.getElementById('gameiframe'), undefined)
+					if (platform === 'kongregate') setTimeout(function() {
+						make_space_for_kongregate(document.getElementById('gameiframe'), undefined);
 					}, 10000);
 					var top_body = document.getElementsByTagName('body');
-					for (var el = 0; el < top_body.length; el++) {
+					for (el = 0; el < top_body.length; el++) {
 						if (top_body[el].id) debugLog('top_body[' + el + '].id = ' + top_body[el].id);
 						hide_all(top_body[el], game_frame);
 					}
@@ -215,22 +214,21 @@
 					}
 					break;
 			}
-		}
+		};
 		setWide();
 	} else {
 		platform = document.body.className.split(' ');
-		if (platform && platform[0]) {
+		if (platform && platform[0])
 			platform = platform[0].replace(/(platforms_|_game)/g, '');
-		} else {
-			platform = 'google';
-		}
+		else
+            platform = 'google';
 		var errors = 0;
 
-		function setHigh() {
-			clearTimeout;
+		var setHigh = function() {
+			clearTimeout();
 			/* Custom treatment for intermediate iframe */
 			if (document.getElementById('game_frame')) setTimeout(function() {
-				make_space_for_kongregate(document.getElementById('game_frame'), '100%')
+				make_space_for_kongregate(document.getElementById('game_frame'), '100%');
 			}, 10000);
 			var object = document.getElementsByTagName('object');
 			if (object.length < 1) {
@@ -242,11 +240,12 @@
 				return;
 			}
 			var background_118446 = localStorage.getItem('118446_background');
-			var USE_BACKGROUND = (background_118446 && background_118446 != undefined && background_118446 != null) ? eval(background_118446) : true;
+			var USE_BACKGROUND = (background_118446 && background_118446 !== undefined && background_118446 !== null) ? eval(background_118446) : true;
+            var i = 0, el = 0, body_elements = null, html_elements = null;
 			switch (platform) {
 				case 'facebook':
 					REALM_URL = 'https://apps.facebook.com/dragonsofatlantis/realm/';
-					for (var i = 0; i < object.length; i++) {
+					for (i = 0; i < object.length; i++) {
 						switch (object[i].parentNode.id) {
 							case 'hd':
 								object[i].style.display = 'none';
@@ -257,27 +256,27 @@
 					}
 					document.getElementById('hd').parentNode.style.width = '760px';
 					var hdChild = document.getElementById('hd').childNodes;
-					for (var i = 0; i < hdChild.length; i++) {
-						if (hdChild[i].tagName == 'DIV') hdChild[i].style.display = 'none';
-						if (hdChild[i].tagName == 'IFRAME') hdChild[i].style.display = 'none';
+					for (i = 0; i < hdChild.length; i++) {
+						if (hdChild[i].tagName === 'DIV') hdChild[i].style.display = 'none';
+						if (hdChild[i].tagName === 'IFRAME') hdChild[i].style.display = 'none';
 					}
 					document.getElementById('ft').style.display = 'none';
 					document.scrollTop = '42px';
 					if (REMOVE_HD) document.getElementById('hd').style.display = 'none';
 					if (USE_BACKGROUND) {
-						var body_elements = document.getElementsByTagName('body');
-						for (var el = 0; el < body_elements.length; el++)
+						body_elements = document.getElementsByTagName('body');
+						for (el = 0; el < body_elements.length; el++)
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
-						var html_elements = document.getElementsByTagName('html');
-						for (var el = 0; el < html_elements.length; el++)
+						html_elements = document.getElementsByTagName('html');
+						for (el = 0; el < html_elements.length; el++)
 							html_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					}
 					break;
 				case 'google':
 					document.getElementById('pane_hd').style.display = 'none';
 					if (USE_BACKGROUND) {
-						var body_elements = document.getElementsByTagName('body');
-						for (var el = 0; el < body_elements.length; el++) {
+						body_elements = document.getElementsByTagName('body');
+						for (el = 0; el < body_elements.length; el++) {
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 						}
@@ -285,9 +284,9 @@
 					break;
 				case 'kabam':
 					REALM_URL = 'https://www.kabam.com/fr/games/dragons-of-atlantis/play/';
-					var html_elements = document.getElementsByTagName('html');
-					for (var el = 0; el < html_elements.length; el++) {
-						html_elements[el].style.overflow = 'hidden'
+					html_elements = document.getElementsByTagName('html');
+					for (el = 0; el < html_elements.length; el++) {
+						html_elements[el].style.overflow = 'hidden';
 						html_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					}
 					if (!USE_BACKGROUND) document.body.style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
@@ -296,7 +295,7 @@
 					break;
 			}
 			initScript(object);
-		}
+		};
 		setHigh();
 	}
 
@@ -305,7 +304,7 @@
 	function initScript(SWF_OBJECT) {
 
 		function makeUID(len) {
-			var len = (len != undefined ? len : 20);
+			len = (len !== undefined ? len : 20);
 			var chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'u', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'U', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'];
 			var uid = chars[Math.floor(Math.random() * 54)];
 			for (var i = 0; i < len; i++) {
@@ -315,12 +314,12 @@
 		}
 
 		function getUID(name) {
-			return UID[name] != undefined ? UID[name] : name;
+			return UID[name] !== undefined ? UID[name] : name;
 		}
 
 		function setUID(name) {
 			var uid = makeUID();
-			while (UIDN[uid] != undefined) {
+			while (UIDN[uid] !== undefined) {
 				uid = makeUID();
 			}
 			UIDN[uid] = 1;
@@ -332,7 +331,7 @@
 			var obj = {};
 			var pattern = /\s*(.*?)\s*=\s*('|")(.*?)\2/gi;
 			var match;
-			while ((match = pattern.exec(str)) != null) {
+			while ((match = pattern.exec(str)) !== null) {
 				obj[match[1]] = match[3];
 			}
 			return obj;
@@ -344,9 +343,9 @@
 			var pattern = /\<\s*param\s*(.*?)\>/gi;
 			var attrs = {};
 			var args, match, p;
-			while ((match = pattern.exec(params)) != null) {
-				var p = parseQuotedVars(match[1]);
-				if (p.name && p.name == 'flashvars') {
+			while ((match = pattern.exec(params)) !== null) {
+				p = parseQuotedVars(match[1]);
+				if (p.name && p.name === 'flashvars') {
 					args = decodeEntity(p.value).split('&');
 					for (var i = 0; i < args.length; i++) {
 						var v = args[i].split('=');
@@ -379,7 +378,7 @@
 		 */
 		var api_version = 'overarch',
 			scriptName = 'CalciumScript',
-			mainAuthor = 'Calcium'
+			mainAuthor = 'Calcium',
             CPT_SEARCH = {  players:'playerSearchName', playersHisto:'playerSearchHistoName', playerDetail: 'detailPlayer',
                             alliances:'allianceSearchName', allianceDetail: 'detailAlliance' };
 		/* Skins */
@@ -597,6 +596,10 @@
 			}
 
 			try {
+                var doMuteSound = function () {
+                    logit('Mute sound');
+					swf.musicMute();
+                };
 				var swf = null;
 				var object = document.getElementsByTagName('object');
 				if (object.length < 1) {
@@ -604,7 +607,7 @@
 					return;
 				}
 				for (i = 0; i < object.length; i++) {
-					if (object[i].type && object[i].type == 'application/x-shockwave-flash') {
+					if (object[i].type && object[i].type === 'application/x-shockwave-flash') {
 						swf = object[i];
 						getFlashVars(swf);
 						if (C.attrs.apiServer) {
@@ -612,14 +615,11 @@
 							if (maxWidth < 760) maxWidth = 760;
 							if (window.location.href.indexOf("facebook") !== -1)
 								document.getElementById('hd').parentNode.style.width = maxWidth + 'px';
-							if (swf.id == 'castlemania_swf') swf.style.width = maxWidth + 'px';
+							if (swf.id === 'castlemania_swf') swf.style.width = maxWidth + 'px';
 							swf_object = swf;
 							SWF_CONTAINER = swf.parentNode;
 							SWF_CONTAINER_INNERHTML = SWF_CONTAINER.innerHTML;
-							setTimeout(function() {
-								logit('Mute sound');
-								swf.musicMute();
-							}, 30000);
+							setTimeout(doMuteSound, 30000);
 							break;
 						}
 					}
@@ -1505,7 +1505,7 @@
 				clearAndReload();
 
 				/* Set the default locale use */
-				if (Data.options.user_language != undefined && Data.options.user_language != null && Data.options.user_language != LANG_CODE) {
+				if (Data.options.user_language !== undefined && Data.options.user_language !== null && Data.options.user_language !== LANG_CODE) {
 					setLanguage(Data.options.user_language);
 				}
 				/* Set blue energy transportable if cheat enabled */
@@ -1521,7 +1521,7 @@
 															 */
 				/* Check basic initialization */
 
-				function stepStarting(current_step) {
+				var stepStarting = function(current_step) {
 					var wait_time = Math.randRange(2500, 4500);
 					   var error_code;
 					var error_msg;
@@ -1540,16 +1540,15 @@
 							/* Bad request (API version ?) */
 							case 400:
 								error_msg = translate('<b>Bad request!</b>');
-								progressBar.stop;
+								progressBar.stop();
 								progressBar.hideshow(false);
 								retry = 400;
 								dialogFatal('<b>' + kFatalSeedTitle + '</b><br><br>\
 											<font color="#BF0000"><b> ' + errorMsg + '</b></font>\
 											<br><br><div align=left>\
 											' + kFatalSeedMsg + '<br><br></div>\
-											<a id="' + UID['support_link'] + '" href="" target="_blank">Bugs and Known Issues</a><br>');
+											<a id="' + UID.support_link + '" href="" target="_blank">Bugs and Known Issues</a><br>');
 								return;
-								break;
 								/*
 								 * Forbidden (RefControl or --no-referrers
 								 * missing ?)
@@ -1558,7 +1557,6 @@
 								error_msg = translate('<b>Forbidden!</b>');
 								retry = 403;
 								return;
-								break;
 								/* Rate Limit Exceeded */
 							case 429:
 								error_msg = '<b>API </b>' + translate('<b>Rate Limit Exceeded</b>, too many requests!');
@@ -1572,7 +1570,6 @@
 								verboseLog(error_msg + ' - ' + translate('Retry in :') + waitTime);
 								STARTUP_TIMER = setTimeout(stepStarting, waitTime * 1000, currentStep);
 								return;
-								break;
 							case 509:
 								error_msg = translate('<b>Rate Limit Exceeded</b>, too many requests!');
 								waitTime = 600;
@@ -1585,7 +1582,6 @@
 								verboseLog(error_msg + ' - ' + translate('Retry in :') + waitTime);
 								STARTUP_TIMER = setTimeout(stepStarting, waitTime * 1000, currentStep);
 								return;
-								break;
 							default:
 								break;
 						}
@@ -1595,27 +1591,28 @@
 					}
 
 					if (retry <= 20) {
+                        var i = 0, cityIdx = 0;
 						switch (current_step) {
 							case 1:
 								/* Check API version */
-									function getSupportedVersions(callback) {
-										var params = {};
-										new MyAjaxRequest('versions', url_versions + '/supported_versions', params, function(res) {
-											if (res.ok && res.dat) {
-												var list = '';
-												if (res.dat.length) {
-													api_version = res.dat[res.dat.length - 1];
-													for (var v = 0; v < res.dat.length; v++) list = list + ((v == 0) ? '' : ', ') + res.dat[v];
-												} else {
-													api_version = res.dat;
-													list = res.dat;
-												}
-												verboseLog('List of supported API version : ' + list);
-												debugLog('List of supported API version : ' + list);
-											}
-											if (callback) callback(res);
-										}, false);
-								}
+                                var getSupportedVersions = function(callback) {
+                                    var params = {};
+                                    new MyAjaxRequest('versions', url_versions + '/supported_versions', params, function(res) {
+                                        if (res.ok && res.dat) {
+                                            var list = '';
+                                            if (res.dat.length) {
+                                                api_version = res.dat[res.dat.length - 1];
+                                                for (var v = 0; v < res.dat.length; v++) list = list + ((v === 0) ? '' : ', ') + res.dat[v];
+                                            } else {
+                                                api_version = res.dat;
+                                                list = res.dat;
+                                            }
+                                            verboseLog('List of supported API version : ' + list);
+                                            debugLog('List of supported API version : ' + list);
+                                        }
+                                        if (callback) callback(res);
+                                    }, false);
+                                };
 								progress_title = translate('Getting API version...');
 								progressBar.update({
 									step: current_step,
@@ -1638,7 +1635,7 @@
 									step: current_step,
 									title: progress_title,
 									stepText: translate('Charging Map binairy file')
-					});
+                                });
 								Map.initMapData(function(res) {
 									if (res.ok) {
 										onSuccess(translate('Map Bin Successfully initialized'), wait_time, current_step + 1);
@@ -1713,11 +1710,10 @@
 								break;
 							case 7:
 								/* Fetch capital data */
-									progress_title = translate('Getting cities data...');
-								var cityIdx;
+								progress_title = translate('Getting cities data...');
 								/* We make sure to first start the capital */
-								for (var i = 0; i < Seed.cityInit.length; i++) {
-									if (Seed.cityInit[i].type == 'capital') {
+								for (i = 0; i < Seed.cityInit.length; i++) {
+									if (Seed.cityInit[i].type === CAPITAL.type) {
 										cityIdx = Seed.cityInit[i].id;
 									}
 								}
@@ -1739,7 +1735,18 @@
 								break;
 							case 8:
 								/* Fetch outposts data */
-									progress_title = translate('Getting cities data...');
+								var clbFct = function(res) {
+                                    if (res.ok) {
+                                        wait_time = Math.randRange(2500, 6000);
+                                        if (current_index === Seed.cityInit.length - 1) {
+                                            wait_time = 2500;
+                                        }
+                                        onSuccess(translate('Outpost') + ' #' + (i + 1) + ' ' + translate('data successfully fetched'), wait_time, current_step);
+                                    } else {
+                                        onError(res.status, res.errmsg, translate('Outpost') + ' #' + (i + 1), wait_time, current_step);
+                                    }
+                                };
+                                progress_title = translate('Getting cities data...');
 								for (var i = 0; i < Seed.cityInit.length; i++) {
 									if (Seed.cityInit[i].loaded) {
 										continue;
@@ -1753,28 +1760,17 @@
 										clearTimeout(Seed.cityInit[i].timer);
 									}
 									var current_index = i;
-									var cityIdx = Seed.cityInit[i].id;
-									Seed.fetchCity(cityIdx, function(res) {
-										if (res.ok) {
-											wait_time = Math.randRange(2500, 6000);
-											if (current_index == Seed.cityInit.length - 1) {
-												wait_time = 2500;
-											}
-											onSuccess(translate('Outpost') + ' #' + (i + 1) + ' ' + translate('data successfully fetched'), wait_time, current_step);
-										} else {
-											onError(res.status, res.errmsg, translate('Outpost') + ' #' + (i + 1), wait_time, current_step);
-										}
-									});
+									cityIdx = Seed.cityInit[i].id;
+									Seed.fetchCity(cityIdx, clbFct);
 									return;
 								}
 								startScript();
 								return;
-								break;
 						}
 					} else {
 						/* Retries Limit */
 						clearTimeout(STARTUP_TIMER);
-						progressBar.stop;
+						progressBar.stop();
 						progressBar.hideshow(false);
 						if (retry < 400) { /*
 											 * to avoid displaying twice a
@@ -1784,20 +1780,20 @@
 								<font color="#BF0000"><b> ' + (error_code || retry) + ' - ' + error_msg + '</b></font>\
 								<br><br><div align=left>\
 								' + kFatalSeedMsg + '<br><br></div>\
-								<a id="' + UID['support_link'] + '" href="" target="_blank">Bugs and Known Issues</a><br>');
+								<a id="' + UID.support_link + '" href="" target="_blank">Bugs and Known Issues</a><br>');
 						}
 						return;
 					}
-				}
+				};
 
 				actionLog('<B>' + scriptVersion + ' ' + translate('Loading...') + '</B>');
 				consoleLog('<B>' + scriptVersion + ' ' + translate('Loading...') + '</B>');
 				stepStarting(1);
 
-				function startScript() {
+				var startScript = function() {
 
 					if (updaterPop) setTimeout(function() {
-						updaterPop.destroy()
+						updaterPop.destroy();
 					}, 100);
 
 					progressBar.update({
@@ -1814,11 +1810,11 @@
 					Messages.init();
 
 
-					progressBar.stop;
+					progressBar.stop();
 					progressBar.hideshow(false);
 					progressBarPop.destroy();
 
-					if (Data.options.popUp == null || Data.options.popUp.x == null || Data.options.popUp.x == '' || isNaN(Data.options.popUp.x)) {
+					if (Data.options.popUp === null || Data.options.popUp.x === null || Data.options.popUp.x === '' || isNaN(Data.options.popUp.x)) {
 						var maxWidth = document.body.offsetWidth - 570;
 						if (maxWidth < 760) maxWidth = 760;
 						Data.options.popUp.x = maxWidth + 2;
@@ -1871,7 +1867,7 @@
 
 					REALM_NAME = $$('a.current_realm.change_realm')[0].text;
 					logit(REALM_NAME);
-				}
+				};
 			} catch (e) {
 				dialogFatal(kInitErr + e);
 				logit(inspectObj(e, 8, 1));
@@ -1941,14 +1937,14 @@
 			},
 
 			showAlertNotification: function(msg) {
-				if ((Data.options.enable_notifications_spy && msg.type == 1) ||
-					(Data.options.enable_notifications_attack && msg.type == 0)) {
+				if ((Data.options.enable_notifications_spy && msg.type === 1) ||
+					(Data.options.enable_notifications_attack && msg.type === 0)) {
 
 					CalciumNotifications.showNotification(
-						REALM_NAME + '-' + translate((msg.type == 1 ? 'Spy' : 'Attack')) + '-' + translate('Arrival time') + ': ' + new Date(msg.arrive_at).formatDate() + ' ' + new Date(msg.arrive_at).formatTime(),
+						REALM_NAME + '-' + translate((msg.type === 1 ? 'Spy' : 'Attack')) + '-' + translate('Arrival time') + ': ' + new Date(msg.arrive_at).formatDate() + ' ' + new Date(msg.arrive_at).formatTime(),
 						msg.x + ',' + msg.y + ' : ' + msg.alliance + '/' + msg.troups,
 						serverTime(),
-						(msg.type == 1 ? 'https://wackoscripts.com/images/Spy.jpg' : 'https://wackoscripts.com/images/Attacks.jpg')
+						(msg.type === 1 ? 'https://wackoscripts.com/images/Spy.jpg' : 'https://wackoscripts.com/images/Attacks.jpg')
 					);
 
 				}
@@ -1967,9 +1963,9 @@
 					id: data.player_id
 				};
 				
-				if(tabTemp[1] == 0) {
+				if(tabTemp[1] === 0) {
 					if(Data.options.tchat.enable_notif_realm) {
-						if(t.nMonde != null) {
+						if(t.nMonde !== null) {
 							t.nMonde.close();
 							clearTimeout(t.timerMonde);
 						}
@@ -1986,7 +1982,7 @@
 					verboseLog('Add message to realm tchat :' + inspectObj(message, 4, 1));
 				} else {
 					if(Data.options.tchat.enable_notif_alliance) {
-						if(t.nAlliance != null) {
+						if(t.nAlliance !== null) {
 							t.nAlliance.close();
 							clearTimeout(t.timerAlliance);
 						}
@@ -2039,7 +2035,7 @@
 						msg.x = warn.attacker_coords.x;
 						msg.y = warn.attacker_coords.y;
 					}
-					if (warn.march_type && warn.march_type == 'SpyMarch') {
+					if (warn.march_type && warn.march_type === 'SpyMarch') {
 						msg.type = 1;
 					}
 					if (warn.attacker_units) {
@@ -2047,7 +2043,7 @@
 						for (var tr in warn.attacker_units) {
 							var unit = numf(warn.attacker_units[tr], ' ') + ' ' + translate(tr);
 							results.push(unit);
-							if(msg.type == 1 && tr == 'Spy') {
+							if(msg.type === 1 && tr === 'Spy') {
 								nbSpy = warn.attacker_units[tr];
 							}
 						}
@@ -2063,7 +2059,7 @@
 
 				var found = false;
 				for (var i = 0; i < Data.options.messages_notification.length && !found; i++) {
-					if (Data.options.messages_notification[i].id == msgid) {
+					if (Data.options.messages_notification[i].id === msgid) {
 						found = true;
 					}
 				}
@@ -2142,30 +2138,30 @@
 				if (str.length >= 19) {
 					var year = toNum(str.substr(0, 4));
 					var month = toNum(str.substr(5, 2));
-					if (month == 0) {
+					if (month === 0) {
 						month = toNum(str.substr(6, 1));
 					}
 					var day = toNum(str.substr(8, 2));
-					if (day == 0) {
+					if (day === 0) {
 						day = toNum(str.substr(9, 1));
 					}
 					var hours = toNum(str.substr(11, 2));
-					if (hours == 0) {
+					if (hours === 0) {
 						hours = toNum(str.substr(12, 1));
 					}
 					var minutes = toNum(str.substr(14, 2));
-					if (minutes == 0) {
+					if (minutes === 0) {
 						minutes = toNum(str.substr(15, 1));
 					}
 					var seconds = toNum(str.substr(17, 2));
-					if (seconds == 0) {
+					if (seconds === 0) {
 						seconds = toNum(str.substr(18, 1));
 					}
 					result = new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
 				}
 				return result;
 			}
-		}
+		};
 		/******************************** Socket Teamwork package ********************/
 		var Socket = {
 			SWF_SOCKET_URL : 'https://wackoscripts.com/files/teamwork_socket_bridge.swf',
@@ -2297,21 +2293,21 @@
 				if (!t.isready) return;
 
 				// Send message Connect to server
-				window.postMessage({ type: "TEAMWORK_SOCKET_CONNECT", flashid : UID['TeamWork_SocketBridge'] ,text: (server+':'+port) }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_CONNECT", flashid : UID.TeamWork_SocketBridge ,text: (server+':'+port) }, "*");
 			},
 
 			close : function() {
 				var t = Socket;
 				if (!t.isconnected) return;
 				// Send message disConnect to server
-				window.postMessage({ type: "TEAMWORK_SOCKET_CLOSE", flashid : UID['TeamWork_SocketBridge'] ,text: "none" }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_CLOSE", flashid : UID.TeamWork_SocketBridge ,text: "none" }, "*");
 			},
 
 			write : function(msg) {
 				var t = Socket;
 				if (!t.isconnected) return;
 
-				window.postMessage({ type: "TEAMWORK_SOCKET_WRITE", flashid : UID['TeamWork_SocketBridge'] ,text: msg }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_WRITE", flashid : UID.TeamWork_SocketBridge ,text: msg }, "*");
 			},
 
 			checkstatus : function() {
@@ -2320,7 +2316,7 @@
 				t.shockwave_ok = false;
 
 				logit('SWF request');
-				window.postMessage({ type: "TEAMWORK_SOCKET_CHECKSTATUS", flashid : UID['TeamWork_SocketBridge'] ,text: "none" }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_CHECKSTATUS", flashid : UID.TeamWork_SocketBridge ,text: "none" }, "*");
 				setTimeout(function(){
 					var t = Socket;
 					if (!t.shockwave_ok) {
@@ -2345,26 +2341,26 @@
 				t.credentials = {player_id:Seed.player.id};
 
 				setUID('TeamWork_SWF_Container');
-				var container = $(UID['TeamWork_SWF_Container']);
+				var container = $(UID.TeamWork_SWF_Container);
 				if (!container) {
-					var container = document.createElement('div');
-					container.setAttribute('id', UID['TeamWork_SWF_Container']);
+					container = document.createElement('div');
+					container.setAttribute('id', UID.TeamWork_SWF_Container);
 					mainbox.appendChild(container);
 				}
 
 				setUID('TeamWork_Socket_Bridge');
-				var swf_player = $(UID['TeamWork_Socket_Bridge']);
+				var swf_player = $(UID.TeamWork_Socket_Bridge);
 				if (!swf_player) {
-					var swf_container = $(UID['TeamWork_SWF_Container']);
-					var swf_player = document.createElement('div');
-					swf_player.setAttribute('id', UID['TeamWork_Socket_Bridge']);
+					var swf_container = $(UID.TeamWork_SWF_Container);
+					swf_player = document.createElement('div');
+					swf_player.setAttribute('id', UID.TeamWork_Socket_Bridge);
 					swf_container.appendChild(swf_player);
 				}
 
 				window.addEventListener("message", function(event) {
 					var t = Socket;
 					// We only accept messages from ourselves
-					if (event.source != window) {
+					if (event.source !== window) {
 						logit('window.addEventListener --- Ejected');
 						return;
 					}
