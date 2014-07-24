@@ -1747,7 +1747,7 @@
                                     }
                                 };
                                 progress_title = translate('Getting cities data...');
-								for (var i = 0; i < Seed.cityInit.length; i++) {
+								for (i = 0; i < Seed.cityInit.length; i++) {
 									if (Seed.cityInit[i].loaded) {
 										continue;
 									}
@@ -2377,93 +2377,92 @@
 				script.type = 'text/javascript';
 				script.setAttribute('id',t.scriptid);
 
-				var html=
-				 '//<![CDATA[\n'
-				+'var TeamWork_Socket = {\n'
-				+'	loaded : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_LOADED", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	statusok : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_STATUSOK", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	connected : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_CONNECTED", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	disconnected : function() {\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_DISCONNECTED", text: "none" }, "*");\n'
-				+'	},\n'
-				+'	ioError : function(msg) {\n'
-				+'		console.log(" JS Injected : ioError");\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_IOERROR", text: msg }, "*");\n'
-				+'	},\n'
-				+'	securityError : function(msg) {\n'
-				+'		console.log(" JS Injected : securityError");\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_SECURITYERROR", text: msg }, "*");\n'
-				+'	},\n'
-				+'	receive : function(msg) {\n'
-				+'		console.log(" JS Injected : receive. msg = " +  msg);\n'
-				+'		window.postMessage({ type: "TEAMWORK_SOCKET_RECEIVE", text: msg }, "*");\n'
-				+'	},\n'
-				+'};\n'
-				+'var EventType = {\n'
-				+'	TEAMWORK_SOCKET_CONNECT : \'connect\',\n'
-				+'	TEAMWORK_SOCKET_CLOSE: \'close\',\n'
-				+'	TEAMWORK_SOCKET_WRITE : \'write\',\n'
-				+'	TEAMWORK_SOCKET_CHECKSTATUS : \'checkstatus\',\n'
-				+'};\n'
-				+'function connect(id,strconnect){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		var args=strconnect.split(":");\n'
-				+'		swf.connect(args[0],args[1]);\n'
-				+'	} else {\n'
-				+'		console.log("connect :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function close(id){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		swf.close();\n'
-				+'	} else {\n'
-				+'		console.log("close :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function write(id,msg){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		swf.write(msg);\n'
-				+'	} else {\n'
-				+'		console.log("write :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function checkstatus(id){\n'
-				+'	var swf=document.getElementById(id);\n'
-				+'  if (swf) {\n'
-				+'		swf.areyouok();\n'
-				+'	} else {\n'
-				+'		console.log("areyouok :"+id+" not found");\n'
-				+'	}'
-				+'};\n'
-				+'function init(){\n'
-				+'	window.addEventListener("message", function(event) {\n'
-				+'		if (event.source != window ) {\n'
-				+'			console.log(" JS Injected : Ejected");\n'
-				+'			return;\n'
-				+'		}\n'
-				+'		if (event.data.type && event.data.flashid && event.data.text && EventType[event.data.type]) {\n'
-				+'			var myfunc = EventType[event.data.type];\n'
-				+'			var fn=eval(myfunc);\n'
-				+'			if (typeof fn == \'function\') {\n'
-				+'				fn(event.data.flashid,event.data.text);\n'
-				+'			} else {\n'
-				+'				console.log(myfunc +" is not a function");\n'
-				+'			}\n'
-				+'		}\n'
-				+'	}, false);\n'
-				+'	window.postMessage({ type: "TEAMWORK_SOCKET_SCRIPTREADY", text: "none" }, "*");\n'
-				+'};\n'
-				+'init();\n'
-				+' //]]>';
+				var html = '//<![CDATA[\n';
+				html+= 'var TeamWork_Socket = {\n';
+				html+= '	loaded : function() {\n';
+				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_LOADED", text: "none" }, "*");\n';
+				html+= '	},\n';
+				html+= '	statusok : function() {\n';
+				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_STATUSOK", text: "none" }, "*");\n';
+				html+= '	},\n';
+				html+= '	connected : function() {\n';
+				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_CONNECTED", text: "none" }, "*");\n';
+				html+= '	},\n';
+				html+= '	disconnected : function() {\n';
+				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_DISCONNECTED", text: "none" }, "*");\n';
+				html+= '	},\n';
+				html+= '	ioError : function(msg) {\n';
+				html+= '		console.log(" JS Injected : ioError");\n';
+				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_IOERROR", text: msg }, "*");\n';
+				html+= '	},\n';
+				html+= '	securityError : function(msg) {\n';
+				html+= '		console.log(" JS Injected : securityError");\n';
+				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_SECURITYERROR", text: msg }, "*");\n';
+				html+= '	},\n';
+				html+= '	receive : function(msg) {\n';
+				html+= '		console.log(" JS Injected : receive. msg = " +  msg);\n';
+				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_RECEIVE", text: msg }, "*");\n';
+				html+= '	},\n';
+				html+= '};\n';
+				html+= 'var EventType = {\n';
+				html+= '	TEAMWORK_SOCKET_CONNECT : \'connect\',\n';
+				html+= '	TEAMWORK_SOCKET_CLOSE: \'close\',\n';
+				html+= '	TEAMWORK_SOCKET_WRITE : \'write\',\n';
+				html+= '	TEAMWORK_SOCKET_CHECKSTATUS : \'checkstatus\',\n';
+				html+= '};\n';
+				html+= 'function connect(id,strconnect){\n';
+				html+= '	var swf=document.getElementById(id);\n';
+				html+= '  if (swf) {\n';
+				html+= '		var args=strconnect.split(":");\n';
+				html+= '		swf.connect(args[0],args[1]);\n';
+				html+= '	} else {\n';
+				html+= '		console.log("connect :"+id+" not found");\n';
+				html+= '	}';
+				html+= '};\n';
+				html+= 'function close(id){\n';
+				html+= '	var swf=document.getElementById(id);\n';
+				html+= '  if (swf) {\n';
+				html+= '		swf.close();\n';
+				html+= '	} else {\n';
+				html+= '		console.log("close :"+id+" not found");\n';
+				html+= '	}';
+				html+= '};\n';
+				html+= 'function write(id,msg){\n';
+				html+= '	var swf=document.getElementById(id);\n';
+				html+= '  if (swf) {\n';
+				html+= '		swf.write(msg);\n';
+				html+= '	} else {\n';
+				html+= '		console.log("write :"+id+" not found");\n';
+				html+= '	}';
+				html+= '};\n';
+				html+= 'function checkstatus(id){\n';
+				html+= '	var swf=document.getElementById(id);\n';
+				html+= '  if (swf) {\n';
+				html+= '		swf.areyouok();\n';
+				html+= '	} else {\n';
+				html+= '		console.log("areyouok :"+id+" not found");\n';
+				html+= '	}';
+				html+= '};\n';
+				html+= 'function init(){\n';
+				html+= '	window.addEventListener("message", function(event) {\n';
+				html+= '		if (event.source != window ) {\n';
+				html+= '			console.log(" JS Injected : Ejected");\n';
+				html+= '			return;\n';
+				html+= '		}\n';
+				html+= '		if (event.data.type && event.data.flashid && event.data.text && EventType[event.data.type]) {\n';
+				html+= '			var myfunc = EventType[event.data.type];\n';
+				html+= '			var fn=eval(myfunc);\n';
+				html+= '			if (typeof fn == \'function\') {\n';
+				html+= '				fn(event.data.flashid,event.data.text);\n';
+				html+= '			} else {\n';
+				html+= '				console.log(myfunc +" is not a function");\n';
+				html+= '			}\n';
+				html+= '		}\n';
+				html+= '	}, false);\n';
+				html+= '	window.postMessage({ type: "TEAMWORK_SOCKET_SCRIPTREADY", text: "none" }, "*");\n';
+				html+= '};\n';
+				html+= 'init();\n';
+				html+= ' //]]>';
 
 				script.text=html;
 
@@ -2505,11 +2504,11 @@
 				var t = Socket;
 
 				setUID('TeamWork_Socket_Bridge');
-				var swf_player = $(UID['TeamWork_Socket_Bridge']);
+				var swf_player = $(UID.TeamWork_Socket_Bridge);
 				if (!swf_player) {
-					var swf_container = $(UID['TeamWork_SWF_Container']);
-					var swf_player = document.createElement('div');
-					swf_player.setAttribute('id', UID['TeamWork_Socket_Bridge']);
+					var swf_container = $(UID.TeamWork_SWF_Container);
+					swf_player = document.createElement('div');
+					swf_player.setAttribute('id', UID.TeamWork_Socket_Bridge);
 					swf_container.appendChild(swf_player);
 				}
 
@@ -2524,8 +2523,8 @@
 				
 				easyswf({
 					swf: t.SWF_SOCKET_URL,
-					targetDiv: UID['TeamWork_Socket_Bridge'],
-					swfid : UID['TeamWork_SocketBridge'],
+					targetDiv: UID.TeamWork_Socket_Bridge,
+					swfid : UID.TeamWork_SocketBridge,
 					width: 1,
 					height: 1,
 					allowScriptAccess: "always",
@@ -2542,7 +2541,7 @@
 
 			reloadSocketBridge : function() {
 				var t = Socket;
-				$(UID['TeamWork_SocketBridge']).remove();
+				$(UID.TeamWork_SocketBridge).remove();
 				t.loadSocketBridge();
 			},
 			
@@ -2564,7 +2563,7 @@
 				var ret = false;
 				var boosts = getBoosts();
 				for (var i = 0; i < boosts.length; i++) {
-					if (is_protected() && boosts[i].type == 'safety' && boosts[i].run_at) {
+					if (is_protected() && boosts[i].type === 'safety' && boosts[i].run_at) {
 						if (boosts[i].run_at > serverTime()) {
 							ret = true;
 						}
@@ -2610,7 +2609,7 @@
 				for (var pu in presetUnits) {
 					var numTroops = getTroopNumbers(CAPITAL.id, pu);
 					var unit_max = numTroops.incity + numTroops.indefense;
-					if (unit_max < presetUnits[pu] || presetUnits[pu] == -1) { 
+					if (unit_max < presetUnits[pu] || presetUnits[pu] === -1) { 
 						units[pu] = unit_max;
 					}
 					else  {
@@ -2618,7 +2617,7 @@
 					}
 				}
 				t.apply(units);
-				if(type == 'attack') {
+				if(type === 'attack') {
 					if(Data.options.wall.presets[id].armor !== '' && Data.options.wall.presets[id].scales !== '') {
 						new MyAjax.setCustomization('GreatDragon', Data.options.wall.presets[id].armor, Data.options.wall.presets[id].scales, function(rslt) {});
 					}
@@ -2627,13 +2626,12 @@
 			
 			readBattleReport: function(rpt) {
 				// Parcours des messages du guet
-				for(var i = 0 ; i < Data.options.messages_tower.length ; i++) {
+                var i = 0;
+				for(i = 0 ; i < Data.options.messages_tower.length ; i++) {
 					var msg = Data.options.messages_tower[i];
 					// Si X, Y et type de messages coincide on continue
 					// 
-					if (rpt.report.attacker.location.x == Data.options.messages_tower[i].x 
-					&& rpt.report.attacker.location.y == Data.options.messages_tower[i].y 
-					&& rpt.report.location.terrain == 'City') {
+					if (rpt.report.attacker.location.x === Data.options.messages_tower[i].x && rpt.report.attacker.location.y === Data.options.messages_tower[i].y && rpt.report.location.terrain === 'City') {
 						var results = [];
 						var msgTroups = '';
 						for (var tr in rpt.report.attacker.units) {
@@ -2643,7 +2641,7 @@
 						if (results.length > 0) {
 							msgTroups = results.join(', ');
 						}
-						if(msgTroups == Data.options.messages_tower[i].troups) {
+						if(msgTroups === Data.options.messages_tower[i].troups) {
 							 Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
 						}
 					}
@@ -2652,10 +2650,10 @@
 					var detAlert = SoundPlayer.getNbCurrentAlertForAutoWall();
 					// Hide troop at the end of the last attack ?? ==> Gérer
 					// dans package Wall !
-					if(detAlert.nbAttackInProgress == 0 && detAlert.nbSpyInProgress == 0) {
+					if(detAlert.nbAttackInProgress === 0 && detAlert.nbSpyInProgress === 0) {
 						clearTimeout(Data.options.wall.auto.hide_troop_timeout);
 						var troopInDefense = false;
-						for (var i = 0; i < all_unit_types.length; i++) {
+						for (i = 0; i < all_unit_types.length; i++) {
 							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i]);
 							if(numTroops.indefense > 0) {
 								troopInDefense = true;
@@ -2670,12 +2668,11 @@
 			
 			readSpyReport: function(rpt) {
 				// Parcours des messages du guet
-				for(var i = 0 ; i < Data.options.messages_tower.length ; i++) {
+                var i = 0;
+				for(i = 0 ; i < Data.options.messages_tower.length ; i++) {
 					var msg = Data.options.messages_tower[i];
 					
-					if (rpt.report.attacker.location.x == Data.options.messages_tower[i].x 
-					&& rpt.report.attacker.location.y == Data.options.messages_tower[i].y 
-					&& rpt.report.location.terrain == 'City') {
+					if (rpt.report.attacker.location.x === Data.options.messages_tower[i].x && rpt.report.attacker.location.y === Data.options.messages_tower[i].y && rpt.report.location.terrain === 'City') {
 						var results = [];
 						var msgTroups = '';
 						for (var tr in rpt.report.attacker.units) {
@@ -2685,7 +2682,7 @@
 						if (results.length > 0) {
 							msgTroups = results.join(', ');
 						}
-						if(msgTroups == Data.options.messages_tower[i].troups) {
+						if(msgTroups === Data.options.messages_tower[i].troups) {
 							 Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
 						}
 					}
@@ -2694,10 +2691,10 @@
 					var detAlert = SoundPlayer.getNbCurrentAlertForAutoWall();
 					// Hide troop at the end of the last attack ?? ==> Gérer
 					// dans package Wall !
-					if(detAlert.nbAttackInProgress == 0 && detAlert.nbSpyInProgress == 0) {
+					if(detAlert.nbAttackInProgress === 0 && detAlert.nbSpyInProgress === 0) {
 						clearTimeout(Data.options.wall.auto.hide_troop_timeout);
 						var troopInDefense = false;
-						for (var i = 0; i < all_unit_types.length; i++) {
+						for (i = 0; i < all_unit_types.length; i++) {
 							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i]);
 							if(numTroops.indefense > 0) {
 								troopInDefense = true;
@@ -2735,19 +2732,28 @@
 					});
 				}
 			}
-		}
+		};
 		/******************************** MyAjax package *****************************/
 		var MyAjax = {
 			addMainParams: function() {
 				var p = {};
-				p['user_id'] = C.attrs.userId;
-				p['dragon_heart'] = C.attrs.dragonHeart;
-				p['_session_id'] = C.attrs.sessionId;
-				p['version'] = api_version;
-				p['timestamp'] = toNum(serverTime());
+				p.user_id = C.attrs.userId;
+				p.dragon_heart = C.attrs.dragonHeart;
+				p._session_id = C.attrs.sessionId;
+				p.version = api_version;
+				p.timestamp = toNum(serverTime());
 				return p;
 			},
 			tradeSell: function(product, nbProduct, price, callback) {
+                var mycb = function(rslt) {
+					if (rslt.ok) {
+						
+					} else {
+						verboseLog('Ajax.tradeSell ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt.dat.result);
+					return;
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
@@ -2756,19 +2762,18 @@
 				p['offer[price]'] = price;
 				
 				new MyAjaxRequest('trade', 'trades/sell.json', p, mycb, true);
-				
-				function mycb(rslt) {
+			},
+			tradeSearch: function(product, nbProduct, upperPrice, callback) { 
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					} else {
-						verboseLog('Ajax.tradeSell ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+						verboseLog('Ajax.tradeSearch ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				}
-			},
-			tradeSearch: function(product, nbProduct, upperPrice, callback) { 
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				p['offer[product]'] = product;
@@ -2777,8 +2782,9 @@
 				p['offer[upper_price]'] = upperPrice;
 				
 				new MyAjaxRequest('trade', 'trades/search.json', p, mycb, false);
-
-				function mycb(rslt) {
+			},
+			tradeSearchSell: function(callback) { 
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					} else {
@@ -2786,10 +2792,8 @@
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				}
-			},
-			tradeSearchSell: function(callback) { 
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				p['offer[product]'] = 'gold';
@@ -2798,25 +2802,9 @@
 				p['offer[upper_price]'] = 251000;
 				
 				new MyAjaxRequest('trade', 'trades.json', p, mycb, false);
-
-				function mycb(rslt) {
-					if (rslt.ok) {
-						
-					} else {
-						verboseLog('Ajax.tradeSearch ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					}
-					if (callback) callback(rslt.dat.result);
-					return;
-				}
 			},
 			tradeBuy: function(idTrade, callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				
-				new MyAjaxRequest('trade', 'trades/' + idTrade + '/buy.json', p, mycb, true);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else {
@@ -2824,16 +2812,15 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			tradeCancel: function(idTrade, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				
-				new MyAjaxRequest('trade', 'trades/' + idTrade + '/cancel.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('trade', 'trades/' + idTrade + '/buy.json', p, mycb, true);
+			},
+			tradeCancel: function(idTrade, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					} else {
@@ -2841,39 +2828,16 @@
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				}
-			},
-			abandonWilderness: function(city_id, x, y, callback) {
-				verboseLog('Ajax.abandonWilderness : city_id='+city_id+', x='+x+', y='+y);
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method']	= 'delete';
-				p['x']			= x;
-				p['y']			= y;
 				
-				var p2 = {};
-				p2 = t.addMainParams();
-				p2['x'] = x;
-				p2['y'] = y;
-				new MyAjaxRequest('wilderness', 'cities/'+ city_id +'/wildernesses/abandon.json', p, mycb, true);
-				
-				
-				function mycb(rslt) {
-					if (rslt.ok) {
-						var options = {
-							x:x,
-							y:y,
-							force_request:true,
-							wild_detail:true
-						};
-						Map.tileAt(options, mycb2);
-						verboseLog('Ajax.abandonWilderness : ' + rslt.ok);
-					} else {
-						verboseLog('Ajax.abandonWilderness ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					}
-					
-					function mycb2(rslt) {
+				new MyAjaxRequest('trade', 'trades/' + idTrade + '/cancel.json', p, mycb, true);
+			},
+			abandonWilderness: function(city_id, x, y, callback) {
+				var mycb = function(rslt) {
+					var mycb2 = function(rslt) {
 						if (rslt.ok) {
 							verboseLog('Ajax.tileAt : ' + rslt.ok);
 							if (callback) {
@@ -2885,18 +2849,32 @@
 								callback(false);
 							}
 						}
+					};
+                    if (rslt.ok) {
+						var options = {
+							x:x,
+							y:y,
+							force_request:true,
+							wild_detail:true
+						};
+						Map.tileAt(options, mycb2);
+						verboseLog('Ajax.abandonWilderness : ' + rslt.ok);
+					} else {
+						verboseLog('Ajax.abandonWilderness ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
-				}
-				
-				verboseLog('Ajax.abandonWilderness : Fin');
-			},
-			sanctuaryAbilities: function(callback) {
+				};
+                verboseLog('Ajax.abandonWilderness : city_id='+city_id+', x='+x+', y='+y);
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('dragonHandle', 'sanctuary_abilities', p, mycb, false);
+				p._method = 'delete';
+				p.x = x;
+				p.y = y;
 
-				function mycb(rslt) {
+				new MyAjaxRequest('wilderness', 'cities/'+ city_id +'/wildernesses/abandon.json', p, mycb, true);
+			},
+			sanctuaryAbilities: function(callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Data.options.sanctuaryAbilities = rslt.dat.sanctuary_abilities;
 						if (callback) {
@@ -2908,15 +2886,14 @@
 							callback(false);
 						}
 					}
-				}
-			},
-			battleReport: function(report_id, player_id, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('reports_read', 'reports/battle/' + report_id + '/player/' + player_id + '.json', p, mycb, false);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('dragonHandle', 'sanctuary_abilities', p, mycb, false);
+			},
+			battleReport: function(report_id, player_id, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						var msg = rslt.dat.result.report_notification;
 						var rpt = {
@@ -2938,16 +2915,14 @@
 					} else verboseLog('Ajax.battleReport ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			getCustomization: function (callback) {
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				
-				new MyAjaxRequest('customization', 'player_unit_customization', p, mycb, false);
-				
-				function mycb(rslt) {
+				new MyAjaxRequest('reports_read', 'reports/battle/' + report_id + '/player/' + player_id + '.json', p, mycb, false);
+			},
+			getCustomization: function (callback) {
+                var mycb = function(rslt) {
 					if(rslt.dat) {
 						if (rslt.dat.result) {
 							if (rslt.dat.result.success) {
@@ -2961,33 +2936,23 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				}
-				
-			},
-			setCustomization: function(unitName, armor, scales, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
-
 				p = t.addMainParams();
-				p['unit_name'] = unitName;
-
-				if (armor) {
-					p['customizations'] = scales + ',' + armor;
-				} else {
-					p['customizations'] = scales;
-				}
-
-				new MyAjaxRequest('customization', 'player_unit_customization/update.json', p, mycb, true);
-
-				function mycb(rslt) {
+				
+				new MyAjaxRequest('customization', 'player_unit_customization', p, mycb, false);
+			},
+			setCustomization: function(unitName, armor, scales, callback) {
+				var mycb = function(rslt) {
 					if(rslt.dat) {
 						if (rslt.dat.result) {
 							if (rslt.dat.result.success) {
 								var dragon_name = rslt.dat.result.unit_type.substring(rslt.dat.result.unit_type.indexOf('::') + 2);
 								Seed.dragons[dragon_name].slots = rslt.dat.result.slots;
-								if (Seed.dragons[dragon_name].slots.scales == undefined)
+								if (Seed.dragons[dragon_name].slots.scales === undefined)
 									Seed.dragons[dragon_name].slots.scales = "GreenScales";
-								if (Seed.dragons[dragon_name].slots.armor == undefined)
+								if (Seed.dragons[dragon_name].slots.armor === undefined)
 									Seed.dragons[dragon_name].slots.armor = "GreenArmor";
 
 							}
@@ -2999,16 +2964,21 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			buildingUpgrade: function(cityId, buildingId, callback) {
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'put';
-				new MyAjaxRequest('building', 'cities/' + cityId + '/buildings/' + buildingId + '.json', p, mycb, true);
+				p.unit_name = unitName;
 
-				function mycb(rslt) {
+				if (armor) 
+					p.customizations = scales + ',' + armor;
+				else 
+					p.customizations = scales;
+
+				new MyAjaxRequest('customization', 'player_unit_customization/update.json', p, mycb, true);
+			},
+			buildingUpgrade: function(cityId, buildingId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
 							Seed.checkAddJob(rslt.dat.result.job);
@@ -3016,17 +2986,15 @@
 					} else verboseLog('Ajax.buildingUpgrade ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			cancelTraining: function(jobId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['job_id'] = jobId;
-				p['_method'] = 'delete';
-				new MyAjaxRequest('canceljob', 'jobs/' + jobId + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p._method = 'put';
+				new MyAjaxRequest('building', 'cities/' + cityId + '/buildings/' + buildingId + '.json', p, mycb, true);
+			},
+			cancelTraining: function(jobId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
 							delete(Seed.jobs[rslt.dat.result.job.city_id][rslt.dat.result.job.id]);
@@ -3035,17 +3003,16 @@
 					} else verboseLog('Ajax.cancelTraining ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			claimQuest: function(questName, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['quest_name'] = questName;
-				p['_method'] = 'put';
-				new MyAjaxRequest('claim', 'player_quests/claim.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.job_id = jobId;
+				p._method = 'delete';
+				new MyAjaxRequest('canceljob', 'jobs/' + jobId + '.json', p, mycb, true);
+			},
+			claimQuest: function(questName, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.quests.claimed) Seed.player.quests.claimed = cloneProps(rslt.dat.quests.claimed);
@@ -3056,58 +3023,55 @@
 					} else verboseLog(translate('could-not-claim') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			collectResources: function(cityId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('collect', 'cities/' + cityId + '/move_resources.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.quest_name = questName;
+				p._method = 'put';
+				new MyAjaxRequest('claim', 'player_quests/claim.json', p, mycb, true);
+			},
+			collectResources: function(cityId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) Seed.updateCity(rslt.dat.city);
 					else verboseLog(translate('Auto-Collect Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				}
-			},
-			dragonBreeding: function(male_id, female_id, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'put';
-				p['male_id'] = male_id;
-				p['female_id'] = female_id;
-				new MyAjaxRequest('breeding', 'dragons', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('collect', 'cities/' + cityId + '/move_resources.json', p, mycb, true);
+			},
+			dragonBreeding: function(male_id, female_id, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.checkAddJob(rslt.dat.result.breeding_job);
 					} else verboseLog('Ajax.dragonBreeding ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p._method = 'put';
+				p.male_id = male_id;
+				p.female_id = female_id;
+				new MyAjaxRequest('breeding', 'dragons', p, mycb, true);
 			},
 			dragonHandle: function(options, callback) {
-				/*
+				if (!options.dragon_id) return;
+                /*
 				 * options : { dragon_id, method, building_id } method delete =
 				 * Dismiss a dragon method put = Remove a dragon from roost
 				 * method put + a roost building id = Set a dragon in the roost
 				 * (boosts activated)
 				 */
-				if (!options.dragon_id) return;
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p['_method'] = (options.method || 'put');
-				if (options && options.building_id) p['building_id'] = options.building_id;
-				new MyAjaxRequest('dragonHandle', 'dragons/' + options.dragon_id, p, mycb, true);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
-							if (options.method == 'delete') {
+							if (options.method === 'delete') {
 								delete(Seed.sanctuary_dragons[options.dragon_id]);
 								if (Data.options.sanctuary.feeding[options.dragon_id]) delete(Data.options.sanctuary.feeding[options.dragon_id]);
 							} else {
@@ -3116,48 +3080,47 @@
 									for (var i in rslt.dat.result.dragon) {
 										var dragon = cloneProps(rslt.dat.result.dragon[i]);
 										var dragon_name = dragon.type.substring(dragon.type.indexOf('::') + 2);
-										dragon_name = (dragon_name == 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
+										dragon_name = (dragon_name === 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
 										dragon.name = dragon_name;
 										var dragon_rank = sanctuaryDragonRank[dragon.rank];
 										dragon.type = dragon.gender + '-' + dragon_rank;
-										dragon.subtype = ((i == 'city_great_dragon') ? 'great_dragon' : i).replace(/ |_/g, '-');
+										dragon.subtype = ((i === 'city_great_dragon') ? 'great_dragon' : i).replace(/ |_/g, '-');
 										Seed.sanctuary_dragons[dragon.id] = cloneProps(dragon);
 									}
 								} catch (e) {
 									rslt.ok = false;
 									rslt.errmsg = 'Exception - ' + e.toString();
-									verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg)
+									verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 								}
 							}
 						}
 					} else verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			dragonFeeding: function(dragon_id, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('feeding', 'dragons/' + dragon_id + '/feed', p, mycb, true);
-
-				function mycb(rslt) {
+				p._method = (options.method || 'put');
+				if (options && options.building_id) p.building_id = options.building_id;
+				new MyAjaxRequest('dragonHandle', 'dragons/' + options.dragon_id, p, mycb, true);
+			},
+			dragonFeeding: function(dragon_id, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.checkAddJob(rslt.dat.result.feeding_job);
 					} else verboseLog('Ajax.dragonFeeding ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			getMinigame: function(type, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['ticket_type'] = type;
-				new MyAjaxRequest('minigame', 'minigames/index.json', p, mycb, false);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('feeding', 'dragons/' + dragon_id + '/feed', p, mycb, true);
+			},
+			getMinigame: function(type, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (callback) {
 							callback({
@@ -3172,73 +3135,38 @@
 					} else verboseLog('Ajax.getMinigame ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			marchRecall: function(cityId, marchId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				new MyAjaxRequest('cancelmarch', 'cities/' + cityId + '/marches/' + marchId + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.ticket_type = type;
+				new MyAjaxRequest('minigame', 'minigames/index.json', p, mycb, false);
+			},
+			marchRecall: function(cityId, marchId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.updateCity(rslt.dat.result.city);
 					} else verboseLog('Ajax.marchRecall ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p._method = 'delete';
+				new MyAjaxRequest('cancelmarch', 'cities/' + cityId + '/marches/' + marchId + '.json', p, mycb, true);
 			},
 			marchBusy: false,
 			marchSend: function(cityId, x, y, generalId, units, ownerId, callback) {
-				var t = MyAjax;
-
-				t.marchBusy = true;
-				var dragon_type = null;
-				var found_in_list = false;
-				var u = {}
-				var mt = false;
-				var sendTroops = "{";
-				for (var pu in units) {
-					if (units[pu] > 0) {
-						for (var gd = 0; gd < Seed.dragonList.length && !found_in_list; gd++) {
-							if (Seed.dragonList[gd].type == units[pu]) {
-								found_in_list = true;
-								dragon_type = units[pu];
-							}
-						}
-						u[pu] = units[pu];
-						if (mt == true) {
-							sendTroops += ',';
-						}
-						sendTroops += '"' + pu + '":' + units[pu];
-						mt = true;
-					}
-				}
-				sendTroops += "}";
-
-				var p = {};
-				p = t.addMainParams();
-				p['march[x]'] = x;
-				p['march[y]'] = y;
-				p['_method'] = 'post';
-				p['march[units]'] = sendTroops;
-				p['march[general_id]'] = generalId;
-				p['march[march_type]'] = 'attack'; /*
-													 * Fix to send only spies in
-													 * attack
-													 */
-				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-
-				function mycb(rslt) {
+				var mycb = function(rslt) {
 					t.marchBusy = false;
 					if (rslt.ok) {
 						try {
 							rslt.dat.result.job.ownerId = ownerId;
 							if (rslt.dat.result.city.marches) {
 								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
+									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
 										rslt.dat.result.city.marches[i].ownerId = ownerId;
 								}
 							}
@@ -3251,19 +3179,71 @@
 					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
+				};
+                var t = MyAjax;
+				t.marchBusy = true;
+				var dragon_type = null;
+				var found_in_list = false;
+				var u = {};
+				var mt = false;
+				var sendTroops = "{";
+				for (var pu in units) {
+					if (units[pu] > 0) {
+						for (var gd = 0; gd < Seed.dragonList.length && !found_in_list; gd++) {
+							if (Seed.dragonList[gd].type === units[pu]) {
+								found_in_list = true;
+								dragon_type = units[pu];
+							}
+						}
+						u[pu] = units[pu];
+						if (mt === true) {
+							sendTroops += ',';
+						}
+						sendTroops += '"' + pu + '":' + units[pu];
+						mt = true;
+					}
 				}
+				sendTroops += "}";
+
+				var p = {};
+				p = t.addMainParams();
+				p['march[x]'] = x;
+				p['march[y]'] = y;
+				p._method = 'post';
+				p['march[units]'] = sendTroops;
+				p['march[general_id]'] = generalId;
+				p['march[march_type]'] = 'attack'; // Fix to send only spies in attack
+				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
 			},
 			marchSpy: function(cityId, x, y, units, ownerId, callback) {
-				var t = MyAjax;
-
+				var mycb = function(rslt) {
+					t.marchBusy = false;
+					if (rslt.ok) {
+						try {
+							rslt.dat.result.job.ownerId = ownerId;
+							if (rslt.dat.result.city.marches) {
+								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
+									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
+										rslt.dat.result.city.marches[i].ownerId = ownerId;
+								}
+							}
+							Seed.updateCity(rslt.dat.result.city);
+						} catch (e) {
+							debugLog('***********' + e);
+						}
+					} else verboseLog('Ajax.marchSpy ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				};
+                var t = MyAjax;
 				t.marchBusy = true;
-				var u = {}
+				var u = {};
 				var mt = false;
 				var sendTroops = "{";
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						u[pu] = units[pu];
-						if (mt == true) {
+						if (mt === true) {
 							sendTroops += ',';
 						}
 						sendTroops += '"' + pu + '":' + units[pu];
@@ -3277,65 +3257,31 @@
 				p['march[march_type]'] = 'spy';
 				p['march[y]'] = y;
 				p['march[units]'] = sendTroops;
-				p['_method'] = 'post';
+				p._method = 'post';
 				p['march[x]'] = x;
 				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-
-				function mycb(rslt) {
-					t.marchBusy = false;
-					if (rslt.ok) {
-						try {
-							rslt.dat.result.job.ownerId = ownerId;
-							if (rslt.dat.result.city.marches) {
-								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
-										rslt.dat.result.city.marches[i].ownerId = ownerId;
-								}
-							}
-							Seed.updateCity(rslt.dat.result.city);
-						} catch (e) {
-							debugLog('***********' + e);
-						}
-					} else verboseLog('Ajax.marchSpy ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				}
 			},
 			membership: function(alliance_id, id, method, callback) {
+                var mycb = function(rslt) {
+					if (!rslt.ok) verboseLog('Ajax.membership ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				};
 				var t = MyAjax;
 				var p = {}, json = 'alliances/' + alliance_id + '/memberships';
 				p = t.addMainParams();
-				if (method == 'put')
+				if (method === 'put')
 					p['alliance_membership[approved]'] = 'true';
-				if (method == 'invite')
+				if (method === 'invite')
 					p['alliance_membership[player_id]'] = id;
 				else {
 					json += '/' + id;
-					p['_method'] = method;
+					p._method = method;
 				}
 				new MyAjaxRequest('membership', json, p, mycb, true);
-
-				function mycb(rslt) {
-					if (!rslt.ok) verboseLog('Ajax.membership ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) {
-						/*
-						 * new
-						 * Ajax.Request('script.calciumscript.com/finder.php', {
-						 * method: 'post', parameters: { result: rslt, type:
-						 * 'membership' } });
-						 */
-						callback(rslt);
-					}
-					return;
-				}
 			},
 			messageDetail: function(id, callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				new MyAjaxRequest('reports_read', 'reports/' + id + '.json', p, mycb, false);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						var msg = rslt.dat.result.report_notification;
 						var d = {
@@ -3358,17 +3304,14 @@
 					} else verboseLog('Ajax.messageDetail ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			messageDelete: function(ids, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				p['ids'] = ids.join('|');
-				new MyAjaxRequest('reports_del', 'reports/bulk_delete.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('reports_read', 'reports/' + id + '.json', p, mycb, false);
+			},
+			messageDelete: function(ids, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						for (var i = 0; i < ids.length; i++) {
 							if (Messages.details[ids[i]]) delete(Messages.details[ids[i]]);
@@ -3377,22 +3320,16 @@
 					} else verboseLog('Ajax.messageDelete ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				}
-			},
-			messageList: function(cat, numpage, count, callback) {
+				};
 				var t = MyAjax;
-				if (!cat) {
-					cat = 'all';
-				}
-				var npage = (numpage == -1 ? 1 : numpage);
 				var p = {};
 				p = t.addMainParams();
-				p['count'] = count;
-				p['category'] = cat;
-				p['page'] = npage;
-				new MyAjaxRequest('reports', 'reports.json', p, mycb, false);
-
-				function mycb(rslt) {
+				p._method = 'delete';
+				p.ids = ids.join('|');
+				new MyAjaxRequest('reports_del', 'reports/bulk_delete.json', p, mycb, true);
+			},
+			messageList: function(cat, numpage, count, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Messages.total_count = rslt.dat.result.total;
 						if (rslt.dat.result.report_notifications) {
@@ -3417,20 +3354,20 @@
 					} else verboseLog('Ajax.messageList ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			messageSend: function(subject, body, id, to_player, callback) {
+				};
 				var t = MyAjax;
+				if (!cat)
+					cat = 'all';
+				var npage = (numpage === -1 ? 1 : numpage);
 				var p = {};
 				p = t.addMainParams();
-				if (to_player)
-					p['player_id'] = id;
-				else p['alliance_id'] = id;
-				p['message[subject]'] = subject;
-				p['message[message]'] = body;
-				new MyAjaxRequest('message', 'messages.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.count = count;
+				p.category = cat;
+				p.page = npage;
+				new MyAjaxRequest('reports', 'reports.json', p, mycb, false);
+			},
+			messageSend: function(subject, body, id, to_player, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (callback) {
 							callback(rslt.dat.result);
@@ -3438,68 +3375,61 @@
 						}
 					} else verboseLog('Ajax.messageSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
-				}
+				};
+                var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				if (to_player) p.player_id = id;
+				else p.alliance_id = id;
+				p['message[subject]'] = subject;
+				p['message[message]'] = body;
+				new MyAjaxRequest('message', 'messages.json', p, mycb, true);
 			},
 			pollingList: function(callback) {
-				var t = MyAjax;
-				var p = {};
-				new MyAjaxRequest('reports', 'poll.json', p, mycb, false);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						if (callback) {
-							callback(rslt.dat.result); /*
-														 * should find
-														 * unread_count (number)
-														 * and next_attack
-														 * (number)
-														 */
+							callback(rslt.dat.result); //should find unread_count (number) and next_attack (number)
 							return;
 						}
 					} else verboseLog('Ajax.pollingList ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				}
-			},
-			researchStart: function(cityId, researchType, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
-				p = t.addMainParams();
-				p['_method'] = 'post';
-				p['research[research_type]'] = researchType;
-				new MyAjaxRequest('research', 'cities/' + cityId + '/researches.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('reports', 'poll.json', p, mycb, false);
+			},
+			researchStart: function(cityId, researchType, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						Seed.updateCity(rslt.dat.result.city);
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else verboseLog('Ajax.researchStart ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			save_sound: function(callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['cookie'] = '{"DoALocalSoundKey":{"sound":0,"music":0}}';
-				new MyAjaxRequest('cookie', 'cookie/save.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p._method = 'post';
+				p['research[research_type]'] = researchType;
+				new MyAjaxRequest('research', 'cities/' + cityId + '/researches.json', p, mycb, true);
+			},
+			save_sound: function(callback) {
+                var mycb = function(rslt) {
 					if (!rslt.ok) verboseLog('Ajax.save_sound ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				}
-			},
-			saveMinigame: function(id, type, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['ticket_type'] = type;
-				p['minigame_timestamp'] = id;
-				new MyAjaxRequest('save_minigame', 'minigames/save_result.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.cookie = '{"DoALocalSoundKey":{"sound":0,"music":0}}';
+				new MyAjaxRequest('cookie', 'cookie/save.json', p, mycb, true);
+			},
+			saveMinigame: function(id, type, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) Seed.player.items = cloneProps(rslt.dat.result.items);
@@ -3520,31 +3450,16 @@
 					} else verboseLog(translate('Save minigame Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			setDefenseForce: function(cityId, units, callback) {
+				};
 				var t = MyAjax;
-				var u = {};
-				var mt = false;
-				var defenseForce = "{";
-				for (var pu in units) {
-					if (units[pu] > 0) {
-						u[pu] = units[pu];
-						if (mt == true) {
-							defenseForce += ',';
-						}
-						defenseForce += '"' + pu + '":' + units[pu];
-						mt = true;
-					}
-				}
-				defenseForce += "}";
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'put';
-				p['defense_force[units]'] = defenseForce;
-				new MyAjaxRequest('defense', 'cities/' + cityId + '/defense_force.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p.ticket_type = type;
+				p.minigame_timestamp = id;
+				new MyAjaxRequest('save_minigame', 'minigames/save_result.json', p, mycb, true);
+			},
+			setDefenseForce: function(cityId, units, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							Seed.updateCity(rslt.dat.result.city);
@@ -3554,47 +3469,83 @@
 					} else verboseLog('Ajax.setDefenseForce ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			switchDefensiveTower: function(cityId, onOff, callback) {
+				};
 				var t = MyAjax;
+				var u = {};
+				var mt = false;
+				var defenseForce = "{";
+				for (var pu in units) {
+					if (units[pu] > 0) {
+						u[pu] = units[pu];
+						if (mt === true) {
+							defenseForce += ',';
+						}
+						defenseForce += '"' + pu + '":' + units[pu];
+						mt = true;
+					}
+				}
+				defenseForce += "}";
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'put';
-				p['defensive_tower'] = onOff ? '0' : '1';
-				new MyAjaxRequest('defended', 'cities/' + cityId + '/defensive_tower', p, mycb, true);
-				
-				function mycb(rslt) {
+				p._method = 'put';
+				p['defense_force[units]'] = defenseForce;
+				new MyAjaxRequest('defense', 'cities/' + cityId + '/defense_force.json', p, mycb, true);
+			},
+			switchDefensiveTower: function(cityId, onOff, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						verboseLog(translate('switchDefensiveTower OK'));
 						Seed.updateCity(rslt.dat.city);
 					} else verboseLog(translate('switchDefensiveTower Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-				
-			},
-			switchDefense: function(cityId, onOff, callback) {
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['callback'] = 'function Function() {}';
-				p['_method'] = 'put';
-				p['defended'] = onOff ? '0' : '1';
-				new MyAjaxRequest('defended', 'cities/' + cityId + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p._method = 'put';
+				p.defensive_tower = onOff ? '0' : '1';
+				new MyAjaxRequest('defended', 'cities/' + cityId + '/defensive_tower', p, mycb, true);
+			},
+			switchDefense: function(cityId, onOff, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						verboseLog(translate('switchDefense OK'));
 						Seed.updateCity(rslt.dat.city);
 					} else verboseLog(translate('switchDefense Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p.callback = 'function Function() {}';
+				p._method = 'put';
+				p.defended = onOff ? '0' : '1';
+				new MyAjaxRequest('defended', 'cities/' + cityId + '.json', p, mycb, true);
 			},
 			TransportMarch: function(cityId, x, y, units, resources, ownerId, callback) {
-				var t = MyAjax;
-
+				var mycb = function(rslt) {
+					t.marchBusy = false;
+					if (rslt.ok) {
+						try {
+							rslt.dat.result.job.ownerId = ownerId;
+							if (rslt.dat.result.city.marches) {
+								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
+									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
+										rslt.dat.result.city.marches[i].ownerId = ownerId;
+								}
+							}
+							Seed.updateCity(rslt.dat.result.city);
+							Data.marches.ressources[rslt.dat.result.job.march_id] = cloneProps(resources);
+						} catch (e) {
+							debugLog('***********' + e);
+						}
+					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				};
+                var t = MyAjax;
 				t.marchBusy = true;
 				var r = {};
 				var trs = false;
@@ -3602,7 +3553,7 @@
 				for (var pr in resources) {
 					if (resources[pr] > 0) {
 						r[pr] = resources[pr];
-						if (trs == true) {
+						if (trs === true) {
 							sendResources += ',';
 						}
 						sendResources += '"' + pr + '":' + resources[pr];
@@ -3616,7 +3567,7 @@
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						u[pu] = units[pu];
-						if (mt == true) {
+						if (mt === true) {
 							sendTroops += ',';
 						}
 						sendTroops += '"' + pu + '":' + units[pu];
@@ -3631,74 +3582,44 @@
 				p['march[y]'] = y;
 				p['march[resources]'] = sendResources;
 				p['march[units]'] = sendTroops;
-				p['_method'] = 'post';
+				p._method = 'post';
 				p['march[x]'] = x;
 				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-
-				function mycb(rslt) {
-					t.marchBusy = false;
-					if (rslt.ok) {
-						try {
-							rslt.dat.result.job.ownerId = ownerId;
-							if (rslt.dat.result.city.marches) {
-								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
-										rslt.dat.result.city.marches[i].ownerId = ownerId;
-								}
-							}
-							Seed.updateCity(rslt.dat.result.city);
-							Data.marches.ressources[rslt.dat.result.job.march_id] = cloneProps(resources);
-						} catch (e) {
-							debugLog('***********' + e);
-						}
-					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				}
 			},
 			troopTraining: function(troopType, troopQty, cityId, callback) {
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p['_method'] = 'post';
-				p['units[quantity]'] = troopQty;
-				p['units[unit_type]'] = troopType;
-				new MyAjaxRequest('training', 'cities/' + cityId + '/units.json', p, mycb, true);
-
-				function mycb(rslt) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						Seed.updateCity(rslt.dat.result.city);
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else verboseLog('Ajax.troopTraining ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			troopReviving: function(troopType, troopQty, cityId, callback) {
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
+				p._method = 'post';
 				p['units[quantity]'] = troopQty;
-				p['_method'] = 'post';
 				p['units[unit_type]'] = troopType;
-				new MyAjaxRequest('resurrect', 'cities/' + cityId + '/units/resurrect.json', p, mycb, true);
-
-				function mycb(rslt) {
+				new MyAjaxRequest('training', 'cities/' + cityId + '/units.json', p, mycb, true);
+			},
+			troopReviving: function(troopType, troopQty, cityId, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) Seed.checkAddJob(rslt.dat.result.job);
 					else verboseLog('Ajax.troopReviving ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			useItem: function(cityId, url, jobId, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['job_id'] = jobId;
-				p['_method'] = 'delete';
-				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+				p['units[quantity]'] = troopQty;
+				p._method = 'post';
+				p['units[unit_type]'] = troopType;
+				new MyAjaxRequest('resurrect', 'cities/' + cityId + '/units/resurrect.json', p, mycb, true);
+			},
+			useItem: function(cityId, url, jobId, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) Seed.player.items = cloneProps(rslt.dat.result.items);
@@ -3710,23 +3631,22 @@
 					} else verboseLog(translate('March speedup Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			useSingleItem: function(url, callback) {
-				var t = MyAjax;
+				};
+                var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				p['quantity'] = 1;
+				p.job_id = jobId;
+				p._method = 'delete';
 				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+			},
+			useSingleItem: function(url, callback) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) {
 								var tabIt = [];
 								for(var it in rslt.dat.result.items) {
-									if(rslt.dat.result.items[it] != Seed.player.items[it]) {
+									if(rslt.dat.result.items[it] !== Seed.player.items[it]) {
 										verboseLog('Push : ' + translate(it));
 										tabIt.push(it);
 									}
@@ -3742,23 +3662,22 @@
 					} else verboseLog(translate('Single item usage Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
-			},
-			useMoreItem: function(url, nb, callback) {
+				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method'] = 'delete';
-				p['quantity'] = nb;
+				p._method = 'delete';
+				p.quantity = 1;
 				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
-
-				function mycb(rslt) {
+			},
+			useMoreItem: function(url, nb, callback) {
+				var mycb = function(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) {
 								var tabIt = [];
 								for(var it in rslt.dat.result.items) {
-									if(rslt.dat.result.items[it] != Seed.player.items[it]) {
+									if(rslt.dat.result.items[it] !== Seed.player.items[it]) {
 										verboseLog('Push : ' + translate(it));
 										tabIt.push(it);
 									}
@@ -3774,19 +3693,16 @@
 					} else verboseLog(translate('More item usage Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				}
+				};
+                var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p._method = 'delete';
+				p.quantity = nb;
+				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
 			},
 			searchCPT: function(type, search, callback) {
-				var t = MyAjax;
-				var p = {};
-				p['realmId'] = SERVER_ID;
-				p['type'] = type;
-				p['search'] = search;
-                p['version'] = api_version;
-				p['timestamp'] = toNum(serverTime());
-				new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
-
-				function mycb(rslt) {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					}
@@ -3797,17 +3713,18 @@
 						callback(rslt);
 					}
 					return;
-				}
-			},
-            statScript: function() {
+				};
 				var t = MyAjax;
 				var p = {};
-				p['realmId'] = SERVER_ID;
-				p['tool'] = scriptName;
-				p['userId'] = C.attrs.userId;
-               new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/script.php', p, mycb, false);
-
-				function mycb(rslt) {
+				p.realmId = SERVER_ID;
+				p.type = type;
+				p.search = search;
+                p.version = api_version;
+				p.timestamp = toNum(serverTime());
+				new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
+			},
+            statScript: function() {
+                var mycb = function(rslt) {
 					if (rslt.ok) {
 						
 					}
@@ -3815,7 +3732,13 @@
 						verboseLog(translate('Script stat error') + ': ' + rslt.errmsg);
 					}
 					return;
-				}
+				};
+				var t = MyAjax;
+				var p = {};
+				p.realmId = SERVER_ID;
+				p.tool = scriptName;
+				p.userId = C.attrs.userId;
+                new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/script.php', p, mycb, false);
 			}
 		};
 		/******************************** Auto-collect package ***********************/
@@ -3838,42 +3761,22 @@
 					}
 				}
 			},
-
-			doit: function() {
+            doit: function() {
+                var collect = function(cityIdx, delay) {
+					setTimeout(function() {
+						MyAjax.collectResources(Seed.cities[cityIdx].id);
+						actionLog(translate('Collected resources at outpost') + ' <B>#' + cityIdx + '</B>');
+					}, delay);
+				};
 				var t = AutoCollect,
 					offset = 0;
 				Data.options.autoCollect.last_time = serverTime();
-				if (Seed.player.boosts && Seed.player.boosts.collect_resources) { /*
-																					 * Do
-																					 * not
-																					 * collect
-																					 * from
-																					 * OP
-																					 * if
-																					 * nano
-																					 * collector
-																					 * is
-																					 * running
-																					 */
+				if (Seed.player.boosts && Seed.player.boosts.collect_resources) { //Do not collect from OP if nano collector is running
 					actionLog(translate('Collected resources at outpost') + ' : ' + translate('pause').initCap() + ' (' + translate('boost-collect-week') + ')');
 				} else {
-					for (var out = 2; out < Seed.cities.length; ++out) { /*
-																			 * Start
-																			 * at 2
-																			 * (0=Capital,
-																			 * 1=Spectral)
-																			 */
-						if (Seed.cities[out] && Seed.cities[out].id && Buildings.getCount(out, 'Silo') > 0) { /*
-																												 * Do
-																												 * not
-																												 * collect
-																												 * if
-																												 * there's
-																												 * no
-																												 * silo
-																												 * on
-																												 * OP
-																												 */
+					for (var out = 2; out < Seed.cities.length; ++out) {//Start at 2 (0=Capital, 1=Spectral)
+
+						if (Seed.cities[out] && Seed.cities[out].id && Buildings.getCount(out, 'Silo') > 0) { //Do not collect if there's no silo on OP
 							++offset;
 							collect(out, offset * Math.randRange(5000, 10000));
 						}
@@ -3881,13 +3784,6 @@
 				}
 				var delay_time = ((Data.options.autoCollect.delay * Data.options.autoCollect.unit) + (Math.random() * 120)) * 1000;
 				t.timer = setTimeout(t.doit, delay_time);
-
-				function collect(cityIdx, delay) {
-					setTimeout(function() {
-						MyAjax.collectResources(Seed.cities[cityIdx].id);
-						actionLog(translate('Collected resources at outpost') + ' <B>#' + cityIdx + '</B>');
-					}, delay);
-				}
 			}
 		};
 		/******************************** Falsh auto-refresh package *****************/
@@ -3934,7 +3830,7 @@
 					t.timer = setTimeout(t.onTimeout, 30000);
 				}
 			}
-		}
+		};
 		/******************************** Buildings package **************************/
 		var Buildings = {
 			getCount: function(cityIdx, type) {
@@ -3967,14 +3863,14 @@
 			},
 			getById: function(cityIdx, bid) {
 				for (var i = 0; i < Seed.cities[cityIdx].buildings.length; i++) {
-					if (Seed.cities[cityIdx].buildings[i].id == bid) return (Seed.cities[cityIdx].buildings[i]);
+					if (Seed.cities[cityIdx].buildings[i].id === bid) return (Seed.cities[cityIdx].buildings[i]);
 				}
 				return null;
 			},
 			setLevel: function(city_id, bid, level) {
 				var cityIdx = Seed.cityIdx[city_id];
 				for (var i = 0; i < Seed.cities[cityIdx].buildings.length; i++) {
-					if (Seed.cities[cityIdx].buildings[i].id == bid) Seed.cities[cityIdx].buildings[i].level = level;
+					if (Seed.cities[cityIdx].buildings[i].id === bid) Seed.cities[cityIdx].buildings[i].level = level;
 				}
 				Tabs.Jobs.buildRefreshLvl = false;
 				return null;
@@ -3991,36 +3887,24 @@
 
 			init: function(obj) {
 				try {
-					/* Saves defaults properties */
+					//Saves defaults properties
 					Data.defaults.mergeWith(obj || {});
 					for (var item_name in obj) {
-						/*
-						 * Checks if the object is already defined in the Data
-						 * Object
-						 */
-						if (typeof(Data[item_name]) == 'undefined') {
-							/*
-							 * Assign default object properties, if defined,
-							 * otherwise an empty object
-							 */
-							Data[item_name] = typeof(obj[item_name]) != 'undefined' ? cloneProps(obj[item_name]) : {};
+						//Checks if the object is already defined in the Data Object
+						if (typeof(Data[item_name]) === 'undefined') {
+							//Assign default object properties, if defined, otherwise an empty object
+							Data[item_name] = typeof(obj[item_name]) !== 'undefined' ? cloneProps(obj[item_name]) : {};
 						}
-						/*
-						 * Load the data stored, of the current item from
-						 * localStorage
-						 */
+						//Load the data stored, of the current item from localStorage
 						var stored_object = Data.getObject(item_name);
-						/* Clean removed values from stored object ( max depth 2 ) */
-						if (stored_object != null && typeof(stored_object) == 'object') {
+						//Clean removed values from stored object ( max depth 2 )
+						if (stored_object !== null && typeof(stored_object) === 'object') {
 							verboseLog('Clean Removed Vars from : [ ' + name + ' ]');
 							stored_object.cleanRemoved(Data[item_name], 1);
 						}
-						/* Check if the default object is really an object */
-						if (Data[item_name] !== null && typeof(Data[item_name]) == 'object') {
-							/*
-							 * Assign the properties of stored objeto into the
-							 * default object, overwriting the values
-							 */
+						//Check if the default object is really an object
+						if (Data[item_name] !== null && typeof(Data[item_name]) === 'object') {
+							//Assign the properties of stored objeto into the default object, overwriting the values
 							Data[item_name].mergeWith(stored_object);
 						} else {
 							Data[item_name] = stored_object;
@@ -4035,24 +3919,24 @@
 			},
 
 			clearStorage: function(keep_map) {
+                var item_name = '', keys = '', temp_storage = {}, i = 0;
 				if (keep_map) {
-					var temp_storage = {};
-					var keys = getKeys(Data.defaults);
-					for (var i = 0; i < keys.length; i++) {
+					keys = getKeys(Data.defaults);
+					for (i = 0; i < keys.length; i++) {
 						if (/(map|dynamic)/i.test(keys[i])) {
-							var item_name = keys[i];
+							item_name = keys[i];
 							temp_storage[item_name] = cloneProps(Data[item_name]);
 						}
 					}
 				}
 				localStorage.clear();
-				for (var item_name in Data.defaults) {
+				for (item_name in Data.defaults) {
 					Data[item_name] = cloneProps(Data.defaults[item_name]);
 				}
 				if (keep_map) {
-					var keys = getKeys(temp_storage);
-					for (var i = 0; i < keys.length; i++) {
-						var item_name = keys[i];
+					keys = getKeys(temp_storage);
+					for (i = 0; i < keys.length; i++) {
+						item_name = keys[i];
 						Data[item_name] = cloneProps(temp_storage[item_name]);
 						Data.setObject(item_name, Data[item_name]);
 					}
@@ -4061,19 +3945,13 @@
 			},
 			getObject: function(key) {
 				var item = localStorage.getItem([SERVER_ID, USER_ID, key].join('_'));
-				/*
-				 * logit('load setting ['+SERVER_ID+', '+USER_ID+', '+key+' =
-				 * '+item);
-				 */
+				//logit('load setting ['+SERVER_ID+', '+USER_ID+', '+key+' = '+item);
 				return (item || '').charAt(0) === '{' ? JSON.parse(item || '{}') : eval(item);
 			},
 			setObject: function(key, value) {
-				if (key == 'log') return;
+				if (key === 'log') return;
 				try {
-					/*
-					 * logit('save setting ['+SERVER_ID+', '+USER_ID+', '+key+' =
-					 * '+JSON.stringify( value ) );
-					 */
+					//logit('save setting ['+SERVER_ID+', '+USER_ID+', '+key+' = '+JSON.stringify( value ) );
 					localStorage.setItem([SERVER_ID, USER_ID, key].join('_'), JSON.stringify(value));
 				} catch (e) {
 					if (e === QUOTA_EXCEEDED_ERR || (e.code === 22 && e.name === 'QUOTA_EXCEEDED_ERR')) {
@@ -4098,9 +3976,10 @@
 			cleanRequestsStats: function() {
 				if (!Data.stats.requests.ajax_type) return;
 				for (var req_type in Data.stats.requests.ajax_type) {
-					for (var i = 0; i < Data.stats.requests.ajax_type[req_type].time.length; i++)
+					var i = 0;
+                    for (i = 0; i < Data.stats.requests.ajax_type[req_type].time.length; i++)
 						if (toNum(serverTime()) - Data.stats.requests.ajax_type[req_type].time[i] >= 3600) Data.stats.requests.ajax_type[req_type].time.splice(i, 1);
-					for (var i = 0; i < Data.stats.requests.ajax_type[req_type].error.length; i++)
+					for (i = 0; i < Data.stats.requests.ajax_type[req_type].error.length; i++)
 						if (toNum(serverTime()) - Data.stats.requests.ajax_type[req_type].error[i] >= 3600) Data.stats.requests.ajax_type[req_type].error.splice(i, 1);
 				}
 			},
