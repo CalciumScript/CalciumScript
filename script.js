@@ -3985,74 +3985,25 @@
 			},
 
 			setDefaultValues: function(tab) {
-				switch (tab) {
-					case 'alliance':
-						setAllianceDefaults();
-						break;
-					case 'attacks':
-						setAttacksDefaults();
-						break;
-					case 'bookmark':
-						setBookmarksDefaults();
-						break;
-					case 'jobs':
-						setJobsDefaults();
-						break;
-					case 'multiple':
-						setMultipleDefaults();
-						break;
-					case 'options':
-						setOptionsDefaults();
-						break;
-					case 'search':
-						setSearchDefaults();
-						break;
-					case 'spies':
-						setSpiesDefaults();
-						break;
-					case 'waves':
-						setWavesDefaults();
-						break;
-					case 'wheel':
-						setWheelDefaults();
-						break;
-					case 'all':
-						setAllianceDefaults();
-						setAttacksDefaults();
-						setBookmarksDefaults();
-						setJobsDefaults();
-						setMultipleDefaults();
-						setOptionsDefaults();
-						setSearchDefaults();
-						setSpiesDefaults();
-						setWavesDefaults();
-						setWheelDefaults();
-						break;
-					default:
-						break;
-				}
-
-				function setAllianceDefaults() {
+				var setAllianceDefaults = function() {
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.alliance.auto.max_marches))
 						Data.options.alliance.auto.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				}
+				};
 
-				function setAttacksDefaults() {
-					for (var x = 1; x <= 11; x++) {
+				var setAttacksDefaults = function() {
+                    var x = 1, j = 0;
+					for (x = 1; x <= 11; x++) {
 						if (!Data.options.attacks.units[x])
 							Data.options.attacks.units[x] = {};
-						/*
-						 * check if troops have been entered. Is not, set to
-						 * default
-						 */
+						//check if troops have been entered. Is not, set to default
 						var exists = false;
-						for (var j = 0; j < attack_unit_types.length && !exists; j++) {
+						for (j = 0; j < attack_unit_types.length && !exists; j++) {
 							if (Data.options.attacks.units[x][attack_unit_types[j]] && Data.options.attacks.units[x][attack_unit_types[j]] > 0)
 								exists = true;
 						}
 						if (!exists) {
-							for (var j = 0; j < attack_unit_types.length; j++) {
-								var num = 0
+							for (j = 0; j < attack_unit_types.length; j++) {
+								var num = 0;
 								switch (x) {
 									case 1:
 										switch (attack_unit_types[j]) {
@@ -4158,7 +4109,7 @@
 												break;
 										}
 										break;
-					case 9:
+                                    case 9:
 										switch (attack_unit_types[j]) {
 											case 'FireTroop':
 												num = 3000;
@@ -4218,9 +4169,9 @@
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.attacks.max_marches)) {
 						Data.options.attacks.max_marches = Seed.cities[CAPITAL.id].figures.marches.maximum;
 					}
-				}
+				};
 
-				function setBookmarksDefaults() {
+				var setBookmarksDefaults = function() {
 					if (!Data.options.bookmarks.new_bookmark.dragons)
 						Data.options.bookmarks.new_bookmark.dragons = {};
 					if (is_null(Data.options.bookmarks.new_bookmark.dragons)) {
@@ -4231,29 +4182,25 @@
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.bookmarks.max_marches))
 						Data.options.bookmarks.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				}
+				};
 
-				function setJobsDefaults() {
+				var setJobsDefaults = function () {
 					/* Training initialization */
-					var initDefault_units = all_unit_types;
-					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-						if (cityIdx != SPECTRAL_OUTPOST.id && cityIdx != SKY_OUTPOST.id  && cityIdx != LUNA_OUTPOST.id) {
+					var initDefault_units = all_unit_types, cityIdx = 0, tt = 0;
+					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+						if (cityIdx !== SPECTRAL_OUTPOST.id && cityIdx !== SKY_OUTPOST.id  && cityIdx !== LUNA_OUTPOST.id) {
 							if (!Data.options.training.city[cityIdx]) Data.options.training.city[cityIdx] = {};
 							if (!Data.options.training.city[cityIdx].units) Data.options.training.city[cityIdx].units = [];
 							var exists = false;
-							for (var tt = 0; tt < initDefault_units.length && !exists; tt++) {
+							for (tt = 0; tt < initDefault_units.length && !exists; tt++) {
 								if (Data.options.training.city[cityIdx].units[tt] && Data.options.training.city[cityIdx].units[tt] > 0)
 									exists = true;
-				}
+                            }
 							if (!exists) {
-								for (var tt = 0; tt < initDefault_units.length; tt++) {
+								for (tt = 0; tt < initDefault_units.length; tt++) {
 									Data.options.training.city[cityIdx].units[tt] = 0;
-									/* User defined initialization for units */
-									/*
-									 * Just change the troops number and
-									 * activate the lines to have always the
-									 * same settings when cleaning the cache
-									 */
+									//User defined initialization for units
+									//Just change the troops number and activate the lines to have always the same settings when cleaning the cache
 
 									/*
 									 * -Remove this line to activate- switch
@@ -4295,24 +4242,17 @@
 							}
 							if (!Data.options.training.city[cityIdx].cap) Data.options.training.city[cityIdx].cap = [];
 
-							var exists = false;
-							for (var tt = 0; tt < all_unit_types.length && !exists; tt++) {
+							exists = false;
+							for (tt = 0; tt < all_unit_types.length && !exists; tt++) {
 								if (Data.options.training.city[cityIdx].cap[tt] && Data.options.training.city[cityIdx].cap[tt] > 0)
 									exists = true;
 							}
 							if (!exists) {
-								for (var tt = 0; tt < all_unit_types.length; tt++) {
+								for (tt = 0; tt < all_unit_types.length; tt++) {
 									Data.options.training.city[cityIdx].cap[tt] = 0;
 
-									/* User defined cap initialization */
-									/*
-									 * Just change the troops cap and activate
-									 * the lines
-									 */
-									/*
-									 * to have always the same cap settings when
-									 * cleaning the cache
-									 */
+									//User defined cap initialization
+									//Just change the troops cap and activate the lines to have always the same cap settings when cleaning the cache
 
 									/*
 									 * -Remove this line to activate- switch
@@ -4354,17 +4294,17 @@
 						}
 					}
 					/* Build initilization */
-					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 						if (!Data.options.building.level_enable[cityIdx]) Data.options.building.level_enable[cityIdx] = {};
 						if (!Data.options.building.level_cap[cityIdx]) Data.options.building.level_cap[cityIdx] = {};
 					}
 					/* Research initialization */
-					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 						if (!Data.options.research.res_enable[cityIdx]) Data.options.research.res_enable[cityIdx] = {};
 						if (!Data.options.research.res_cap[cityIdx]) Data.options.research.res_cap[cityIdx] = {};
 					}
 					/* Resurrection initialization */
-					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 						if (!Data.options.resurrect.res_enable[cityIdx]) Data.options.resurrect.res_enable[cityIdx] = {};
 						if (!Data.options.resurrect.res_max[cityIdx]) Data.options.resurrect.res_max[cityIdx] = {};
 						for (tt = 0; tt < all_unit_types.length; tt++) {
@@ -4380,9 +4320,10 @@
 							enable: false,
 							cap: 9
 						};
-				}
+				};
 
-				function setMultipleDefaults() {
+				var setMultipleDefaults = function() {
+                    var j = 0, dragon = '';
 					if (!Data.options.multiple.target.dragons_1) Data.options.multiple.target.dragons_1 = {};
 					if (!Data.options.multiple.target.dragons_2) Data.options.multiple.target.dragons_2 = {};
 					if (is_null(Data.options.multiple.target.dragons_1)) {
@@ -4403,14 +4344,14 @@
 						if (is_null(Data.options.multiple.max_secondary))
 							Data.options.multiple.max_secondary = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
 					}
-				}
+				};
 
-				function setOptionsDefaults() {
+				var setOptionsDefaults = function() {
 					checkDelay();
-				}
+				};
 
-				function setSearchDefaults() {
-					if (!Data.options.search.target.x || Data.options.search.target.x == 999) {
+				var setSearchDefaults = function() {
+					if (!Data.options.search.target.x || Data.options.search.target.x === 999) {
 						Data.options.search.target.x = Seed.cities[CAPITAL.id].x;
 						Data.options.search.target.y = Seed.cities[CAPITAL.id].y;
 					}
@@ -4420,14 +4361,14 @@
 					if (is_null(Data.options.search.sort_list)) Data.options.search.sort_list = '0';
 					if (is_null(Data.options.search.min_level)) Data.options.search.min_level = 1;
 					if (is_null(Data.options.search.max_level)) Data.options.search.max_level = 10;
-				}
+				};
 
-				function setSpiesDefaults() {
+				var setSpiesDefaults = function() {
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.spies.max_marches))
 						Data.options.spies.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				}
+				};
 
-				function setWavesDefaults() {
+				var setWavesDefaults = function() {
 					if (!Data.options.waves.target.dragons) Data.options.waves.target.dragons = {};
 					if (is_null(Data.options.waves.target.dragons)) {
 						for (var j = 0; j < Seed.dragonList.length; j++) {
@@ -4437,9 +4378,56 @@
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.waves.max_marches))
 						Data.options.waves.max_marches = Seed.cities[CAPITAL.id].figures.marches.maximum;
-				}
+				};
 
-				function setWheelDefaults() {}
+				var setWheelDefaults = function() {};
+                
+                switch (tab) {
+					case 'alliance':
+						setAllianceDefaults();
+						break;
+					case 'attacks':
+						setAttacksDefaults();
+						break;
+					case 'bookmark':
+						setBookmarksDefaults();
+						break;
+					case 'jobs':
+						setJobsDefaults();
+						break;
+					case 'multiple':
+						setMultipleDefaults();
+						break;
+					case 'options':
+						setOptionsDefaults();
+						break;
+					case 'search':
+						setSearchDefaults();
+						break;
+					case 'spies':
+						setSpiesDefaults();
+						break;
+					case 'waves':
+						setWavesDefaults();
+						break;
+					case 'wheel':
+						setWheelDefaults();
+						break;
+					case 'all':
+						setAllianceDefaults();
+						setAttacksDefaults();
+						setBookmarksDefaults();
+						setJobsDefaults();
+						setMultipleDefaults();
+						setOptionsDefaults();
+						setSearchDefaults();
+						setSpiesDefaults();
+						setWavesDefaults();
+						setWheelDefaults();
+						break;
+					default:
+						break;
+				}
 			}
 		};
 		/******************************** Jobs package *******************************/
@@ -4448,14 +4436,14 @@
 				var cid = Seed.cities[cityIdx].id;
 				var jobs = Seed.jobs[cid];
 				for (var p in jobs) {
-					if (jobs[p] == job) delete jobs[p];
+					if (jobs[p] === job) delete jobs[p];
 				}
 			},
 			getBuildingJob: function(cityIdx) {
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue == 'building') return ({
+					if (job.queue === 'building') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4466,7 +4454,7 @@
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue == 'tower_healing') return ({
+					if (job.queue === 'tower_healing') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4478,7 +4466,7 @@
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue == 'build_tower') return ({
+					if (job.queue === 'build_tower') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4486,29 +4474,27 @@
 				return null;
 			},
 			getJobs: function(queue, get_first, city_Idx) {
-				var ret = [],
-					cityIdx = (city_Idx || CAPITAL.id);
+				var ret = [], cityIdx = (city_Idx || CAPITAL.id), cid = '', p = '', job = '';
 				if (cityIdx >= 0 && Seed.cities[cityIdx]) {
-					var cid = Seed.cities[cityIdx].id;
+					cid = Seed.cities[cityIdx].id;
 					if (cid) {
-						for (var p in Seed.jobs[cid]) {
-							var job = Seed.jobs[cid][p];
-							if (job.queue == queue) {
+						for (p in Seed.jobs[cid]) {
+							job = Seed.jobs[cid][p];
+							if (job.queue === queue) {
 								ret.push(job);
 								if (get_first) return ret;
 							}
 						}
 					}
-				} else if (cityIdx == -1) {
+				} else if (cityIdx === -1) {
 					for (var city_idx = 0; city_idx < Seed.cities.length; city_idx++) {
-						if (!Data.options.Rcheat_enabled && city_idx != CAPITAL.id && queue == 'research') continue;
-						if (Seed.cities[city_idx] && city_idx != undefined && !isNaN(city_idx) && city_idx >= 0 && city_idx < Seed.cities.length &&
-							((city_idx != SPECTRAL_OUTPOST.id && city_idx != SKY_OUTPOST.id && city_idx != CAVE_OUTPOST.id && city_idx != LUNA_OUTPOST.id && queue == 'research') || queue != 'research')) {
-							var cid = Seed.cities[city_idx].id;
+						if (!Data.options.Rcheat_enabled && city_idx !== CAPITAL.id && queue === 'research') continue;
+						if (Seed.cities[city_idx] && city_idx !== undefined && !isNaN(city_idx) && city_idx >= 0 && city_idx < Seed.cities.length && ((city_idx !== SPECTRAL_OUTPOST.id && city_idx !== SKY_OUTPOST.id && city_idx !== CAVE_OUTPOST.id && city_idx !== LUNA_OUTPOST.id && queue === 'research') || queue !== 'research')) {
+							cid = Seed.cities[city_idx].id;
 							if (cid) {
-								for (var p in Seed.jobs[cid]) {
-									var job = Seed.jobs[cid][p];
-									if (job.queue == queue) {
+								for (p in Seed.jobs[cid]) {
+									job = Seed.jobs[cid][p];
+									if (job.queue === queue) {
 										ret.push(job);
 										if (get_first) return ret;
 									}
@@ -4530,11 +4516,11 @@
 				button.value = time_item_list[itemId].text;
 				if (num > 0) {
 					button.disabled = false;
-					button.className = UID['btn_green'] + ' thin';
+					button.className = UID.btn_green + ' thin';
 					button.addEventListener('click', function(event) {
 						var self = event.target;
 						self.disabled = true;
-						self.className = UID['btn_disabled'] + ' thin';
+						self.className = UID.btn_disabled + ' thin';
 						logit('' + self.getAttribute('ref'));
 						var ids = self.getAttribute('ref').split('_');
 						var found = false;
