@@ -7,6 +7,7 @@
 // @grant		GM_info
 // @grant		GM_setValue
 // @grant		GM_getValue
+// @grant		GM_getValue
 // @match		*://apps.facebook.com/dragonsofatlantis/*
 // @match		*://*.castle.wonderhill.com/platforms/*/game
 // @match		*://www.kabam.com/dragons-of-atlantis/play
@@ -33,7 +34,7 @@
 // @exclude		*://www.googleapis.com/static*
 // @include		*://*realm*doa.altervista.org*
 // @exclude		*://realmtheraindoa.altervista.org/Jeux/*
-// @version		2014.723.1
+// @version		2014.725.1
 // @grant       GM_addStyle
 // @grant       unsafeWindow
 // @homepageURL http://script.wygopro.com/script/
@@ -43,7 +44,7 @@
 
 (function() {
 
-	var CHROME_EXT = false, scriptVersion = '2014.723.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+	var CHROME_EXT = false, scriptVersion = '2014.725.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -4368,7 +4369,7 @@
 						var confirmation = false;
 						var jobs = Seed.cities[ids[1]].jobs;
 						for (var x = 0; x < jobs.length && !found; x++)
-							if (jobs[x].id === ids[2]) found = true;
+							if (jobs[x].id === parseInt(ids[2])) found = true;
 						if (!found) return;
 
 						for (var i = 0; i < time_item_list.length; i++) {

@@ -1,6 +1,6 @@
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.723.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2014.725.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -427,18 +427,13 @@
             CPT_TAB_ENABLE = true;
 
 		/* Global variables */
-		var DEBUG_TRACE_AJAX = 2,
-			DEBUG_MARCHES = false,
+		var DEBUG_MARCHES = false,
 			E429_TIMER = 0,
 			E429_DELAY = 3600,
 			TILE_DELAY = 2250,
 			MAP_DELAY = 1250,
 			MIN_DELAY = 10,
-			EMULATE_NET_ERROR = 0,
 			MIN_DELAY_BETWEEN_WAVE = 10;
-
-		var BUTTON_BGCOLOR = '#436',
-			JOB_BUTTON_BGCOLOR = '#436';
 
 		/* Message handling */
 		var MESSAGES_ALL = 0,
@@ -552,7 +547,6 @@
 		var SWF_CONTAINER;
 		var SWF_CONTAINER_INNERHTML;
 		var gAttScrollPos = 0;
-		var gMapScrollPos = 0;
 		var C = {};
 		var gFormatTime = ':';
 		var gFormatDate = '/';
@@ -560,11 +554,9 @@
 		var kWikiLink = 'Wiki DoA';
 		var scriptUrlError = 'http://script.wygopro.com/';
 		var scriptTitle = '';
-		var scriptSite = '';
 		var scriptTimeout = null;
 		var scriptLoaded = false;
 		var startupCount = 0;
-		var initTimeout = null;
 		var STARTUP_TIMER;
 		var citySteps;
 
@@ -750,17 +742,10 @@
 						building: {
 							enabled: false,
 							hide_fields: false,
-							level_enable: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-							/* Add 1 for new outpost - luna added */
-							level_cap: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}] /*
-																							 * Add
-																							 * 1
-																							 * for
-																							 * new
-																							 * outpost -
-																							 * luna
-																							 * added
-																							 */
+							level_enable: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+							// Add 1 for new outpost
+							level_cap: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
+                            // Add 1 for new outpost
 						},
 						research: {
 							enabled: false,
@@ -4524,7 +4509,7 @@
 						var confirmation = false;
 						var jobs = Seed.cities[ids[1]].jobs;
 						for (var x = 0; x < jobs.length && !found; x++)
-							if (jobs[x].id === ids[2]) found = true;
+							if (jobs[x].id === parseInt(ids[2])) found = true;
 						if (!found) return;
 
 						for (var i = 0; i < time_item_list.length; i++) {
@@ -4935,40 +4920,39 @@
 				}
 			},
 			updateTradeTable: function(table) {
-				var now = toNum(serverTime()),
-					idle_cities = [];
-				var mtClass = UID['row_marchMine'];
+				var now = toNum(serverTime()), idle_cities = [];
+                var iRow, iCell, cityIdx, city;
+				var mtClass = UID.row_marchMine;
 				/* Clear table */
 				for (var row = 0; row < table.rows.length; row++) {
 					table.deleteRow(row);
 					row--;
 				}
-				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+				for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 					if (Seed.cities[cityIdx]) {
 						var options = {
 							noPlayer: true,
 							cities: []
 						};
-						var city = Seed.cities[cityIdx];
+						city = Seed.cities[cityIdx];
 						var jobs = Jobs.getJobs('trade', true, cityIdx);
 						
-						if(jobs.length != 0) {
+						if(jobs.length !== 0) {
 							for(var nbT = 0 ; nbT < jobs.length ; nbT++) {
-								var iRow, iCell;
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
-								iRow.title = numf(jobs[nbT].offer.units, ' ') + ' ' + translate(jobs[nbT].offer.product) + ' ' + translate('for') + ' ' + numf(jobs[nbT].offer.price, ' ') + ' ' + translate('gold') + ' ' + translate('from') + ' ' + jobs[nbT].offer.seller.name + '(' + numf(jobs[nbT].offer.seller.might, ' ') + ')' + ' / ' + (jobs[nbT].offer.seller.alliance.name == '' ? '---' : jobs[nbT].offer.seller.alliance.name ) + '(' + (jobs[nbT].offer.seller.alliance.role == '' ? '---' : translate(jobs[nbT].offer.seller.alliance.role)) + ')';
+								iRow.title = numf(jobs[nbT].offer.units, ' ') + ' ' + translate(jobs[nbT].offer.product) + ' ' + translate('for') + ' ' + numf(jobs[nbT].offer.price, ' ') + ' ' + translate('gold') + ' ' + translate('from') + ' ' + jobs[nbT].offer.seller.name + '(' + numf(jobs[nbT].offer.seller.might, ' ') + ')' + ' / ' + (jobs[nbT].offer.seller.alliance.name === '' ? '---' : jobs[nbT].offer.seller.alliance.name ) + '(' + (jobs[nbT].offer.seller.alliance.role === '' ? '---' : translate(jobs[nbT].offer.seller.alliance.role)) + ')';
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '20%';
-								iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+								iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 								var timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
-								if (timeRemaining == 0) {
+								if (timeRemaining === 0) {
 									iCell = iRow.insertCell(-1);
 									iCell.setAttribute('colspan', '3');
 									iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 									Jobs.deleteJob(cityIdx, jobs[0]);
-									if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+									if (cityIdx !== 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 									options.cities.push(city.id);
 									Seed.fetchPlayer(options);
 								} else {
@@ -4986,18 +4970,6 @@
 									iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timeRemaining + '</font>';
 									if (!jobs[0].cancelled && Data.options.jobs_speedups_enabled)
 										Jobs.addSpeedUpButtons(table, 'tabJobsTrade_speedups_0', 'jobs', cityIdx + '_' + jobs[0].id);
-
-									// Tabs.Jobs.buildStatFetch = false;
-									try {
-										// document.getElementById(UID['tabJobDragon_FB_'
-										// + cityIdx + '_' +
-										// jobs[0].city_building_type]).innerHTML =
-										// '<font color=#000>' +
-										// translate('Building') + ': ' +
-										// translate(jobs[0].city_building_type) + '
-										// ' + translate('Level').toLowerCase() + '
-										// ' + jobs[0].level + '</font>';
-									} catch (e) {}
 								}
 								iRow = table.insertRow(-1);
 								iCell = iRow.insertCell(-1);
@@ -5008,16 +4980,15 @@
 						}
 					}
 				}
-				for (var cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
+				for (cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
 					if (Seed.cities[idle_cities[cityIdx]]) {
-						var city = Seed.cities[idle_cities[cityIdx]];
-						var iRow, iCell;
+						city = Seed.cities[idle_cities[cityIdx]];
 						iRow = table.insertRow(-1);
 						iRow.className = mtClass;
 						iCell = iRow.insertCell(-1);
 						iCell.style.textAlign = 'left';
 						iCell.style.width = '20%';
-						iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+						iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 						iCell = iRow.insertCell(-1);
 						iCell.innerHTML = translate('Idle');
 					}
@@ -5025,16 +4996,15 @@
 			},
 			updateResearchTable: function(table) {
 				var now = toNum(serverTime());
-				var mtClass = UID['row_marchMine'];
+				var mtClass = UID.row_marchMine;
 				/* Clear table */
 				for (var row = 0; row < table.rows.length; row++) {
 					table.deleteRow(row);
 					row--;
 				}
 				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-					if (!Data.options.Rcheat_enabled && cityIdx != CAPITAL.id) continue;
-					if (Seed.cities[cityIdx] && cityIdx >= 0 && cityIdx < Seed.cities.length && cityIdx != SPECTRAL_OUTPOST.id && cityIdx != SKY_OUTPOST.id && cityIdx != CAVE_OUTPOST.id && cityIdx != LUNA_OUTPOST.id && cityIdx != COLOSSUS_OUTPOST.id &&
-						Seed.cities[cityIdx].figures.queue_lengths && Seed.cities[cityIdx].figures.queue_lengths['research']) {
+					if (!Data.options.Rcheat_enabled && cityIdx !== CAPITAL.id) continue;
+					if (Seed.cities[cityIdx] && cityIdx >= 0 && cityIdx < Seed.cities.length && cityIdx !== SPECTRAL_OUTPOST.id && cityIdx !== SKY_OUTPOST.id && cityIdx !== CAVE_OUTPOST.id && cityIdx !== LUNA_OUTPOST.id && cityIdx !== COLOSSUS_OUTPOST.id && Seed.cities[cityIdx].figures.queue_lengths && Seed.cities[cityIdx].figures.queue_lengths.research) {
 						var city = Seed.cities[cityIdx];
 						var jobs = Jobs.getJobs('research', true, cityIdx);
 						var iRow, iCell;
@@ -5043,19 +5013,19 @@
 						iCell = iRow.insertCell(-1);
 						iCell.style.textAlign = 'left';
 						iCell.style.width = '20%';
-						iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
-						if (jobs.length == 0) {
+						iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+						if (jobs.length === 0) {
 							iCell = iRow.insertCell(-1);
 							iCell.innerHTML = translate('Idle');
 						} else {
 							var timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
-							if (timeRemaining == 0) {
+							if (timeRemaining === 0) {
 								iCell = iRow.insertCell(-1);
 								iCell.setAttribute('colspan', '3');
 								iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 								Jobs.deleteJob(cityIdx, jobs[0]);
-								if (Tabs.Jobs.resStatFetch == false) {
-									if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+								if (Tabs.Jobs.resStatFetch === false) {
+									if (cityIdx !== 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 									options.cities.push(city.id);
 									Seed.fetchPlayer(options);
 									Tabs.Jobs.resStatFetch = true;
@@ -5075,13 +5045,13 @@
 								button.value = 'X';
 								if (jobs[0].cancelled) {
 									button.disabled = true;
-									button.className = UID['btn_disabled'] + ' thin';
+									button.className = UID.btn_disabled + ' thin';
 								} else {
-									button.className = UID['btn_red'] + ' thin';
+									button.className = UID.btn_red + ' thin';
 									button.addEventListener('click', function(event) {
 										var self = event.target;
 										self.disabled = true;
-										self.className = UID['btn_disabled'] + ' thin';
+										self.className = UID.btn_disabled + ' thin';
 										var ids = self.getAttribute('ref').split('_');
 										var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
 										if (job) {
@@ -5119,29 +5089,27 @@
 			},
 			updateSanctuaryTable: function(table) {
 				var now = toNum(serverTime());
-				var mtClass = UID['row_marchMine'];
+				var mtClass = UID.row_marchMine;
 
 				function addJobTable(type) {
-					var last = serverTime();
-					var trains = [];
-					var cityBreeding = [];
+					var last = serverTime(), trains = [], cityBreeding = [], cityIdx, jobs, j;
 
-					if (type == 'breeding') {
-						for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-							var jobs = (Seed.cities[cityIdx] ? Seed.cities[cityIdx].jobs : []);
-							for (var j = 0; j < jobs.length; j++) {
-								if (jobs[j].queue == 'breeding' && jobs[j].male_id && jobs[j].female_id && jobs[j].run_at > last) {
+					if (type === 'breeding') {
+						for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+							jobs = (Seed.cities[cityIdx] ? Seed.cities[cityIdx].jobs : []);
+							for (j = 0; j < jobs.length; j++) {
+								if (jobs[j].queue === 'breeding' && jobs[j].male_id && jobs[j].female_id && jobs[j].run_at > last) {
 									trains.push(jobs[j]);
-									cityBreeding.push(cityIdx)
+									cityBreeding.push(cityIdx);
 								}
 							}
 						}
 					} else {
-						var cityIdx = CAPITAL.id;
-						var jobs = Seed.cities[cityIdx].jobs;
-						for (var j = 0; j < jobs.length; j++) {
-							if (type == 'hatching' && jobs[j].queue == 'hatching' && jobs[j].egg_id && jobs[j].run_at > last) trains.push(jobs[j]);
-							if (type == 'feeding' && jobs[j].queue == 'feeding' && jobs[j].dragon_id && jobs[j].run_at > last) trains.push(jobs[j]);
+						cityIdx = CAPITAL.id;
+						jobs = Seed.cities[cityIdx].jobs;
+						for (j = 0; j < jobs.length; j++) {
+							if (type === 'hatching' && jobs[j].queue === 'hatching' && jobs[j].egg_id && jobs[j].run_at > last) trains.push(jobs[j]);
+							if (type === 'feeding' && jobs[j].queue === 'feeding' && jobs[j].dragon_id && jobs[j].run_at > last) trains.push(jobs[j]);
 						}
 					}
 					var iRow, iCell;
@@ -5150,15 +5118,15 @@
 					iCell = iRow.insertCell(-1);
 					iCell.style.textAlign = 'left';
 					iCell.style.width = '20%';
-					if (type == 'breeding')
+					if (type === 'breeding')
 						iCell.innerHTML = '<b>' + translate('breeding-dragon') + '</b>';
-					else if (type == 'hatching')
+					else if (type === 'hatching')
 						iCell.innerHTML = '<b>' + translate('hatching-egg') + '</b>';
-					else if (type == 'feeding')
+					else if (type === 'feeding')
 						iCell.innerHTML = '<b>' + translate('upgrading-dragon') + '</b>';
 					else iCell.innerHTML = '<b>' + translate('Unknown') + '</b>';
 
-					if (trains.length == 0) {
+					if (trains.length === 0) {
 						iCell = iRow.insertCell(-1);
 						iCell.innerHTML = translate('Idle');
 					} else {
@@ -5166,18 +5134,18 @@
 							return a.run_at - b.run_at;
 						});
 						var totTime=0;
-						for (var j = 0; j < trains.length; j++) {
+						for (j = 0; j < trains.length; j++) {
 							var time_remaining;
 							// Oeuf en couveuse ? alors tous entrain de se faire
 							// et non pas à la queue leu leu
-							if (type == 'hatching') {
+							if (type === 'hatching') {
 								totTime += ((trains[j].run_at - last > 0) ? trains[j].run_at - last : 0);
 							} else {
-								time_remaining = (j == 0 ? ((trains[j].run_at - last > 0) ? trains[j].run_at - last : 0) : trains[j].duration);
+								time_remaining = (j === 0 ? ((trains[j].run_at - last > 0) ? trains[j].run_at - last : 0) : trains[j].duration);
 							}
 							
 							var tot = '';
-							if (j != 0) {
+							if (j !== 0) {
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iCell = iRow.insertCell(-1);
@@ -5189,7 +5157,7 @@
 							iCell = iRow.insertCell(-1);
 							iCell.style.textAlign = 'left';
 							iCell.style.width = '35%';
-							if (type == 'breeding') {
+							if (type === 'breeding') {
 								var male = '',
 									female = '';
 								if (!Seed.sanctuary_dragons[trains[j].male_id]) {
@@ -5205,7 +5173,7 @@
 									female = translateByKey(Seed.sanctuary_dragons[trains[j].female_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].female_id].type, 'dragons');
 								}
 								iCell.innerHTML = male + ' + ' + female;
-							} else if (type == 'hatching') {
+							} else if (type === 'hatching') {
 								var egg = '';
 								if (!Seed.sanctuary_dragons[trains[j].egg_id]) {
 									verboseLog('Error: Inexisting dragon ' + trains[j].egg_id);
@@ -5214,7 +5182,7 @@
 									egg = translateByKey(Seed.sanctuary_dragons[trains[j].egg_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].egg_id].type, 'dragons');
 								}
 								iCell.innerHTML = egg;
-							} else if (type == 'feeding') {
+							} else if (type === 'feeding') {
 								var dragon = '';
 								if (!Seed.sanctuary_dragons[trains[j].dragon_id]) {
 									verboseLog('Error: Inexisting dragon ' + trains[j].dragon_id);
@@ -5229,25 +5197,25 @@
 							iCell.style.width = '10%';
 							var button = document.createElement('input');
 							button.type = 'button';
-							if (type == 'breeding')
+							if (type === 'breeding')
 								button.setAttribute('ref', cityBreeding[j] + '_' + trains[j].id);
 							else
 								button.setAttribute('ref', cityIdx + '_' + trains[j].id);
 							button.value = 'X';
 							if (trains[j].cancelled) {
 								button.disabled = true;
-								button.className = UID['btn_disabled'] + ' thin';
+								button.className = UID.btn_disabled + ' thin';
 							} else {
-								button.className = UID['btn_red'] + ' thin';
+								button.className = UID.btn_red + ' thin';
 								button.addEventListener('click', function(event) {
 									var self = event.target;
 									self.disabled = true;
-									self.className = UID['btn_disabled'] + ' thin';
+									self.className = UID.btn_disabled + ' thin';
 									var ids = self.getAttribute('ref').split('_');
 									var found = false;
 									var jobs = Seed.cities[ids[0]].jobs;
 									for (var x = 0; x < jobs.length && !found; x++) {
-										if (jobs[x].id == ids[1]) {
+										if (jobs[x].id === ids[1]) {
 											found = true;
 											jobs[x].cancelled = true;
 											var desc = translate('breeding-cancel-complete');
@@ -5270,10 +5238,10 @@
 							iCell = iRow.insertCell(-1);
 							iCell.style.textAlign = 'left';
 							iCell.style.width = '35%';
-							iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timestr((type == 'hatching' ? totTime : time_remaining), true) + '</font>';
+							iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timestr((type === 'hatching' ? totTime : time_remaining), true) + '</font>';
 							last = trains[j].run_at;
-							if (j == 0 && !trains[j].cancelled && Data.options.jobs_speedups_enabled) {
-								if (type == 'breeding')
+							if (j === 0 && !trains[j].cancelled && Data.options.jobs_speedups_enabled) {
+								if (type === 'breeding')
 									Jobs.addSpeedUpButtons(table, 'tabJobsSanct_speedups_' + j, 'jobs', cityBreeding[j] + '_' + trains[j].id);
 								else
 									Jobs.addSpeedUpButtons(table, 'tabJobsSanct_speedups_' + j, 'jobs', cityIdx + '_' + trains[j].id);
