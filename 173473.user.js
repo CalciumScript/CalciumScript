@@ -8966,7 +8966,7 @@
 							case 'Messages::Breeding':
 							case 'Messages::Hatching':
 								msgToDelete = Data.options.messages_delete.rptBreeding;
-								break
+								break;
 							default:
 								msgToDelete = false;
 						}
@@ -31167,7 +31167,7 @@
 							expr[indexOf("vaareUGZY")] = scan.substr(i, left).replace(/\s/g, "&nbsp;");
 							array[truncate("nccraqPuvyq")](expr);
 							if (i + left >= self) {
-								break
+								break;
 							}
 							i += left
 						};
