@@ -1,6 +1,50 @@
+// ==UserScript==
+// @name		DoA Power Tools Plus V (modded by Calcium)
+// @namespace	http://userscripts.org:8080/scripts/show/173473
+// @icon		http://img66.xooimage.com/files/3/6/d/jaws64-2b5041c.png
+// @description	Enhanced Power Tools for Dragons of Atlantis, modded by Calcium - Supported languages : Dutch, English, French, German, Spanish, Swedish
+// @grant		GM_xmlhttpRequest
+// @grant		GM_info
+// @grant		GM_setValue
+// @grant		GM_getValue
+// @match		*://apps.facebook.com/dragonsofatlantis/*
+// @match		*://*.castle.wonderhill.com/platforms/*/game
+// @match		*://www.kabam.com/dragons-of-atlantis/play
+// @match		*://www.kongregate.com/games/kabam/dragons-of-atlantis
+// @match		*://plus.google.com/games/659749063556*
+// @match		*://*.googleusercontent.com/gadgets/ifr?url=app://659749063556*
+// @include		*://plus.google.com/games/659749063556*
+// @include		*://plus.google.com/*/games/659749063556*
+// @include		*://www.kongregate.com/games/kabam/dragons-of-atlantis*
+// @include		*://*.castle.wonderhill.com/platforms/*/game
+// @include		*://*.googleusercontent.com/gadgets/ifr?url=app://659749063556*
+// @include		*://www.kabam.com/dragons-of-atlantis/play
+// @include		*://apps.facebook.com/dragonsofatlantis/*
+// @include		*://*.castle.wonderhill.com/platforms/*/game
+// @exclude		*://apps.facebook.com/dragonsofatlantis/rubies
+// @exclude		*://apps.facebook.com/ai.php*
+// @exclude		*://www.facebook.com/plugins/like.php*
+// @exclude		*://kabam1-a.akamaihd.net/pixelkabam/*
+// @exclude		*://*.akamaihd.net/pixelkabam/*
+// @exclude		*://plus.google.com/_/apps-static/*
+// @exclude		*://plus.google.com/u/0/_/gadgets/contactPicker*
+// @exclude		*://accounts.google.com/*
+// @exclude		*://talkgadget.google.com/*
+// @exclude		*://www.googleapis.com/static*
+// @include		*://*realm*doa.altervista.org*
+// @exclude		*://realmtheraindoa.altervista.org/Jeux/*
+// @version		2014.717.1
+// @changeLog	More and more....
+// ==/UserScript== 
+
+/*
+	===== TO DO EVERYTIME WHEN PACKAGING CHROME EXTENSION =====
+	!! Change CHROME_EXT here and version in manifest.json before packing !!
+*/
+
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.723.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2014.717.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -21,7 +65,7 @@
 			var child_list = tag.childNodes;
 			var found = false;
 			for (var x = 0; x < child_list.length && !found; x++) {
-				if (child_list[x].id && child_list[x].id === game_container) found = true;
+				if (child_list[x].id && child_list[x].id == game_container) found = true;
 				else found = content_dependant(child_list[x]);
 			}
 			return found;
@@ -30,7 +74,7 @@
 			var child_elements = body.childNodes;
 			for (var c = 0; c < child_elements.length; c++) {
 				var child = child_elements[c];
-				if (child.id && child.id === game_container) {
+				if (child.id && child.id == game_container) {
 					child.style.width = '100%';
 					child.style.margin = '0';
 					child.style.border = '0';
@@ -38,12 +82,12 @@
 				} else {
 					var depend = content_dependant(child);
 					if (!depend) {
-						if (child.tagName === 'DIV' || child.tagName === 'IFRAME' || child.tagName === 'TABLE') {
+						if (child.tagName == 'DIV' || child.tagName == 'IFRAME' || child.tagName == 'TABLE') {
 							child.style.width = '0%';
 							child.style.display = 'none';
 						} else hide_all(child, game_container);
 					} else {
-						if (child.tagName === 'DIV' || child.tagName === 'IFRAME' || child.tagName === 'TABLE' || child.tagName === 'TD') {
+						if (child.tagName == 'DIV' || child.tagName == 'IFRAME' || child.tagName == 'TABLE' || child.tagName == 'TD') {
 							child.style.padding = '0px';
 							child.style.width = '100%';
 							child.style.margin = '0';
@@ -61,7 +105,7 @@
 		if (element.parentNode) {
 			var parent_element = element.parentNode;
 			setHD(parent_element);
-			if (parent_element.tagName === 'DIV' || parent_element.tagName === 'IFRAME' || parent_element.tagName === 'TABLE' || parent_element.tagName === 'TD') {
+			if (parent_element.tagName == 'DIV' || parent_element.tagName == 'IFRAME' || parent_element.tagName == 'TABLE' || parent_element.tagName == 'TD') {
 				parent_element.style.width = '100%';
 				parent_element.style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 			}
@@ -95,8 +139,10 @@
 		return;
 	}
 
+
+
 	if (window.top === window.self) {
-		var setWide = function() {
+		function setWide() {
 			if (window.location.href.indexOf('facebook') !== -1) {
 				iframe = document.getElementById('iframe_canvas');
 				platform = 'facebook';
@@ -120,28 +166,30 @@
 				return;
 			}
 			var background_118446 = localStorage.getItem('118446_background');
-			var USE_BACKGROUND = (background_118446 && background_118446 !== undefined && background_118446 !== null) ? eval(background_118446) : true;
-            var el = 0;
+			var USE_BACKGROUND = (background_118446 && background_118446 != undefined && background_118446 != null) ? eval(background_118446) : true;
 			switch (platform) {
 				case 'facebook':
-					while ((iframe = iframe.parentNode) !== null) {
-						if (iframe.tagName === 'DIV')
+					while ((iframe = iframe.parentNode) != null) {
+						if (iframe.tagName == 'DIV')
 							iframe.style.width = '100%';
 					}
-                    var idFbToHide = ['rightCol','blueBarDOMInspector'];
-                    idFbToHide.forEach(function(element, index, array) {
-                        document.getElementById(element).style.display = 'none';
-                    });
+					document.getElementById('rightCol').style.display = 'none';
+					document.getElementById('rightCol').style.display = 'none';
+					document.getElementById('blueBarHolder').style.display = 'none';
+					document.getElementById('blueBar').style.display = 'none';
+					document.getElementById('pageHead').style.display = 'none';
+					document.getElementById('jewelContainer').style.display = 'none';
+					document.getElementById('headNav').style.display = 'none';
 					document.getElementById('contentCol').style.margin = '0px';
 					document.getElementById('contentCol').style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					var contentColChild = document.getElementById('contentCol').childNodes;
 					for (var i = 0; i < contentColChild.length; i++)
-						if (contentColChild[i].tagName === 'DIV')
+						if (contentColChild[i].tagName == 'DIV')
 							contentColChild[i].style.margin = '0px';
 					document.scrollTop = '42px';
 					if (USE_BACKGROUND) {
 						var body_elements = document.getElementsByTagName('body');
-						for (el = 0; el < body_elements.length; el++)
+						for (var el = 0; el < body_elements.length; el++)
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					}
 					break;
@@ -153,8 +201,8 @@
 						iframe.style.backgroundColor = 'transparent';
 					else
 						iframe.style.backgroundColor = 'white';
-					while ((iframe = iframe.parentNode) !== null) {
-						if (iframe.tagName === 'DIV') {
+					while ((iframe = iframe.parentNode) != null) {
+						if (iframe.tagName == 'DIV') {
 							iframe.style.width = '100%';
 							iframe.style.margin = '0';
 							iframe.style.border = '0';
@@ -175,7 +223,7 @@
 						ss.media = "screen";
 						ss.href = "https://kabam1-a.akamaihd.net/castle/stylesheets/chomped/common_258783ec84eaa8c2ad74bf6168ec24317be52dab.css";
 						document.getElementsByTagName('head')[0].appendChild(ss);
-						ss = document.createElement("link");
+						var ss = document.createElement("link");
 						ss.type = "text/css";
 						ss.rel = "stylesheet";
 						ss.media = "screen";
@@ -183,7 +231,7 @@
 						document.getElementsByTagName('head')[0].appendChild(ss);
 					}
 					var centers = document.getElementsByTagName('center');
-					for (el = 0; el < centers.length; el++) {
+					for (var el = 0; el < centers.length; el++) {
 						var old_elem = centers[el];
 						var new_elem = document.createElement('div');
 						new_elem.id = 'altervista_div' + el;
@@ -195,11 +243,11 @@
 					if (object) initScript(object);
 					break;
 				default:
-					if (platform === 'kongregate') setTimeout(function() {
-						make_space_for_kongregate(document.getElementById('gameiframe'), undefined);
+					if (platform == 'kongregate') setTimeout(function() {
+						make_space_for_kongregate(document.getElementById('gameiframe'), undefined)
 					}, 10000);
 					var top_body = document.getElementsByTagName('body');
-					for (el = 0; el < top_body.length; el++) {
+					for (var el = 0; el < top_body.length; el++) {
 						if (top_body[el].id) debugLog('top_body[' + el + '].id = ' + top_body[el].id);
 						hide_all(top_body[el], game_frame);
 					}
@@ -211,21 +259,22 @@
 					}
 					break;
 			}
-		};
+		}
 		setWide();
 	} else {
 		platform = document.body.className.split(' ');
-		if (platform && platform[0])
+		if (platform && platform[0]) {
 			platform = platform[0].replace(/(platforms_|_game)/g, '');
-		else
-            platform = 'google';
+		} else {
+			platform = 'google';
+		}
 		var errors = 0;
 
-		var setHigh = function() {
-			clearTimeout();
+		function setHigh() {
+			clearTimeout;
 			/* Custom treatment for intermediate iframe */
 			if (document.getElementById('game_frame')) setTimeout(function() {
-				make_space_for_kongregate(document.getElementById('game_frame'), '100%');
+				make_space_for_kongregate(document.getElementById('game_frame'), '100%')
 			}, 10000);
 			var object = document.getElementsByTagName('object');
 			if (object.length < 1) {
@@ -237,12 +286,11 @@
 				return;
 			}
 			var background_118446 = localStorage.getItem('118446_background');
-			var USE_BACKGROUND = (background_118446 && background_118446 !== undefined && background_118446 !== null) ? eval(background_118446) : true;
-            var i = 0, el = 0, body_elements = null, html_elements = null;
+			var USE_BACKGROUND = (background_118446 && background_118446 != undefined && background_118446 != null) ? eval(background_118446) : true;
 			switch (platform) {
 				case 'facebook':
 					REALM_URL = 'https://apps.facebook.com/dragonsofatlantis/realm/';
-					for (i = 0; i < object.length; i++) {
+					for (var i = 0; i < object.length; i++) {
 						switch (object[i].parentNode.id) {
 							case 'hd':
 								object[i].style.display = 'none';
@@ -253,27 +301,27 @@
 					}
 					document.getElementById('hd').parentNode.style.width = '760px';
 					var hdChild = document.getElementById('hd').childNodes;
-					for (i = 0; i < hdChild.length; i++) {
-						if (hdChild[i].tagName === 'DIV') hdChild[i].style.display = 'none';
-						if (hdChild[i].tagName === 'IFRAME') hdChild[i].style.display = 'none';
+					for (var i = 0; i < hdChild.length; i++) {
+						if (hdChild[i].tagName == 'DIV') hdChild[i].style.display = 'none';
+						if (hdChild[i].tagName == 'IFRAME') hdChild[i].style.display = 'none';
 					}
 					document.getElementById('ft').style.display = 'none';
 					document.scrollTop = '42px';
 					if (REMOVE_HD) document.getElementById('hd').style.display = 'none';
 					if (USE_BACKGROUND) {
-						body_elements = document.getElementsByTagName('body');
-						for (el = 0; el < body_elements.length; el++)
+						var body_elements = document.getElementsByTagName('body');
+						for (var el = 0; el < body_elements.length; el++)
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
-						html_elements = document.getElementsByTagName('html');
-						for (el = 0; el < html_elements.length; el++)
+						var html_elements = document.getElementsByTagName('html');
+						for (var el = 0; el < html_elements.length; el++)
 							html_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					}
 					break;
 				case 'google':
 					document.getElementById('pane_hd').style.display = 'none';
 					if (USE_BACKGROUND) {
-						body_elements = document.getElementsByTagName('body');
-						for (el = 0; el < body_elements.length; el++) {
+						var body_elements = document.getElementsByTagName('body');
+						for (var el = 0; el < body_elements.length; el++) {
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 							body_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 						}
@@ -281,9 +329,9 @@
 					break;
 				case 'kabam':
 					REALM_URL = 'https://www.kabam.com/fr/games/dragons-of-atlantis/play/';
-					html_elements = document.getElementsByTagName('html');
-					for (el = 0; el < html_elements.length; el++) {
-						html_elements[el].style.overflow = 'hidden';
+					var html_elements = document.getElementsByTagName('html');
+					for (var el = 0; el < html_elements.length; el++) {
+						html_elements[el].style.overflow = 'hidden'
 						html_elements[el].style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					}
 					if (!USE_BACKGROUND) document.body.style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
@@ -292,7 +340,7 @@
 					break;
 			}
 			initScript(object);
-		};
+		}
 		setHigh();
 	}
 
@@ -301,7 +349,7 @@
 	function initScript(SWF_OBJECT) {
 
 		function makeUID(len) {
-			len = (len !== undefined ? len : 20);
+			var len = (len != undefined ? len : 20);
 			var chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'u', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'U', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_'];
 			var uid = chars[Math.floor(Math.random() * 54)];
 			for (var i = 0; i < len; i++) {
@@ -311,12 +359,12 @@
 		}
 
 		function getUID(name) {
-			return UID[name] !== undefined ? UID[name] : name;
+			return UID[name] != undefined ? UID[name] : name;
 		}
 
 		function setUID(name) {
 			var uid = makeUID();
-			while (UIDN[uid] !== undefined) {
+			while (UIDN[uid] != undefined) {
 				uid = makeUID();
 			}
 			UIDN[uid] = 1;
@@ -328,7 +376,7 @@
 			var obj = {};
 			var pattern = /\s*(.*?)\s*=\s*('|")(.*?)\2/gi;
 			var match;
-			while ((match = pattern.exec(str)) !== null) {
+			while ((match = pattern.exec(str)) != null) {
 				obj[match[1]] = match[3];
 			}
 			return obj;
@@ -340,9 +388,9 @@
 			var pattern = /\<\s*param\s*(.*?)\>/gi;
 			var attrs = {};
 			var args, match, p;
-			while ((match = pattern.exec(params)) !== null) {
-				p = parseQuotedVars(match[1]);
-				if (p.name && p.name === 'flashvars') {
+			while ((match = pattern.exec(params)) != null) {
+				var p = parseQuotedVars(match[1]);
+				if (p.name && p.name == 'flashvars') {
 					args = decodeEntity(p.value).split('&');
 					for (var i = 0; i < args.length; i++) {
 						var v = args[i].split('=');
@@ -375,7 +423,7 @@
 		 */
 		var api_version = 'overarch',
 			scriptName = 'CalciumScript',
-			mainAuthor = 'Calcium',
+			mainAuthor = 'Calcium'
             CPT_SEARCH = {  players:'playerSearchName', playersHisto:'playerSearchHistoName', playerDetail: 'detailPlayer',
                             alliances:'allianceSearchName', allianceDetail: 'detailAlliance' };
 		/* Skins */
@@ -593,10 +641,6 @@
 			}
 
 			try {
-                var doMuteSound = function () {
-                    logit('Mute sound');
-					swf.musicMute();
-                };
 				var swf = null;
 				var object = document.getElementsByTagName('object');
 				if (object.length < 1) {
@@ -604,7 +648,7 @@
 					return;
 				}
 				for (i = 0; i < object.length; i++) {
-					if (object[i].type && object[i].type === 'application/x-shockwave-flash') {
+					if (object[i].type && object[i].type == 'application/x-shockwave-flash') {
 						swf = object[i];
 						getFlashVars(swf);
 						if (C.attrs.apiServer) {
@@ -612,11 +656,14 @@
 							if (maxWidth < 760) maxWidth = 760;
 							if (window.location.href.indexOf("facebook") !== -1)
 								document.getElementById('hd').parentNode.style.width = maxWidth + 'px';
-							if (swf.id === 'castlemania_swf') swf.style.width = maxWidth + 'px';
+							if (swf.id == 'castlemania_swf') swf.style.width = maxWidth + 'px';
 							swf_object = swf;
 							SWF_CONTAINER = swf.parentNode;
 							SWF_CONTAINER_INNERHTML = SWF_CONTAINER.innerHTML;
-							setTimeout(doMuteSound, 30000);
+							setTimeout(function() {
+								logit('Mute sound');
+								swf.musicMute();
+							}, 30000);
 							break;
 						}
 					}
@@ -1502,7 +1549,7 @@
 				clearAndReload();
 
 				/* Set the default locale use */
-				if (Data.options.user_language !== undefined && Data.options.user_language !== null && Data.options.user_language !== LANG_CODE) {
+				if (Data.options.user_language != undefined && Data.options.user_language != null && Data.options.user_language != LANG_CODE) {
 					setLanguage(Data.options.user_language);
 				}
 				/* Set blue energy transportable if cheat enabled */
@@ -1518,7 +1565,7 @@
 															 */
 				/* Check basic initialization */
 
-				var stepStarting = function(current_step) {
+				function stepStarting(current_step) {
 					var wait_time = Math.randRange(2500, 4500);
 					   var error_code;
 					var error_msg;
@@ -1537,15 +1584,16 @@
 							/* Bad request (API version ?) */
 							case 400:
 								error_msg = translate('<b>Bad request!</b>');
-								progressBar.stop();
+								progressBar.stop;
 								progressBar.hideshow(false);
 								retry = 400;
 								dialogFatal('<b>' + kFatalSeedTitle + '</b><br><br>\
 											<font color="#BF0000"><b> ' + errorMsg + '</b></font>\
 											<br><br><div align=left>\
 											' + kFatalSeedMsg + '<br><br></div>\
-											<a id="' + UID.support_link + '" href="" target="_blank">Bugs and Known Issues</a><br>');
+											<a id="' + UID['support_link'] + '" href="" target="_blank">Bugs and Known Issues</a><br>');
 								return;
+								break;
 								/*
 								 * Forbidden (RefControl or --no-referrers
 								 * missing ?)
@@ -1554,6 +1602,7 @@
 								error_msg = translate('<b>Forbidden!</b>');
 								retry = 403;
 								return;
+								break;
 								/* Rate Limit Exceeded */
 							case 429:
 								error_msg = '<b>API </b>' + translate('<b>Rate Limit Exceeded</b>, too many requests!');
@@ -1567,6 +1616,7 @@
 								verboseLog(error_msg + ' - ' + translate('Retry in :') + waitTime);
 								STARTUP_TIMER = setTimeout(stepStarting, waitTime * 1000, currentStep);
 								return;
+								break;
 							case 509:
 								error_msg = translate('<b>Rate Limit Exceeded</b>, too many requests!');
 								waitTime = 600;
@@ -1579,6 +1629,7 @@
 								verboseLog(error_msg + ' - ' + translate('Retry in :') + waitTime);
 								STARTUP_TIMER = setTimeout(stepStarting, waitTime * 1000, currentStep);
 								return;
+								break;
 							default:
 								break;
 						}
@@ -1588,28 +1639,27 @@
 					}
 
 					if (retry <= 20) {
-                        var i = 0, cityIdx = 0;
 						switch (current_step) {
 							case 1:
 								/* Check API version */
-                                var getSupportedVersions = function(callback) {
-                                    var params = {};
-                                    new MyAjaxRequest('versions', url_versions + '/supported_versions', params, function(res) {
-                                        if (res.ok && res.dat) {
-                                            var list = '';
-                                            if (res.dat.length) {
-                                                api_version = res.dat[res.dat.length - 1];
-                                                for (var v = 0; v < res.dat.length; v++) list = list + ((v === 0) ? '' : ', ') + res.dat[v];
-                                            } else {
-                                                api_version = res.dat;
-                                                list = res.dat;
-                                            }
-                                            verboseLog('List of supported API version : ' + list);
-                                            debugLog('List of supported API version : ' + list);
-                                        }
-                                        if (callback) callback(res);
-                                    }, false);
-                                };
+									function getSupportedVersions(callback) {
+										var params = {};
+										new MyAjaxRequest('versions', url_versions + '/supported_versions', params, function(res) {
+											if (res.ok && res.dat) {
+												var list = '';
+												if (res.dat.length) {
+													api_version = res.dat[res.dat.length - 1];
+													for (var v = 0; v < res.dat.length; v++) list = list + ((v == 0) ? '' : ', ') + res.dat[v];
+												} else {
+													api_version = res.dat;
+													list = res.dat;
+												}
+												verboseLog('List of supported API version : ' + list);
+												debugLog('List of supported API version : ' + list);
+											}
+											if (callback) callback(res);
+										}, false);
+								}
 								progress_title = translate('Getting API version...');
 								progressBar.update({
 									step: current_step,
@@ -1632,7 +1682,7 @@
 									step: current_step,
 									title: progress_title,
 									stepText: translate('Charging Map binairy file')
-                                });
+					});
 								Map.initMapData(function(res) {
 									if (res.ok) {
 										onSuccess(translate('Map Bin Successfully initialized'), wait_time, current_step + 1);
@@ -1707,10 +1757,11 @@
 								break;
 							case 7:
 								/* Fetch capital data */
-								progress_title = translate('Getting cities data...');
+									progress_title = translate('Getting cities data...');
+								var cityIdx;
 								/* We make sure to first start the capital */
-								for (i = 0; i < Seed.cityInit.length; i++) {
-									if (Seed.cityInit[i].type === CAPITAL.type) {
+								for (var i = 0; i < Seed.cityInit.length; i++) {
+									if (Seed.cityInit[i].type == 'capital') {
 										cityIdx = Seed.cityInit[i].id;
 									}
 								}
@@ -1732,19 +1783,8 @@
 								break;
 							case 8:
 								/* Fetch outposts data */
-								var clbFct = function(res) {
-                                    if (res.ok) {
-                                        wait_time = Math.randRange(2500, 6000);
-                                        if (current_index === Seed.cityInit.length - 1) {
-                                            wait_time = 2500;
-                                        }
-                                        onSuccess(translate('Outpost') + ' #' + (i + 1) + ' ' + translate('data successfully fetched'), wait_time, current_step);
-                                    } else {
-                                        onError(res.status, res.errmsg, translate('Outpost') + ' #' + (i + 1), wait_time, current_step);
-                                    }
-                                };
-                                progress_title = translate('Getting cities data...');
-								for (i = 0; i < Seed.cityInit.length; i++) {
+									progress_title = translate('Getting cities data...');
+								for (var i = 0; i < Seed.cityInit.length; i++) {
 									if (Seed.cityInit[i].loaded) {
 										continue;
 									}
@@ -1757,17 +1797,28 @@
 										clearTimeout(Seed.cityInit[i].timer);
 									}
 									var current_index = i;
-									cityIdx = Seed.cityInit[i].id;
-									Seed.fetchCity(cityIdx, clbFct);
+									var cityIdx = Seed.cityInit[i].id;
+									Seed.fetchCity(cityIdx, function(res) {
+										if (res.ok) {
+											wait_time = Math.randRange(2500, 6000);
+											if (current_index == Seed.cityInit.length - 1) {
+												wait_time = 2500;
+											}
+											onSuccess(translate('Outpost') + ' #' + (i + 1) + ' ' + translate('data successfully fetched'), wait_time, current_step);
+										} else {
+											onError(res.status, res.errmsg, translate('Outpost') + ' #' + (i + 1), wait_time, current_step);
+										}
+									});
 									return;
 								}
 								startScript();
 								return;
+								break;
 						}
 					} else {
 						/* Retries Limit */
 						clearTimeout(STARTUP_TIMER);
-						progressBar.stop();
+						progressBar.stop;
 						progressBar.hideshow(false);
 						if (retry < 400) { /*
 											 * to avoid displaying twice a
@@ -1777,20 +1828,20 @@
 								<font color="#BF0000"><b> ' + (error_code || retry) + ' - ' + error_msg + '</b></font>\
 								<br><br><div align=left>\
 								' + kFatalSeedMsg + '<br><br></div>\
-								<a id="' + UID.support_link + '" href="" target="_blank">Bugs and Known Issues</a><br>');
+								<a id="' + UID['support_link'] + '" href="" target="_blank">Bugs and Known Issues</a><br>');
 						}
 						return;
 					}
-				};
+				}
 
 				actionLog('<B>' + scriptVersion + ' ' + translate('Loading...') + '</B>');
 				consoleLog('<B>' + scriptVersion + ' ' + translate('Loading...') + '</B>');
 				stepStarting(1);
 
-				var startScript = function() {
+				function startScript() {
 
 					if (updaterPop) setTimeout(function() {
-						updaterPop.destroy();
+						updaterPop.destroy()
 					}, 100);
 
 					progressBar.update({
@@ -1807,11 +1858,11 @@
 					Messages.init();
 
 
-					progressBar.stop();
+					progressBar.stop;
 					progressBar.hideshow(false);
 					progressBarPop.destroy();
 
-					if (Data.options.popUp === null || Data.options.popUp.x === null || Data.options.popUp.x === '' || isNaN(Data.options.popUp.x)) {
+					if (Data.options.popUp == null || Data.options.popUp.x == null || Data.options.popUp.x == '' || isNaN(Data.options.popUp.x)) {
 						var maxWidth = document.body.offsetWidth - 570;
 						if (maxWidth < 760) maxWidth = 760;
 						Data.options.popUp.x = maxWidth + 2;
@@ -1864,7 +1915,7 @@
 
 					REALM_NAME = $$('a.current_realm.change_realm')[0].text;
 					logit(REALM_NAME);
-				};
+				}
 			} catch (e) {
 				dialogFatal(kInitErr + e);
 				logit(inspectObj(e, 8, 1));
@@ -1934,14 +1985,14 @@
 			},
 
 			showAlertNotification: function(msg) {
-				if ((Data.options.enable_notifications_spy && msg.type === 1) ||
-					(Data.options.enable_notifications_attack && msg.type === 0)) {
+				if ((Data.options.enable_notifications_spy && msg.type == 1) ||
+					(Data.options.enable_notifications_attack && msg.type == 0)) {
 
 					CalciumNotifications.showNotification(
-						REALM_NAME + '-' + translate((msg.type === 1 ? 'Spy' : 'Attack')) + '-' + translate('Arrival time') + ': ' + new Date(msg.arrive_at).formatDate() + ' ' + new Date(msg.arrive_at).formatTime(),
+						REALM_NAME + '-' + translate((msg.type == 1 ? 'Spy' : 'Attack')) + '-' + translate('Arrival time') + ': ' + new Date(msg.arrive_at).formatDate() + ' ' + new Date(msg.arrive_at).formatTime(),
 						msg.x + ',' + msg.y + ' : ' + msg.alliance + '/' + msg.troups,
 						serverTime(),
-						(msg.type === 1 ? 'https://wackoscripts.com/images/Spy.jpg' : 'https://wackoscripts.com/images/Attacks.jpg')
+						(msg.type == 1 ? 'https://wackoscripts.com/images/Spy.jpg' : 'https://wackoscripts.com/images/Attacks.jpg')
 					);
 
 				}
@@ -1960,9 +2011,9 @@
 					id: data.player_id
 				};
 				
-				if(tabTemp[1] === 0) {
+				if(tabTemp[1] == 0) {
 					if(Data.options.tchat.enable_notif_realm) {
-						if(t.nMonde !== null) {
+						if(t.nMonde != null) {
 							t.nMonde.close();
 							clearTimeout(t.timerMonde);
 						}
@@ -1979,7 +2030,7 @@
 					verboseLog('Add message to realm tchat :' + inspectObj(message, 4, 1));
 				} else {
 					if(Data.options.tchat.enable_notif_alliance) {
-						if(t.nAlliance !== null) {
+						if(t.nAlliance != null) {
 							t.nAlliance.close();
 							clearTimeout(t.timerAlliance);
 						}
@@ -2032,7 +2083,7 @@
 						msg.x = warn.attacker_coords.x;
 						msg.y = warn.attacker_coords.y;
 					}
-					if (warn.march_type && warn.march_type === 'SpyMarch') {
+					if (warn.march_type && warn.march_type == 'SpyMarch') {
 						msg.type = 1;
 					}
 					if (warn.attacker_units) {
@@ -2040,7 +2091,7 @@
 						for (var tr in warn.attacker_units) {
 							var unit = numf(warn.attacker_units[tr], ' ') + ' ' + translate(tr);
 							results.push(unit);
-							if(msg.type === 1 && tr === 'Spy') {
+							if(msg.type == 1 && tr == 'Spy') {
 								nbSpy = warn.attacker_units[tr];
 							}
 						}
@@ -2056,7 +2107,7 @@
 
 				var found = false;
 				for (var i = 0; i < Data.options.messages_notification.length && !found; i++) {
-					if (Data.options.messages_notification[i].id === msgid) {
+					if (Data.options.messages_notification[i].id == msgid) {
 						found = true;
 					}
 				}
@@ -2135,30 +2186,30 @@
 				if (str.length >= 19) {
 					var year = toNum(str.substr(0, 4));
 					var month = toNum(str.substr(5, 2));
-					if (month === 0) {
+					if (month == 0) {
 						month = toNum(str.substr(6, 1));
 					}
 					var day = toNum(str.substr(8, 2));
-					if (day === 0) {
+					if (day == 0) {
 						day = toNum(str.substr(9, 1));
 					}
 					var hours = toNum(str.substr(11, 2));
-					if (hours === 0) {
+					if (hours == 0) {
 						hours = toNum(str.substr(12, 1));
 					}
 					var minutes = toNum(str.substr(14, 2));
-					if (minutes === 0) {
+					if (minutes == 0) {
 						minutes = toNum(str.substr(15, 1));
 					}
 					var seconds = toNum(str.substr(17, 2));
-					if (seconds === 0) {
+					if (seconds == 0) {
 						seconds = toNum(str.substr(18, 1));
 					}
 					result = new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
 				}
 				return result;
 			}
-		};
+		}
 		/******************************** Socket Teamwork package ********************/
 		var Socket = {
 			SWF_SOCKET_URL : 'https://wackoscripts.com/files/teamwork_socket_bridge.swf',
@@ -2290,21 +2341,21 @@
 				if (!t.isready) return;
 
 				// Send message Connect to server
-				window.postMessage({ type: "TEAMWORK_SOCKET_CONNECT", flashid : UID.TeamWork_SocketBridge ,text: (server+':'+port) }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_CONNECT", flashid : UID['TeamWork_SocketBridge'] ,text: (server+':'+port) }, "*");
 			},
 
 			close : function() {
 				var t = Socket;
 				if (!t.isconnected) return;
 				// Send message disConnect to server
-				window.postMessage({ type: "TEAMWORK_SOCKET_CLOSE", flashid : UID.TeamWork_SocketBridge ,text: "none" }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_CLOSE", flashid : UID['TeamWork_SocketBridge'] ,text: "none" }, "*");
 			},
 
 			write : function(msg) {
 				var t = Socket;
 				if (!t.isconnected) return;
 
-				window.postMessage({ type: "TEAMWORK_SOCKET_WRITE", flashid : UID.TeamWork_SocketBridge ,text: msg }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_WRITE", flashid : UID['TeamWork_SocketBridge'] ,text: msg }, "*");
 			},
 
 			checkstatus : function() {
@@ -2313,7 +2364,7 @@
 				t.shockwave_ok = false;
 
 				logit('SWF request');
-				window.postMessage({ type: "TEAMWORK_SOCKET_CHECKSTATUS", flashid : UID.TeamWork_SocketBridge ,text: "none" }, "*");
+				window.postMessage({ type: "TEAMWORK_SOCKET_CHECKSTATUS", flashid : UID['TeamWork_SocketBridge'] ,text: "none" }, "*");
 				setTimeout(function(){
 					var t = Socket;
 					if (!t.shockwave_ok) {
@@ -2338,26 +2389,26 @@
 				t.credentials = {player_id:Seed.player.id};
 
 				setUID('TeamWork_SWF_Container');
-				var container = $(UID.TeamWork_SWF_Container);
+				var container = $(UID['TeamWork_SWF_Container']);
 				if (!container) {
-					container = document.createElement('div');
-					container.setAttribute('id', UID.TeamWork_SWF_Container);
+					var container = document.createElement('div');
+					container.setAttribute('id', UID['TeamWork_SWF_Container']);
 					mainbox.appendChild(container);
 				}
 
 				setUID('TeamWork_Socket_Bridge');
-				var swf_player = $(UID.TeamWork_Socket_Bridge);
+				var swf_player = $(UID['TeamWork_Socket_Bridge']);
 				if (!swf_player) {
-					var swf_container = $(UID.TeamWork_SWF_Container);
-					swf_player = document.createElement('div');
-					swf_player.setAttribute('id', UID.TeamWork_Socket_Bridge);
+					var swf_container = $(UID['TeamWork_SWF_Container']);
+					var swf_player = document.createElement('div');
+					swf_player.setAttribute('id', UID['TeamWork_Socket_Bridge']);
 					swf_container.appendChild(swf_player);
 				}
 
 				window.addEventListener("message", function(event) {
 					var t = Socket;
 					// We only accept messages from ourselves
-					if (event.source !== window) {
+					if (event.source != window) {
 						logit('window.addEventListener --- Ejected');
 						return;
 					}
@@ -2374,92 +2425,93 @@
 				script.type = 'text/javascript';
 				script.setAttribute('id',t.scriptid);
 
-				var html = '//<![CDATA[\n';
-				html+= 'var TeamWork_Socket = {\n';
-				html+= '	loaded : function() {\n';
-				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_LOADED", text: "none" }, "*");\n';
-				html+= '	},\n';
-				html+= '	statusok : function() {\n';
-				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_STATUSOK", text: "none" }, "*");\n';
-				html+= '	},\n';
-				html+= '	connected : function() {\n';
-				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_CONNECTED", text: "none" }, "*");\n';
-				html+= '	},\n';
-				html+= '	disconnected : function() {\n';
-				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_DISCONNECTED", text: "none" }, "*");\n';
-				html+= '	},\n';
-				html+= '	ioError : function(msg) {\n';
-				html+= '		console.log(" JS Injected : ioError");\n';
-				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_IOERROR", text: msg }, "*");\n';
-				html+= '	},\n';
-				html+= '	securityError : function(msg) {\n';
-				html+= '		console.log(" JS Injected : securityError");\n';
-				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_SECURITYERROR", text: msg }, "*");\n';
-				html+= '	},\n';
-				html+= '	receive : function(msg) {\n';
-				html+= '		console.log(" JS Injected : receive. msg = " +  msg);\n';
-				html+= '		window.postMessage({ type: "TEAMWORK_SOCKET_RECEIVE", text: msg }, "*");\n';
-				html+= '	},\n';
-				html+= '};\n';
-				html+= 'var EventType = {\n';
-				html+= '	TEAMWORK_SOCKET_CONNECT : \'connect\',\n';
-				html+= '	TEAMWORK_SOCKET_CLOSE: \'close\',\n';
-				html+= '	TEAMWORK_SOCKET_WRITE : \'write\',\n';
-				html+= '	TEAMWORK_SOCKET_CHECKSTATUS : \'checkstatus\',\n';
-				html+= '};\n';
-				html+= 'function connect(id,strconnect){\n';
-				html+= '	var swf=document.getElementById(id);\n';
-				html+= '  if (swf) {\n';
-				html+= '		var args=strconnect.split(":");\n';
-				html+= '		swf.connect(args[0],args[1]);\n';
-				html+= '	} else {\n';
-				html+= '		console.log("connect :"+id+" not found");\n';
-				html+= '	}';
-				html+= '};\n';
-				html+= 'function close(id){\n';
-				html+= '	var swf=document.getElementById(id);\n';
-				html+= '  if (swf) {\n';
-				html+= '		swf.close();\n';
-				html+= '	} else {\n';
-				html+= '		console.log("close :"+id+" not found");\n';
-				html+= '	}';
-				html+= '};\n';
-				html+= 'function write(id,msg){\n';
-				html+= '	var swf=document.getElementById(id);\n';
-				html+= '  if (swf) {\n';
-				html+= '		swf.write(msg);\n';
-				html+= '	} else {\n';
-				html+= '		console.log("write :"+id+" not found");\n';
-				html+= '	}';
-				html+= '};\n';
-				html+= 'function checkstatus(id){\n';
-				html+= '	var swf=document.getElementById(id);\n';
-				html+= '  if (swf) {\n';
-				html+= '		swf.areyouok();\n';
-				html+= '	} else {\n';
-				html+= '		console.log("areyouok :"+id+" not found");\n';
-				html+= '	}';
-				html+= '};\n';
-				html+= 'function init(){\n';
-				html+= '	window.addEventListener("message", function(event) {\n';
-				html+= '		if (event.source != window ) {\n';
-				html+= '			console.log(" JS Injected : Ejected");\n';
-				html+= '			return;\n';
-				html+= '		}\n';
-				html+= '		if (event.data.type && event.data.flashid && event.data.text && EventType[event.data.type]) {\n';
-				html+= '			var myfunc = EventType[event.data.type];\n';
-				html+= '			var fn=eval(myfunc);\n';
-				html+= '			if (typeof fn == \'function\') {\n';
-				html+= '				fn(event.data.flashid,event.data.text);\n';
-				html+= '			} else {\n';
-				html+= '				console.log(myfunc +" is not a function");\n';
-				html+= '			}\n';
-				html+= '		}\n';
-				html+= '	}, false);\n';
-				html+= '	window.postMessage({ type: "TEAMWORK_SOCKET_SCRIPTREADY", text: "none" }, "*");\n';
-				html+= '};\n';
-				html+= 'init();\n';
-				html+= ' //]]>';
+				var html=
+				 '//<![CDATA[\n'
+				+'var TeamWork_Socket = {\n'
+				+'	loaded : function() {\n'
+				+'		window.postMessage({ type: "TEAMWORK_SOCKET_LOADED", text: "none" }, "*");\n'
+				+'	},\n'
+				+'	statusok : function() {\n'
+				+'		window.postMessage({ type: "TEAMWORK_SOCKET_STATUSOK", text: "none" }, "*");\n'
+				+'	},\n'
+				+'	connected : function() {\n'
+				+'		window.postMessage({ type: "TEAMWORK_SOCKET_CONNECTED", text: "none" }, "*");\n'
+				+'	},\n'
+				+'	disconnected : function() {\n'
+				+'		window.postMessage({ type: "TEAMWORK_SOCKET_DISCONNECTED", text: "none" }, "*");\n'
+				+'	},\n'
+				+'	ioError : function(msg) {\n'
+				+'		console.log(" JS Injected : ioError");\n'
+				+'		window.postMessage({ type: "TEAMWORK_SOCKET_IOERROR", text: msg }, "*");\n'
+				+'	},\n'
+				+'	securityError : function(msg) {\n'
+				+'		console.log(" JS Injected : securityError");\n'
+				+'		window.postMessage({ type: "TEAMWORK_SOCKET_SECURITYERROR", text: msg }, "*");\n'
+				+'	},\n'
+				+'	receive : function(msg) {\n'
+				+'		console.log(" JS Injected : receive. msg = " +  msg);\n'
+				+'		window.postMessage({ type: "TEAMWORK_SOCKET_RECEIVE", text: msg }, "*");\n'
+				+'	},\n'
+				+'};\n'
+				+'var EventType = {\n'
+				+'	TEAMWORK_SOCKET_CONNECT : \'connect\',\n'
+				+'	TEAMWORK_SOCKET_CLOSE: \'close\',\n'
+				+'	TEAMWORK_SOCKET_WRITE : \'write\',\n'
+				+'	TEAMWORK_SOCKET_CHECKSTATUS : \'checkstatus\',\n'
+				+'};\n'
+				+'function connect(id,strconnect){\n'
+				+'	var swf=document.getElementById(id);\n'
+				+'  if (swf) {\n'
+				+'		var args=strconnect.split(":");\n'
+				+'		swf.connect(args[0],args[1]);\n'
+				+'	} else {\n'
+				+'		console.log("connect :"+id+" not found");\n'
+				+'	}'
+				+'};\n'
+				+'function close(id){\n'
+				+'	var swf=document.getElementById(id);\n'
+				+'  if (swf) {\n'
+				+'		swf.close();\n'
+				+'	} else {\n'
+				+'		console.log("close :"+id+" not found");\n'
+				+'	}'
+				+'};\n'
+				+'function write(id,msg){\n'
+				+'	var swf=document.getElementById(id);\n'
+				+'  if (swf) {\n'
+				+'		swf.write(msg);\n'
+				+'	} else {\n'
+				+'		console.log("write :"+id+" not found");\n'
+				+'	}'
+				+'};\n'
+				+'function checkstatus(id){\n'
+				+'	var swf=document.getElementById(id);\n'
+				+'  if (swf) {\n'
+				+'		swf.areyouok();\n'
+				+'	} else {\n'
+				+'		console.log("areyouok :"+id+" not found");\n'
+				+'	}'
+				+'};\n'
+				+'function init(){\n'
+				+'	window.addEventListener("message", function(event) {\n'
+				+'		if (event.source != window ) {\n'
+				+'			console.log(" JS Injected : Ejected");\n'
+				+'			return;\n'
+				+'		}\n'
+				+'		if (event.data.type && event.data.flashid && event.data.text && EventType[event.data.type]) {\n'
+				+'			var myfunc = EventType[event.data.type];\n'
+				+'			var fn=eval(myfunc);\n'
+				+'			if (typeof fn == \'function\') {\n'
+				+'				fn(event.data.flashid,event.data.text);\n'
+				+'			} else {\n'
+				+'				console.log(myfunc +" is not a function");\n'
+				+'			}\n'
+				+'		}\n'
+				+'	}, false);\n'
+				+'	window.postMessage({ type: "TEAMWORK_SOCKET_SCRIPTREADY", text: "none" }, "*");\n'
+				+'};\n'
+				+'init();\n'
+				+' //]]>';
 
 				script.text=html;
 
@@ -2501,11 +2553,11 @@
 				var t = Socket;
 
 				setUID('TeamWork_Socket_Bridge');
-				var swf_player = $(UID.TeamWork_Socket_Bridge);
+				var swf_player = $(UID['TeamWork_Socket_Bridge']);
 				if (!swf_player) {
-					var swf_container = $(UID.TeamWork_SWF_Container);
-					swf_player = document.createElement('div');
-					swf_player.setAttribute('id', UID.TeamWork_Socket_Bridge);
+					var swf_container = $(UID['TeamWork_SWF_Container']);
+					var swf_player = document.createElement('div');
+					swf_player.setAttribute('id', UID['TeamWork_Socket_Bridge']);
 					swf_container.appendChild(swf_player);
 				}
 
@@ -2520,8 +2572,8 @@
 				
 				easyswf({
 					swf: t.SWF_SOCKET_URL,
-					targetDiv: UID.TeamWork_Socket_Bridge,
-					swfid : UID.TeamWork_SocketBridge,
+					targetDiv: UID['TeamWork_Socket_Bridge'],
+					swfid : UID['TeamWork_SocketBridge'],
 					width: 1,
 					height: 1,
 					allowScriptAccess: "always",
@@ -2538,7 +2590,7 @@
 
 			reloadSocketBridge : function() {
 				var t = Socket;
-				$(UID.TeamWork_SocketBridge).remove();
+				$(UID['TeamWork_SocketBridge']).remove();
 				t.loadSocketBridge();
 			},
 			
@@ -2560,7 +2612,7 @@
 				var ret = false;
 				var boosts = getBoosts();
 				for (var i = 0; i < boosts.length; i++) {
-					if (is_protected() && boosts[i].type === 'safety' && boosts[i].run_at) {
+					if (is_protected() && boosts[i].type == 'safety' && boosts[i].run_at) {
 						if (boosts[i].run_at > serverTime()) {
 							ret = true;
 						}
@@ -2606,7 +2658,7 @@
 				for (var pu in presetUnits) {
 					var numTroops = getTroopNumbers(CAPITAL.id, pu);
 					var unit_max = numTroops.incity + numTroops.indefense;
-					if (unit_max < presetUnits[pu] || presetUnits[pu] === -1) { 
+					if (unit_max < presetUnits[pu] || presetUnits[pu] == -1) { 
 						units[pu] = unit_max;
 					}
 					else  {
@@ -2614,7 +2666,7 @@
 					}
 				}
 				t.apply(units);
-				if(type === 'attack') {
+				if(type == 'attack') {
 					if(Data.options.wall.presets[id].armor !== '' && Data.options.wall.presets[id].scales !== '') {
 						new MyAjax.setCustomization('GreatDragon', Data.options.wall.presets[id].armor, Data.options.wall.presets[id].scales, function(rslt) {});
 					}
@@ -2623,12 +2675,13 @@
 			
 			readBattleReport: function(rpt) {
 				// Parcours des messages du guet
-                var i = 0;
-				for(i = 0 ; i < Data.options.messages_tower.length ; i++) {
+				for(var i = 0 ; i < Data.options.messages_tower.length ; i++) {
 					var msg = Data.options.messages_tower[i];
 					// Si X, Y et type de messages coincide on continue
 					// 
-					if (rpt.report.attacker.location.x === Data.options.messages_tower[i].x && rpt.report.attacker.location.y === Data.options.messages_tower[i].y && rpt.report.location.terrain === 'City') {
+					if (rpt.report.attacker.location.x == Data.options.messages_tower[i].x 
+					&& rpt.report.attacker.location.y == Data.options.messages_tower[i].y 
+					&& rpt.report.location.terrain == 'City') {
 						var results = [];
 						var msgTroups = '';
 						for (var tr in rpt.report.attacker.units) {
@@ -2638,7 +2691,7 @@
 						if (results.length > 0) {
 							msgTroups = results.join(', ');
 						}
-						if(msgTroups === Data.options.messages_tower[i].troups) {
+						if(msgTroups == Data.options.messages_tower[i].troups) {
 							 Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
 						}
 					}
@@ -2647,10 +2700,10 @@
 					var detAlert = SoundPlayer.getNbCurrentAlertForAutoWall();
 					// Hide troop at the end of the last attack ?? ==> Gérer
 					// dans package Wall !
-					if(detAlert.nbAttackInProgress === 0 && detAlert.nbSpyInProgress === 0) {
+					if(detAlert.nbAttackInProgress == 0 && detAlert.nbSpyInProgress == 0) {
 						clearTimeout(Data.options.wall.auto.hide_troop_timeout);
 						var troopInDefense = false;
-						for (i = 0; i < all_unit_types.length; i++) {
+						for (var i = 0; i < all_unit_types.length; i++) {
 							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i]);
 							if(numTroops.indefense > 0) {
 								troopInDefense = true;
@@ -2665,11 +2718,12 @@
 			
 			readSpyReport: function(rpt) {
 				// Parcours des messages du guet
-                var i = 0;
-				for(i = 0 ; i < Data.options.messages_tower.length ; i++) {
+				for(var i = 0 ; i < Data.options.messages_tower.length ; i++) {
 					var msg = Data.options.messages_tower[i];
 					
-					if (rpt.report.attacker.location.x === Data.options.messages_tower[i].x && rpt.report.attacker.location.y === Data.options.messages_tower[i].y && rpt.report.location.terrain === 'City') {
+					if (rpt.report.attacker.location.x == Data.options.messages_tower[i].x 
+					&& rpt.report.attacker.location.y == Data.options.messages_tower[i].y 
+					&& rpt.report.location.terrain == 'City') {
 						var results = [];
 						var msgTroups = '';
 						for (var tr in rpt.report.attacker.units) {
@@ -2679,7 +2733,7 @@
 						if (results.length > 0) {
 							msgTroups = results.join(', ');
 						}
-						if(msgTroups === Data.options.messages_tower[i].troups) {
+						if(msgTroups == Data.options.messages_tower[i].troups) {
 							 Data.options.messages_tower[i].arrive_at = Data.options.messages_tower[i].arrive_at*2000;
 						}
 					}
@@ -2688,10 +2742,10 @@
 					var detAlert = SoundPlayer.getNbCurrentAlertForAutoWall();
 					// Hide troop at the end of the last attack ?? ==> Gérer
 					// dans package Wall !
-					if(detAlert.nbAttackInProgress === 0 && detAlert.nbSpyInProgress === 0) {
+					if(detAlert.nbAttackInProgress == 0 && detAlert.nbSpyInProgress == 0) {
 						clearTimeout(Data.options.wall.auto.hide_troop_timeout);
 						var troopInDefense = false;
-						for (i = 0; i < all_unit_types.length; i++) {
+						for (var i = 0; i < all_unit_types.length; i++) {
 							var numTroops = getTroopNumbers(CAPITAL.id, all_unit_types[i]);
 							if(numTroops.indefense > 0) {
 								troopInDefense = true;
@@ -2729,28 +2783,19 @@
 					});
 				}
 			}
-		};
+		}
 		/******************************** MyAjax package *****************************/
 		var MyAjax = {
 			addMainParams: function() {
 				var p = {};
-				p.user_id = C.attrs.userId;
-				p.dragon_heart = C.attrs.dragonHeart;
-				p._session_id = C.attrs.sessionId;
-				p.version = api_version;
-				p.timestamp = toNum(serverTime());
+				p['user_id'] = C.attrs.userId;
+				p['dragon_heart'] = C.attrs.dragonHeart;
+				p['_session_id'] = C.attrs.sessionId;
+				p['version'] = api_version;
+				p['timestamp'] = toNum(serverTime());
 				return p;
 			},
 			tradeSell: function(product, nbProduct, price, callback) {
-                var mycb = function(rslt) {
-					if (rslt.ok) {
-						
-					} else {
-						verboseLog('Ajax.tradeSell ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					}
-					if (callback) callback(rslt.dat.result);
-					return;
-				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
@@ -2759,18 +2804,19 @@
 				p['offer[price]'] = price;
 				
 				new MyAjaxRequest('trade', 'trades/sell.json', p, mycb, true);
-			},
-			tradeSearch: function(product, nbProduct, upperPrice, callback) { 
-				var mycb = function(rslt) {
+				
+				function mycb(rslt) {
 					if (rslt.ok) {
 						
 					} else {
-						verboseLog('Ajax.tradeSearch ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+						verboseLog('Ajax.tradeSell ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				};
-                var t = MyAjax;
+				}
+			},
+			tradeSearch: function(product, nbProduct, upperPrice, callback) { 
+				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				p['offer[product]'] = product;
@@ -2779,9 +2825,8 @@
 				p['offer[upper_price]'] = upperPrice;
 				
 				new MyAjaxRequest('trade', 'trades/search.json', p, mycb, false);
-			},
-			tradeSearchSell: function(callback) { 
-				var mycb = function(rslt) {
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						
 					} else {
@@ -2789,8 +2834,10 @@
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				};
-                var t = MyAjax;
+				}
+			},
+			tradeSearchSell: function(callback) { 
+				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				p['offer[product]'] = 'gold';
@@ -2799,9 +2846,25 @@
 				p['offer[upper_price]'] = 251000;
 				
 				new MyAjaxRequest('trade', 'trades.json', p, mycb, false);
+
+				function mycb(rslt) {
+					if (rslt.ok) {
+						
+					} else {
+						verboseLog('Ajax.tradeSearch ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt.dat.result);
+					return;
+				}
 			},
 			tradeBuy: function(idTrade, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				
+				new MyAjaxRequest('trade', 'trades/' + idTrade + '/buy.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else {
@@ -2809,15 +2872,16 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			tradeCancel: function(idTrade, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				
-				new MyAjaxRequest('trade', 'trades/' + idTrade + '/buy.json', p, mycb, true);
-			},
-			tradeCancel: function(idTrade, callback) {
-				var mycb = function(rslt) {
+				new MyAjaxRequest('trade', 'trades/' + idTrade + '/cancel.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						
 					} else {
@@ -2825,29 +2889,26 @@
 					}
 					if (callback) callback(rslt.dat.result);
 					return;
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				
-				new MyAjaxRequest('trade', 'trades/' + idTrade + '/cancel.json', p, mycb, true);
+				}
 			},
 			abandonWilderness: function(city_id, x, y, callback) {
-				var mycb = function(rslt) {
-					var mycb2 = function(rslt) {
-						if (rslt.ok) {
-							verboseLog('Ajax.tileAt : ' + rslt.ok);
-							if (callback) {
-								callback(true);
-							}
-						} else {
-							verboseLog('Ajax.tileAt ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-							if (callback) {
-								callback(false);
-							}
-						}
-					};
-                    if (rslt.ok) {
+				verboseLog('Ajax.abandonWilderness : city_id='+city_id+', x='+x+', y='+y);
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method']	= 'delete';
+				p['x']			= x;
+				p['y']			= y;
+				
+				var p2 = {};
+				p2 = t.addMainParams();
+				p2['x'] = x;
+				p2['y'] = y;
+				new MyAjaxRequest('wilderness', 'cities/'+ city_id +'/wildernesses/abandon.json', p, mycb, true);
+				
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
 						var options = {
 							x:x,
 							y:y,
@@ -2859,19 +2920,31 @@
 					} else {
 						verboseLog('Ajax.abandonWilderness ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
-				};
-                verboseLog('Ajax.abandonWilderness : city_id='+city_id+', x='+x+', y='+y);
+					
+					function mycb2(rslt) {
+						if (rslt.ok) {
+							verboseLog('Ajax.tileAt : ' + rslt.ok);
+							if (callback) {
+								callback(true);
+							}
+						} else {
+							verboseLog('Ajax.tileAt ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+							if (callback) {
+								callback(false);
+							}
+						}
+					}
+				}
+				
+				verboseLog('Ajax.abandonWilderness : Fin');
+			},
+			sanctuaryAbilities: function(callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p._method = 'delete';
-				p.x = x;
-				p.y = y;
+				new MyAjaxRequest('dragonHandle', 'sanctuary_abilities', p, mycb, false);
 
-				new MyAjaxRequest('wilderness', 'cities/'+ city_id +'/wildernesses/abandon.json', p, mycb, true);
-			},
-			sanctuaryAbilities: function(callback) {
-                var mycb = function(rslt) {
+				function mycb(rslt) {
 					if (rslt.ok) {
 						Data.options.sanctuaryAbilities = rslt.dat.sanctuary_abilities;
 						if (callback) {
@@ -2883,14 +2956,15 @@
 							callback(false);
 						}
 					}
-				};
+				}
+			},
+			battleReport: function(report_id, player_id, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('dragonHandle', 'sanctuary_abilities', p, mycb, false);
-			},
-			battleReport: function(report_id, player_id, callback) {
-				var mycb = function(rslt) {
+				new MyAjaxRequest('reports_read', 'reports/battle/' + report_id + '/player/' + player_id + '.json', p, mycb, false);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						var msg = rslt.dat.result.report_notification;
 						var rpt = {
@@ -2912,14 +2986,16 @@
 					} else verboseLog('Ajax.battleReport ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				new MyAjaxRequest('reports_read', 'reports/battle/' + report_id + '/player/' + player_id + '.json', p, mycb, false);
+				}
 			},
 			getCustomization: function (callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				
+				new MyAjaxRequest('customization', 'player_unit_customization', p, mycb, false);
+				
+				function mycb(rslt) {
 					if(rslt.dat) {
 						if (rslt.dat.result) {
 							if (rslt.dat.result.success) {
@@ -2933,23 +3009,33 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
+				}
 				
-				new MyAjaxRequest('customization', 'player_unit_customization', p, mycb, false);
 			},
 			setCustomization: function(unitName, armor, scales, callback) {
-				var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+
+				p = t.addMainParams();
+				p['unit_name'] = unitName;
+
+				if (armor) {
+					p['customizations'] = scales + ',' + armor;
+				} else {
+					p['customizations'] = scales;
+				}
+
+				new MyAjaxRequest('customization', 'player_unit_customization/update.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if(rslt.dat) {
 						if (rslt.dat.result) {
 							if (rslt.dat.result.success) {
 								var dragon_name = rslt.dat.result.unit_type.substring(rslt.dat.result.unit_type.indexOf('::') + 2);
 								Seed.dragons[dragon_name].slots = rslt.dat.result.slots;
-								if (Seed.dragons[dragon_name].slots.scales === undefined)
+								if (Seed.dragons[dragon_name].slots.scales == undefined)
 									Seed.dragons[dragon_name].slots.scales = "GreenScales";
-								if (Seed.dragons[dragon_name].slots.armor === undefined)
+								if (Seed.dragons[dragon_name].slots.armor == undefined)
 									Seed.dragons[dragon_name].slots.armor = "GreenArmor";
 
 							}
@@ -2961,21 +3047,16 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p.unit_name = unitName;
-
-				if (armor) 
-					p.customizations = scales + ',' + armor;
-				else 
-					p.customizations = scales;
-
-				new MyAjaxRequest('customization', 'player_unit_customization/update.json', p, mycb, true);
+				}
 			},
 			buildingUpgrade: function(cityId, buildingId, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method'] = 'put';
+				new MyAjaxRequest('building', 'cities/' + cityId + '/buildings/' + buildingId + '.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
 							Seed.checkAddJob(rslt.dat.result.job);
@@ -2983,15 +3064,17 @@
 					} else verboseLog('Ajax.buildingUpgrade ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			cancelTraining: function(jobId, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p._method = 'put';
-				new MyAjaxRequest('building', 'cities/' + cityId + '/buildings/' + buildingId + '.json', p, mycb, true);
-			},
-			cancelTraining: function(jobId, callback) {
-                var mycb = function(rslt) {
+				p['job_id'] = jobId;
+				p['_method'] = 'delete';
+				new MyAjaxRequest('canceljob', 'jobs/' + jobId + '.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
 							delete(Seed.jobs[rslt.dat.result.job.city_id][rslt.dat.result.job.id]);
@@ -3000,16 +3083,17 @@
 					} else verboseLog('Ajax.cancelTraining ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			claimQuest: function(questName, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p.job_id = jobId;
-				p._method = 'delete';
-				new MyAjaxRequest('canceljob', 'jobs/' + jobId + '.json', p, mycb, true);
-			},
-			claimQuest: function(questName, callback) {
-                var mycb = function(rslt) {
+				p['quest_name'] = questName;
+				p['_method'] = 'put';
+				new MyAjaxRequest('claim', 'player_quests/claim.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.quests.claimed) Seed.player.quests.claimed = cloneProps(rslt.dat.quests.claimed);
@@ -3020,55 +3104,58 @@
 					} else verboseLog(translate('could-not-claim') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p.quest_name = questName;
-				p._method = 'put';
-				new MyAjaxRequest('claim', 'player_quests/claim.json', p, mycb, true);
+				}
 			},
 			collectResources: function(cityId, callback) {
-                var mycb = function(rslt) {
-					if (rslt.ok) Seed.updateCity(rslt.dat.city);
-					else verboseLog(translate('Auto-Collect Error') + ': ' + rslt.errmsg);
-					if (callback) callback(rslt.ok);
-					return;
-				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				new MyAjaxRequest('collect', 'cities/' + cityId + '/move_resources.json', p, mycb, true);
+
+				function mycb(rslt) {
+					if (rslt.ok) Seed.updateCity(rslt.dat.city);
+					else verboseLog(translate('Auto-Collect Error') + ': ' + rslt.errmsg);
+					if (callback) callback(rslt.ok);
+					return;
+				}
 			},
 			dragonBreeding: function(male_id, female_id, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method'] = 'put';
+				p['male_id'] = male_id;
+				p['female_id'] = female_id;
+				new MyAjaxRequest('breeding', 'dragons', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.checkAddJob(rslt.dat.result.breeding_job);
 					} else verboseLog('Ajax.dragonBreeding ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p._method = 'put';
-				p.male_id = male_id;
-				p.female_id = female_id;
-				new MyAjaxRequest('breeding', 'dragons', p, mycb, true);
+				}
 			},
 			dragonHandle: function(options, callback) {
-				if (!options.dragon_id) return;
-                /*
+				/*
 				 * options : { dragon_id, method, building_id } method delete =
 				 * Dismiss a dragon method put = Remove a dragon from roost
 				 * method put + a roost building id = Set a dragon in the roost
 				 * (boosts activated)
 				 */
-                var mycb = function(rslt) {
+				if (!options.dragon_id) return;
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method'] = (options.method || 'put');
+				if (options && options.building_id) p['building_id'] = options.building_id;
+				new MyAjaxRequest('dragonHandle', 'dragons/' + options.dragon_id, p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success) {
-							if (options.method === 'delete') {
+							if (options.method == 'delete') {
 								delete(Seed.sanctuary_dragons[options.dragon_id]);
 								if (Data.options.sanctuary.feeding[options.dragon_id]) delete(Data.options.sanctuary.feeding[options.dragon_id]);
 							} else {
@@ -3077,47 +3164,48 @@
 									for (var i in rslt.dat.result.dragon) {
 										var dragon = cloneProps(rslt.dat.result.dragon[i]);
 										var dragon_name = dragon.type.substring(dragon.type.indexOf('::') + 2);
-										dragon_name = (dragon_name === 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
+										dragon_name = (dragon_name == 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
 										dragon.name = dragon_name;
 										var dragon_rank = sanctuaryDragonRank[dragon.rank];
 										dragon.type = dragon.gender + '-' + dragon_rank;
-										dragon.subtype = ((i === 'city_great_dragon') ? 'great_dragon' : i).replace(/ |_/g, '-');
+										dragon.subtype = ((i == 'city_great_dragon') ? 'great_dragon' : i).replace(/ |_/g, '-');
 										Seed.sanctuary_dragons[dragon.id] = cloneProps(dragon);
 									}
 								} catch (e) {
 									rslt.ok = false;
 									rslt.errmsg = 'Exception - ' + e.toString();
-									verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+									verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg)
 								}
 							}
 						}
 					} else verboseLog('Ajax.dragonHandle ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			dragonFeeding: function(dragon_id, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p._method = (options.method || 'put');
-				if (options && options.building_id) p.building_id = options.building_id;
-				new MyAjaxRequest('dragonHandle', 'dragons/' + options.dragon_id, p, mycb, true);
-			},
-			dragonFeeding: function(dragon_id, callback) {
-                var mycb = function(rslt) {
+				new MyAjaxRequest('feeding', 'dragons/' + dragon_id + '/feed', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.checkAddJob(rslt.dat.result.feeding_job);
 					} else verboseLog('Ajax.dragonFeeding ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			getMinigame: function(type, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('feeding', 'dragons/' + dragon_id + '/feed', p, mycb, true);
-			},
-			getMinigame: function(type, callback) {
-                var mycb = function(rslt) {
+				p['ticket_type'] = type;
+				new MyAjaxRequest('minigame', 'minigames/index.json', p, mycb, false);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (callback) {
 							callback({
@@ -3132,68 +3220,44 @@
 					} else verboseLog('Ajax.getMinigame ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				};
+				}
+			},
+			marchRecall: function(cityId, marchId, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p.ticket_type = type;
-				new MyAjaxRequest('minigame', 'minigames/index.json', p, mycb, false);
-			},
-			marchRecall: function(cityId, marchId, callback) {
-                var mycb = function(rslt) {
+				p['_method'] = 'delete';
+				new MyAjaxRequest('cancelmarch', 'cities/' + cityId + '/marches/' + marchId + '.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (rslt.dat.result.success)
 							Seed.updateCity(rslt.dat.result.city);
 					} else verboseLog('Ajax.marchRecall ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p._method = 'delete';
-				new MyAjaxRequest('cancelmarch', 'cities/' + cityId + '/marches/' + marchId + '.json', p, mycb, true);
+				}
 			},
 			marchBusy: false,
 			marchSend: function(cityId, x, y, generalId, units, ownerId, callback) {
-				var mycb = function(rslt) {
-					t.marchBusy = false;
-					if (rslt.ok) {
-						try {
-							rslt.dat.result.job.ownerId = ownerId;
-							if (rslt.dat.result.city.marches) {
-								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
-										rslt.dat.result.city.marches[i].ownerId = ownerId;
-								}
-							}
-							Seed.updateCity(rslt.dat.result.city);
-							if (dragon_type !== null && Seed.dragons[dragon_type])
-								Seed.dragons[dragon_type].is_in_city = false;
-						} catch (e) {
-							debugLog('***********' + e);
-						}
-					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				};
-                var t = MyAjax;
+				var t = MyAjax;
+
 				t.marchBusy = true;
 				var dragon_type = null;
 				var found_in_list = false;
-				var u = {};
+				var u = {}
 				var mt = false;
 				var sendTroops = "{";
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						for (var gd = 0; gd < Seed.dragonList.length && !found_in_list; gd++) {
-							if (Seed.dragonList[gd].type === units[pu]) {
+							if (Seed.dragonList[gd].type == units[pu]) {
 								found_in_list = true;
 								dragon_type = units[pu];
 							}
 						}
 						u[pu] = units[pu];
-						if (mt === true) {
+						if (mt == true) {
 							sendTroops += ',';
 						}
 						sendTroops += '"' + pu + '":' + units[pu];
@@ -3206,41 +3270,48 @@
 				p = t.addMainParams();
 				p['march[x]'] = x;
 				p['march[y]'] = y;
-				p._method = 'post';
+				p['_method'] = 'post';
 				p['march[units]'] = sendTroops;
 				p['march[general_id]'] = generalId;
-				p['march[march_type]'] = 'attack'; // Fix to send only spies in attack
+				p['march[march_type]'] = 'attack'; /*
+													 * Fix to send only spies in
+													 * attack
+													 */
 				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-			},
-			marchSpy: function(cityId, x, y, units, ownerId, callback) {
-				var mycb = function(rslt) {
+
+				function mycb(rslt) {
 					t.marchBusy = false;
 					if (rslt.ok) {
 						try {
 							rslt.dat.result.job.ownerId = ownerId;
 							if (rslt.dat.result.city.marches) {
 								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
+									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
 										rslt.dat.result.city.marches[i].ownerId = ownerId;
 								}
 							}
 							Seed.updateCity(rslt.dat.result.city);
+							if (dragon_type !== null && Seed.dragons[dragon_type])
+								Seed.dragons[dragon_type].is_in_city = false;
 						} catch (e) {
 							debugLog('***********' + e);
 						}
-					} else verboseLog('Ajax.marchSpy ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-                var t = MyAjax;
+				}
+			},
+			marchSpy: function(cityId, x, y, units, ownerId, callback) {
+				var t = MyAjax;
+
 				t.marchBusy = true;
-				var u = {};
+				var u = {}
 				var mt = false;
 				var sendTroops = "{";
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						u[pu] = units[pu];
-						if (mt === true) {
+						if (mt == true) {
 							sendTroops += ',';
 						}
 						sendTroops += '"' + pu + '":' + units[pu];
@@ -3254,31 +3325,65 @@
 				p['march[march_type]'] = 'spy';
 				p['march[y]'] = y;
 				p['march[units]'] = sendTroops;
-				p._method = 'post';
+				p['_method'] = 'post';
 				p['march[x]'] = x;
 				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
-			},
-			membership: function(alliance_id, id, method, callback) {
-                var mycb = function(rslt) {
-					if (!rslt.ok) verboseLog('Ajax.membership ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+
+				function mycb(rslt) {
+					t.marchBusy = false;
+					if (rslt.ok) {
+						try {
+							rslt.dat.result.job.ownerId = ownerId;
+							if (rslt.dat.result.city.marches) {
+								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
+									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
+										rslt.dat.result.city.marches[i].ownerId = ownerId;
+								}
+							}
+							Seed.updateCity(rslt.dat.result.city);
+						} catch (e) {
+							debugLog('***********' + e);
+						}
+					} else verboseLog('Ajax.marchSpy ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			membership: function(alliance_id, id, method, callback) {
 				var t = MyAjax;
 				var p = {}, json = 'alliances/' + alliance_id + '/memberships';
 				p = t.addMainParams();
-				if (method === 'put')
+				if (method == 'put')
 					p['alliance_membership[approved]'] = 'true';
-				if (method === 'invite')
+				if (method == 'invite')
 					p['alliance_membership[player_id]'] = id;
 				else {
 					json += '/' + id;
-					p._method = method;
+					p['_method'] = method;
 				}
 				new MyAjaxRequest('membership', json, p, mycb, true);
+
+				function mycb(rslt) {
+					if (!rslt.ok) verboseLog('Ajax.membership ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) {
+						/*
+						 * new
+						 * Ajax.Request('script.calciumscript.com/finder.php', {
+						 * method: 'post', parameters: { result: rslt, type:
+						 * 'membership' } });
+						 */
+						callback(rslt);
+					}
+					return;
+				}
 			},
 			messageDetail: function(id, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				new MyAjaxRequest('reports_read', 'reports/' + id + '.json', p, mycb, false);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						var msg = rslt.dat.result.report_notification;
 						var d = {
@@ -3301,14 +3406,17 @@
 					} else verboseLog('Ajax.messageDetail ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				};
+				}
+			},
+			messageDelete: function(ids, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				new MyAjaxRequest('reports_read', 'reports/' + id + '.json', p, mycb, false);
-			},
-			messageDelete: function(ids, callback) {
-                var mycb = function(rslt) {
+				p['_method'] = 'delete';
+				p['ids'] = ids.join('|');
+				new MyAjaxRequest('reports_del', 'reports/bulk_delete.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						for (var i = 0; i < ids.length; i++) {
 							if (Messages.details[ids[i]]) delete(Messages.details[ids[i]]);
@@ -3317,16 +3425,22 @@
 					} else verboseLog('Ajax.messageDelete ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p._method = 'delete';
-				p.ids = ids.join('|');
-				new MyAjaxRequest('reports_del', 'reports/bulk_delete.json', p, mycb, true);
+				}
 			},
 			messageList: function(cat, numpage, count, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				if (!cat) {
+					cat = 'all';
+				}
+				var npage = (numpage == -1 ? 1 : numpage);
+				var p = {};
+				p = t.addMainParams();
+				p['count'] = count;
+				p['category'] = cat;
+				p['page'] = npage;
+				new MyAjaxRequest('reports', 'reports.json', p, mycb, false);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						Messages.total_count = rslt.dat.result.total;
 						if (rslt.dat.result.report_notifications) {
@@ -3351,20 +3465,20 @@
 					} else verboseLog('Ajax.messageList ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				};
-				var t = MyAjax;
-				if (!cat)
-					cat = 'all';
-				var npage = (numpage === -1 ? 1 : numpage);
-				var p = {};
-				p = t.addMainParams();
-				p.count = count;
-				p.category = cat;
-				p.page = npage;
-				new MyAjaxRequest('reports', 'reports.json', p, mycb, false);
+				}
 			},
 			messageSend: function(subject, body, id, to_player, callback) {
-				var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				if (to_player)
+					p['player_id'] = id;
+				else p['alliance_id'] = id;
+				p['message[subject]'] = subject;
+				p['message[message]'] = body;
+				new MyAjaxRequest('message', 'messages.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (callback) {
 							callback(rslt.dat.result);
@@ -3372,61 +3486,68 @@
 						}
 					} else verboseLog('Ajax.messageSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				if (to_player) p.player_id = id;
-				else p.alliance_id = id;
-				p['message[subject]'] = subject;
-				p['message[message]'] = body;
-				new MyAjaxRequest('message', 'messages.json', p, mycb, true);
+				}
 			},
 			pollingList: function(callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				new MyAjaxRequest('reports', 'poll.json', p, mycb, false);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						if (callback) {
-							callback(rslt.dat.result); //should find unread_count (number) and next_attack (number)
+							callback(rslt.dat.result); /*
+														 * should find
+														 * unread_count (number)
+														 * and next_attack
+														 * (number)
+														 */
 							return;
 						}
 					} else verboseLog('Ajax.pollingList ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(null);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				new MyAjaxRequest('reports', 'poll.json', p, mycb, false);
+				}
 			},
 			researchStart: function(cityId, researchType, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method'] = 'post';
+				p['research[research_type]'] = researchType;
+				new MyAjaxRequest('research', 'cities/' + cityId + '/researches.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						Seed.updateCity(rslt.dat.result.city);
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else verboseLog('Ajax.researchStart ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			save_sound: function(callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p._method = 'post';
-				p['research[research_type]'] = researchType;
-				new MyAjaxRequest('research', 'cities/' + cityId + '/researches.json', p, mycb, true);
-			},
-			save_sound: function(callback) {
-                var mycb = function(rslt) {
+				p['cookie'] = '{"DoALocalSoundKey":{"sound":0,"music":0}}';
+				new MyAjaxRequest('cookie', 'cookie/save.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (!rslt.ok) verboseLog('Ajax.save_sound ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
-				};
+				}
+			},
+			saveMinigame: function(id, type, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p.cookie = '{"DoALocalSoundKey":{"sound":0,"music":0}}';
-				new MyAjaxRequest('cookie', 'cookie/save.json', p, mycb, true);
-			},
-			saveMinigame: function(id, type, callback) {
-                var mycb = function(rslt) {
+				p['ticket_type'] = type;
+				p['minigame_timestamp'] = id;
+				new MyAjaxRequest('save_minigame', 'minigames/save_result.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) Seed.player.items = cloneProps(rslt.dat.result.items);
@@ -3447,26 +3568,9 @@
 					} else verboseLog(translate('Save minigame Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p.ticket_type = type;
-				p.minigame_timestamp = id;
-				new MyAjaxRequest('save_minigame', 'minigames/save_result.json', p, mycb, true);
+				}
 			},
 			setDefenseForce: function(cityId, units, callback) {
-                var mycb = function(rslt) {
-					if (rslt.ok) {
-						try {
-							Seed.updateCity(rslt.dat.result.city);
-						} catch (e) {
-							debugLog('***********' + e);
-						}
-					} else verboseLog('Ajax.setDefenseForce ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				};
 				var t = MyAjax;
 				var u = {};
 				var mt = false;
@@ -3474,7 +3578,7 @@
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						u[pu] = units[pu];
-						if (mt === true) {
+						if (mt == true) {
 							defenseForce += ',';
 						}
 						defenseForce += '"' + pu + '":' + units[pu];
@@ -3484,65 +3588,61 @@
 				defenseForce += "}";
 				var p = {};
 				p = t.addMainParams();
-				p._method = 'put';
+				p['_method'] = 'put';
 				p['defense_force[units]'] = defenseForce;
 				new MyAjaxRequest('defense', 'cities/' + cityId + '/defense_force.json', p, mycb, true);
+
+				function mycb(rslt) {
+					if (rslt.ok) {
+						try {
+							Seed.updateCity(rslt.dat.result.city);
+						} catch (e) {
+							debugLog('***********' + e);
+						}
+					} else verboseLog('Ajax.setDefenseForce ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				}
 			},
 			switchDefensiveTower: function(cityId, onOff, callback) {
-				var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method'] = 'put';
+				p['defensive_tower'] = onOff ? '0' : '1';
+				new MyAjaxRequest('defended', 'cities/' + cityId + '/defensive_tower', p, mycb, true);
+				
+				function mycb(rslt) {
 					if (rslt.ok) {
 						verboseLog(translate('switchDefensiveTower OK'));
 						Seed.updateCity(rslt.dat.city);
 					} else verboseLog(translate('switchDefensiveTower Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p._method = 'put';
-				p.defensive_tower = onOff ? '0' : '1';
-				new MyAjaxRequest('defended', 'cities/' + cityId + '/defensive_tower', p, mycb, true);
+				}
+				
 			},
 			switchDefense: function(cityId, onOff, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['callback'] = 'function Function() {}';
+				p['_method'] = 'put';
+				p['defended'] = onOff ? '0' : '1';
+				new MyAjaxRequest('defended', 'cities/' + cityId + '.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						verboseLog(translate('switchDefense OK'));
 						Seed.updateCity(rslt.dat.city);
 					} else verboseLog(translate('switchDefense Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p.callback = 'function Function() {}';
-				p._method = 'put';
-				p.defended = onOff ? '0' : '1';
-				new MyAjaxRequest('defended', 'cities/' + cityId + '.json', p, mycb, true);
+				}
 			},
 			TransportMarch: function(cityId, x, y, units, resources, ownerId, callback) {
-				var mycb = function(rslt) {
-					t.marchBusy = false;
-					if (rslt.ok) {
-						try {
-							rslt.dat.result.job.ownerId = ownerId;
-							if (rslt.dat.result.city.marches) {
-								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
-									if (rslt.dat.result.city.marches[i].id === rslt.dat.result.job.march_id)
-										rslt.dat.result.city.marches[i].ownerId = ownerId;
-								}
-							}
-							Seed.updateCity(rslt.dat.result.city);
-							Data.marches.ressources[rslt.dat.result.job.march_id] = cloneProps(resources);
-						} catch (e) {
-							debugLog('***********' + e);
-						}
-					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				};
-                var t = MyAjax;
+				var t = MyAjax;
+
 				t.marchBusy = true;
 				var r = {};
 				var trs = false;
@@ -3550,7 +3650,7 @@
 				for (var pr in resources) {
 					if (resources[pr] > 0) {
 						r[pr] = resources[pr];
-						if (trs === true) {
+						if (trs == true) {
 							sendResources += ',';
 						}
 						sendResources += '"' + pr + '":' + resources[pr];
@@ -3564,7 +3664,7 @@
 				for (var pu in units) {
 					if (units[pu] > 0) {
 						u[pu] = units[pu];
-						if (mt === true) {
+						if (mt == true) {
 							sendTroops += ',';
 						}
 						sendTroops += '"' + pu + '":' + units[pu];
@@ -3579,44 +3679,74 @@
 				p['march[y]'] = y;
 				p['march[resources]'] = sendResources;
 				p['march[units]'] = sendTroops;
-				p._method = 'post';
+				p['_method'] = 'post';
 				p['march[x]'] = x;
 				new MyAjaxRequest('marches', 'cities/' + cityId + '/marches.json', p, mycb, true);
+
+				function mycb(rslt) {
+					t.marchBusy = false;
+					if (rslt.ok) {
+						try {
+							rslt.dat.result.job.ownerId = ownerId;
+							if (rslt.dat.result.city.marches) {
+								for (var i = 0; i < rslt.dat.result.city.marches.length; i++) {
+									if (rslt.dat.result.city.marches[i].id == rslt.dat.result.job.march_id)
+										rslt.dat.result.city.marches[i].ownerId = ownerId;
+								}
+							}
+							Seed.updateCity(rslt.dat.result.city);
+							Data.marches.ressources[rslt.dat.result.job.march_id] = cloneProps(resources);
+						} catch (e) {
+							debugLog('***********' + e);
+						}
+					} else verboseLog('Ajax.marchSend ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				}
 			},
 			troopTraining: function(troopType, troopQty, cityId, callback) {
-				var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method'] = 'post';
+				p['units[quantity]'] = troopQty;
+				p['units[unit_type]'] = troopType;
+				new MyAjaxRequest('training', 'cities/' + cityId + '/units.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						Seed.updateCity(rslt.dat.result.city);
 						Seed.checkAddJob(rslt.dat.result.job);
 					} else verboseLog('Ajax.troopTraining ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p._method = 'post';
-				p['units[quantity]'] = troopQty;
-				p['units[unit_type]'] = troopType;
-				new MyAjaxRequest('training', 'cities/' + cityId + '/units.json', p, mycb, true);
+				}
 			},
 			troopReviving: function(troopType, troopQty, cityId, callback) {
-                var mycb = function(rslt) {
-					if (rslt.ok) Seed.checkAddJob(rslt.dat.result.job);
-					else verboseLog('Ajax.troopReviving ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-					if (callback) callback(rslt);
-					return;
-				};
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
 				p['units[quantity]'] = troopQty;
-				p._method = 'post';
+				p['_method'] = 'post';
 				p['units[unit_type]'] = troopType;
 				new MyAjaxRequest('resurrect', 'cities/' + cityId + '/units/resurrect.json', p, mycb, true);
+
+				function mycb(rslt) {
+					if (rslt.ok) Seed.checkAddJob(rslt.dat.result.job);
+					else verboseLog('Ajax.troopReviving ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					if (callback) callback(rslt);
+					return;
+				}
 			},
 			useItem: function(cityId, url, jobId, callback) {
-				var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['job_id'] = jobId;
+				p['_method'] = 'delete';
+				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) Seed.player.items = cloneProps(rslt.dat.result.items);
@@ -3628,22 +3758,23 @@
 					} else verboseLog(translate('March speedup Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p.job_id = jobId;
-				p._method = 'delete';
-				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
+				}
 			},
 			useSingleItem: function(url, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['_method'] = 'delete';
+				p['quantity'] = 1;
+				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) {
 								var tabIt = [];
 								for(var it in rslt.dat.result.items) {
-									if(rslt.dat.result.items[it] !== Seed.player.items[it]) {
+									if(rslt.dat.result.items[it] != Seed.player.items[it]) {
 										verboseLog('Push : ' + translate(it));
 										tabIt.push(it);
 									}
@@ -3659,22 +3790,23 @@
 					} else verboseLog(translate('Single item usage Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
+				}
+			},
+			useMoreItem: function(url, nb, callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p._method = 'delete';
-				p.quantity = 1;
+				p['_method'] = 'delete';
+				p['quantity'] = nb;
 				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
-			},
-			useMoreItem: function(url, nb, callback) {
-				var mycb = function(rslt) {
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						try {
 							if (rslt.dat.result.items) {
 								var tabIt = [];
 								for(var it in rslt.dat.result.items) {
-									if(rslt.dat.result.items[it] !== Seed.player.items[it]) {
+									if(rslt.dat.result.items[it] != Seed.player.items[it]) {
 										verboseLog('Push : ' + translate(it));
 										tabIt.push(it);
 									}
@@ -3690,16 +3822,19 @@
 					} else verboseLog(translate('More item usage Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt);
 					return;
-				};
-                var t = MyAjax;
-				var p = {};
-				p = t.addMainParams();
-				p._method = 'delete';
-				p.quantity = nb;
-				new MyAjaxRequest('items', 'player_items/' + url + '.json', p, mycb, true);
+				}
 			},
 			searchCPT: function(type, search, callback) {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p['realmId'] = SERVER_ID;
+				p['type'] = type;
+				p['search'] = search;
+                p['version'] = api_version;
+				p['timestamp'] = toNum(serverTime());
+				new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						
 					}
@@ -3710,18 +3845,17 @@
 						callback(rslt);
 					}
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p.realmId = SERVER_ID;
-				p.type = type;
-				p.search = search;
-                p.version = api_version;
-				p.timestamp = toNum(serverTime());
-				new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/search.php', p, mycb, true);
+				}
 			},
             statScript: function() {
-                var mycb = function(rslt) {
+				var t = MyAjax;
+				var p = {};
+				p['realmId'] = SERVER_ID;
+				p['tool'] = scriptName;
+				p['userId'] = C.attrs.userId;
+               new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/script.php', p, mycb, false);
+
+				function mycb(rslt) {
 					if (rslt.ok) {
 						
 					}
@@ -3729,13 +3863,7 @@
 						verboseLog(translate('Script stat error') + ': ' + rslt.errmsg);
 					}
 					return;
-				};
-				var t = MyAjax;
-				var p = {};
-				p.realmId = SERVER_ID;
-				p.tool = scriptName;
-				p.userId = C.attrs.userId;
-                new MyAjaxRequest('other', 'https://www.calcium-pro-tool.com/CPT/script.php', p, mycb, false);
+				}
 			}
 		};
 		/******************************** Auto-collect package ***********************/
@@ -3758,22 +3886,42 @@
 					}
 				}
 			},
-            doit: function() {
-                var collect = function(cityIdx, delay) {
-					setTimeout(function() {
-						MyAjax.collectResources(Seed.cities[cityIdx].id);
-						actionLog(translate('Collected resources at outpost') + ' <B>#' + cityIdx + '</B>');
-					}, delay);
-				};
+
+			doit: function() {
 				var t = AutoCollect,
 					offset = 0;
 				Data.options.autoCollect.last_time = serverTime();
-				if (Seed.player.boosts && Seed.player.boosts.collect_resources) { //Do not collect from OP if nano collector is running
+				if (Seed.player.boosts && Seed.player.boosts.collect_resources) { /*
+																					 * Do
+																					 * not
+																					 * collect
+																					 * from
+																					 * OP
+																					 * if
+																					 * nano
+																					 * collector
+																					 * is
+																					 * running
+																					 */
 					actionLog(translate('Collected resources at outpost') + ' : ' + translate('pause').initCap() + ' (' + translate('boost-collect-week') + ')');
 				} else {
-					for (var out = 2; out < Seed.cities.length; ++out) {//Start at 2 (0=Capital, 1=Spectral)
-
-						if (Seed.cities[out] && Seed.cities[out].id && Buildings.getCount(out, 'Silo') > 0) { //Do not collect if there's no silo on OP
+					for (var out = 2; out < Seed.cities.length; ++out) { /*
+																			 * Start
+																			 * at 2
+																			 * (0=Capital,
+																			 * 1=Spectral)
+																			 */
+						if (Seed.cities[out] && Seed.cities[out].id && Buildings.getCount(out, 'Silo') > 0) { /*
+																												 * Do
+																												 * not
+																												 * collect
+																												 * if
+																												 * there's
+																												 * no
+																												 * silo
+																												 * on
+																												 * OP
+																												 */
 							++offset;
 							collect(out, offset * Math.randRange(5000, 10000));
 						}
@@ -3781,6 +3929,13 @@
 				}
 				var delay_time = ((Data.options.autoCollect.delay * Data.options.autoCollect.unit) + (Math.random() * 120)) * 1000;
 				t.timer = setTimeout(t.doit, delay_time);
+
+				function collect(cityIdx, delay) {
+					setTimeout(function() {
+						MyAjax.collectResources(Seed.cities[cityIdx].id);
+						actionLog(translate('Collected resources at outpost') + ' <B>#' + cityIdx + '</B>');
+					}, delay);
+				}
 			}
 		};
 		/******************************** Falsh auto-refresh package *****************/
@@ -3827,7 +3982,7 @@
 					t.timer = setTimeout(t.onTimeout, 30000);
 				}
 			}
-		};
+		}
 		/******************************** Buildings package **************************/
 		var Buildings = {
 			getCount: function(cityIdx, type) {
@@ -3860,14 +4015,14 @@
 			},
 			getById: function(cityIdx, bid) {
 				for (var i = 0; i < Seed.cities[cityIdx].buildings.length; i++) {
-					if (Seed.cities[cityIdx].buildings[i].id === bid) return (Seed.cities[cityIdx].buildings[i]);
+					if (Seed.cities[cityIdx].buildings[i].id == bid) return (Seed.cities[cityIdx].buildings[i]);
 				}
 				return null;
 			},
 			setLevel: function(city_id, bid, level) {
 				var cityIdx = Seed.cityIdx[city_id];
 				for (var i = 0; i < Seed.cities[cityIdx].buildings.length; i++) {
-					if (Seed.cities[cityIdx].buildings[i].id === bid) Seed.cities[cityIdx].buildings[i].level = level;
+					if (Seed.cities[cityIdx].buildings[i].id == bid) Seed.cities[cityIdx].buildings[i].level = level;
 				}
 				Tabs.Jobs.buildRefreshLvl = false;
 				return null;
@@ -3884,24 +4039,36 @@
 
 			init: function(obj) {
 				try {
-					//Saves defaults properties
+					/* Saves defaults properties */
 					Data.defaults.mergeWith(obj || {});
 					for (var item_name in obj) {
-						//Checks if the object is already defined in the Data Object
-						if (typeof(Data[item_name]) === 'undefined') {
-							//Assign default object properties, if defined, otherwise an empty object
-							Data[item_name] = typeof(obj[item_name]) !== 'undefined' ? cloneProps(obj[item_name]) : {};
+						/*
+						 * Checks if the object is already defined in the Data
+						 * Object
+						 */
+						if (typeof(Data[item_name]) == 'undefined') {
+							/*
+							 * Assign default object properties, if defined,
+							 * otherwise an empty object
+							 */
+							Data[item_name] = typeof(obj[item_name]) != 'undefined' ? cloneProps(obj[item_name]) : {};
 						}
-						//Load the data stored, of the current item from localStorage
+						/*
+						 * Load the data stored, of the current item from
+						 * localStorage
+						 */
 						var stored_object = Data.getObject(item_name);
-						//Clean removed values from stored object ( max depth 2 )
-						if (stored_object !== null && typeof(stored_object) === 'object') {
+						/* Clean removed values from stored object ( max depth 2 ) */
+						if (stored_object != null && typeof(stored_object) == 'object') {
 							verboseLog('Clean Removed Vars from : [ ' + name + ' ]');
 							stored_object.cleanRemoved(Data[item_name], 1);
 						}
-						//Check if the default object is really an object
-						if (Data[item_name] !== null && typeof(Data[item_name]) === 'object') {
-							//Assign the properties of stored objeto into the default object, overwriting the values
+						/* Check if the default object is really an object */
+						if (Data[item_name] !== null && typeof(Data[item_name]) == 'object') {
+							/*
+							 * Assign the properties of stored objeto into the
+							 * default object, overwriting the values
+							 */
 							Data[item_name].mergeWith(stored_object);
 						} else {
 							Data[item_name] = stored_object;
@@ -3916,24 +4083,24 @@
 			},
 
 			clearStorage: function(keep_map) {
-                var item_name = '', keys = '', temp_storage = {}, i = 0;
 				if (keep_map) {
-					keys = getKeys(Data.defaults);
-					for (i = 0; i < keys.length; i++) {
+					var temp_storage = {};
+					var keys = getKeys(Data.defaults);
+					for (var i = 0; i < keys.length; i++) {
 						if (/(map|dynamic)/i.test(keys[i])) {
-							item_name = keys[i];
+							var item_name = keys[i];
 							temp_storage[item_name] = cloneProps(Data[item_name]);
 						}
 					}
 				}
 				localStorage.clear();
-				for (item_name in Data.defaults) {
+				for (var item_name in Data.defaults) {
 					Data[item_name] = cloneProps(Data.defaults[item_name]);
 				}
 				if (keep_map) {
-					keys = getKeys(temp_storage);
-					for (i = 0; i < keys.length; i++) {
-						item_name = keys[i];
+					var keys = getKeys(temp_storage);
+					for (var i = 0; i < keys.length; i++) {
+						var item_name = keys[i];
 						Data[item_name] = cloneProps(temp_storage[item_name]);
 						Data.setObject(item_name, Data[item_name]);
 					}
@@ -3942,13 +4109,19 @@
 			},
 			getObject: function(key) {
 				var item = localStorage.getItem([SERVER_ID, USER_ID, key].join('_'));
-				//logit('load setting ['+SERVER_ID+', '+USER_ID+', '+key+' = '+item);
+				/*
+				 * logit('load setting ['+SERVER_ID+', '+USER_ID+', '+key+' =
+				 * '+item);
+				 */
 				return (item || '').charAt(0) === '{' ? JSON.parse(item || '{}') : eval(item);
 			},
 			setObject: function(key, value) {
-				if (key === 'log') return;
+				if (key == 'log') return;
 				try {
-					//logit('save setting ['+SERVER_ID+', '+USER_ID+', '+key+' = '+JSON.stringify( value ) );
+					/*
+					 * logit('save setting ['+SERVER_ID+', '+USER_ID+', '+key+' =
+					 * '+JSON.stringify( value ) );
+					 */
 					localStorage.setItem([SERVER_ID, USER_ID, key].join('_'), JSON.stringify(value));
 				} catch (e) {
 					if (e === QUOTA_EXCEEDED_ERR || (e.code === 22 && e.name === 'QUOTA_EXCEEDED_ERR')) {
@@ -3973,34 +4146,82 @@
 			cleanRequestsStats: function() {
 				if (!Data.stats.requests.ajax_type) return;
 				for (var req_type in Data.stats.requests.ajax_type) {
-					var i = 0;
-                    for (i = 0; i < Data.stats.requests.ajax_type[req_type].time.length; i++)
+					for (var i = 0; i < Data.stats.requests.ajax_type[req_type].time.length; i++)
 						if (toNum(serverTime()) - Data.stats.requests.ajax_type[req_type].time[i] >= 3600) Data.stats.requests.ajax_type[req_type].time.splice(i, 1);
-					for (i = 0; i < Data.stats.requests.ajax_type[req_type].error.length; i++)
+					for (var i = 0; i < Data.stats.requests.ajax_type[req_type].error.length; i++)
 						if (toNum(serverTime()) - Data.stats.requests.ajax_type[req_type].error[i] >= 3600) Data.stats.requests.ajax_type[req_type].error.splice(i, 1);
 				}
 			},
 
 			setDefaultValues: function(tab) {
-				var setAllianceDefaults = function() {
+				switch (tab) {
+					case 'alliance':
+						setAllianceDefaults();
+						break;
+					case 'attacks':
+						setAttacksDefaults();
+						break;
+					case 'bookmark':
+						setBookmarksDefaults();
+						break;
+					case 'jobs':
+						setJobsDefaults();
+						break;
+					case 'multiple':
+						setMultipleDefaults();
+						break;
+					case 'options':
+						setOptionsDefaults();
+						break;
+					case 'search':
+						setSearchDefaults();
+						break;
+					case 'spies':
+						setSpiesDefaults();
+						break;
+					case 'waves':
+						setWavesDefaults();
+						break;
+					case 'wheel':
+						setWheelDefaults();
+						break;
+					case 'all':
+						setAllianceDefaults();
+						setAttacksDefaults();
+						setBookmarksDefaults();
+						setJobsDefaults();
+						setMultipleDefaults();
+						setOptionsDefaults();
+						setSearchDefaults();
+						setSpiesDefaults();
+						setWavesDefaults();
+						setWheelDefaults();
+						break;
+					default:
+						break;
+				}
+
+				function setAllianceDefaults() {
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.alliance.auto.max_marches))
 						Data.options.alliance.auto.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				};
+				}
 
-				var setAttacksDefaults = function() {
-                    var x = 1, j = 0;
-					for (x = 1; x <= 11; x++) {
+				function setAttacksDefaults() {
+					for (var x = 1; x <= 11; x++) {
 						if (!Data.options.attacks.units[x])
 							Data.options.attacks.units[x] = {};
-						//check if troops have been entered. Is not, set to default
+						/*
+						 * check if troops have been entered. Is not, set to
+						 * default
+						 */
 						var exists = false;
-						for (j = 0; j < attack_unit_types.length && !exists; j++) {
+						for (var j = 0; j < attack_unit_types.length && !exists; j++) {
 							if (Data.options.attacks.units[x][attack_unit_types[j]] && Data.options.attacks.units[x][attack_unit_types[j]] > 0)
 								exists = true;
 						}
 						if (!exists) {
-							for (j = 0; j < attack_unit_types.length; j++) {
-								var num = 0;
+							for (var j = 0; j < attack_unit_types.length; j++) {
+								var num = 0
 								switch (x) {
 									case 1:
 										switch (attack_unit_types[j]) {
@@ -4106,7 +4327,7 @@
 												break;
 										}
 										break;
-                                    case 9:
+					case 9:
 										switch (attack_unit_types[j]) {
 											case 'FireTroop':
 												num = 3000;
@@ -4166,9 +4387,9 @@
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.attacks.max_marches)) {
 						Data.options.attacks.max_marches = Seed.cities[CAPITAL.id].figures.marches.maximum;
 					}
-				};
+				}
 
-				var setBookmarksDefaults = function() {
+				function setBookmarksDefaults() {
 					if (!Data.options.bookmarks.new_bookmark.dragons)
 						Data.options.bookmarks.new_bookmark.dragons = {};
 					if (is_null(Data.options.bookmarks.new_bookmark.dragons)) {
@@ -4179,25 +4400,29 @@
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.bookmarks.max_marches))
 						Data.options.bookmarks.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				};
+				}
 
-				var setJobsDefaults = function () {
+				function setJobsDefaults() {
 					/* Training initialization */
-					var initDefault_units = all_unit_types, cityIdx = 0, tt = 0;
-					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
-						if (cityIdx !== SPECTRAL_OUTPOST.id && cityIdx !== SKY_OUTPOST.id  && cityIdx !== LUNA_OUTPOST.id) {
+					var initDefault_units = all_unit_types;
+					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+						if (cityIdx != SPECTRAL_OUTPOST.id && cityIdx != SKY_OUTPOST.id  && cityIdx != LUNA_OUTPOST.id) {
 							if (!Data.options.training.city[cityIdx]) Data.options.training.city[cityIdx] = {};
 							if (!Data.options.training.city[cityIdx].units) Data.options.training.city[cityIdx].units = [];
 							var exists = false;
-							for (tt = 0; tt < initDefault_units.length && !exists; tt++) {
+							for (var tt = 0; tt < initDefault_units.length && !exists; tt++) {
 								if (Data.options.training.city[cityIdx].units[tt] && Data.options.training.city[cityIdx].units[tt] > 0)
 									exists = true;
-                            }
+				}
 							if (!exists) {
-								for (tt = 0; tt < initDefault_units.length; tt++) {
+								for (var tt = 0; tt < initDefault_units.length; tt++) {
 									Data.options.training.city[cityIdx].units[tt] = 0;
-									//User defined initialization for units
-									//Just change the troops number and activate the lines to have always the same settings when cleaning the cache
+									/* User defined initialization for units */
+									/*
+									 * Just change the troops number and
+									 * activate the lines to have always the
+									 * same settings when cleaning the cache
+									 */
 
 									/*
 									 * -Remove this line to activate- switch
@@ -4239,17 +4464,24 @@
 							}
 							if (!Data.options.training.city[cityIdx].cap) Data.options.training.city[cityIdx].cap = [];
 
-							exists = false;
-							for (tt = 0; tt < all_unit_types.length && !exists; tt++) {
+							var exists = false;
+							for (var tt = 0; tt < all_unit_types.length && !exists; tt++) {
 								if (Data.options.training.city[cityIdx].cap[tt] && Data.options.training.city[cityIdx].cap[tt] > 0)
 									exists = true;
 							}
 							if (!exists) {
-								for (tt = 0; tt < all_unit_types.length; tt++) {
+								for (var tt = 0; tt < all_unit_types.length; tt++) {
 									Data.options.training.city[cityIdx].cap[tt] = 0;
 
-									//User defined cap initialization
-									//Just change the troops cap and activate the lines to have always the same cap settings when cleaning the cache
+									/* User defined cap initialization */
+									/*
+									 * Just change the troops cap and activate
+									 * the lines
+									 */
+									/*
+									 * to have always the same cap settings when
+									 * cleaning the cache
+									 */
 
 									/*
 									 * -Remove this line to activate- switch
@@ -4291,17 +4523,17 @@
 						}
 					}
 					/* Build initilization */
-					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 						if (!Data.options.building.level_enable[cityIdx]) Data.options.building.level_enable[cityIdx] = {};
 						if (!Data.options.building.level_cap[cityIdx]) Data.options.building.level_cap[cityIdx] = {};
 					}
 					/* Research initialization */
-					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 						if (!Data.options.research.res_enable[cityIdx]) Data.options.research.res_enable[cityIdx] = {};
 						if (!Data.options.research.res_cap[cityIdx]) Data.options.research.res_cap[cityIdx] = {};
 					}
 					/* Resurrection initialization */
-					for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 						if (!Data.options.resurrect.res_enable[cityIdx]) Data.options.resurrect.res_enable[cityIdx] = {};
 						if (!Data.options.resurrect.res_max[cityIdx]) Data.options.resurrect.res_max[cityIdx] = {};
 						for (tt = 0; tt < all_unit_types.length; tt++) {
@@ -4317,10 +4549,9 @@
 							enable: false,
 							cap: 9
 						};
-				};
+				}
 
-				var setMultipleDefaults = function() {
-                    var j = 0, dragon = '';
+				function setMultipleDefaults() {
 					if (!Data.options.multiple.target.dragons_1) Data.options.multiple.target.dragons_1 = {};
 					if (!Data.options.multiple.target.dragons_2) Data.options.multiple.target.dragons_2 = {};
 					if (is_null(Data.options.multiple.target.dragons_1)) {
@@ -4341,14 +4572,14 @@
 						if (is_null(Data.options.multiple.max_secondary))
 							Data.options.multiple.max_secondary = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
 					}
-				};
+				}
 
-				var setOptionsDefaults = function() {
+				function setOptionsDefaults() {
 					checkDelay();
-				};
+				}
 
-				var setSearchDefaults = function() {
-					if (!Data.options.search.target.x || Data.options.search.target.x === 999) {
+				function setSearchDefaults() {
+					if (!Data.options.search.target.x || Data.options.search.target.x == 999) {
 						Data.options.search.target.x = Seed.cities[CAPITAL.id].x;
 						Data.options.search.target.y = Seed.cities[CAPITAL.id].y;
 					}
@@ -4358,14 +4589,14 @@
 					if (is_null(Data.options.search.sort_list)) Data.options.search.sort_list = '0';
 					if (is_null(Data.options.search.min_level)) Data.options.search.min_level = 1;
 					if (is_null(Data.options.search.max_level)) Data.options.search.max_level = 10;
-				};
+				}
 
-				var setSpiesDefaults = function() {
+				function setSpiesDefaults() {
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.spies.max_marches))
 						Data.options.spies.max_marches = toNum(Seed.cities[CAPITAL.id].figures.marches.maximum);
-				};
+				}
 
-				var setWavesDefaults = function() {
+				function setWavesDefaults() {
 					if (!Data.options.waves.target.dragons) Data.options.waves.target.dragons = {};
 					if (is_null(Data.options.waves.target.dragons)) {
 						for (var j = 0; j < Seed.dragonList.length; j++) {
@@ -4375,56 +4606,9 @@
 					}
 					if (Seed.cities[CAPITAL.id].figures.marches.maximum && is_null(Data.options.waves.max_marches))
 						Data.options.waves.max_marches = Seed.cities[CAPITAL.id].figures.marches.maximum;
-				};
-
-				var setWheelDefaults = function() {};
-                
-                switch (tab) {
-					case 'alliance':
-						setAllianceDefaults();
-						break;
-					case 'attacks':
-						setAttacksDefaults();
-						break;
-					case 'bookmark':
-						setBookmarksDefaults();
-						break;
-					case 'jobs':
-						setJobsDefaults();
-						break;
-					case 'multiple':
-						setMultipleDefaults();
-						break;
-					case 'options':
-						setOptionsDefaults();
-						break;
-					case 'search':
-						setSearchDefaults();
-						break;
-					case 'spies':
-						setSpiesDefaults();
-						break;
-					case 'waves':
-						setWavesDefaults();
-						break;
-					case 'wheel':
-						setWheelDefaults();
-						break;
-					case 'all':
-						setAllianceDefaults();
-						setAttacksDefaults();
-						setBookmarksDefaults();
-						setJobsDefaults();
-						setMultipleDefaults();
-						setOptionsDefaults();
-						setSearchDefaults();
-						setSpiesDefaults();
-						setWavesDefaults();
-						setWheelDefaults();
-						break;
-					default:
-						break;
 				}
+
+				function setWheelDefaults() {}
 			}
 		};
 		/******************************** Jobs package *******************************/
@@ -4433,14 +4617,14 @@
 				var cid = Seed.cities[cityIdx].id;
 				var jobs = Seed.jobs[cid];
 				for (var p in jobs) {
-					if (jobs[p] === job) delete jobs[p];
+					if (jobs[p] == job) delete jobs[p];
 				}
 			},
 			getBuildingJob: function(cityIdx) {
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue === 'building') return ({
+					if (job.queue == 'building') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4451,7 +4635,7 @@
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue === 'tower_healing') return ({
+					if (job.queue == 'tower_healing') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4463,7 +4647,7 @@
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue === 'build_tower') return ({
+					if (job.queue == 'build_tower') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4471,27 +4655,29 @@
 				return null;
 			},
 			getJobs: function(queue, get_first, city_Idx) {
-				var ret = [], cityIdx = (city_Idx || CAPITAL.id), cid = '', p = '', job = '';
+				var ret = [],
+					cityIdx = (city_Idx || CAPITAL.id);
 				if (cityIdx >= 0 && Seed.cities[cityIdx]) {
-					cid = Seed.cities[cityIdx].id;
+					var cid = Seed.cities[cityIdx].id;
 					if (cid) {
-						for (p in Seed.jobs[cid]) {
-							job = Seed.jobs[cid][p];
-							if (job.queue === queue) {
+						for (var p in Seed.jobs[cid]) {
+							var job = Seed.jobs[cid][p];
+							if (job.queue == queue) {
 								ret.push(job);
 								if (get_first) return ret;
 							}
 						}
 					}
-				} else if (cityIdx === -1) {
+				} else if (cityIdx == -1) {
 					for (var city_idx = 0; city_idx < Seed.cities.length; city_idx++) {
-						if (!Data.options.Rcheat_enabled && city_idx !== CAPITAL.id && queue === 'research') continue;
-						if (Seed.cities[city_idx] && city_idx !== undefined && !isNaN(city_idx) && city_idx >= 0 && city_idx < Seed.cities.length && ((city_idx !== SPECTRAL_OUTPOST.id && city_idx !== SKY_OUTPOST.id && city_idx !== CAVE_OUTPOST.id && city_idx !== LUNA_OUTPOST.id && queue === 'research') || queue !== 'research')) {
-							cid = Seed.cities[city_idx].id;
+						if (!Data.options.Rcheat_enabled && city_idx != CAPITAL.id && queue == 'research') continue;
+						if (Seed.cities[city_idx] && city_idx != undefined && !isNaN(city_idx) && city_idx >= 0 && city_idx < Seed.cities.length &&
+							((city_idx != SPECTRAL_OUTPOST.id && city_idx != SKY_OUTPOST.id && city_idx != CAVE_OUTPOST.id && city_idx != LUNA_OUTPOST.id && queue == 'research') || queue != 'research')) {
+							var cid = Seed.cities[city_idx].id;
 							if (cid) {
-								for (p in Seed.jobs[cid]) {
-									job = Seed.jobs[cid][p];
-									if (job.queue === queue) {
+								for (var p in Seed.jobs[cid]) {
+									var job = Seed.jobs[cid][p];
+									if (job.queue == queue) {
 										ret.push(job);
 										if (get_first) return ret;
 									}
@@ -4513,22 +4699,22 @@
 				button.value = time_item_list[itemId].text;
 				if (num > 0) {
 					button.disabled = false;
-					button.className = UID.btn_green + ' thin';
+					button.className = UID['btn_green'] + ' thin';
 					button.addEventListener('click', function(event) {
 						var self = event.target;
 						self.disabled = true;
-						self.className = UID.btn_disabled + ' thin';
+						self.className = UID['btn_disabled'] + ' thin';
 						logit('' + self.getAttribute('ref'));
 						var ids = self.getAttribute('ref').split('_');
 						var found = false;
 						var confirmation = false;
 						var jobs = Seed.cities[ids[1]].jobs;
 						for (var x = 0; x < jobs.length && !found; x++)
-							if (jobs[x].id === ids[2]) found = true;
+							if (jobs[x].id == ids[2]) found = true;
 						if (!found) return;
 
 						for (var i = 0; i < time_item_list.length; i++) {
-							if (time_item_list[i].name === ids[0]) {
+							if (time_item_list[i].name == ids[0]) {
 								confirmation = time_item_list[i].confirmation;
 								break;
 							}
@@ -4548,7 +4734,7 @@
 													var found = false;
 													var jobs = Seed.cities[ids[1]].jobs;
 													for (var x = 0; x < jobs.length && !found; x++) {
-														if (jobs[x].id === itmResp.id) {
+														if (jobs[x].id == itmResp.id) {
 															found = true;
 															jobs[x].run_at = itmResp.run_at;
 															jobs[x].duration = itmResp.duration;
@@ -4563,7 +4749,7 @@
 												var num = toNum(Seed.player.items[ids[0]]);
 												if (num > 0) {
 													button.disabled = false;
-													button.className = UID.btn_green + ' thin';
+													button.className = UID['btn_green'] + ' thin';
 												}
 											}
 										}
@@ -4583,7 +4769,7 @@
 											var found = false;
 											var jobs = Seed.cities[ids[1]].jobs;
 											for (var x = 0; x < jobs.length && !found; x++) {
-												if (jobs[x].id === itmResp.id) {
+												if (jobs[x].id == itmResp.id) {
 													found = true;
 													jobs[x].run_at = itmResp.run_at;
 													jobs[x].duration = itmResp.duration;
@@ -4598,7 +4784,7 @@
 										var num = toNum(Seed.player.items[ids[0]]);
 										if (num > 0) {
 											button.disabled = false;
-											button.className = UID.btn_green + ' thin';
+											button.className = UID['btn_green'] + ' thin';
 										}
 									}
 								}
@@ -4609,14 +4795,14 @@
 					}, false);
 				} else {
 					button.disabled = true;
-					button.className = UID.btn_disabled + ' thin';
+					button.className = UID['btn_disabled'] + ' thin';
 				}
 				nCell.appendChild(button);
 			},
 			addSpeedUpButtons: function(table, tableid, jobtype, id) {
-				var tot = 0, i = 0;
-				var mtClass = UID.row_marchMine;
-				for (i = 0; i < time_item_list.length; i++)
+				var tot = 0;
+				var mtClass = UID['row_marchMine'];
+				for (var i = 0; i < time_item_list.length; i++)
 					tot += toNum(Seed.player.items[time_item_list[i].name]);
 				if (tot > 0) {
 					iRow = table.insertRow(-1);
@@ -4625,19 +4811,20 @@
 					iCell.style.textAlign = 'left';
 					iCell.style.width = '100%';
 					iCell.setAttribute('colspan', '4');
-					iCell.innerHTML = '<table id=' + setUID(tableid) + ' class=' + UID.table + '></table>';
+					iCell.innerHTML = '<table id=' + setUID(tableid) + ' class=' + UID['table'] + '></table>';
 					var jRow, jCell;
 					jRow = document.getElementById(UID[tableid]).insertRow(-1);
 					jRow.className = mtClass;
-					for (i = 0; i < time_item_list.length; i++) {
+					for (var i = 0; i < time_item_list.length; i++) {
 						var num = toNum(Seed.player.items[time_item_list[i].name]);
 						if (num > 0 && Jobs.checkItemType(i, jobtype)) {
 							jCell = jRow.insertCell(-1);
 							jCell.style.textAlign = 'right';
 							jCell.innerHTML = '&nbsp;';
 							var type = 'N';
-							if ((jobtype === 'jobs' && time_item_list[i].type.indexOf('J') === -1) || (jobtype === 'units' && time_item_list[i].type.indexOf('T') === -1) || (jobtype === 'resurrection' && time_item_list[i].type.indexOf('R') === -1))
-                                type = 'C';
+							if ((jobtype == 'jobs' && time_item_list[i].type.indexOf('J') == -1) ||
+								(jobtype == 'units' && time_item_list[i].type.indexOf('T') == -1) ||
+								(jobtype == 'resurrection' && time_item_list[i].type.indexOf('R') == -1)) type = 'C';
 							Jobs.addSingleButton(i, type, jCell, id, num);
 						}
 					}
@@ -4645,44 +4832,44 @@
 			},
 			checkItemType: function(item, chkType) {
 				var type = time_item_list[item].type;
-				if ((type.indexOf('T') >= 0 && chkType === 'units') || (type.indexOf('R') >= 0 && chkType === 'resurrection') || (type.indexOf('J') >= 0 && chkType === 'jobs'))
-                    return (true);
-				else
-                    return (false);
+				if ((type.indexOf('T') >= 0 && chkType == 'units') ||
+					(type.indexOf('R') >= 0 && chkType == 'resurrection') ||
+					(type.indexOf('J') >= 0 && chkType == 'jobs')
+				) return (true);
+				else return (false);
 			},
 			updateBuildTable: function(table) {
 				var now = toNum(serverTime()),
 					idle_cities = [];
-				var mtClass = UID.row_marchMine;
+				var mtClass = UID['row_marchMine'];
 				/* Clear table */
 				for (var row = 0; row < table.rows.length; row++) {
 					table.deleteRow(row);
 					row--;
 				}
-                var cityIdx, city, iRow, iCell;
-				for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 					if (Seed.cities[cityIdx]) {
 						var options = {
 							noPlayer: true,
 							cities: []
 						};
-						city = Seed.cities[cityIdx];
+						var city = Seed.cities[cityIdx];
 						var jobs = Jobs.getJobs('building', true, cityIdx);
 						var jobsTD = Jobs.getJobs('build_tower', true, cityIdx);
 						
-						if (jobs.length === 0 && jobsTD.length === 0)
+						if (jobs.length == 0 && jobsTD.length == 0)
 							idle_cities.push(cityIdx);
 						else {
-                            var timeRemaining, button;
-							if(jobs.length !== 0) {
+							if(jobs.length != 0) {
+								var iRow, iCell;
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '20%';
-								iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
-								timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
-								if (timeRemaining === 0) {
+								iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+								var timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
+								if (timeRemaining == 0) {
 									/*
 									 * If we have a job and the timeRemaining is
 									 * negative or zero we delete the job and
@@ -4695,8 +4882,8 @@
 									iCell.setAttribute('colspan', '3');
 									iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 									Jobs.deleteJob(cityIdx, jobs[0]);
-									if (Tabs.Jobs.buildStatFetch === false) {
-										if (cityIdx !== 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+									if (Tabs.Jobs.buildStatFetch == false) {
+										if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 										options.cities.push(city.id);
 										Seed.fetchPlayer(options);
 										Tabs.Jobs.buildStatFetch = true;
@@ -4710,19 +4897,19 @@
 									/* Building cancel Button */
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
-									button = document.createElement('input');
+									var button = document.createElement('input');
 									button.type = 'button';
 									button.setAttribute('ref', cityIdx + '_' + jobs[0].id);
 									button.value = 'X';
 									if (jobs[0].cancelled) {
 										button.disabled = true;
-										button.className = UID.btn_disabled + ' thin';
+										button.className = UID['btn_disabled'] + ' thin';
 									} else {
-										button.className = UID.btn_red + ' thin';
+										button.className = UID['btn_red'] + ' thin';
 										button.addEventListener('click', function(event) {
 											var self = event.target;
 											self.disabled = true;
-											self.className = UID.btn_disabled + ' thin';
+											self.className = UID['btn_disabled'] + ' thin';
 											var ids = self.getAttribute('ref').split('_');
 											var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
 											if (job) {
@@ -4755,15 +4942,16 @@
 								iCell.style.width = '20%';
 								iCell.innerHTML = '&nbsp;';
 							}
-							if(jobsTD.length !== 0) {
+							if(jobsTD.length != 0) {
+								var iRow, iCell;
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '20%';
-								iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
-								timeRemaining = ((jobsTD[0].run_at - serverTime()) > 0) ? timestr(jobsTD[0].run_at - serverTime()) : 0;
-								if (timeRemaining === 0) {
+								iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+								var timeRemaining = ((jobsTD[0].run_at - serverTime()) > 0) ? timestr(jobsTD[0].run_at - serverTime()) : 0;
+								if (timeRemaining == 0) {
 									/*
 									 * If we have a job and the timeRemaining is
 									 * negative or zero we delete the job and
@@ -4776,8 +4964,8 @@
 									iCell.setAttribute('colspan', '3');
 									iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 									Jobs.deleteJob(cityIdx, jobsTD[0]);
-									if (Tabs.Jobs.buildStatFetch === false) {
-										if (cityIdx !== 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+									if (Tabs.Jobs.buildStatFetch == false) {
+										if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 										options.cities.push(city.id);
 										Seed.fetchPlayer(options);
 										Tabs.Jobs.buildStatFetch = true;
@@ -4791,19 +4979,19 @@
 									/* Building cancel Button */
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
-									button = document.createElement('input');
+									var button = document.createElement('input');
 									button.type = 'button';
 									button.setAttribute('ref', cityIdx + '_' + jobsTD[0].id);
 									button.value = 'X';
 									if (jobsTD[0].cancelled) {
 										button.disabled = true;
-										button.className = UID.btn_disabled + ' thin';
+										button.className = UID['btn_disabled'] + ' thin';
 									} else {
-										button.className = UID.btn_red + ' thin';
+										button.className = UID['btn_red'] + ' thin';
 										button.addEventListener('click', function(event) {
 											var self = event.target;
 											self.disabled = true;
-											self.className = UID.btn_disabled + ' thin';
+											self.className = UID['btn_disabled'] + ' thin';
 											var ids = self.getAttribute('ref').split('_');
 											var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
 											if (job) {
@@ -4839,15 +5027,16 @@
 						}
 					}
 				}
-				for (cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
+				for (var cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
 					if (Seed.cities[idle_cities[cityIdx]]) {
-						city = Seed.cities[idle_cities[cityIdx]];
+						var city = Seed.cities[idle_cities[cityIdx]];
+						var iRow, iCell;
 						iRow = table.insertRow(-1);
 						iRow.className = mtClass;
 						iCell = iRow.insertCell(-1);
 						iCell.style.textAlign = 'left';
 						iCell.style.width = '20%';
-						iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+						iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 						iCell = iRow.insertCell(-1);
 						iCell.innerHTML = translate('Idle');
 					}
@@ -4856,31 +5045,31 @@
 			updateDragonTable: function(table) {
 				var now = toNum(serverTime()),
 					idle_cities = [];
-				var mtClass = UID.row_marchMine;
+				var mtClass = UID['row_marchMine'];
 				/* Clear table */
 				for (var row = 0; row < table.rows.length; row++) {
 					table.deleteRow(row);
 					row--;
 				}
-                var cityIdx, city, iRow, iCell;
-				for (cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
+				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 					if (Seed.cities[cityIdx]) {
 						var options = {
 							noPlayer: true,
 							cities: []
 						};
-						city = Seed.cities[cityIdx];
+						var city = Seed.cities[cityIdx];
 						var jobs = Jobs.getJobs('dragon', true, cityIdx);
 						
-						if(jobs.length !== 0) {
+						if(jobs.length != 0) {
+							var iRow, iCell;
 							iRow = table.insertRow(-1);
 							iRow.className = mtClass;
 							iCell = iRow.insertCell(-1);
 							iCell.style.textAlign = 'left';
 							iCell.style.width = '20%';
-							iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+							iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 							var timeRemaining = ((jobs[0].run_at - serverTime()) > 0) ? timestr(jobs[0].run_at - serverTime()) : 0;
-							if (timeRemaining === 0) {
+							if (timeRemaining == 0) {
 								/*
 								 * If we have a job and the timeRemaining is
 								 * negative or zero we delete the job and fetch
@@ -4892,8 +5081,7 @@
 								iCell.setAttribute('colspan', '3');
 								iCell.innerHTML = translate('Awaiting task completion notification') + '...';
 								Jobs.deleteJob(cityIdx, jobs[0]);
-								if (cityIdx !== 0)
-                                    options.cities.push(Seed.cities[CAPITAL.id].id);
+								if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
 								options.cities.push(city.id);
 								Seed.fetchPlayer(options);
 							} else {
@@ -4905,12 +5093,48 @@
 								/* Building cancel Button */
 								iCell = iRow.insertCell(-1);
 								iCell.style.width = '10%';
+								/*
+								 * var button = document.createElement('input');
+								 * button.type = 'button';
+								 * button.setAttribute('ref', cityIdx + '_' +
+								 * jobs[0].id); button.value = 'X'; if
+								 * (jobs[0].cancelled) { button.disabled = true;
+								 * button.className = UID['btn_disabled'] + '
+								 * thin'; } else { button.className =
+								 * UID['btn_red'] + ' thin';
+								 * button.addEventListener('click',
+								 * function(event) { var self = event.target;
+								 * self.disabled = true; self.className =
+								 * UID['btn_disabled'] + ' thin'; var ids =
+								 * self.getAttribute('ref').split('_'); var job =
+								 * Seed.jobs[Seed.cities[ids[0]].id][ids[1]]; if
+								 * (job) { job.cancelled = true; var desc =
+								 * translate(job.city_building_type) + ' ' +
+								 * job.level; MyAjax.cancelTraining(ids[1],
+								 * function(r) { if (r.ok &&
+								 * r.dat.result.success) {
+								 * verboseLog(translate('Building job
+								 * cancelled') + ' (' + desc + ')'); } }); } },
+								 * false); } iCell.appendChild(button);
+								 */
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
 								iCell.style.width = '25%';
 								iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timeRemaining + '</font>';
 								if (!jobs[0].cancelled && Data.options.jobs_speedups_enabled)
 									Jobs.addSpeedUpButtons(table, 'tabJobsDragon_speedups_0', 'jobs', cityIdx + '_' + jobs[0].id);
+
+								// Tabs.Jobs.buildStatFetch = false;
+								try {
+									// document.getElementById(UID['tabJobDragon_FB_'
+									// + cityIdx + '_' +
+									// jobs[0].city_building_type]).innerHTML =
+									// '<font color=#000>' +
+									// translate('Building') + ': ' +
+									// translate(jobs[0].city_building_type) + '
+									// ' + translate('Level').toLowerCase() + '
+									// ' + jobs[0].level + '</font>';
+								} catch (e) {}
 							}
 							iRow = table.insertRow(-1);
 							iCell = iRow.insertCell(-1);
@@ -4920,15 +5144,16 @@
 						}
 					}
 				}
-				for (cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
+				for (var cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
 					if (Seed.cities[idle_cities[cityIdx]]) {
-						city = Seed.cities[idle_cities[cityIdx]];
+						var city = Seed.cities[idle_cities[cityIdx]];
+						var iRow, iCell;
 						iRow = table.insertRow(-1);
 						iRow.className = mtClass;
 						iCell = iRow.insertCell(-1);
 						iCell.style.textAlign = 'left';
 						iCell.style.width = '20%';
-						iCell.innerHTML = '<b>' + ((cityIdx === CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+						iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
 						iCell = iRow.insertCell(-1);
 						iCell.innerHTML = translate('Idle');
 					}
