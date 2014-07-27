@@ -130,13 +130,8 @@
 							iframe.style.width = '100%';
 					}
 					document.getElementById('rightCol').style.display = 'none';
-					document.getElementById('rightCol').style.display = 'none';
-					document.getElementById('blueBarHolder').style.display = 'none';
-					document.getElementById('blueBar').style.display = 'none';
-					document.getElementById('pageHead').style.display = 'none';
-					document.getElementById('jewelContainer').style.display = 'none';
-					document.getElementById('headNav').style.display = 'none';
-					document.getElementById('contentCol').style.margin = '0px';
+					document.getElementById('blueBarDOMInspector').style.display = 'none';
+                    document.getElementById('contentCol').style.margin = '0px';
 					document.getElementById('contentCol').style.background = '#888 url(https://images.alphacoders.com/117/117053.jpg)';
 					var contentColChild = document.getElementById('contentCol').childNodes;
 					for (var i = 0; i < contentColChild.length; i++)
@@ -11772,16 +11767,18 @@
 			}, options);
 		}
 
-		function saveBookmark(container, x, y, type, level, id, name, units, ai, include_great_dragon, include_exclude, great_dragons, comment) {
-			if (Data.options.bookmarks.targets && Data.options.bookmarks.targets.length > 0) {
+		function saveBookmark(container, x, y, type, level, id, name, units, ai, include_great_dragon, include_exclude, great_dragons, comment, cptDESC) {
+			var target_desc = '';
+            if( typeof(cptDESC) !== 'undefined' )
+                target_desc = cptDESC;
+            if (Data.options.bookmarks.targets && Data.options.bookmarks.targets.length > 0) {
 				var h = cloneProps(Data.options.bookmarks.targets);
 				for (var i = h.length - 1; i >= 0; i--) {
 					if ((h[i].x == x) && (h[i].y == y))
 						Data.options.bookmarks.targets.splice(i, 1);
 				}
 			}
-			var target_desc = '',
-				target_id = id,
+			var target_id = id,
 				target_name = name;
 			var target_type = 0;
 			Map.tileAt({
@@ -28339,33 +28336,63 @@
                     var id = event.target.getAttribute('ref');
                     new MyAjax.searchCPT(CPT_SEARCH.playerDetail, id, function(rslt) {
                         if(rslt.dat.result) {
-                        	var bs = [];
+                        	var bs = [], bb = [];
                             var player = rslt.dat.player;
                             var m = '<table width=100%>';
                                m += '   <tr><td align=center><b>' + player.name + ' / ' + (player.alliance ? player.alliance.name : '---') + '</b> - ' + translate('might') + ' : ' + numf(player.might) + '</td></tr>';
-                               m += '   <tr><td align=center><input id=' + setUID('tabCPT_GoCptPlayer' + player.id) + ' ref=' +  player.id + ' class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value="' + translate('go') + ' CPT" /></td></tr>';
+                               m += '   <tr><td align=center>';
+                               m += '       <input id=' + setUID('tabCPT_GoCptPlayer' + player.id) + ' ref="' +  player.id + '" class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value="  ' + translate('go') + ' CPT  " />  ';
+                               m += '       <input class=class="' + UID['btn_blue'] + '" id="' + setUID('tabCPT_MsgUser') + '" ref="' + player.id  + '_' + player.name + '" type=button  style="width:auto !important;" value="  ' + translate('Msg') + '  " \>';
+                               m += '      </td></tr>';
                                m += '</table><br /><br />';
                                m += '<table class=' + UID['row_style'] + ' width=100%>';
                                m += '   <tr class=' + UID['row_headers'] + '><td colspan=2 align=center>' + translate('outposts') + '</td><td>' + translate('action') + '</td></tr>';
                                for(var i=0 ; i < player.ops.length ; i++) {
                                 m += '  <tr><td align=center>' + player.ops[i].type + ' </td>';
                                 m += '		<td align=center>' + player.ops[i].x + ' / ' + player.ops[i].y + '</td>';
-                                m += '		<td align=center><input id="' + setUID('tabCpt_SpyNow_' + i) + '" ref="'+player.name+'('+player.ops[i].type+')_' + player.ops[i].x + '_' + player.ops[i].y + '" class="' + UID['btn_red'] + '" style="width:auto !important;" type=button value="  ' + translate('Spy') + ' !  " /></td>';
+                                m += '<td align=center>';
+                                m += '<input id="' + setUID('tabCpt_SpyNow_' + i) + '" ref="'+player.name+'('+player.ops[i].type+')_' + player.ops[i].x + '_' + player.ops[i].y + '" class="'+(player.ops[i].type === 'Spectral' ? UID['btn_disabled'] : UID['btn_red'])+ '" style="width:auto !important;" type=button value="  ' + translate('Spy') + ' !  " '+( player.ops[i].type === 'Spectral' ? 'disabled' : '')+' />  ';
+                                m += '  <input id=' + setUID('tabCpt_Bookmark_' + i) + ' ref="' + i + '_' + player.ops[i].x + '_' + player.ops[i].y + '_'+player.name+'" class="' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="  ' + translate('Bookmark') + '  " />';
+                                m += '</td>';
                                 m += '	</tr>';
-                                bs.push('tabCpt_SpyNow_' + i);
+                                if(player.ops[i].type !== 'Spectral')
+                                    bs.push('tabCpt_SpyNow_' + i);
+                                bb.push('tabCpt_Bookmark_' + i);
                                }
                                m += '</table>';
                             $(UID['tabCPT_divPlayerDetail']).update(m);
+                            $(UID['tabCPT_MsgUser']).observe('click', onClickMsg);
                             $(UID['tabCPT_GoCptPlayer' + player.id]).observe('click', function(event) {
                                 var id = event.target.getAttribute('ref');
                                 window.open('https://www.calcium-pro-tool.com/CPT/displayUser.php?id='+id+'&realmId='+SERVER_ID);
                             });
                             for(var j=0; j < bs.length; j++) {
-                            	$(UID[bs[j]]).observe('click', function(event) {
-                            		var args = event.target.getAttribute('ref').split('_');
-                            		var targ = { n:args[0], x:args[1], y:args[2] };
-                            		buttonSpyNow(UID['tabCPT_divSearch'], targ);
-                            	});
+                            	$(UID[bs[j]]).observe('click', cptSpyNow);
+                            }
+                            for(var k=0; k < bb.length; k++) {
+                            	$(UID[bb[k]]).observe('click', addBookmark);
+                            }
+                            
+                            function cptSpyNow(event) {
+                                var args = event.target.getAttribute('ref').split('_'),
+                                    targ = { n:args[0], x:args[1], y:args[2] };
+                                buttonSpyNow(t.container, targ);
+                            }
+                            function addBookmark(event) {
+                                var args = event.target.getAttribute('ref').split('_');
+                                saveBookmark(t.container,
+                                    toNum(args[1]),
+                                    toNum(args[2]),
+                                    0,
+                                    0,
+                                    0,
+                                    toNum(args[0]),
+                                    {},
+                                    '',
+                                    false, true,
+                                    false,
+                                    '',
+                                    args[3]);
                             }
                         } else {
                             $(UID['tabCPT_divPlayerDetail']).update(rslt.dat.msg);
@@ -28428,17 +28455,24 @@
                     new MyAjax.searchCPT(CPT_SEARCH.allianceDetail, id, function(rslt) {
                         if(rslt.dat.result) {
                             var alliance = rslt.dat.alliance;
-                            var tcpt = [];
+                            var tcpt = [], bm = [];
                             var m = '<table width=100%>';
                             m += '   <tr><td align=center><b>' + alliance.name + '</b> - ' + translate('might') + ' : ' + numf(alliance.might) + '</td></tr>';
                             m += '   <tr><td align=center><input id=' + setUID('tabCPT_GoCptAlliance' + alliance.id) + ' ref=' +  alliance.id + ' class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value="' + translate('go') + ' CPT" /></td></tr>';
                             m += '</table><br />';
                             m += '<table class=' + UID['row_style'] + ' width=100%>';
                             m += '   <tr class=' + UID['row_headers'] + '><td colspan=4 align=center>' + translate('members') + '</td></tr>';
-                            m += '   <tr class=' + UID['row_headers'] + '><td align=center>' + translate('members') + '</td><td align=center>' + translate('might') + '</td><td align=center>' + translate('Role') + '</td><td align=center>' + translate('go') + ' CPT</td></tr>';
+                            m += '   <tr class=' + UID['row_headers'] + '><td align=center>' + translate('members') + '</td><td align=center>' + translate('might') + '</td><td align=center>' + translate('Role') + '</td><td align=center>' + translate('action') + '</td></tr>';
                             for(var i=0 ; i < alliance.players.length ; i++) {
-                                m += '  <tr><td>' + alliance.players[i].name + '</td><td align=right>' + numf(alliance.players[i].might) + '</td><td>' + translate('role-'+alliance.players[i].role) + '</td><td><input id=' + setUID('tabCPT_GoCptPlayer' + alliance.players[i].id) + ' ref=' +  alliance.players[i].id + ' class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value="' + translate('go') + ' CPT"/></td></tr>';
+                                m += '  <tr><td>' + alliance.players[i].name + '</td><td align=right>' + numf(alliance.players[i].might) + '</td>';
+                                m += '      <td>' + translate('role-'+alliance.players[i].role) + '</td>';
+                                m += '      <td align=center>';
+                                m += '          <input id=' + setUID('tabCPT_GoCptPlayer' + alliance.players[i].id) + ' ref=' +  alliance.players[i].id + ' class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value="' + translate('go') + ' CPT"/>';
+                                m += '          <input class=class="' + UID['btn_blue'] + '" id="' + setUID('tabCPT_MsgUser_'+i) + '" ref="' + alliance.players[i].id  + '_' + alliance.players[i].name + '" type=button  style="width:auto !important;" value="  ' + translate('Msg') + '  " \>';
+                                m += '      </td>';
+                                m += '  </tr>';
                                 tcpt.push('tabCPT_GoCptPlayer' + alliance.players[i].id);
+                                bm.push('tabCPT_MsgUser_'+i);
                             }
                             m += '</table>';
                             $(UID['tabCPT_divAllianceDetail']).update(m);
@@ -28447,6 +28481,7 @@
                                     var id = event.target.getAttribute('ref');
                                     window.open('https://www.calcium-pro-tool.com/CPT/displayUser.php?id='+id+'&realmId='+SERVER_ID);
                                 });
+                                $(UID[bm[j]]).observe('click', onClickMsg);
                             }
                             $(UID['tabCPT_GoCptAlliance' + alliance.id]).observe('click', function(event) {
                                 var id = event.target.getAttribute('ref');
