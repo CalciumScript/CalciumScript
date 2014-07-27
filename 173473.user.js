@@ -5103,7 +5103,33 @@
 									iCell.style.textAlign = 'left';
 									iCell.style.width = '35%';
 									iCell.innerHTML = translate('trade') + ' - ' + translate('buy');
-									/* Building cancel Button */
+									/* Trade cancel Button */
+									var button = document.createElement('input');
+									button.type = 'button';
+									button.setAttribute('ref', cityIdx + '_' + jobs[0].id);
+									button.value = 'X';
+									if (jobs[0].cancelled) {
+										button.disabled = true;
+										button.className = UID['btn_disabled'] + ' thin';
+									} else {
+										button.className = UID['btn_red'] + ' thin';
+										button.addEventListener('click', function(event) {
+											var self = event.target;
+											self.disabled = true;
+											self.className = UID['btn_disabled'] + ' thin';
+											var ids = self.getAttribute('ref').split('_');
+											var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
+											if (job) {
+												job.cancelled = true;
+												MyAjax.tradeCancel(ids[1], function(r) {
+													if (r.ok && r.dat.result.success) {
+														verboseLog('Trade job cancelled');
+													}
+												});
+											}
+										}, false);
+									}
+									iCell.appendChild(button);
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
 									iCell = iRow.insertCell(-1);
