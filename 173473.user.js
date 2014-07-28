@@ -2927,7 +2927,7 @@
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				
+				p['_method'] = 'delete';
 				new MyAjaxRequest('trade', 'trades/' + idTrade + '/cancel.json', p, mycb, true);
 
 				function mycb(rslt) {
@@ -5103,33 +5103,6 @@
 									iCell.style.textAlign = 'left';
 									iCell.style.width = '35%';
 									iCell.innerHTML = translate('trade') + ' - ' + translate('buy');
-									/* Trade cancel Button */
-									var button = document.createElement('input');
-									button.type = 'button';
-									button.setAttribute('ref', cityIdx + '_' + jobs[0].id);
-									button.value = 'X';
-									if (jobs[0].cancelled) {
-										button.disabled = true;
-										button.className = UID['btn_disabled'] + ' thin';
-									} else {
-										button.className = UID['btn_red'] + ' thin';
-										button.addEventListener('click', function(event) {
-											var self = event.target;
-											self.disabled = true;
-											self.className = UID['btn_disabled'] + ' thin';
-											var ids = self.getAttribute('ref').split('_');
-											var job = Seed.jobs[Seed.cities[ids[0]].id][ids[1]];
-											if (job) {
-												job.cancelled = true;
-												MyAjax.tradeCancel(ids[1], function(r) {
-													if (r.ok && r.dat.result.success) {
-														verboseLog('Trade job cancelled');
-													}
-												});
-											}
-										}, false);
-									}
-									iCell.appendChild(button);
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
 									iCell = iRow.insertCell(-1);
@@ -19487,18 +19460,26 @@
 					+ '<td>' + translate('resource') + '</td>' 
 					+ '<td>' + translate('price') + '</td>' 
 					+ '<td>' + translate('quantity') + '</td>'
+                    + '<td>' + translate('cancel') + '</td>'
 					+ '</tr>';
-					
+					var bct = [];
 					for(var offer=0; offer < result.player_sells.length; offer++) {
 						m += '<tr>' 
 							+ '<td>' + translate(result.player_sells[offer].product) + '</td>' 
 							+ '<td align=right>' + numf(result.player_sells[offer].price) + '</td>' 
 							+ '<td align=right>' + numf(result.player_sells[offer].units) + '</td>'
+                            + '<td align=center><input class="Xtrasmall '+UID['btn_red']+'" id="'+setUID(result.player_sells[offer].id)+'" ref="'+result.player_sells[offer].id+'" type="button" style="width:auto !important;" value=" X "></td>' 
 							+ '</tr>';
+                        bct.push(result.player_sells[offer].id);
 					}
 					m += '</table>';
-					
 					document.getElementById(UID['tabTrade_SellTable']).innerHTML = m;
+                    for(var i=0; i<bct.length; i++) {
+                        document.getElementById(UID[bct[i]]).addEventListener('click', function(event) {
+                            var idTrade = event.target.getAttribute('ref');
+                            MyAjax.tradeCancel(idTrade, getSellInTrade)
+                        }, false);
+                    }
 				}
 				
 			},
