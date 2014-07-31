@@ -27977,6 +27977,19 @@
 					}
 				}
 			}
+            function ontimeout(resp) {
+                clearTimeout(timer);
+                var response = {
+                    responseText	: null,
+                    status				: 599,
+                    statusText		: 'Request Timed Out',
+                    ajax				: resp
+                };
+                debugLog(url + ' Failed : ' + inspectObj(response, 8, 1));
+                if (opts.onFailure) opts.onFailure(response);
+                if (opts['on' + ajax.status])
+                    opts['on' + ajax.status](response);
+			}
 			url = ((url.indexOf('http') == -1) ? C.attrs.apiServer + '/' + url : url);
 			/* Parse request parameters */
 			params = typeof opts === 'string' ? opts.parameters : Object.toQueryString(opts.parameters).replace(/\_/g, '%5F').replace(/\(/g, '%28').replace(/\)/g, '%29');
@@ -28005,7 +28018,8 @@
 					data: (opts.method === 'POST' ? params : null),
 					headers: headers,
 					overrideMimeType: overrideMimeType,
-					ontimeout: (opts.timeoutSecs ? opts.timeoutSecs * 1000 : 0),
+                    timeout : ( opts.timeoutSecs ? opts.timeoutSecs*1000 : 0 ),
+					ontimeout: ontimeout,
 					onreadystatechange: onreadystatechange
 				});
 			} else {
