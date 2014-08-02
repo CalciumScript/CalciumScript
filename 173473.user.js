@@ -3138,10 +3138,10 @@
 								Seed.player.boosts = cloneProps(rslt.dat.boosts);
 								try {
 									for (var i in rslt.dat.result.dragon) {
-										var dragon = cloneProps(rslt.dat.result.dragon[i]);
+										/*var dragon = cloneProps(rslt.dat.result.dragon[i]);
 										var dragon_name = dragon.type.substring(dragon.type.indexOf('::') + 2);
 										dragon_name = (dragon_name == 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
-										dragon.name = dragon_name;
+										dragon.name = dragon_name;*/
 										var dragon_rank = sanctuaryDragonRank[dragon.rank];
 										dragon.type = dragon.gender + '-' + dragon_rank;
 										dragon.subtype = ((i == 'city_great_dragon') ? 'great_dragon' : i).replace(/ |_/g, '-');
@@ -5308,13 +5308,13 @@
 									verboseLog('Error: Inexisting dragon ' + trains[j].male_id);
 									male = trains[j].male_id;
 								} else {
-									male = translateByKey(Seed.sanctuary_dragons[trains[j].male_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].male_id].type, 'dragons');
+									male = ( Seed.sanctuary_dragons[trains[j].male_id].name != '' ? Seed.sanctuary_dragons[trains[j].male_id].name : translateByKey(Seed.sanctuary_dragons[trains[j].male_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].male_id].type, 'dragons'));
 								}
 								if (!Seed.sanctuary_dragons[trains[j].female_id]) {
 									verboseLog('Error: Inexisting dragon ' + trains[j].female_id);
 									female = trains[j].female_id;
 								} else {
-									female = translateByKey(Seed.sanctuary_dragons[trains[j].female_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].female_id].type, 'dragons');
+									female = ( Seed.sanctuary_dragons[trains[j].female_id].name != '' ? Seed.sanctuary_dragons[trains[j].female_id].name : translateByKey(Seed.sanctuary_dragons[trains[j].female_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].female_id].type, 'dragons'));
 								}
 								iCell.innerHTML = male + ' + ' + female;
 							} else if (type == 'hatching') {
@@ -5332,7 +5332,7 @@
 									verboseLog('Error: Inexisting dragon ' + trains[j].dragon_id);
 									dragon = trains[j].dragon_id;
 								} else {
-									dragon = translateByKey(Seed.sanctuary_dragons[trains[j].dragon_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].dragon_id].type, 'dragons') + '&nbsp;(' + (Seed.sanctuary_dragons[trains[j].dragon_id].level+1) + ')';
+									dragon = ( Seed.sanctuary_dragons[trains[j].dragon_id].name != '' ? Seed.sanctuary_dragons[trains[j].dragon_id].name : translateByKey(Seed.sanctuary_dragons[trains[j].dragon_id].subtype, 'rank-' + Seed.sanctuary_dragons[trains[j].dragon_id].type, 'dragons')) + '&nbsp;(' + (Seed.sanctuary_dragons[trains[j].dragon_id].level+1) + ')';
 								}
 								iCell.innerHTML = dragon;
 							}
@@ -9530,9 +9530,9 @@
 							for (var i = 0; i < dragons.length; i++) {
 								for (var j in dragons[i]) {
 									var dragon = cloneProps(dragons[i][j]);
-									var dragon_name = dragon.type.substring(dragon.type.indexOf('::') + 2);
+									/*var dragon_name = dragon.type.substring(dragon.type.indexOf('::') + 2);
 									dragon_name = (dragon_name == 'CityGreatDragon') ? 'GreatDragon' : dragon_name;
-									dragon.name = dragon_name;
+									dragon.name = dragon_name;*/
 									var dragon_rank = sanctuaryDragonRank[dragon.rank];
 									dragon.type = dragon.gender + '-' + dragon_rank;
 									dragon.subtype = ((j == 'city_great_dragon') ? 'great_dragon' : j).replace(/ |_/g, '-');
@@ -19780,19 +19780,19 @@
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' + '<div class=' + UID['subtitle'] + '>' + translate('dragons') + '</div>' + '	<table class=' + UID['row_style'] + ' width=100%>';
 				for (var d = 0; d < dragons.length; d++) {
 					if (dragons[d].level !== undefined)
-						m += '	<tr valign=top>' + '			<td class=left width=30%>' + translateByKey(dragons[d].subtype, 'rank-' + dragons[d].type, 'dragons') + '</td>' + '			<td width=10%><label>' + translate(dragons[d].gender) + '</label></td>' + '			<td width=5%><label>' + dragons[d].level + '</label></td>' + '			<td width=55%>' + dispAbility(dragons[d].abilities) + '</td>' + '	</tr>';
+						m += '	<tr valign=top>' + '			<td class=left width=40%>' + translateByKey(dragons[d].subtype, 'rank-' + dragons[d].type, 'dragons') + '</td>' + '			<td width=10%><label>' + translate(dragons[d].gender) + '</label></td>' + '			<td width=5%><label>' + dragons[d].level + '</label></td>' + '			<td width=45%>' + dispAbility(dragons[d].abilities) + '</td>' + '	</tr>';
 				}
 				m += '</table>' + '<br><div class=' + UID['subtitle'] + '>' + translate('dragonroost') + '</div>' + '	<table class=' + UID['row_style'] + ' width=100%>';
 				for (var d = 0; d < roosts.length; d++) {
-					m += '	<tr valign=top>' + '			<td class=left width=30%>' + translateByKey(roosts[d].subtype, 'rank-' + roosts[d].type, 'dragons') + '<br>' + '			<input id=' + setUID('tabJobSanct_Remove_' + roosts[d].id) + ' ref=' + roosts[d].id + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('unequip').initCap() + '" />&nbsp;&nbsp;' + '			<input id=' + setUID('tabJobSanct_Delete_' + roosts[d].id) + ' ref=' + roosts[d].id + ' class="Xtrasmall ' + UID['btn_red'] + '" style="width:auto !important;" type=submit value="' + translate('dismiss') + '" /></td>' + '			<td width=10%><label>' + translate(roosts[d].gender) + '</label></td>' + '			<td width=5%><label>' + roosts[d].level + '</label></td>' + '			<td width=55%>' + dispAbility(roosts[d].abilities) + '</td>' + '	</tr>';
+					m += '	<tr valign=top>' + '			<td class=left width=40%><b>' + translate('Type') + '</b>:' + translateByKey(roosts[d].subtype, 'rank-' + roosts[d].type, 'dragons') + '<br /><b>'+translate('name')+'</b> : ' + roosts[d].name + '<br>' + '			<input id=' + setUID('tabJobSanct_Remove_' + roosts[d].id) + ' ref=' + roosts[d].id + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('unequip').initCap() + '" />&nbsp;&nbsp;' + '			<input id=' + setUID('tabJobSanct_Delete_' + roosts[d].id) + ' ref=' + roosts[d].id + ' class="Xtrasmall ' + UID['btn_red'] + '" style="width:auto !important;" type=submit value="' + translate('dismiss') + '" /></td>' + '			<td width=10%><label>' + translate(roosts[d].gender) + '</label></td>' + '			<td width=5%><label>' + roosts[d].level + '</label></td>' + '			<td width=45%>' + dispAbility(roosts[d].abilities) + '</td>' + '	</tr>';
 				}
 				m += '</table>' + '<br><div class=' + UID['subtitle'] + '>' + translateByKey('masterrookery', undefined, 'dialogs') + ' - ' + Seed.sanctuary_dragons.player_slots + '</div>' + '	<table class=' + UID['row_style'] + ' width=100%>';
 				for (var d = 0; d < rookery.length; d++) {
-					m += '	<tr valign=top>' + '			<td class=left width=30%>' + translateByKey(rookery[d].subtype, 'rank-' + rookery[d].type, 'dragons') + '<br>' + '			<input id=' + setUID('tabJobSanct_Equip_' + rookery[d].id) + ' ref=' + rookery[d].id + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('Equip').initCap() + '" />&nbsp;&nbsp;' + '			<input id=' + setUID('tabJobSanct_Delete_' + rookery[d].id) + ' ref=' + rookery[d].id + ' class="Xtrasmall ' + UID['btn_red'] + '" style="width:auto !important;" type=submit value="' + translate('dismiss') + '" /></td>' + '			<td width=10%><label>' + translate(rookery[d].gender) + '</label></td>' + '			<td width=5%><label>' + rookery[d].level + '</label></td>' + '			<td width=55%>' + dispAbility(rookery[d].abilities) + '</td>' + '	</tr>';
+					m += '	<tr valign=top>' + '			<td class=left width=40%><b>' + translate('Type') + '</b>:' + translateByKey(rookery[d].subtype, 'rank-' + rookery[d].type, 'dragons') + '<br /><b>'+translate('name')+'</b> : ' + rookery[d].name + '<br>' + '			<input id=' + setUID('tabJobSanct_Equip_' + rookery[d].id) + ' ref=' + rookery[d].id + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('Equip').initCap() + '" />&nbsp;&nbsp;' + '			<input id=' + setUID('tabJobSanct_Delete_' + rookery[d].id) + ' ref=' + rookery[d].id + ' class="Xtrasmall ' + UID['btn_red'] + '" style="width:auto !important;" type=submit value="' + translate('dismiss') + '" /></td>' + '			<td width=10%><label>' + translate(rookery[d].gender) + '</label></td>' + '			<td width=5%><label>' + rookery[d].level + '</label></td>' + '			<td width=45%>' + dispAbility(rookery[d].abilities) + '</td>' + '	</tr>';
 				}
 				m += '</table>' + '<br><div class=' + UID['subtitle'] + '>' + translate('dragonnest') + '</div>' + '	<table class=' + UID['row_style'] + ' width=100%>';
 				for (var d = 0; d < nests.length; d++) {
-					m += '	<tr valign=top>' + '			<td class=left width=30%>' + translateByKey(nests[d].subtype, 'rank-' + nests[d].type, 'dragons') + '</td>' + '			<td width=10%><label>' + translate(nests[d].gender) + '</label></td>' + '			<td width=5%><label>' + nests[d].level + '</label></td>' + '			<td width=55%>' + dispAbility(nests[d].abilities) + '</td>' + '	</tr>';
+					m += '	<tr valign=top>' + '			<td class=left width=40%>' + translateByKey(nests[d].subtype, 'rank-' + nests[d].type, 'dragons') + '</td>' + '			<td width=10%><label>' + translate(nests[d].gender) + '</label></td>' + '			<td width=5%><label>' + nests[d].level + '</label></td>' + '			<td width=45%>' + dispAbility(nests[d].abilities) + '</td>' + '	</tr>';
 				}
 				m += '</table>' + '</div>';
 				document.getElementById(UID['tabJobSanct_Content']).innerHTML = m;
@@ -19950,7 +19950,18 @@
 				}
 
 				function dispStats(obj) {
-					var m = '<table width=100%>' + '	<tr valign=top>' + '		<td width=30%><label>' + translate('Level') + '</label></td>' + '		<td width=70%><label>' + obj.level + '</label></td>' + '	</tr>' + '	<tr valign=top>' + '		<td width=30%><label>' + translate('Capacity') + '</label></td>' + '		<td width=70%>';
+					var m = '<table width=100%>'
+ 					+ '	<tr valign=top>' 
+ 					+ '		<td width=30%><label><b>' + translate('name') + '</b></label></td>' 
+ 					+ '		<td width=70%><label>' + obj.name + '</label></td>' 
+ 					+ '	</tr>'
+ 					+ '	<tr valign=top>' 
+ 					+ '		<td width=30%><label>' + translate('Level') + '</label></td>' 
+ 					+ '		<td width=70%><label>' + obj.level + '</label></td>' 
+ 					+ '	</tr>'
+ 					+ '	<tr valign=top>' 
+ 					+ '		<td width=30%><label>' + translate('Capacity') + '</label></td>' 
+ 					+ '		<td width=70%>';
 					if (!obj.abilities || obj.abilities.length == 0) m += '&nbsp;</td></tr>';
 					else {
 						m += '<table width=100%>';
@@ -19984,7 +19995,7 @@
 							selected = 'selected';
 							found = true;
 						}
-						m += '<option value="' + dragons[d].id + '" ' + selected + '>' + translateByKey(dragons[d].subtype, 'rank-' + dragons[d].type, 'dragons') + '</option>';
+						m += '<option value="' + dragons[d].id + '" ' + selected + '>' + ( dragons[d].name != '' ? dragons[d].name : translateByKey(dragons[d].subtype, 'rank-' + dragons[d].type, 'dragons')) + '</option>';
 					}
 					if (!found) selected = 'selected';
 					else selected = '';
@@ -20081,7 +20092,7 @@
 					if (is_null(dragon.abilities) || dragon.level < 1) continue;
 					
 					if(!Data.options.sanctuary.hideDrgMaxLevel || dragon.level < max_level) {
-						m += '	<tr valign=top>' + '			<td align=left width=35%><input type=checkbox id=' + setUID('tabJobFeeding_CB_' + id) + ' ' + (setting.enable ? 'checked' : '') + ' ref=' + id + ' /> ' + translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + '			<br><div id=' + setUID('tabJobFeeding_FB_' + id) + ' class=jewel valign=top style="width:100%;white-space:normal;"></div>' + '			</td>' + '			<td width=10%><label>' + translate(dragon.gender) + '</label></td>' + '			<td width=5%><label>' + dragon.level + '</label></td>' + '			<td>';
+						m += '	<tr valign=top>' + '			<td align=left width=35%><input type=checkbox id=' + setUID('tabJobFeeding_CB_' + id) + ' ' + (setting.enable ? 'checked' : '') + ' ref=' + id + ' /> ' + translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + '<br><b>' + translate('name') + '</b> : ' + dragon.name + '			<br><div id=' + setUID('tabJobFeeding_FB_' + id) + ' class=jewel valign=top style="width:100%;white-space:normal;"></div>' + '			</td>' + '			<td width=10%><label>' + translate(dragon.gender) + '</label></td>' + '			<td width=5%><label>' + dragon.level + '</label></td>' + '			<td>';
 						
 						if (dragon.level < max_level) {
 							m += '	<td with=5%>' + '		<select id=' + setUID('tabJobFeeding_Sel_' + id) + ' ref=' + id + '>';
