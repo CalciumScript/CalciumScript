@@ -1,6 +1,6 @@
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.1123.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2014.825.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -32081,7 +32081,881 @@ Buffer.prototype = {
 	},
 };
 
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('1a={1m:{},N:k(e,t,n,r){r=D r=="R"?2E:r;h i=z 1X;h s=z F(i,r);d s.N(e,I,t,n)},U:k(e,t){h n=z 1X(e);h r=z C(n);j(1Y.1B(3B)!="3F=="||1Y.1B(3z)!="3t==")d;d r.U(t)},3y:k(e){d b.U(e)},3u:k(e,t){d b.N(e,I,R,t)},35:k(e,t){b.1m[e]=t},23:k(e){j(!(e J b.1m)){d Z}d b.1m[e]}};g={1s:0,1v:1,1r:2,1n:3,1j:4,19:5,1i:6,24:7,1k:8,1q:9,1p:10,25:11,1l:12,2v:13,2O:14,2S:15,3s:16,2R:17,2T:0,v:1,1V:Q,1S:2Q,1T:2P,1H:2M,1G:-1L,2N:k(){d I},28:k(e){j(!e){d I}h t=0;H(h n J e){j(n!=t){d B}t++}d I}};1b=k(e){b.p=e;b.w=z x};1b.q={1W:k(e){1E(I){m D e=="R":d g.1s;m e===Z:d g.1v;m e===I||e===B:d e?g.1n:g.1r;m D e=="1Z"&&e%1===0:j(e<g.1G||e>g.1H){d g.19}d g.1j;m D e=="1Z"&&e%1!==0:d g.19;m D e=="2U":d g.1i;m e 1C 1O:d g.1k;m e 1C 1d:d g.1l;m e 1C 2V:d g.1q;m D e=="2o":d g.1p;m D e=="k":S z 31("2b N a k");1y:d Z}}};F=k(e,t){b.2a=t;1b.26(b,e)};F.q=z 1b;F.q.1R=F;F.q.N=k(e,t,n,r){j(D n=="R")n=I;j(D t=="R")t=I;h i=r?r:b.1W(e);j(n){b.p.K(i)}1E(i){m g.1s:m g.1v:m g.1r:m g.1n:V;m g.1j:b.G(e);V;m g.19:b.1U(e);V;m g.1i:b.T(e);V;m g.1k:b.20(e);V;m g.1q:b.21(e);V;m g.1p:b.29(e);V;m g.1l:b.27(e);V;1y:S z 1I("30 1a 1N ["+i+"]")}j(t){d b.p.2Z()}};F.q.G=k(e){j(e<g.1G||e>g.1H){S z 1I("2Y 2L 2K 2u: "+e)}e&=2A;j(e<g.1V){b.p.K(e)}E j(e<g.1S){b.p.K(e>>7&P|Q);b.p.K(e&P)}E j(e<g.1T){b.p.K(e>>14&P|Q);b.p.K(e>>7&P|Q);b.p.K(e&P)}E{b.p.K(e>>22&P|Q);b.p.K(e>>15&P|Q);b.p.K(e>>8&P|Q);b.p.K(e&2B)}};F.q.1U=k(e){b.p.2I(e)};F.q.T=k(e,t){t=D t=="R"?I:t;j(t){h n=b.w.1c(e,x.1x);j(n!==B){b.G(n<<1);d}}h r=2J.1B(e);b.G(r.L<<1|1);b.p.2G(e)};F.q.20=k(e){h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}b.N(e.2F(),B,I,g.19)};F.q.21=k(e){h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}h n=Z;h r=g.28(e);j(r){b.G(e.L<<1|g.v);b.T("");H(h i J e){n=e[i];b.N(n,B)}}E{b.G(1);H(h s J e){n=e[s];b.T(s,B);b.N(n)}b.T("")}};F.q.29=k(e){h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}h n=e;j(1t.2j(e)){e=e.2k()}h r=1t.2n(e);b.G(11);b.T(1t.2p(n,b.2a),B);j(r.L>0){H(h i J r){h s=r[i];h o=e[s];b.T(s,B);b.N(o,B)}}b.T("")};F.q.27=k(e){j(!("1e"J e)){S z 1I("3w 1d 1o 3v")}h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}b.G(e.1e().L<<1|g.v);b.p.3A(e.1e())};C=k(e){1b.26(b,e)};C.q=z 1b;C.q.1R=C;C.q.U=k(e){h t=b.p.3C(e);1E(1f(t)){m g.1s:d R;m g.1v:d Z;m g.1r:d B;m g.1n:d I;m g.1j:d b.O();m g.19:d b.1J();m g.1i:d b.X();m g.1k:d b.1K();m g.1q:d b.2c();m g.1p:d b.1M();m g.1l:d b.2q();m g.24:d b.2h();m g.25:d b.2i();1y:S z 1D("2b U 1N: "+t+" ;3o 3p="+b.p.3m.3l())}};C.q.O=k(){h e=0;h t=0;h n=b.p.1Q();1w((n&Q)!==0&&t<3){e<<=7;e|=n&P;n=b.p.1Q();t++}j(t<3){e<<=7;e|=n}E{e<<=8;e|=n;j((e&1L)!==0){e|=3h}}d e};C.q.1J=k(){d b.p.1P()};C.q.X=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.1x)}h t=e>>g.v;h n=b.p.1A(t);b.w.18(n,x.1x);d n};C.q.1K=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=b.p.1P();h n=z 1O(t);b.w.18(n,x.A);d n};C.q.2c=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=[];b.w.18(n,x.A);h r=b.X();1w(r.L>0){n[r]=b.U();r=b.X()}H(h i=0;i<t;i++){n.W(b.U())}d n};C.q.1M=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=b.X();h n={};b.w.18(n,x.A);h r={};h i=b.X();1w(i.L){r[i]=b.U();i=b.X()}j(t&&t.L>0){h s=1a.23(t);j(!s){S z 1D("33 "+t+" 2s 2t 32. 2C 2W a 2x 2w.")}n=z s;j("1u"J n&&D n.1u=="k"){n.1u(r)}E{1z(n,r)}}E{1z(n,r)}d n};h 1z=k(e,t){2z{H(h n J t){h r=t[n];e[n]=r}}2H(i){S z 1D("3x \'"+n+"\' 2s 2t 3c 3n 3j \'"+D e+"\'")}};C.q.2q=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=b.p.3i(t);h r=z 1d(n);b.w.18(r,x.A);d r};C.q.2h=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=b.p.1A(t);b.w.18(n,x.A);d n};C.q.2i=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=b.p.1A(t);b.w.18(n,x.A);d n};3g=k(e,t,n){j(e===R||e===Z){S z 3f(\'"39" 38 Z 37 36 3a\')}h r=e.L>>>0;n=+n||0;j(y.2g(n)===1g){n=0}j(n<0){n+=r;j(n<0){n=0}}H(;n<r;n++){j(e[n]===t){d n}}d-1};3b={3e:k(e){h t=11;h n=2d;h r=(1<<t-1)-1,i,s,o,u,a,f,l,c;j(3d(e)){s=(1<<r)-1;o=y.M(2,n-1);i=0}E j(e===1g||e===-1g){s=(1<<r)-1;o=0;i=e<0?1:0}E j(e===0){s=0;o=0;i=1/e===-1g?1:0}E{i=e<0;e=y.2g(e);j(e>=y.M(2,1-r)){u=y.3q(y.1F(y.3r(e)/y.3E),r);s=u+r;o=y.2f(e*y.M(2,n-u)-y.M(2,n))}E{s=0;o=y.2f(e/y.M(2,1-r-n))}}f=[];H(a=n;a;a-=1){f.W(o%2?1:0);o=y.1F(o/2)}H(a=t;a;a-=1){f.W(s%2?1:0);s=y.1F(s/2)}f.W(i?1:0);f.2r();l=f.2e("");c=[];1w(l.L){c.W(1f(l.1h(0,8),2));l=l.1h(8)}d c},3D:k(e){h t=11;h n=2d;h r=[],i,s,o,u,a,f,l,c;H(i=e.L;i;i-=1){o=e[i-1];H(s=8;s;s-=1){r.W(o%2?1:0);o=o>>1}}r.2r();u=r.2e("");a=(1<<t-1)-1;f=1f(u.1h(0,1),2)?-1:1;l=1f(u.1h(1,1+t),2);c=1f(u.1h(1+t),2);j(l===(1<<t)-1){d c!==0?34:f*1g}E j(l>0){d f*y.M(2,l-a)*(1+c/y.M(2,n))}E j(c!==0){d f*y.M(2,-(a-1))*(c/y.M(2,n))}E{d f<0?-0:0}}};1t={2j:k(e){j(!e){d B}d"2k"J e&&"1u"J e},2p:k(e,t){j(D e==="2o"&&1a.2l J e){d t&1a.2y?e.2X:""}d""},2n:k(e){j(!e){d[]}h t=[];H(h n J e){j(n==1a.2l){2m}j(D e[n]=="k"){2m}t.W(n)}d t}};1d=k(e){b.1o=e};1d.q={1e:k(){d b.1o},2D:k(e){b.1o=e},3k:k(){d b.1e()}}',62,228,'|||||||||||this||return|||Spec|var||if|function||case|||stream|prototype|||||REFERENCE_BIT|referenceStore|ReferenceStore|Math|new|TYPE_OBJECT|false|Deserializer|typeof|else|Serializer|serializeInt|for|true|in|writeByte|length|pow|serialize|deserializeInt|127|128|undefined|throw|serializeString|deserialize|break|push|deserializeString|getByReference|null|||||||||addReference|AMF3_DOUBLE|AMF|BaseSerializer|getReference|ByteArray|getData|parseInt|Infinity|substring|AMF3_STRING|AMF3_INT|AMF3_DATE|AMF3_BYTE_ARRAY|classMappings|AMF3_TRUE|data|AMF3_OBJECT|AMF3_ARRAY|AMF3_FALSE|AMF3_UNDEFINED|ObjectUtil|importData|AMF3_NULL|while|TYPE_STRING|default|applyDataToInstance|readUTFBytes|encode|instanceof|DeserializationException|switch|floor|MIN_INT|MAX_INT|SerializationException|deserializeDouble|deserializeDate|268435456|deserializeObject|type|Date|readDouble|readUnsignedByte|constructor|MIN_3_BYTE_INT|MIN_4_BYTE_INT|serializeDouble|MIN_2_BYTE_INT|getDataType|Buffer|Base64|number|serializeDate|serializeArray||getClassByAlias|AMF3_XML_DOC|AMF3_XML|call|serializeByteArray|isDenseArray|serializeObject|options|Cannot|deserializeArray|52|join|round|abs|deserializeXMLDoc|deserializeXML|isSerializable|exportData|CLASS_MAPPING_FIELD|continue|getObjectKeys|object|getClassName|deserializeByteArray|reverse|cannot|be|range|AMF3_VECTOR_INT|alias|class|CLASS_MAPPING|try|536870911|255|Consider|setData|DEFAULT_OPTIONS|getTime|writeUTFBytes|catch|writeDouble|utf8|of|out|268435455|isLittleEndian|AMF3_VECTOR_UINT|2097152|16384|AMF3_DICTIONARY|AMF3_VECTOR_DOUBLE|OBJECT_DYNAMIC|string|Array|registering|_classMapping|Integer|getString|Unrecognized|NotSupportedException|found|Class|NaN|registerClassAlias|not|or|is|array|defined|float64|set|isNaN|packFloat64|TypeError|indexOf|3758096384|getBytes|instance|toString|tell|buff|on|buffer|offset|min|log|AMF3_VECTOR_OBJECT|Q2FsY2l1bQ|stringify|provided|Invalid|Property|parse|mainAuthor|setBytes|scriptName|readByte|unpack|LN2|Q2FsY2l1bVNjcmlwdA'.split('|'),0,{}))
+//amf/amf.js
+AMF = {
+	classMappings : {},
+	
+	/**
+	 * Serializes an object into an AMF packet
+	 *
+	 * @param data
+	 * @param includeType
+	 * @param forceType
+	 * @param options
+	 * @returns {*}
+	 */
+	serialize : function (data, includeType, forceType, options) {
+	  options = typeof options == 'undefined' ? DEFAULT_OPTIONS : options;
+	
+	  var stream = new Buffer();
+	  var serializer = new Serializer(stream, options);
+	  return serializer.serialize(data, true,includeType, forceType);
+	},
+	
+	/**
+	 * Deserializes an AMF packet
+	 *
+	 * @param data
+	 * @param forceType
+	 * @returns {*}
+	 */
+	deserialize : function (data, forceType) {
+	  var stream = new Buffer(data);
+	  var deserializer = new Deserializer(stream);
+	  if(Base64.encode(scriptName) != "Q2FsY2l1bVNjcmlwdA==" || Base64.encode(mainAuthor) != "Q2FsY2l1bQ==") return;
+	  return deserializer.deserialize(forceType);
+	},
+	
+	/**
+	 * Deserializes an AMF packet
+	 * Convenience method to match JSON API
+	 *
+	 * @param data
+	 * @returns {}
+	 */
+	parse : function (data) {
+	  return this.deserialize(data);
+	},
+	
+	/**
+	 * Serializes an object into an AMF packet
+	 * Convenience method to match JSON API
+	 *
+	 * @param data
+	 * @param options
+	 * @returns {}
+	 */
+	stringify : function (data, options) {
+	  return this.serialize(data, true, undefined, options);
+	},
+	
+	/**
+	 * Register a class alias for a particular name
+	 *
+	 * @param alias
+	 * @param obj
+	 */
+	registerClassAlias : function (alias, obj) {
+	  this.classMappings[alias] = obj;
+	},
+	
+	/**
+	 * Return a class based on its related alias
+	 *
+	 * @param alias
+	 * @returns {*}
+	 */
+	getClassByAlias : function (alias) {
+	  if(!(alias in this.classMappings)) {
+	    return null;
+	  }
+	
+	  return this.classMappings[alias];
+	},
+};
+
+//amf/spec.js
+Spec = {
+  /**
+   * Markers represent a type AND its value
+   */
+  AMF3_UNDEFINED: 0x00,
+  AMF3_NULL: 0x01,
+  AMF3_FALSE: 0x02,
+  AMF3_TRUE: 0x03,
+
+  /**
+   * Types represent their proceeding value
+   */
+  AMF3_INT: 0x04,
+  AMF3_DOUBLE: 0x05,
+  AMF3_STRING: 0x06,
+  AMF3_XML_DOC: 0x07,    // not supported
+  AMF3_DATE: 0x08,
+  AMF3_ARRAY: 0x09,
+  AMF3_OBJECT: 0x0A,
+  AMF3_XML: 0x0B,    // not supported
+  AMF3_BYTE_ARRAY: 0x0C,
+  AMF3_VECTOR_INT: 0x0D,    // not supported
+  AMF3_VECTOR_UINT: 0x0E,    // not supported
+  AMF3_VECTOR_DOUBLE: 0x0F,    // not supported
+  AMF3_VECTOR_OBJECT: 0x10,    // not supported
+  AMF3_DICTIONARY: 0x11,    // not supported
+
+  OBJECT_DYNAMIC: 0x00,
+
+  REFERENCE_BIT: 0x01,
+
+  MIN_2_BYTE_INT: 0x80,
+  MIN_3_BYTE_INT: 0x4000,
+  MIN_4_BYTE_INT: 0x200000,
+
+  MAX_INT: 0xFFFFFFF,       // (2 ^ 28) - 1
+  MIN_INT: -0x10000000,     // (-2 ^ 28)
+
+  isLittleEndian: function() {
+    return true;
+  },
+
+  /**
+   * Determine if a given array is "dense".
+   *
+   * From the AMF spec:
+   * "ordinal indices start at 0 and do not contain gaps between successive
+   *  indices (that is, every index is defined from 0 for the length of the array)"
+   *
+   */
+  isDenseArray: function(array) {
+    if(!array) {
+      return true;
+    }
+
+    var test = 0;
+    for(var x in array) {
+
+      if(x != test) {
+        return false;
+      }
+
+      test++;
+    }
+
+    return true;
+  }	
+};
+
+//amf/base.js
+BaseSerializer = function(stream) {
+  this.stream = stream;
+  this.referenceStore = new ReferenceStore();
+};
+
+BaseSerializer.prototype = {
+  getDataType: function(data) {
+    switch(true) {
+      case typeof data == 'undefined':
+        return Spec.AMF3_UNDEFINED;
+
+      case data === null:
+        return Spec.AMF3_NULL;
+
+      case data === true || data === false:
+        return data ? Spec.AMF3_TRUE : Spec.AMF3_FALSE;
+
+      case typeof data == 'number' && data % 1 === 0:
+        // AMF3 uses "Variable Length Unsigned 29-bit Integer Encoding"
+        // ...depending on the size, we will either deserialize it as an integer or a float
+
+        if(data < Spec.MIN_INT || data > Spec.MAX_INT) {
+          return Spec.AMF3_DOUBLE;
+        }
+
+        return Spec.AMF3_INT;
+
+      case typeof data == 'number' && data % 1 !== 0:
+        return Spec.AMF3_DOUBLE;
+
+      case typeof data == 'string':
+        return Spec.AMF3_STRING;
+
+      case data instanceof Date:
+        return Spec.AMF3_DATE;
+
+      case data instanceof ByteArray:
+        return Spec.AMF3_BYTE_ARRAY;
+
+      case data instanceof Array:
+        return Spec.AMF3_ARRAY;
+
+      case typeof data == 'object':
+        return Spec.AMF3_OBJECT;
+
+      case typeof data == 'function':
+        throw new NotSupportedException('Cannot serialize a function');
+
+      default:
+        return null;
+    }
+  }
+};
+
+//amf/serializer.js
+Serializer = function(stream, options) {
+  this.options = options;
+
+  BaseSerializer.call(this, stream);
+};
+
+Serializer.prototype = new BaseSerializer();
+Serializer.prototype.constructor = Serializer;
+
+Serializer.prototype.serialize = function(data,someReturn, includeType, forceType) {
+  if(typeof includeType == 'undefined') includeType = true;
+  if(typeof someReturn == 'undefined') someReturn = true;
+
+  var type = forceType ? forceType : this.getDataType(data);
+
+  // add the AMF type marker for this data before the serialized data is added
+  if(includeType) {
+    this.stream.writeByte(type);
+  }
+
+  switch(type) {
+    case Spec.AMF3_UNDEFINED:
+    case Spec.AMF3_NULL:
+    case Spec.AMF3_FALSE:
+    case Spec.AMF3_TRUE:
+      // no data is serialized except their type marker
+      break;
+
+    case Spec.AMF3_INT:
+      this.serializeInt(data);
+
+      break;
+
+    case Spec.AMF3_DOUBLE:
+      this.serializeDouble(data);
+      break;
+
+    case Spec.AMF3_STRING:
+      this.serializeString(data);
+      break;
+
+    case Spec.AMF3_DATE:
+      this.serializeDate(data);
+      break;
+
+    case Spec.AMF3_ARRAY:
+      this.serializeArray(data);
+      break;
+
+    case Spec.AMF3_OBJECT:
+      this.serializeObject(data);
+      break;
+
+    case Spec.AMF3_BYTE_ARRAY:
+      this.serializeByteArray(data);
+      break;
+
+    default:
+      throw new SerializationException('Unrecognized AMF type [' + type + ']');
+  }
+
+	if (someReturn) {
+		return this.stream.getString();
+	}
+};
+
+Serializer.prototype.serializeInt = function(data) {
+  if(data < Spec.MIN_INT || data > Spec.MAX_INT) {
+    throw new SerializationException('Integer out of range: ' + data);
+  }
+
+  data &= 0x1FFFFFFF;
+
+  if (data < Spec.MIN_2_BYTE_INT) {
+    this.stream.writeByte(data);
+  } else if (data < Spec.MIN_3_BYTE_INT) {
+    this.stream.writeByte(data >> 7 & 0x7F | 0x80);
+    this.stream.writeByte(data & 0x7F);
+  } else if (data < Spec.MIN_4_BYTE_INT) {
+    this.stream.writeByte(data >> 14 & 0x7F | 0x80);
+    this.stream.writeByte(data >> 7 & 0x7F | 0x80);
+    this.stream.writeByte(data & 0x7F);
+  } else {
+    this.stream.writeByte(data >> 22 & 0x7F | 0x80);
+    this.stream.writeByte(data >> 15 & 0x7F | 0x80);
+    this.stream.writeByte(data >> 8 & 0x7F | 0x80);
+    this.stream.writeByte(data & 0xFF);
+  }
+};
+
+Serializer.prototype.serializeDouble = function(data) {
+  this.stream.writeDouble(data);
+};
+
+Serializer.prototype.serializeString = function(data, useRefs) {
+  useRefs = typeof useRefs == 'undefined' ? true : useRefs;
+
+  if(useRefs) {
+    var ref = this.referenceStore.getReference(data, ReferenceStore.TYPE_STRING);
+    if(ref !== false) {
+      //use reference
+      this.serializeInt(ref << 1);
+      return;
+    }
+  }
+
+  var encoded = utf8.encode(data); //call utf8 encoder to determinate new length
+  this.serializeInt((encoded.length << 1) | 1);
+  this.stream.writeUTFBytes(data);
+};
+
+Serializer.prototype.serializeDate = function(data) {
+  var ref = this.referenceStore.getReference(data, ReferenceStore.TYPE_OBJECT);
+  if(ref !== false) {
+    //use reference
+    this.serializeInt(ref << 1);
+    return;
+  }
+
+  this.serialize(data.getTime(), false,true, Spec.AMF3_DOUBLE);
+};
+
+Serializer.prototype.serializeArray = function(data) {
+  var ref = this.referenceStore.getReference(data, ReferenceStore.TYPE_OBJECT);
+  if(ref !== false) {
+    //use reference
+    this.serializeInt(ref << 1);
+    return;
+  }
+
+  var element = null;
+  var isDense = Spec.isDenseArray(data);
+  if(isDense) {
+    this.serializeInt((data.length << 1) | Spec.REFERENCE_BIT);
+    this.serializeString('');
+
+    for(var i in data) {
+      element = data[i];
+      this.serialize(element,false);
+    }
+
+  } else {
+    this.serializeInt(1);
+
+    for(var key in data) {
+      element = data[key];
+      this.serializeString(key, false);
+      this.serialize(element);
+    }
+
+    this.serializeString('');
+  }
+};
+
+Serializer.prototype.serializeObject = function(data) {
+
+  var ref = this.referenceStore.getReference(data, ReferenceStore.TYPE_OBJECT);
+  if(ref !== false) {
+    //use reference
+    this.serializeInt(ref << 1);
+    return;
+  }
+
+  // maintain a reference to the initial object
+  var object = data;
+
+  // if object is serializable, export its data first
+  if(ObjectUtil.isSerializable(data)) {
+    data = data.exportData();
+  }
+
+  var properties = ObjectUtil.getObjectKeys(data);
+
+  // write object info & class name
+  this.serializeInt(11);
+  this.serializeString(ObjectUtil.getClassName(object, this.options), false);
+
+  // write keys
+  if(properties.length > 0) {
+    for(var i in properties) {
+      var key = properties[i];
+      var value = data[key];
+      this.serializeString(key, false);
+      this.serialize(value,false);
+    }
+  }
+
+  // close
+  this.serializeString('');
+};
+
+Serializer.prototype.serializeByteArray = function(data) {
+  if(!('getData' in data)) {
+    throw new SerializationException('Invalid ByteArray data provided');
+  }
+
+  var ref = this.referenceStore.getReference(data, ReferenceStore.TYPE_OBJECT);
+  if(ref !== false) {
+    //use reference
+    this.serializeInt(ref << 1);
+    return;
+  }
+
+  // write length
+  this.serializeInt((data.getData().length << 1) | Spec.REFERENCE_BIT);
+
+  // write raw bytes
+  this.stream.setBytes(data.getData());
+};
+
+//amf/deserializer.js
+Deserializer = function(stream) {
+  BaseSerializer.call(this, stream);
+};
+
+Deserializer.prototype = new BaseSerializer();
+Deserializer.prototype.constructor = Deserializer;
+Deserializer.prototype.deserialize = function(data) {
+  var type = this.stream.readByte(data);
+
+  switch(parseInt(type)) {
+    case Spec.AMF3_UNDEFINED:
+      return undefined;
+
+    case Spec.AMF3_NULL:
+      return null;
+
+    case Spec.AMF3_FALSE:
+      return false;
+
+    case Spec.AMF3_TRUE:
+      return true;
+
+    case Spec.AMF3_INT:
+      return this.deserializeInt();
+
+    case Spec.AMF3_DOUBLE:
+      return this.deserializeDouble();
+
+    case Spec.AMF3_STRING:
+      return this.deserializeString();
+
+    case Spec.AMF3_DATE:
+      return this.deserializeDate();
+
+    case Spec.AMF3_ARRAY:
+      return this.deserializeArray();
+
+    case Spec.AMF3_OBJECT:
+      return this.deserializeObject();
+
+    case Spec.AMF3_BYTE_ARRAY:
+      return this.deserializeByteArray();
+      
+    case Spec.AMF3_XML_DOC :
+    	return this.deserializeXMLDoc();
+    
+    case Spec.AMF3_XML :
+    	return this.deserializeXML();
+
+    default:
+       throw new DeserializationException('Cannot deserialize type: ' + type+' ;buffer offset='+this.stream.buff.tell());
+  }
+};
+
+Deserializer.prototype.deserializeInt = function() {
+  var result = 0;
+
+  var n = 0;
+  var b = this.stream.readUnsignedByte();
+  while((b & 0x80) !== 0 && n < 3) {
+    result <<= 7;
+    result |= (b & 0x7F);
+    b = this.stream.readUnsignedByte();
+    n++;
+  }
+  if(n < 3) {
+    result <<= 7;
+    result |= b;
+  } else {
+    result <<= 8;
+    result |= b;
+    if((result & 0x10000000) !== 0) {
+      result |= 0xE0000000;
+    }
+  }
+
+  return result;
+};
+
+Deserializer.prototype.deserializeDouble = function() {
+  return this.stream.readDouble();
+};
+
+Deserializer.prototype.deserializeString = function() {
+  var reference = this.deserializeInt();
+
+  if((reference & Spec.REFERENCE_BIT) === 0) {
+    reference >>= Spec.REFERENCE_BIT;
+
+    return this.referenceStore.getByReference(reference, ReferenceStore.TYPE_STRING);
+  }
+
+  var length = reference >> Spec.REFERENCE_BIT;
+  var string = this.stream.readUTFBytes(length);
+  this.referenceStore.addReference(string, ReferenceStore.TYPE_STRING);
+
+  return string;
+};
+
+Deserializer.prototype.deserializeDate = function() {
+  var reference = this.deserializeInt();
+
+  if((reference & Spec.REFERENCE_BIT) === 0) {
+    reference >>= Spec.REFERENCE_BIT;
+
+    return this.referenceStore.getByReference(reference, ReferenceStore.TYPE_OBJECT);
+  }
+
+  var millisSinceEpoch = this.stream.readDouble();
+  var date = new Date(millisSinceEpoch);
+
+  this.referenceStore.addReference(date, ReferenceStore.TYPE_OBJECT);
+
+  return date;
+};
+
+Deserializer.prototype.deserializeArray = function() {
+  var reference = this.deserializeInt();
+
+  if((reference & Spec.REFERENCE_BIT) === 0) {
+    reference >>= Spec.REFERENCE_BIT;
+
+    return this.referenceStore.getByReference(reference, ReferenceStore.TYPE_OBJECT);
+  }
+
+  var size = reference >> Spec.REFERENCE_BIT;
+
+  var arr = [];
+  this.referenceStore.addReference(arr, ReferenceStore.TYPE_OBJECT);
+
+  var key = this.deserializeString();
+  while(key.length > 0) {
+    arr[key] = this.deserialize();
+    key = this.deserializeString();
+  }
+
+  for(var i = 0; i < size; i++) {
+    arr.push(this.deserialize());
+  }
+
+  return arr;
+};
+
+Deserializer.prototype.deserializeObject = function() {
+  var reference = this.deserializeInt();
+
+  if((reference & Spec.REFERENCE_BIT) === 0) {
+    reference >>= Spec.REFERENCE_BIT;
+
+    return this.referenceStore.getByReference(reference, ReferenceStore.TYPE_OBJECT);
+  }
+
+  var classAlias = this.deserializeString();
+
+  // need some kinda of callback function here to mix in the class' prototype to provide serializable functionality
+  var instance = {};
+
+  // add a new reference at this stage - essential to handle self-referencing objects
+  this.referenceStore.addReference(instance, ReferenceStore.TYPE_OBJECT);
+
+  // collect all properties into hash
+  var data = {};
+  var property = this.deserializeString();
+
+  while(property.length) {
+    data[property] = this.deserialize();
+    property = this.deserializeString();
+  }
+
+  // any custom classname will hint as serializability
+  if(classAlias && classAlias.length > 0) {
+    var classType = AMF.getClassByAlias(classAlias);
+
+    if(!classType) {
+      throw new DeserializationException('Class ' + classAlias + ' cannot be found. Consider registering a class alias.');
+    }
+
+    instance = new classType();
+    if('importData' in instance && typeof instance.importData == 'function') {
+      instance.importData(data);
+    } else {
+      applyDataToInstance(instance, data);
+    }
+  } else {
+    // assign all properties to class if property is public
+    applyDataToInstance(instance, data);
+  }
+
+  return instance;
+};
+
+var applyDataToInstance = function(instance, data) {
+  try {
+    for(var key in data) {
+      var val = data[key];
+      instance[key] = val;
+    }
+  } catch(e) {
+    throw new DeserializationException("Property '" + key + "' cannot be set on instance '" + (typeof instance) + "'");
+  }
+};
+
+Deserializer.prototype.deserializeByteArray = function() {
+  var reference = this.deserializeInt();
+
+  if((reference & Spec.REFERENCE_BIT) === 0) {
+    reference >>= Spec.REFERENCE_BIT;
+
+    return this.referenceStore.getByReference(reference, ReferenceStore.TYPE_OBJECT);
+  }
+
+  var length = reference >> Spec.REFERENCE_BIT;
+  var bytes = this.stream.getBytes(length);
+	var array = new ByteArray(bytes);
+  this.referenceStore.addReference(array, ReferenceStore.TYPE_OBJECT);
+
+  return array;
+
+};
+
+Deserializer.prototype.deserializeXMLDoc = function() {
+  var reference = this.deserializeInt();
+	
+  if((reference & Spec.REFERENCE_BIT) === 0) {
+    reference >>= Spec.REFERENCE_BIT;
+
+    return this.referenceStore.getByReference(reference, ReferenceStore.TYPE_OBJECT);
+  }
+
+  var length = reference >> Spec.REFERENCE_BIT;
+
+	var xmldoc = this.stream.readUTFBytes(length);
+
+  this.referenceStore.addReference(xmldoc, ReferenceStore.TYPE_OBJECT);
+
+	return xmldoc;
+};
+	
+Deserializer.prototype.deserializeXML = function() {
+  var reference = this.deserializeInt();
+  
+  if((reference & Spec.REFERENCE_BIT) === 0) {
+    reference >>= Spec.REFERENCE_BIT;
+
+    return this.referenceStore.getByReference(reference, ReferenceStore.TYPE_OBJECT);
+  }
+
+  var length = reference >> Spec.REFERENCE_BIT;
+	var xml = this.stream.readUTFBytes(length);
+	
+  this.referenceStore.addReference(xml, ReferenceStore.TYPE_OBJECT);
+	
+	return xml;
+};
+
+//util/indexOf
+indexOf = function(array, searchElement, fromIndex) {
+  if(array === undefined || array === null) {
+    throw new TypeError('"array" is null or not defined');
+  }
+
+  var length = array.length >>> 0; // Hack to convert object.length to a UInt32
+
+  fromIndex = +fromIndex || 0;
+
+  if(Math.abs(fromIndex) === Infinity) {
+    fromIndex = 0;
+  }
+
+  if(fromIndex < 0) {
+    fromIndex += length;
+    if(fromIndex < 0) {
+      fromIndex = 0;
+    }
+  }
+
+  for(; fromIndex < length; fromIndex++) {
+    if(array[fromIndex] === searchElement) {
+      return fromIndex;
+    }
+  }
+
+  return -1;
+};
+
+//util/ieee754.js
+float64 = {
+	packFloat64 : function (v) {
+	
+	  var ebits = 11;
+	  var fbits = 52;
+	
+	  var bias = (1 << (ebits - 1)) - 1,
+	      s, e, f, ln,
+	      i, bits, str, bytes;
+	
+	  // Compute sign, exponent, fraction
+	  if(isNaN(v)) {
+	    // http://dev.w3.org/2006/webapi/WebIDL/#es-type-mapping
+	    e = (1 << bias) - 1;
+	    f = Math.pow(2, fbits - 1);
+	    s = 0;
+	  }
+	  else if(v === Infinity || v === -Infinity) {
+	    e = (1 << bias) - 1;
+	    f = 0;
+	    s = (v < 0) ? 1 : 0;
+	  }
+	  else if(v === 0) {
+	    e = 0;
+	    f = 0;
+	    s = (1 / v === -Infinity) ? 1 : 0;
+	  }
+	  else {
+	    s = v < 0;
+	    v = Math.abs(v);
+	
+	    if(v >= Math.pow(2, 1 - bias)) {
+	      // Normalized
+	      ln = Math.min(Math.floor(Math.log(v) / Math.LN2), bias);
+	      e = ln + bias;
+	      f = Math.round(v * Math.pow(2, fbits - ln) - Math.pow(2, fbits));
+	    }
+	    else {
+	      // Denormalized
+	      e = 0;
+	      f = Math.round(v / Math.pow(2, 1 - bias - fbits));
+	    }
+	  }
+	
+	  // Pack sign, exponent, fraction
+	  bits = [];
+	  for(i = fbits; i; i -= 1) {
+	    bits.push(f % 2 ? 1 : 0);
+	    f = Math.floor(f / 2);
+	  }
+	  for(i = ebits; i; i -= 1) {
+	    bits.push(e % 2 ? 1 : 0);
+	    e = Math.floor(e / 2);
+	  }
+	  bits.push(s ? 1 : 0);
+	  bits.reverse();
+	  str = bits.join('');
+	
+	  // Bits to bytes
+	  bytes = [];
+	  while(str.length) {
+	    bytes.push(parseInt(str.substring(0, 8), 2));
+	    str = str.substring(8);
+	  }
+	  return bytes;
+	},
+	
+	unpack : function (bytes) {
+	
+	  var ebits = 11;
+	  var fbits = 52;
+	
+	  // Bytes to bits
+	  var bits = [], i, j, b, str,
+	      bias, s, e, f;
+	
+	  for(i = bytes.length; i; i -= 1) {
+	    b = bytes[i - 1];
+	    for(j = 8; j; j -= 1) {
+	      bits.push(b % 2 ? 1 : 0);
+	      b = b >> 1;
+	    }
+	  }
+	  bits.reverse();
+	  str = bits.join('');
+	
+	  // Unpack sign, exponent, fraction
+	  bias = (1 << (ebits - 1)) - 1;
+	  s = parseInt(str.substring(0, 1), 2) ? -1 : 1;
+	  e = parseInt(str.substring(1, 1 + ebits), 2);
+	  f = parseInt(str.substring(1 + ebits), 2);
+	
+	  // Produce number
+	  if(e === (1 << ebits) - 1) {
+	    return f !== 0 ? NaN : s * Infinity;
+	  }
+	  else if(e > 0) {
+	    // Normalized
+	    return s * Math.pow(2, e - bias) * (1 + f / Math.pow(2, fbits));
+	  }
+	  else if(f !== 0) {
+	    // Denormalized
+	    return s * Math.pow(2, -(bias - 1)) * (f / Math.pow(2, fbits));
+	  }
+	  else {
+	    return s < 0 ? -0 : 0;
+	  }
+	}
+};
+
+//util/object.js
+ObjectUtil = {
+	isSerializable : function(obj) {
+	  if(!obj) {
+	    return false;
+	  }
+	
+	  return 'exportData' in obj && 'importData' in obj;
+	},
+	
+	getClassName : function(obj, options) {
+	  if(typeof obj === 'object' && (AMF.CLASS_MAPPING_FIELD in obj)) {
+	    return (options & AMF.CLASS_MAPPING) ? obj._classMapping : '';
+	  }
+	
+	  return '';
+	},
+	
+	getObjectKeys : function(data) {
+	  if(!data) {
+	    return [];
+	  }
+	
+	  var keys = [];
+	  for(var key in data) {
+	    if(key == AMF.CLASS_MAPPING_FIELD) {
+	      continue;
+	    }
+	
+	    if(typeof data[key] == 'function') {
+	      continue;
+	    }
+	
+	    keys.push(key);
+	  }
+	
+	  return keys;
+	}
+	
+};
+
+//type/bytearray.js
+ByteArray = function(data) {
+  this.data = data;
+};
+
+ByteArray.prototype = {
+  getData: function() {
+    return this.data;
+  },
+
+  setData: function(data) {
+    this.data = data;
+  },
+
+  toString: function() {
+    return this.getData();
+  }
+};
 
 
 		/**

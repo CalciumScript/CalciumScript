@@ -20,9 +20,9 @@
    },
    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxru5yYvt2fGykwgcRfaXnwjhQgVEu8IEmnnUeHRQ0Irlsmvq7Df4h05Fubnvj5pOirwGgTXySXbraRRPIWUnbyr2uhh0+L4uAyH08gRGRzM5u7fG+OE1zisF4/nrho00d5WW/netqpZCJEvs+SYYHMKKcGyneofqntYaNPm5vZATwHtk3Q73L5o1Ob46s0aw4yxEudKDLOzaxDOj/PeDKF4/NBXy61X0DPbkX9gh5ubMwizwX1aIUMd+iAuCUAqjbvd/JB1tiaQV+aNwQJ1bcn7MQasfdwurLKRYGF8GNxI2ZVaRGoJYEAAaUpdoYggNKgo/E1+kmU6jZahMngA+XwIDAQAB",
    "manifest_version": 2,
-   "name": "KabaListics - DoA Power Tools Plus V",
+   "name": "Calcium Script - DoA Power Tools Plus V",
    "permissions": [ "background", "storage", "notifications", "unlimitedStorage", "*://*/*" ],
    "short_name": "DoA Calcium",
    "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "2014.825.1"
+   "version": "2014.1123.1"
 }
