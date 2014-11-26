@@ -1,6 +1,6 @@
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.1123.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2014.1126.2', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -767,13 +767,29 @@
 						},
 						forge: {
 							enableAutoMission : false,
+							enableAutoForge: false,
+							crush: {
+								cbAuto:false,
+								select:'',
+								max:10
+							},
+							equipment: {
+								cbAuto: false,
+								select: '',
+								max: 50
+							},
+							ingredient: {
+								cbAuto: false,
+								select: '',
+								max: 50
+							},
 							CapitalAdventurer : {
-								cbAuto : true,
-								mission : 'keeping_the_peace' 
+								cbAuto : false,
+								mission : '' 
 							},
 							WaterOutpostAdventurer : {
-								cbAuto : true,
-								mission : 'keeping_the_peace'
+								cbAuto : false,
+								mission : ''
 							}
 						},
 						trade: {
@@ -2771,6 +2787,22 @@
 				p['timestamp'] = toNum(serverTime());
 				return p;
 			},
+			getForge: function() {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				
+				new MyAjaxRequest('forge', 'forge/forge.json', p, mycb, false);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Forge.data = rslt.dat.forge;
+					} else {
+						verboseLog('Ajax.getForge ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					return;
+				}
+			},
 			repairHammer: function(callback) {
 				var t = MyAjax;
 				var p = {};
@@ -2799,7 +2831,7 @@
 
 				function mycb(rslt) {
 					if (rslt.ok) {
-						//Seed.checkAddJob(rslt.dat.result.job);
+						Seed.player.forge.adventurers = rslt.dat.result.adventurers;
 					} else {
 						verboseLog('Ajax.claimMission ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
@@ -2826,6 +2858,46 @@
 					return;
 				}
 			},
+			forgeItem: function(name, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['output_name']=name;
+				
+				new MyAjaxRequest('forge', 'forge/forge_item', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
+					} else {
+						verboseLog('Ajax.forgeCrush ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
+					return;
+				}
+			},
+			forgeCrush: function(equipmentId, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['player_forge_equipment_id']=equipmentId;
+				
+				new MyAjaxRequest('forge', 'forge/disenchant_equipment', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
+					} else {
+						verboseLog('Ajax.forgeCrush ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
+					return;
+				}
+			},
 			forgeInfo: function(callback) {
 				var t = MyAjax;
 				var p = {};
@@ -2835,7 +2907,9 @@
 				
 				function mycb(rslt) {
 					if (rslt.ok) {
-						
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
 					} else {
 						verboseLog('Ajax.forgeInfo ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
@@ -9726,8 +9800,13 @@
 				} else return t.que[id] ? true : false;
 			}
 		};
+		/******************************** Forge package ***********************/
+		var Forge = {
+			data: {}
+		}
 		/******************************** Seed package *******************************/
 		var Seed = {
+			blacksmith: {},
 			cities: [],
 			/* cities */
 			cityIdx: {},
@@ -9803,6 +9882,7 @@
 				clearInterval(t.tickTimer);
 				t.tickTimer = setInterval(t.tick, 1000);
 				MyAjax.getCustomization();
+				MyAjax.getForge();
 			},
 
 			fetchPlayer: function(callback, options) {
@@ -10902,7 +10982,8 @@
 				'research',
 				'quests',
 				'trading',
-				'activerecord'
+				'activerecord',
+				'forge'
 			],
 
 			init: function(notify) {
@@ -10918,14 +10999,6 @@
 					if (notify)
 						notify(rslt);
 				});
-				//t.fetchLocale(function(rslt) {
-				//	if (rslt.ok) {
-				//		verboseLog(translate('Locale data was Successfully requested from the sever'));
-				//		t.loaded = true;
-				//		t.fixResults();
-				//	} else verboseLog('fetchLocale ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-				//	if (notify) notify(rslt);
-				//});
 			},
 
 			fetchNewLocale: function(notify) {
@@ -10948,10 +11021,6 @@
 										Translation.tmpXML[attrname] = cloneProps(temp[attrname]);
 								}
 								Translation.xml = Translation.tmpXML;
-								//downloadDataURI({
-								//	filename: "XML.txt",
-								//	data: "data:application/text;base64," + Base64.encode(JSON.stringify(Translation.tmpXML))
-								//});
 							}
 							if (notify)
 								notify(rslt2);
@@ -11200,6 +11269,10 @@
 			quests: function(key, subkey) {
 				subkey = subkey != undefined ? subkey : 'name';
 				return Translation.getContent('quests', key, subkey);
+			},
+			forge: function(key, subkey) {
+				subkey = subkey != undefined ? subkey : 'name';
+				return Translation.getContent('forge', key, subkey);
 			}
 		};
 
@@ -20380,18 +20453,15 @@
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">';
 				
 				for(var i=0;i<advs.length;i++) {
-					var inMission=(Jobs.getJobs(Manifest.data.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+					var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
 					var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
-					var adventurer = translate('adventurers');
-					if(advs[i].type == 'CapitalAdventurer')
-						adventurer = translate('adventurer-capitaladventurer');
-					if(advs[i].type == 'WaterOutpostAdventurer')
-						adventurer = translate('adventurer-wateroutpostadventurer');
-					m += '<div class=' + UID['subtitle'] + '><b>' + adventurer + getXPNextLevel(advs[i].experience)+ '</b></div>';
+					var adventurer = translate('adventurer-'+advs[i].type.toLowerCase());
+					
+					m += '<div class=' + UID['subtitle'] + '><b>' + adventurer + getXPNextLevel(advs[i].experience, advs[i].type)+ '</b></div>';
 					m += '<table><tr><td><INPUT type="checkbox" id="'+setUID('ckAdv_' + advs[i].type)+'" ref="'+advs[i].type+'" '+(Data.options.forge[advs[i].type].cbAuto ? 'checked' : '')+'> ';
 					m += translate('missions') + ' : <SELECT ref="'+advs[i].type+'_'+advs[i].adventurer_id+'" id='+setUID('selMission_' + advs[i].type)+'>';
-					for(var missionN in Manifest.data.forge.missions){
-						var mission = Manifest.data.forge.missions[missionN];
+					for(var missionN in Forge.data.missions){
+						var mission = Forge.data.missions[missionN];
 						m += '<option value="'+mission.type+'" '+(Data.options.forge[advs[i].type].mission==mission.type ?  'selected' : '')+'>'+translate('mission-'+mission.type.replace(/_/g, '-'))+'</option>';
 					}
 					m += '</SELECT> </td>';
@@ -20400,6 +20470,7 @@
 					m += '</tr>';
 					m += '</table>';
 					m += '<span id='+setUID(advs[i].type+'_descMission')+'></span>';
+					
 					lBG.push('btnMissionAdvGo_'+advs[i].adventurer_id);
 					lBC.push('btnMissionAdvClaim_'+advs[i].adventurer_id);
 					lS.push('selMission_' + advs[i].type);
@@ -20432,9 +20503,8 @@
 				function onChangeMission(event) {
 					var ref = $(event.target.id).readAttribute('ref').split('_');
 					var idSel = UID['selMission_'+ref[0]+'_'+ref[1]];
-					//var e = $(idSel);
 					var missionType = event.target.options[event.target.selectedIndex].value;
-					var mission = Manifest.data.forge.missions[missionType];
+					var mission = Forge.data.missions[missionType];
 					
 					Data.options.forge[ref[0]].mission = missionType;
 					
@@ -20461,7 +20531,7 @@
 							var qtyP = 0;
 							var ing = Seed.player.forge.items.ingredients;
 							for(var i=0;i<ing.length;i++) {
-								if(ing[i].name=it) {
+								if(ing[i].name==it) {
 									qtyP=ing[i].quantity;
 									break;
 								}
@@ -20475,7 +20545,7 @@
 					$(UID[ref[0]+'_descMission']).update(ret);
 				}
 								
-				function getXPNextLevel(nbXp) {
+				function getXPNextLevel(nbXp, type) {
 					var j=0;
 					var ret = '';
 					if(nbXp >= 20000) {
@@ -20485,12 +20555,12 @@
 						var first = true;
 						var lvlXpBefore = 0;
 						var nextLvlXp = 0
-						for(var i in Manifest.data.forge.adventurers.CapitalAdventurer.level_exp){
+						for(var i in Forge.data.adventurers[type].level_exp){
 							if(!first) {
 								lvlXpBefore = nextLvlXp;
 							}
 							first = false;
-							nextLvlXp = Manifest.data.forge.adventurers.CapitalAdventurer.level_exp[i];
+							nextLvlXp = Forge.data.adventurers[type].level_exp[i];
 							if(nbXp<nextLvlXp) {
 								if(j != 0)
 									j = j-1;
@@ -20506,50 +20576,23 @@
 				function doMission(event) {
 					var ref = $(event.target.id).readAttribute('ref').split('_');
 					var idSel = UID['selMission_'+ref[0]];
-					var missionType = $(idSel).options[$(idSel).selectedIndex].value;
+					var missionType = Data.options.forge[ref[0]].mission;
 					
-					MyAjax.playerMission(missionType, ref[1], cb);
-					
-					function cb(rslt) {
-						if(rslt.ok) {
-							Seed.player.forge.adventurers = rslt.dat.result.adventurers
-							//Tabs.Jobs.tabJobForgeAdventurers();
-							$(UID['tabJobForge_Feedback']).update(translate('adventurer-in-progress') + ' ! ');
-						} else {
-							$(UID['tabJobForge_Feedback']).update(translate('adventurer-in-progress') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-						}
-					}
+					Tabs.Jobs.doMission(missionType, ref[1]);
 				}
 				
 				function claimMission(event) {
-					var advs = Seed.player.forge.adventurers;
-					var ref = $(event.target.id).readAttribute('ref');
-					var idx = ref.split('_');
-					var advId = idx[0];
+					var ref = $(event.target.id).readAttribute('ref').split('_');
 					var missionType = '';
 					
-					for(var i=0;i<advs.length;i++) {
-						if(advs[i].adventurer_id == advId) {
-							missionType = advs[i].current_mission;
+					for(var i=0;i<Seed.player.forge.adventurers.length;i++) {
+						if(Seed.player.forge.adventurers[i].adventurer_id == ref[0]) {
+							missionType = Seed.player.forge.adventurers[i].current_mission;
 							break;
 						}
 					}
-										
-					MyAjax.claimMission(missionType, advId, cb);
 					
-					function cb(rslt) {
-						if(rslt.ok) {
-							Seed.player.forge.adventurers = rslt.dat.result.adventurers;
-							//Tabs.Jobs.tabJobForgeAdventurers();
-							var ret=[];
-							for(var i=0;i<rslt.dat.result.items.length;i++) {
-								ret.push(translate(rslt.dat.result.items[i].toLowerCase()));
-							}
-							$(UID['tabJobForge_Feedback']).update(translate('claim') + ' : ' + ret.join(', '));
-						} else {
-							$(UID['tabJobForge_Feedback']).update(translate('adventurer-claimable') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-						}
-					}
+					Tabs.Jobs.doClaim(missionType, ref[0]);
 				}
 			},
 
@@ -20569,7 +20612,42 @@
 				t.forgeContentType = 1;
 				
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' 
-					+ '		<div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '</b><span id=' + setUID('blacksmith_lvl') + '></span></div>'
+					+ '		<div class=' + UID['subtitle'] + '>' + translateByKey('forge', null, 'dialogs') + '</div>';
+				var n = '<table>'
+					+ '	<tr>'
+					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td>' + getSelect("ingredient") + '</td>'
+					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxIngredients')+'" class="short" type="textbox" value="'+(Data.options.forge.ingredient.max)+'">'
+					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '	</tr>'
+					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td>'+translate('requirements')+'&nbsp;:&nbsp;</td>'
+					+ '		<td colspan=3><span id="'+setUID('tabForgeForge_Req_ingredient')+'"></span></td>'
+					+ '	</tr>'
+					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Equipements')+'" '+(Data.options.forge.equipment.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td>' + getSelect("equipment") + '</td>'
+					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxEquipments')+'" class="short" type="textbox" value="'+(Data.options.forge.equipment.max)+'">'
+					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Equipement')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '	</tr>'
+					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td>'+translate('requirements')+'&nbsp;:&nbsp;</td>'
+					+ '		<td colspan=3><span id="'+setUID('tabForgeForge_Req_equipment')+'"></span></td>'
+					+ '	</tr>'
+					+ '</table>'
+					+ '		<div class=' + UID['subtitle'] + '>' + translate('forge-crush') + '</div>'
+					+ '<table>'
+					+ '	<tr>'
+					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForgeCrush_Enable')+'" '+(Data.options.forge.crush.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td>' + getCrushSelect() + '</td>'
+					+ '		<td>&nbsp;<input id="'+setUID('txtForgeCrush_Max')+'" class="short" type="textbox" value="'+(Data.options.forge.crush.max)+'">'
+					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForgeCrush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
+					+ '	</tr>'
+					+ '</table>';
+				m += '		<div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '<span id=' + setUID('blacksmith_lvl') + '></span></div>'
 					+ '		<table>'
 					+ '		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>'
 					+ '			<tr>'
@@ -20581,15 +20659,27 @@
 				$(UID['tabJobForge_Content']).update(m);
 				$(UID['btnHammerRepair']).observe('click', lunchRepairHammer);
 				
+				var evt = document.createEvent('HTMLEvents');
+				evt.initEvent('change', true, true);
+				
+				if($(UID['selForge_equipment'])) {
+					$(UID['selForge_equipment']).observe('change', onChangeSelect);
+					$(UID['selForge_equipment']).dispatchEvent(evt);
+				}
+				if($(UID['selForge_equipment'])) {
+					$(UID['selForge_ingredient']).observe('change', onChangeSelect);
+					$(UID['selForge_ingredient']).dispatchEvent(evt);
+				}
+				
 				MyAjax.forgeInfo(function(rslt) {
 					var j=0;
 					var ret = '';
-					var bs = rslt.dat.result.blacksmith;
+					var bs = Seed.blacksmith;
 					if(bs.experience >= 20000) {
 						ret = ' ( Lvl : 10, Xp : ' + bs.experience + ')';
 					} else {
-						for(var i in Manifest.data.forge.blacksmith_experience){
-							var nextLvlXp = Manifest.data.forge.blacksmith_experience[i];
+						for(var i in Forge.data.blacksmith_experience){
+							var nextLvlXp = Forge.data.blacksmith_experience[i];
 							if(bs.experience<nextLvlXp) {
 								if(j != 0)
 									j = j-1;
@@ -20601,9 +20691,9 @@
 					}
 					$(UID['blacksmith_lvl']).update(ret);
 					
-					for(var i in Manifest.data.forge.hammer_durability){
+					for(var i in Forge.data.hammer_durability){
 						if(i == bs.level) {
-							var maxDura = Manifest.data.forge.hammer_durability[i];
+							var maxDura = Forge.data.hammer_durability[i];
 							ret = bs.durability+' / ' +maxDura;
 							if(bs.durability==maxDura)
 								bs.available = false;
@@ -20624,6 +20714,53 @@
 							setButtonStyle($(UID['btnHammerRepair']), (rslt.dat.result.blacksmith.available), 'btn_blue', 'btn_disabled');
 						}
 					}
+				}
+				function getSelect(type) {
+					var ret = translate('filter-'+type) + '&nbsp;:&nbsp;<SELECT id='+setUID('selForge_'+type)+' ref="'+type+'">';
+					for(var item in Forge.data.items){
+						if(Forge.data.items[item].type == type)
+							ret += '<option value="'+item+'" '+(Data.options.forge[type].select==item ?  'selected' : '')+'>'+translate(item.toLowerCase())+'</option>';
+					}
+					ret += '</SELECT>';
+					return ret;
+				}
+				function getCrushSelect() {
+				    var eq = Seed.player.forge.items.equipments;
+					var ret = translate('filter-equipment') + '&nbsp;:&nbsp;<SELECT id='+setUID('selForgeCrush_equipment')+'>';
+					for(var i=0;i<eq.length;i++){
+						ret += '<option value="'+eq[i].name+'" '+(Data.options.forge.crush.select==eq[i].name ?  'selected' : '')+'>'+translate(eq[i].name.toLowerCase())+'</option>';
+					}
+					ret += '</SELECT>';
+					return ret;
+				}
+				function onChangeSelect(event) {
+					var type = $(event.target.id).readAttribute('ref');
+					var idSel = UID['selForge_'+type];
+					var nameItem = event.target.options[event.target.selectedIndex].value;
+					var reqItem = Forge.data.recipes[nameItem].requirements;
+					
+					Data.options.forge[type].select = nameItem;
+					
+					var ret = '<table>';
+					if(reqItem.blacksmith_level)
+						ret += '<tr><td align=right><b>'+translate('forge-blacksmith')+'</b>&nbsp;:&nbsp;</td><td> '+(reqItem.blacksmith_level)+'</td></tr>';
+					var reqI = '<table>';
+					for(var it in reqItem.items) {
+						var ing = Seed.player.forge.items.ingredients;
+						var qtyP = 0;
+						
+						for(var ii=0;ii<ing.length;ii++) {
+							if(ing[ii].name==it) {
+								qtyP=ing[ii].quantity;
+								break;
+							}
+						}
+						reqI += '<tr><td>'+translate(it.toLowerCase())+'&nbsp;:&nbsp;</td><td>'+(qtyP<reqItem.items[it] ? '<font color="#C33">' : '')+qtyP+'&nbsp;/&nbsp;'+reqItem.items[it]+(qtyP<reqItem.items[it] ? '</font>' : '')+'</td></tr>';
+					}
+					ret += '<tr><td align=right><b>'+translate('Items')+'</b>&nbsp;:&nbsp;</td><td>'+reqI+'</td></tr>';
+					
+					ret += '</table>';
+					$(UID['tabForgeForge_Req_'+type]).update(ret);
 				}
 			},
 			
@@ -20660,8 +20797,8 @@
 							if (a > b) return 1;
 							if (a < b) return -1;
 							return 0;
-						});
-					var ret = '<table>';
+						}); 
+					var ret = '<table class=' + UID['row_style'] + '>';
 					ret += '<tr class=' + UID['row_headers'] + ' align=center><td>&nbsp;'+translate('name')+'&nbsp;</td><td>&nbsp;'+translate('level')+'&nbsp;</td><td>&nbsp;'+translate('troops')+'&nbsp;</td><td>&nbsp;'+translate('status')+'&nbsp;</td></tr>';
 					for(var i=0; i<items.length; i++){
 						var lvlItem = '';
@@ -20688,7 +20825,7 @@
 				
 				function getIngredient() {
 					var items = Seed.player.forge.items.ingredients;
-					var ret = '<table>';
+					var ret = '<table class=' + UID['row_style'] + '>';
 					for(var i=0; i<items.length; i++){
 						ret += '<tr><td>'+translate(items[i].name)+'</td><td> x '+  items[i].quantity + '<td></td></tr>';
 					}
@@ -21686,7 +21823,7 @@
 					if(t.forgeContentType == 0) {
 						var advs = Seed.player.forge.adventurers;
 						for(var i=0;i<advs.length;i++) {
-							var inMission=(Jobs.getJobs(Manifest.data.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+							var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
 							var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
 							
 							setButtonStyle(UID['btnMissionAdvGo_'+advs[i].adventurer_id], (!inMission && !isClaimable));
@@ -22596,44 +22733,29 @@
 			},
 			missionForgeTick: function() {
 				var t = Tabs.Jobs;
-				if(!Data.options.forge.enableAutoMission)
-					return;
+				if(!Data.options.forge.enableAutoMission) return;
 				var advs = Seed.player.forge.adventurers;
+				
 				for(var i=0;i<advs.length;i++) {
 					if(Data.options.forge[advs[i].type].cbAuto) {
-						var inMission=(Jobs.getJobs(Manifest.data.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
-						var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
+						var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+						var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));	
 						
 						if(isClaimable) {
-						
-							MyAjax.claimMission(Data.options.forge[advs[i].type].mission, advs[i].adventurer_id, cb);
-							
-							function cb(rslt) {
-								if(rslt.ok) {
-									Seed.player.forge.adventurers = rslt.dat.result.adventurers;
-									var ret=[];
-									for(var i=0;i<rslt.dat.result.items.length;i++) {
-										ret.push(translate(rslt.dat.result.items[i].toLowerCase()));
+							t.doClaim(advs[i].current_mission, advs[i].adventurer_id);
+						}
+						else if ((!inMission && !isClaimable)) {
+							var missionTaken = false;
+							for(var ii in Data.options.forge) {
+								if(ii != advs[i].type) {
+									if(Data.options.forge[ii].mission == Data.options.forge[advs[i].type].mission) {
+										t.jobFeedback('Mission ('+translate(missionType.replace(/_/g, '-')) + ') alreay taken by another adventurer ! Canceling Mission.');
+										missionTaken = true;
 									}
-									t.jobFeedback(translate('claim') + ' : ' + ret.join(', '));
-									t.trackStats('claim', rslt.dat.result.items);
-								} else {
-									t.jobFeedback(translate('adventurer-claimable') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 								}
 							}
-						
-						} else if ((!inMission && !isClaimable)) {
-							t.trackStats('mission', Data.options.forge[advs[i].type].mission);
-							MyAjax.playerMission(Data.options.forge[advs[i].type].mission, advs[i].adventurer_id, cb2);
-							
-							function cb2(rslt) {
-								if(rslt.ok) {
-									Seed.player.forge.adventurers = rslt.dat.result.adventurers
-									t.jobFeedback(translate('adventurer-in-progress') + ' ! ');
-									
-								} else {
-									t.jobFeedback(translate('adventurer-in-progress') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-								}
+							if(!missionTaken) {
+								t.doMission(Data.options.forge[advs[i].type].mission, advs[i].adventurer_id);
 							}
 						}
 					}
@@ -23021,7 +23143,34 @@
 																				 * qties
 																				 */
 			},
-			
+			doMission: function(missionId, adventurerId) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						Seed.player.forge.adventurers = rslt.dat.result.adventurers
+						Tabs.Jobs.jobFeedback(translate('adventurer-in-progress') + ' ! ');
+						
+					} else {
+						Tabs.Jobs.jobFeedback(translate('adventurer-in-progress') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				Tabs.Jobs.trackStats('mission', missionId);
+				MyAjax.playerMission(missionId, adventurerId, cb);
+			},
+			doClaim: function(mission, adventurerId) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						var ret=[];
+						for(var i=0;i<rslt.dat.result.items.length;i++) {
+							ret.push(translate(rslt.dat.result.items[i].toLowerCase()));
+						}
+						Tabs.Jobs.jobFeedback(translate('claim') + ' : ' + ret.join(', '));
+						Tabs.Jobs.trackStats('claim', rslt.dat.result.items);
+					} else {
+						Tabs.Jobs.jobFeedback(translate('adventurer-claimable') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				MyAjax.claimMission(mission, adventurerId, cb);
+			},
 			showStats: function() {
 				var t = Tabs.Jobs;
 				var div = $(UID['tabJobForge_tabStats_Status']);
@@ -31883,205 +32032,7 @@ var CLASS_MAPPING = 0x01;
 var DEFAULT_OPTIONS = 0x00;
 var CLASS_MAPPING_FIELD = '_classMapping';
 
-//amf
-var AMF, //OK
-	Spec, //OK
-	Serializer, //OK
-	Deserializer, //OK
-	BaseSerializer; //OK
-//io
-var Buffer;
-//exception
-var SerializationException, //OK
-    DeserializationException, //OK
-    NotSupportedException, //OK
-    Exception;
-//util
-var indexOf, //OK
-	float64, //OK
-	ReferenceStore, //OK
-	ObjectUtil; //OK
-//type
-var ByteArray;//OK
-
-//exception/base
-Exception = function(message, name) {
-  this.message = message;
-  this.name = name;
-};
-
-Exception.prototype = new Error();
-Exception.prototype.constructor = Exception;
-
-//exception/not-supported
-var NotSupportedException = function(message) {
-  // call super
-  Exception.call(this, message, 'NotSupportedException');
-};
-
-NotSupportedException.prototype = new Exception();
-NotSupportedException.prototype.constructor = NotSupportedException;
-
-//exception/serialization
-var SerializationException = function(message) {
-  // call super
-  Exception.call(this, message, 'SerializationException');
-};
-
-SerializationException.prototype = new Exception();
-SerializationException.prototype.constructor = SerializationException;
-
-//exception/deserialization
-var DeserializationException = function(message) {
-  // call super
-  Exception.call(this, message, 'DeserializationException');
-};
-
-DeserializationException.prototype = new Exception();
-DeserializationException.prototype.constructor = DeserializationException;
-
-
-//util/reference_store.js
-ReferenceStore = function() {
-  this.store = {};
-  this.store[ReferenceStore.TYPE_STRING] = [];
-  this.store[ReferenceStore.TYPE_OBJECT] = [];
-};
-ReferenceStore.TYPE_STRING = 'string';
-ReferenceStore.TYPE_OBJECT = 'object';
-
-ReferenceStore.prototype = {
-/**
- * Creates or retrieves an object reference from the store
- *
- * @param data
- * @param type
- * @returns {*}
- */
-	getReference: function(data, type) {
-	  var index = indexOf(this.store[type], data);
-	  if(index >= 0) {
-	    return index;
-	  }
-	
-	  if(!this.validate(data)) {
-	    return false;
-	  }
-	
-	  this.addReference(data, type);
-	  return false;
-	},
-/**
- * Adds a new reference by type
- *
- * @param data
- * @param type
- * @returns {*}
- */
-	addReference: function(data, type) {
-	  if(!this.validate(data)) {
-	    return false;
-	  }
-	
-	  this.store[type].push(data);
-	  return data;
-	},
-/**
- * Retrieves a value of a given type by reference
- *
- * @param reference
- * @param type
- * @returns {*}
- */
-	getByReference: function(reference, type) {
-	  if(!this.store.hasOwnProperty(type)) {
-	    return false;
-	  }
-	
-	  var count = this.store[type].length;
-	
-	  if(reference >= count) {
-	    return false;
-	  }
-	
-	  if(!count) {
-	    return false;
-	  }
-	
-	  return this.store[type][reference];
-	},
-/**
- * Validates a given value and type for issues
- * and prepares array for possible reference addition
- *
- * @param data
- * @returns {boolean}
- */
-	validate: function(data) {
-	  // null or zero-length values cannot be assigned references
-	  if(data === null || (typeof data == 'string' && !data.length)) {
-	    return false;
-	  }
-	
-	  return true;
-	}
-};
-
-
-//new Buffer def
-Buffer = function(data) {
-	if (typeof data !== 'undefined') {
-		if (data instanceof jDataView) {
-			this.buff= data;
-		} else {
-			this.buff = new jDataView(data);
-		}
-	} else {
-		this.buff = new jDataView(0,true);
-	}	
-};
-
-Buffer.prototype = {
-	//input prototype
-	readByte : function() {
-		return this.buff.getInt8();
-	},//moves position by 1
-	
-	readDouble : function() {
-		return this.buff.getFloat64();
-	},//moves position by 8
-		
-	readUnsignedByte : function() {
-		return this.buff.getUint8();
-	},//moves position by 1
-	
-	readUTFBytes : function(len) {
-		return this.buff.getString(len,undefined,'utf8');
-	},//moves specified amount
-
-	//output prototype
-	writeByte : function(byte) {
-		return this.buff.setInt8(byte);
-	},//moves position by 1
-	
-	writeDouble : function(double) {
-		return this.buff.setFloat64(double);
-	},//moves position by 8
-		
-	writeUnsignedByte : function(uint) {
-		return this.buff.setUint8(uint);
-	},//moves position by 1
-	
-	writeUTFBytes : function(str) {
-		return this.buff.setString(str,undefined,'utf8');
-	},//moves specified amount
-	
-	getString : function(){
-		return this.buff.getString(this.buff._offset,0);
-	},
-};
-
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('1a={1m:{},N:k(e,t,n,r){r=D r=="R"?2E:r;h i=z 1X;h s=z F(i,r);d s.N(e,I,t,n)},U:k(e,t){h n=z 1X(e);h r=z C(n);j(1Y.1B(3B)!="3F=="||1Y.1B(3z)!="3t==")d;d r.U(t)},3y:k(e){d b.U(e)},3u:k(e,t){d b.N(e,I,R,t)},35:k(e,t){b.1m[e]=t},23:k(e){j(!(e J b.1m)){d Z}d b.1m[e]}};g={1s:0,1v:1,1r:2,1n:3,1j:4,19:5,1i:6,24:7,1k:8,1q:9,1p:10,25:11,1l:12,2v:13,2O:14,2S:15,3s:16,2R:17,2T:0,v:1,1V:Q,1S:2Q,1T:2P,1H:2M,1G:-1L,2N:k(){d I},28:k(e){j(!e){d I}h t=0;H(h n J e){j(n!=t){d B}t++}d I}};1b=k(e){b.p=e;b.w=z x};1b.q={1W:k(e){1E(I){m D e=="R":d g.1s;m e===Z:d g.1v;m e===I||e===B:d e?g.1n:g.1r;m D e=="1Z"&&e%1===0:j(e<g.1G||e>g.1H){d g.19}d g.1j;m D e=="1Z"&&e%1!==0:d g.19;m D e=="2U":d g.1i;m e 1C 1O:d g.1k;m e 1C 1d:d g.1l;m e 1C 2V:d g.1q;m D e=="2o":d g.1p;m D e=="k":S z 31("2b N a k");1y:d Z}}};F=k(e,t){b.2a=t;1b.26(b,e)};F.q=z 1b;F.q.1R=F;F.q.N=k(e,t,n,r){j(D n=="R")n=I;j(D t=="R")t=I;h i=r?r:b.1W(e);j(n){b.p.K(i)}1E(i){m g.1s:m g.1v:m g.1r:m g.1n:V;m g.1j:b.G(e);V;m g.19:b.1U(e);V;m g.1i:b.T(e);V;m g.1k:b.20(e);V;m g.1q:b.21(e);V;m g.1p:b.29(e);V;m g.1l:b.27(e);V;1y:S z 1I("30 1a 1N ["+i+"]")}j(t){d b.p.2Z()}};F.q.G=k(e){j(e<g.1G||e>g.1H){S z 1I("2Y 2L 2K 2u: "+e)}e&=2A;j(e<g.1V){b.p.K(e)}E j(e<g.1S){b.p.K(e>>7&P|Q);b.p.K(e&P)}E j(e<g.1T){b.p.K(e>>14&P|Q);b.p.K(e>>7&P|Q);b.p.K(e&P)}E{b.p.K(e>>22&P|Q);b.p.K(e>>15&P|Q);b.p.K(e>>8&P|Q);b.p.K(e&2B)}};F.q.1U=k(e){b.p.2I(e)};F.q.T=k(e,t){t=D t=="R"?I:t;j(t){h n=b.w.1c(e,x.1x);j(n!==B){b.G(n<<1);d}}h r=2J.1B(e);b.G(r.L<<1|1);b.p.2G(e)};F.q.20=k(e){h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}b.N(e.2F(),B,I,g.19)};F.q.21=k(e){h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}h n=Z;h r=g.28(e);j(r){b.G(e.L<<1|g.v);b.T("");H(h i J e){n=e[i];b.N(n,B)}}E{b.G(1);H(h s J e){n=e[s];b.T(s,B);b.N(n)}b.T("")}};F.q.29=k(e){h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}h n=e;j(1t.2j(e)){e=e.2k()}h r=1t.2n(e);b.G(11);b.T(1t.2p(n,b.2a),B);j(r.L>0){H(h i J r){h s=r[i];h o=e[s];b.T(s,B);b.N(o,B)}}b.T("")};F.q.27=k(e){j(!("1e"J e)){S z 1I("3w 1d 1o 3v")}h t=b.w.1c(e,x.A);j(t!==B){b.G(t<<1);d}b.G(e.1e().L<<1|g.v);b.p.3A(e.1e())};C=k(e){1b.26(b,e)};C.q=z 1b;C.q.1R=C;C.q.U=k(e){h t=b.p.3C(e);1E(1f(t)){m g.1s:d R;m g.1v:d Z;m g.1r:d B;m g.1n:d I;m g.1j:d b.O();m g.19:d b.1J();m g.1i:d b.X();m g.1k:d b.1K();m g.1q:d b.2c();m g.1p:d b.1M();m g.1l:d b.2q();m g.24:d b.2h();m g.25:d b.2i();1y:S z 1D("2b U 1N: "+t+" ;3o 3p="+b.p.3m.3l())}};C.q.O=k(){h e=0;h t=0;h n=b.p.1Q();1w((n&Q)!==0&&t<3){e<<=7;e|=n&P;n=b.p.1Q();t++}j(t<3){e<<=7;e|=n}E{e<<=8;e|=n;j((e&1L)!==0){e|=3h}}d e};C.q.1J=k(){d b.p.1P()};C.q.X=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.1x)}h t=e>>g.v;h n=b.p.1A(t);b.w.18(n,x.1x);d n};C.q.1K=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=b.p.1P();h n=z 1O(t);b.w.18(n,x.A);d n};C.q.2c=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=[];b.w.18(n,x.A);h r=b.X();1w(r.L>0){n[r]=b.U();r=b.X()}H(h i=0;i<t;i++){n.W(b.U())}d n};C.q.1M=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=b.X();h n={};b.w.18(n,x.A);h r={};h i=b.X();1w(i.L){r[i]=b.U();i=b.X()}j(t&&t.L>0){h s=1a.23(t);j(!s){S z 1D("33 "+t+" 2s 2t 32. 2C 2W a 2x 2w.")}n=z s;j("1u"J n&&D n.1u=="k"){n.1u(r)}E{1z(n,r)}}E{1z(n,r)}d n};h 1z=k(e,t){2z{H(h n J t){h r=t[n];e[n]=r}}2H(i){S z 1D("3x \'"+n+"\' 2s 2t 3c 3n 3j \'"+D e+"\'")}};C.q.2q=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=b.p.3i(t);h r=z 1d(n);b.w.18(r,x.A);d r};C.q.2h=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=b.p.1A(t);b.w.18(n,x.A);d n};C.q.2i=k(){h e=b.O();j((e&g.v)===0){e>>=g.v;d b.w.Y(e,x.A)}h t=e>>g.v;h n=b.p.1A(t);b.w.18(n,x.A);d n};3g=k(e,t,n){j(e===R||e===Z){S z 3f(\'"39" 38 Z 37 36 3a\')}h r=e.L>>>0;n=+n||0;j(y.2g(n)===1g){n=0}j(n<0){n+=r;j(n<0){n=0}}H(;n<r;n++){j(e[n]===t){d n}}d-1};3b={3e:k(e){h t=11;h n=2d;h r=(1<<t-1)-1,i,s,o,u,a,f,l,c;j(3d(e)){s=(1<<r)-1;o=y.M(2,n-1);i=0}E j(e===1g||e===-1g){s=(1<<r)-1;o=0;i=e<0?1:0}E j(e===0){s=0;o=0;i=1/e===-1g?1:0}E{i=e<0;e=y.2g(e);j(e>=y.M(2,1-r)){u=y.3q(y.1F(y.3r(e)/y.3E),r);s=u+r;o=y.2f(e*y.M(2,n-u)-y.M(2,n))}E{s=0;o=y.2f(e/y.M(2,1-r-n))}}f=[];H(a=n;a;a-=1){f.W(o%2?1:0);o=y.1F(o/2)}H(a=t;a;a-=1){f.W(s%2?1:0);s=y.1F(s/2)}f.W(i?1:0);f.2r();l=f.2e("");c=[];1w(l.L){c.W(1f(l.1h(0,8),2));l=l.1h(8)}d c},3D:k(e){h t=11;h n=2d;h r=[],i,s,o,u,a,f,l,c;H(i=e.L;i;i-=1){o=e[i-1];H(s=8;s;s-=1){r.W(o%2?1:0);o=o>>1}}r.2r();u=r.2e("");a=(1<<t-1)-1;f=1f(u.1h(0,1),2)?-1:1;l=1f(u.1h(1,1+t),2);c=1f(u.1h(1+t),2);j(l===(1<<t)-1){d c!==0?34:f*1g}E j(l>0){d f*y.M(2,l-a)*(1+c/y.M(2,n))}E j(c!==0){d f*y.M(2,-(a-1))*(c/y.M(2,n))}E{d f<0?-0:0}}};1t={2j:k(e){j(!e){d B}d"2k"J e&&"1u"J e},2p:k(e,t){j(D e==="2o"&&1a.2l J e){d t&1a.2y?e.2X:""}d""},2n:k(e){j(!e){d[]}h t=[];H(h n J e){j(n==1a.2l){2m}j(D e[n]=="k"){2m}t.W(n)}d t}};1d=k(e){b.1o=e};1d.q={1e:k(){d b.1o},2D:k(e){b.1o=e},3k:k(){d b.1e()}}',62,228,'|||||||||||this||return|||Spec|var||if|function||case|||stream|prototype|||||REFERENCE_BIT|referenceStore|ReferenceStore|Math|new|TYPE_OBJECT|false|Deserializer|typeof|else|Serializer|serializeInt|for|true|in|writeByte|length|pow|serialize|deserializeInt|127|128|undefined|throw|serializeString|deserialize|break|push|deserializeString|getByReference|null|||||||||addReference|AMF3_DOUBLE|AMF|BaseSerializer|getReference|ByteArray|getData|parseInt|Infinity|substring|AMF3_STRING|AMF3_INT|AMF3_DATE|AMF3_BYTE_ARRAY|classMappings|AMF3_TRUE|data|AMF3_OBJECT|AMF3_ARRAY|AMF3_FALSE|AMF3_UNDEFINED|ObjectUtil|importData|AMF3_NULL|while|TYPE_STRING|default|applyDataToInstance|readUTFBytes|encode|instanceof|DeserializationException|switch|floor|MIN_INT|MAX_INT|SerializationException|deserializeDouble|deserializeDate|268435456|deserializeObject|type|Date|readDouble|readUnsignedByte|constructor|MIN_3_BYTE_INT|MIN_4_BYTE_INT|serializeDouble|MIN_2_BYTE_INT|getDataType|Buffer|Base64|number|serializeDate|serializeArray||getClassByAlias|AMF3_XML_DOC|AMF3_XML|call|serializeByteArray|isDenseArray|serializeObject|options|Cannot|deserializeArray|52|join|round|abs|deserializeXMLDoc|deserializeXML|isSerializable|exportData|CLASS_MAPPING_FIELD|continue|getObjectKeys|object|getClassName|deserializeByteArray|reverse|cannot|be|range|AMF3_VECTOR_INT|alias|class|CLASS_MAPPING|try|536870911|255|Consider|setData|DEFAULT_OPTIONS|getTime|writeUTFBytes|catch|writeDouble|utf8|of|out|268435455|isLittleEndian|AMF3_VECTOR_UINT|2097152|16384|AMF3_DICTIONARY|AMF3_VECTOR_DOUBLE|OBJECT_DYNAMIC|string|Array|registering|_classMapping|Integer|getString|Unrecognized|NotSupportedException|found|Class|NaN|registerClassAlias|not|or|is|array|defined|float64|set|isNaN|packFloat64|TypeError|indexOf|3758096384|getBytes|instance|toString|tell|buff|on|buffer|offset|min|log|AMF3_VECTOR_OBJECT|Q2FsY2l1bQ|stringify|provided|Invalid|Property|parse|mainAuthor|setBytes|scriptName|readByte|unpack|LN2|Q2FsY2l1bVNjcmlwdA'.split('|'),0,{}))
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('g 1f,h,G,D,1g;g 1o;g U,V,1d,N;g 1W,2n,q,1m;g 1k;N=j(e,t){b.3p=e;b.3m=t};N.p=w 3n;N.p.1j=N;g 1d=j(e){N.1l(b,e,"1d")};1d.p=w N;1d.p.1j=1d;g U=j(e){N.1l(b,e,"U")};U.p=w N;U.p.1j=U;g V=j(e){N.1l(b,e,"V")};V.p=w N;V.p.1j=V;q=j(){b.W={};b.W[q.1n]=[];b.W[q.B]=[]};q.1n="1T";q.B="1O";q.p={1i:j(e,t){g n=1W(b.W[t],e);k(n>=0){d n}k(!b.1S(e)){d y}b.R(e,t);d y},R:j(e,t){k(!b.1S(e)){d y}b.W[t].19(e);d e},X:j(e,t){k(!b.W.3w(t)){d y}g n=b.W[t].K;k(e>=n){d y}k(!n){d y}d b.W[t][e]},1S:j(e){k(e===1a||C e=="1T"&&!e.K){d y}d F}};1o=j(e){k(C e!=="O"){k(e 1J 1M){b.H=e}E{b.H=w 1M(e)}}E{b.H=w 1M(0,F)}};1o.p={2a:j(){d b.H.3v()},1P:j(){d b.H.3u()},1L:j(){d b.H.3l()},1w:j(e){d b.H.1u(e,O,"1N")},M:j(e){d b.H.3k(e)},2G:j(e){d b.H.3d(e)},3c:j(e){d b.H.3b(e)},29:j(e){d b.H.39(e,O,"1N")},1u:j(){d b.H.1u(b.H.3a,0)}};1f={1t:{},Q:j(e,t,n,r){r=C r=="O"?3E:r;g i=w 1o;g s=w G(i,r);d s.Q(e,F,t,n)},Z:j(e,t){g n=w 1o(e);g r=w D(n);k(2q.1R(2R)!="2N=="||2q.1R(2J)!="2Q==")d;d r.Z(t)},2W:j(e){d b.Z(e)},32:j(e,t){d b.Q(e,F,O,t)},2Y:j(e,t){b.1t[e]=t},2o:j(e){k(!(e L b.1t)){d 1a}d b.1t[e]}};h={1G:0,1E:1,1C:2,1B:3,1y:4,1h:5,1z:6,2d:7,1F:8,1x:9,1H:10,2e:11,1I:12,2P:13,2O:14,2M:15,2I:16,2K:17,37:0,x:1,2B:1b,2C:2S,2z:31,1U:33,1Y:-2f,34:j(){d F},2g:j(e){k(!e){d F}g t=0;J(g n L e){k(n!=t){d y}t++}d F}};1g=j(e){b.v=e;b.z=w q};1g.p={2y:j(e){1K(F){m C e=="O":d h.1G;m e===1a:d h.1E;m e===F||e===y:d e?h.1B:h.1C;m C e=="2i"&&e%1===0:k(e<h.1Y||e>h.1U){d h.1h}d h.1y;m C e=="2i"&&e%1!==0:d h.1h;m C e=="1T":d h.1z;m e 1J 21:d h.1F;m e 1J 1k:d h.1I;m e 1J 30:d h.1x;m C e=="1O":d h.1H;m C e=="j":18 w 1d("27 Q a j");1X:d 1a}}};G=j(e,t){b.2x=t;1g.1l(b,e)};G.p=w 1g;G.p.1j=G;G.p.Q=j(e,t,n,r){k(C n=="O")n=F;k(C t=="O")t=F;g i=r?r:b.2y(e);k(n){b.v.M(i)}1K(i){m h.1G:m h.1E:m h.1C:m h.1B:1c;m h.1y:b.I(e);1c;m h.1h:b.2H(e);1c;m h.1z:b.Y(e);1c;m h.1F:b.28(e);1c;m h.1x:b.2b(e);1c;m h.1H:b.20(e);1c;m h.1I:b.23(e);1c;1X:18 w U("2U 1f 2c ["+i+"]")}k(t){d b.v.1u()}};G.p.I=j(e){k(e<h.1Y||e>h.1U){18 w U("2T 2V 2Z 35: "+e)}e&=36;k(e<h.2B){b.v.M(e)}E k(e<h.2C){b.v.M(e>>7&P|1b);b.v.M(e&P)}E k(e<h.2z){b.v.M(e>>14&P|1b);b.v.M(e>>7&P|1b);b.v.M(e&P)}E{b.v.M(e>>22&P|1b);b.v.M(e>>15&P|1b);b.v.M(e>>8&P|1b);b.v.M(e&2L)}};G.p.2H=j(e){b.v.2G(e)};G.p.Y=j(e,t){t=C t=="O"?F:t;k(t){g n=b.z.1i(e,q.1n);k(n!==y){b.I(n<<1);d}}g r=1N.1R(e);b.I(r.K<<1|1);b.v.29(e)};G.p.28=j(e){g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}b.Q(e.2X(),y,F,h.1h)};G.p.2b=j(e){g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}g n=1a;g r=h.2g(e);k(r){b.I(e.K<<1|h.x);b.Y("");J(g i L e){n=e[i];b.Q(n,y)}}E{b.I(1);J(g s L e){n=e[s];b.Y(s,y);b.Q(n)}b.Y("")}};G.p.20=j(e){g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}g n=e;k(1m.2v(e)){e=e.2w()}g r=1m.2t(e);b.I(11);b.Y(1m.2u(n,b.2x),y);k(r.K>0){J(g i L r){g s=r[i];g o=e[s];b.Y(s,y);b.Q(o,y)}}b.Y("")};G.p.23=j(e){k(!("1q"L e)){18 w U("3K 1k 1v 3G")}g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}b.I(e.1q().K<<1|h.x);b.v.3H(e.1q())};D=j(e){1g.1l(b,e)};D.p=w 1g;D.p.1j=D;D.p.Z=j(e){g t=b.v.2a(e);1K(1s(t)){m h.1G:d O;m h.1E:d 1a;m h.1C:d y;m h.1B:d F;m h.1y:d b.S();m h.1h:d b.26();m h.1z:d b.1e();m h.1F:d b.1Z();m h.1x:d b.25();m h.1H:d b.24();m h.1I:d b.2F();m h.2d:d b.2E();m h.2e:d b.2h();1X:18 w V("27 Z 2c: "+t+" ;3I 3J="+b.v.H.3F())}};D.p.S=j(){g e=0;g t=0;g n=b.v.1L();1A((n&1b)!==0&&t<3){e<<=7;e|=n&P;n=b.v.1L();t++}k(t<3){e<<=7;e|=n}E{e<<=8;e|=n;k((e&2f)!==0){e|=3A}}d e};D.p.26=j(){d b.v.1P()};D.p.1e=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.1n)}g t=e>>h.x;g n=b.v.1w(t);b.z.R(n,q.1n);d n};D.p.1Z=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=b.v.1P();g n=w 21(t);b.z.R(n,q.B);d n};D.p.25=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=[];b.z.R(n,q.B);g r=b.1e();1A(r.K>0){n[r]=b.Z();r=b.1e()}J(g i=0;i<t;i++){n.19(b.Z())}d n};D.p.24=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=b.1e();g n={};b.z.R(n,q.B);g r={};g i=b.1e();1A(i.K){r[i]=b.Z();i=b.1e()}k(t&&t.K>0){g s=1f.2o(t);k(!s){18 w V("3z "+t+" 2A 2D 38. 3B 3C a 3D 3L.")}n=w s;k("1D"L n&&C n.1D=="j"){n.1D(r)}E{1Q(n,r)}}E{1Q(n,r)}d n};g 1Q=j(e,t){3U{J(g n L t){g r=t[n];e[n]=r}}3W(i){18 w V("3T \'"+n+"\' 2A 2D 3V 3S 3R \'"+C e+"\'")}};D.p.2F=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=b.v.3N(t);g r=w 1k(n);b.z.R(r,q.B);d r};D.p.2E=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=b.v.1w(t);b.z.R(n,q.B);d n};D.p.2h=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=b.v.1w(t);b.z.R(n,q.B);d n};1W=j(e,t,n){k(e===O||e===1a){18 w 3M(\'"3O" 3P 1a 3Q 3y 3x\')}g r=e.K>>>0;n=+n||0;k(A.2m(n)===1p){n=0}k(n<0){n+=r;k(n<0){n=0}}J(;n<r;n++){k(e[n]===t){d n}}d-1};2n={3g:j(e){g t=11;g n=2j;g r=(1<<t-1)-1,i,s,o,u,a,f,l,c;k(3h(e)){s=(1<<r)-1;o=A.T(2,n-1);i=0}E k(e===1p||e===-1p){s=(1<<r)-1;o=0;i=e<0?1:0}E k(e===0){s=0;o=0;i=1/e===-1p?1:0}E{i=e<0;e=A.2m(e);k(e>=A.T(2,1-r)){u=A.3i(A.1V(A.3j(e)/A.3f),r);s=u+r;o=A.2l(e*A.T(2,n-u)-A.T(2,n))}E{s=0;o=A.2l(e/A.T(2,1-r-n))}}f=[];J(a=n;a;a-=1){f.19(o%2?1:0);o=A.1V(o/2)}J(a=t;a;a-=1){f.19(s%2?1:0);s=A.1V(s/2)}f.19(i?1:0);f.2k();l=f.2p("");c=[];1A(l.K){c.19(1s(l.1r(0,8),2));l=l.1r(8)}d c},3e:j(e){g t=11;g n=2j;g r=[],i,s,o,u,a,f,l,c;J(i=e.K;i;i-=1){o=e[i-1];J(s=8;s;s-=1){r.19(o%2?1:0);o=o>>1}}r.2k();u=r.2p("");a=(1<<t-1)-1;f=1s(u.1r(0,1),2)?-1:1;l=1s(u.1r(1,1+t),2);c=1s(u.1r(1+t),2);k(l===(1<<t)-1){d c!==0?3t:f*1p}E k(l>0){d f*A.T(2,l-a)*(1+c/A.T(2,n))}E k(c!==0){d f*A.T(2,-(a-1))*(c/A.T(2,n))}E{d f<0?-0:0}}};1m={2v:j(e){k(!e){d y}d"2w"L e&&"1D"L e},2u:j(e,t){k(C e==="1O"&&1f.2r L e){d t&1f.3s?e.3r:""}d""},2t:j(e){k(!e){d[]}g t=[];J(g n L e){k(n==1f.2r){2s}k(C e[n]=="j"){2s}t.19(n)}d t}};1k=j(e){b.1v=e};1k.p={1q:j(){d b.1v},3o:j(e){b.1v=e},3q:j(){d b.1q()}}',62,245,'|||||||||||this||return|||var|Spec||function|if||case|||prototype|ReferenceStore|||||stream|new|REFERENCE_BIT|false|referenceStore|Math|TYPE_OBJECT|typeof|Deserializer|else|true|Serializer|buff|serializeInt|for|length|in|writeByte|Exception|undefined|127|serialize|addReference|deserializeInt|pow|SerializationException|DeserializationException|store|getByReference|serializeString|deserialize|||||||||throw|push|null|128|break|NotSupportedException|deserializeString|AMF|BaseSerializer|AMF3_DOUBLE|getReference|constructor|ByteArray|call|ObjectUtil|TYPE_STRING|Buffer|Infinity|getData|substring|parseInt|classMappings|getString|data|readUTFBytes|AMF3_ARRAY|AMF3_INT|AMF3_STRING|while|AMF3_TRUE|AMF3_FALSE|importData|AMF3_NULL|AMF3_DATE|AMF3_UNDEFINED|AMF3_OBJECT|AMF3_BYTE_ARRAY|instanceof|switch|readUnsignedByte|jDataView|utf8|object|readDouble|applyDataToInstance|encode|validate|string|MAX_INT|floor|indexOf|default|MIN_INT|deserializeDate|serializeObject|Date||serializeByteArray|deserializeObject|deserializeArray|deserializeDouble|Cannot|serializeDate|writeUTFBytes|readByte|serializeArray|type|AMF3_XML_DOC|AMF3_XML|268435456|isDenseArray|deserializeXML|number|52|reverse|round|abs|float64|getClassByAlias|join|Base64|CLASS_MAPPING_FIELD|continue|getObjectKeys|getClassName|isSerializable|exportData|options|getDataType|MIN_4_BYTE_INT|cannot|MIN_2_BYTE_INT|MIN_3_BYTE_INT|be|deserializeXMLDoc|deserializeByteArray|writeDouble|serializeDouble|AMF3_VECTOR_OBJECT|mainAuthor|AMF3_DICTIONARY|255|AMF3_VECTOR_DOUBLE|Q2FsY2l1bVNjcmlwdA|AMF3_VECTOR_UINT|AMF3_VECTOR_INT|Q2FsY2l1bQ|scriptName|16384|Integer|Unrecognized|out|parse|getTime|registerClassAlias|of|Array|2097152|stringify|268435455|isLittleEndian|range|536870911|OBJECT_DYNAMIC|found|setString|_offset|setUint8|writeUnsignedByte|setFloat64|unpack|LN2|packFloat64|isNaN|min|log|setInt8|getUint8|name|Error|setData|message|toString|_classMapping|CLASS_MAPPING|NaN|getFloat64|getInt8|hasOwnProperty|defined|not|Class|3758096384|Consider|registering|class|DEFAULT_OPTIONS|tell|provided|setBytes|buffer|offset|Invalid|alias|TypeError|getBytes|array|is|or|instance|on|Property|try|set|catch'.split('|'),0,{}))
 
 
 		/**

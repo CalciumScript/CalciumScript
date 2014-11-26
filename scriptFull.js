@@ -767,13 +767,29 @@
 						},
 						forge: {
 							enableAutoMission : false,
+							enableAutoForge: false,
+							crush: {
+								cbAuto:false,
+								select:'',
+								max:10
+							},
+							equipment: {
+								cbAuto: false,
+								select: '',
+								max: 50
+							},
+							ingredient: {
+								cbAuto: false,
+								select: '',
+								max: 50
+							},
 							CapitalAdventurer : {
-								cbAuto : true,
-								mission : 'keeping_the_peace' 
+								cbAuto : false,
+								mission : '' 
 							},
 							WaterOutpostAdventurer : {
-								cbAuto : true,
-								mission : 'keeping_the_peace'
+								cbAuto : false,
+								mission : ''
 							}
 						},
 						trade: {
@@ -2771,6 +2787,22 @@
 				p['timestamp'] = toNum(serverTime());
 				return p;
 			},
+			getForge: function() {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				
+				new MyAjaxRequest('forge', 'forge/forge.json', p, mycb, false);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Forge.data = rslt.dat.forge;
+					} else {
+						verboseLog('Ajax.getForge ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					return;
+				}
+			},
 			repairHammer: function(callback) {
 				var t = MyAjax;
 				var p = {};
@@ -2799,7 +2831,7 @@
 
 				function mycb(rslt) {
 					if (rslt.ok) {
-						//Seed.checkAddJob(rslt.dat.result.job);
+						Seed.player.forge.adventurers = rslt.dat.result.adventurers;
 					} else {
 						verboseLog('Ajax.claimMission ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
@@ -2826,6 +2858,46 @@
 					return;
 				}
 			},
+			forgeItem: function(name, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['output_name']=name;
+				
+				new MyAjaxRequest('forge', 'forge/forge_item', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
+					} else {
+						verboseLog('Ajax.forgeCrush ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
+					return;
+				}
+			},
+			forgeCrush: function(equipmentId, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['player_forge_equipment_id']=equipmentId;
+				
+				new MyAjaxRequest('forge', 'forge/disenchant_equipment', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
+					} else {
+						verboseLog('Ajax.forgeCrush ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
+					return;
+				}
+			},
 			forgeInfo: function(callback) {
 				var t = MyAjax;
 				var p = {};
@@ -2835,7 +2907,9 @@
 				
 				function mycb(rslt) {
 					if (rslt.ok) {
-						
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
 					} else {
 						verboseLog('Ajax.forgeInfo ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
@@ -9726,8 +9800,13 @@
 				} else return t.que[id] ? true : false;
 			}
 		};
+		/******************************** Forge package ***********************/
+		var Forge = {
+			data: {}
+		}
 		/******************************** Seed package *******************************/
 		var Seed = {
+			blacksmith: {},
 			cities: [],
 			/* cities */
 			cityIdx: {},
@@ -9803,6 +9882,7 @@
 				clearInterval(t.tickTimer);
 				t.tickTimer = setInterval(t.tick, 1000);
 				MyAjax.getCustomization();
+				MyAjax.getForge();
 			},
 
 			fetchPlayer: function(callback, options) {
@@ -10902,7 +10982,8 @@
 				'research',
 				'quests',
 				'trading',
-				'activerecord'
+				'activerecord',
+				'forge'
 			],
 
 			init: function(notify) {
@@ -10918,14 +10999,6 @@
 					if (notify)
 						notify(rslt);
 				});
-				//t.fetchLocale(function(rslt) {
-				//	if (rslt.ok) {
-				//		verboseLog(translate('Locale data was Successfully requested from the sever'));
-				//		t.loaded = true;
-				//		t.fixResults();
-				//	} else verboseLog('fetchLocale ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-				//	if (notify) notify(rslt);
-				//});
 			},
 
 			fetchNewLocale: function(notify) {
@@ -10948,10 +11021,6 @@
 										Translation.tmpXML[attrname] = cloneProps(temp[attrname]);
 								}
 								Translation.xml = Translation.tmpXML;
-								//downloadDataURI({
-								//	filename: "XML.txt",
-								//	data: "data:application/text;base64," + Base64.encode(JSON.stringify(Translation.tmpXML))
-								//});
 							}
 							if (notify)
 								notify(rslt2);
@@ -11200,6 +11269,10 @@
 			quests: function(key, subkey) {
 				subkey = subkey != undefined ? subkey : 'name';
 				return Translation.getContent('quests', key, subkey);
+			},
+			forge: function(key, subkey) {
+				subkey = subkey != undefined ? subkey : 'name';
+				return Translation.getContent('forge', key, subkey);
 			}
 		};
 
@@ -20380,18 +20453,15 @@
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">';
 				
 				for(var i=0;i<advs.length;i++) {
-					var inMission=(Jobs.getJobs(Manifest.data.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+					var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
 					var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
-					var adventurer = translate('adventurers');
-					if(advs[i].type == 'CapitalAdventurer')
-						adventurer = translate('adventurer-capitaladventurer');
-					if(advs[i].type == 'WaterOutpostAdventurer')
-						adventurer = translate('adventurer-wateroutpostadventurer');
-					m += '<div class=' + UID['subtitle'] + '><b>' + adventurer + getXPNextLevel(advs[i].experience)+ '</b></div>';
+					var adventurer = translate('adventurer-'+advs[i].type.toLowerCase());
+					
+					m += '<div class=' + UID['subtitle'] + '><b>' + adventurer + getXPNextLevel(advs[i].experience, advs[i].type)+ '</b></div>';
 					m += '<table><tr><td><INPUT type="checkbox" id="'+setUID('ckAdv_' + advs[i].type)+'" ref="'+advs[i].type+'" '+(Data.options.forge[advs[i].type].cbAuto ? 'checked' : '')+'> ';
 					m += translate('missions') + ' : <SELECT ref="'+advs[i].type+'_'+advs[i].adventurer_id+'" id='+setUID('selMission_' + advs[i].type)+'>';
-					for(var missionN in Manifest.data.forge.missions){
-						var mission = Manifest.data.forge.missions[missionN];
+					for(var missionN in Forge.data.missions){
+						var mission = Forge.data.missions[missionN];
 						m += '<option value="'+mission.type+'" '+(Data.options.forge[advs[i].type].mission==mission.type ?  'selected' : '')+'>'+translate('mission-'+mission.type.replace(/_/g, '-'))+'</option>';
 					}
 					m += '</SELECT> </td>';
@@ -20400,6 +20470,7 @@
 					m += '</tr>';
 					m += '</table>';
 					m += '<span id='+setUID(advs[i].type+'_descMission')+'></span>';
+					
 					lBG.push('btnMissionAdvGo_'+advs[i].adventurer_id);
 					lBC.push('btnMissionAdvClaim_'+advs[i].adventurer_id);
 					lS.push('selMission_' + advs[i].type);
@@ -20432,9 +20503,8 @@
 				function onChangeMission(event) {
 					var ref = $(event.target.id).readAttribute('ref').split('_');
 					var idSel = UID['selMission_'+ref[0]+'_'+ref[1]];
-					//var e = $(idSel);
 					var missionType = event.target.options[event.target.selectedIndex].value;
-					var mission = Manifest.data.forge.missions[missionType];
+					var mission = Forge.data.missions[missionType];
 					
 					Data.options.forge[ref[0]].mission = missionType;
 					
@@ -20461,7 +20531,7 @@
 							var qtyP = 0;
 							var ing = Seed.player.forge.items.ingredients;
 							for(var i=0;i<ing.length;i++) {
-								if(ing[i].name=it) {
+								if(ing[i].name==it) {
 									qtyP=ing[i].quantity;
 									break;
 								}
@@ -20475,7 +20545,7 @@
 					$(UID[ref[0]+'_descMission']).update(ret);
 				}
 								
-				function getXPNextLevel(nbXp) {
+				function getXPNextLevel(nbXp, type) {
 					var j=0;
 					var ret = '';
 					if(nbXp >= 20000) {
@@ -20485,12 +20555,12 @@
 						var first = true;
 						var lvlXpBefore = 0;
 						var nextLvlXp = 0
-						for(var i in Manifest.data.forge.adventurers.CapitalAdventurer.level_exp){
+						for(var i in Forge.data.adventurers[type].level_exp){
 							if(!first) {
 								lvlXpBefore = nextLvlXp;
 							}
 							first = false;
-							nextLvlXp = Manifest.data.forge.adventurers.CapitalAdventurer.level_exp[i];
+							nextLvlXp = Forge.data.adventurers[type].level_exp[i];
 							if(nbXp<nextLvlXp) {
 								if(j != 0)
 									j = j-1;
@@ -20506,50 +20576,23 @@
 				function doMission(event) {
 					var ref = $(event.target.id).readAttribute('ref').split('_');
 					var idSel = UID['selMission_'+ref[0]];
-					var missionType = $(idSel).options[$(idSel).selectedIndex].value;
+					var missionType = Data.options.forge[ref[0]].mission;
 					
-					MyAjax.playerMission(missionType, ref[1], cb);
-					
-					function cb(rslt) {
-						if(rslt.ok) {
-							Seed.player.forge.adventurers = rslt.dat.result.adventurers
-							//Tabs.Jobs.tabJobForgeAdventurers();
-							$(UID['tabJobForge_Feedback']).update(translate('adventurer-in-progress') + ' ! ');
-						} else {
-							$(UID['tabJobForge_Feedback']).update(translate('adventurer-in-progress') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-						}
-					}
+					Tabs.Jobs.doMission(missionType, ref[1]);
 				}
 				
 				function claimMission(event) {
-					var advs = Seed.player.forge.adventurers;
-					var ref = $(event.target.id).readAttribute('ref');
-					var idx = ref.split('_');
-					var advId = idx[0];
+					var ref = $(event.target.id).readAttribute('ref').split('_');
 					var missionType = '';
 					
-					for(var i=0;i<advs.length;i++) {
-						if(advs[i].adventurer_id == advId) {
-							missionType = advs[i].current_mission;
+					for(var i=0;i<Seed.player.forge.adventurers.length;i++) {
+						if(Seed.player.forge.adventurers[i].adventurer_id == ref[0]) {
+							missionType = Seed.player.forge.adventurers[i].current_mission;
 							break;
 						}
 					}
-										
-					MyAjax.claimMission(missionType, advId, cb);
 					
-					function cb(rslt) {
-						if(rslt.ok) {
-							Seed.player.forge.adventurers = rslt.dat.result.adventurers;
-							//Tabs.Jobs.tabJobForgeAdventurers();
-							var ret=[];
-							for(var i=0;i<rslt.dat.result.items.length;i++) {
-								ret.push(translate(rslt.dat.result.items[i].toLowerCase()));
-							}
-							$(UID['tabJobForge_Feedback']).update(translate('claim') + ' : ' + ret.join(', '));
-						} else {
-							$(UID['tabJobForge_Feedback']).update(translate('adventurer-claimable') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-						}
-					}
+					Tabs.Jobs.doClaim(missionType, ref[0]);
 				}
 			},
 
@@ -20569,7 +20612,43 @@
 				t.forgeContentType = 1;
 				
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' 
-					+ '		<div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '</b><span id=' + setUID('blacksmith_lvl') + '></span></div>'
+					+ '		<div class=' + UID['subtitle'] + '>' + translateByKey('forge', null, 'dialogs') + '</div>';
+				var n = '<table>'
+					+ '	<tr>'
+					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td>' + getSelect("ingredient") + '</td>'
+					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxIngredients')+'" class="short" type="textbox" value="'+(Data.options.forge.ingredient.max)+'">'
+					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '	</tr>'
+					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td>'+translate('requirements')+'&nbsp;:&nbsp;</td>'
+					+ '		<td colspan=3><span id="'+setUID('tabForgeForge_Req_ingredient')+'"></span></td>'
+					+ '	</tr>'
+					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Equipements')+'" '+(Data.options.forge.equipment.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td>' + getSelect("equipment") + '</td>'
+					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxEquipments')+'" class="short" type="textbox" value="'+(Data.options.forge.equipment.max)+'">'
+					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Equipement')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '	</tr>'
+					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td>'+translate('requirements')+'&nbsp;:&nbsp;</td>'
+					+ '		<td colspan=3><span id="'+setUID('tabForgeForge_Req_equipment')+'"></span></td>'
+					+ '	</tr>'
+					+ '</table>'
+					+ '		<div class=' + UID['subtitle'] + '>' + translate('forge-crush') + '</div>'
+					+ '<table>'
+					+ '	<tr>'
+					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForgeCrush_Enable')+'" '+(Data.options.forge.crush.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td>' + getCrushSelect() + '</td>'
+					+ '		<td>&nbsp;<input id="'+setUID('txtForgeCrush_Max')+'" class="short" type="textbox" value="'+(Data.options.forge.crush.max)+'">'
+					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForgeCrush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
+					+ '	</tr>'
+					+ '</table>';
+				m += n;
+				m += '		<div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '<span id=' + setUID('blacksmith_lvl') + '></span></div>'
 					+ '		<table>'
 					+ '		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>'
 					+ '			<tr>'
@@ -20581,15 +20660,27 @@
 				$(UID['tabJobForge_Content']).update(m);
 				$(UID['btnHammerRepair']).observe('click', lunchRepairHammer);
 				
+				var evt = document.createEvent('HTMLEvents');
+				evt.initEvent('change', true, true);
+				
+				if($(UID['selForge_equipment'])) {
+					$(UID['selForge_equipment']).observe('change', onChangeSelect);
+					$(UID['selForge_equipment']).dispatchEvent(evt);
+				}
+				if($(UID['selForge_equipment'])) {
+					$(UID['selForge_ingredient']).observe('change', onChangeSelect);
+					$(UID['selForge_ingredient']).dispatchEvent(evt);
+				}
+				
 				MyAjax.forgeInfo(function(rslt) {
 					var j=0;
 					var ret = '';
-					var bs = rslt.dat.result.blacksmith;
+					var bs = Seed.blacksmith;
 					if(bs.experience >= 20000) {
 						ret = ' ( Lvl : 10, Xp : ' + bs.experience + ')';
 					} else {
-						for(var i in Manifest.data.forge.blacksmith_experience){
-							var nextLvlXp = Manifest.data.forge.blacksmith_experience[i];
+						for(var i in Forge.data.blacksmith_experience){
+							var nextLvlXp = Forge.data.blacksmith_experience[i];
 							if(bs.experience<nextLvlXp) {
 								if(j != 0)
 									j = j-1;
@@ -20601,9 +20692,9 @@
 					}
 					$(UID['blacksmith_lvl']).update(ret);
 					
-					for(var i in Manifest.data.forge.hammer_durability){
+					for(var i in Forge.data.hammer_durability){
 						if(i == bs.level) {
-							var maxDura = Manifest.data.forge.hammer_durability[i];
+							var maxDura = Forge.data.hammer_durability[i];
 							ret = bs.durability+' / ' +maxDura;
 							if(bs.durability==maxDura)
 								bs.available = false;
@@ -20624,6 +20715,53 @@
 							setButtonStyle($(UID['btnHammerRepair']), (rslt.dat.result.blacksmith.available), 'btn_blue', 'btn_disabled');
 						}
 					}
+				}
+				function getSelect(type) {
+					var ret = translate('filter-'+type) + '&nbsp;:&nbsp;<SELECT id='+setUID('selForge_'+type)+' ref="'+type+'">';
+					for(var item in Forge.data.items){
+						if(Forge.data.items[item].type == type)
+							ret += '<option value="'+item+'" '+(Data.options.forge[type].select==item ?  'selected' : '')+'>'+translate(item.toLowerCase())+'</option>';
+					}
+					ret += '</SELECT>';
+					return ret;
+				}
+				function getCrushSelect() {
+				    var eq = Seed.player.forge.items.equipments;
+					var ret = translate('filter-equipment') + '&nbsp;:&nbsp;<SELECT id='+setUID('selForgeCrush_equipment')+'>';
+					for(var i=0;i<eq.length;i++){
+						ret += '<option value="'+eq[i].name+'" '+(Data.options.forge.crush.select==eq[i].name ?  'selected' : '')+'>'+translate(eq[i].name.toLowerCase())+'</option>';
+					}
+					ret += '</SELECT>';
+					return ret;
+				}
+				function onChangeSelect(event) {
+					var type = $(event.target.id).readAttribute('ref');
+					var idSel = UID['selForge_'+type];
+					var nameItem = event.target.options[event.target.selectedIndex].value;
+					var reqItem = Forge.data.recipes[nameItem].requirements;
+					
+					Data.options.forge[type].select = nameItem;
+					
+					var ret = '<table>';
+					if(reqItem.blacksmith_level)
+						ret += '<tr><td align=right><b>'+translate('forge-blacksmith')+'</b>&nbsp;:&nbsp;</td><td> '+(reqItem.blacksmith_level)+'</td></tr>';
+					var reqI = '<table>';
+					for(var it in reqItem.items) {
+						var ing = Seed.player.forge.items.ingredients;
+						var qtyP = 0;
+						
+						for(var ii=0;ii<ing.length;ii++) {
+							if(ing[ii].name==it) {
+								qtyP=ing[ii].quantity;
+								break;
+							}
+						}
+						reqI += '<tr><td>'+translate(it.toLowerCase())+'&nbsp;:&nbsp;</td><td>'+(qtyP<reqItem.items[it] ? '<font color="#C33">' : '')+qtyP+'&nbsp;/&nbsp;'+reqItem.items[it]+(qtyP<reqItem.items[it] ? '</font>' : '')+'</td></tr>';
+					}
+					ret += '<tr><td align=right><b>'+translate('Items')+'</b>&nbsp;:&nbsp;</td><td>'+reqI+'</td></tr>';
+					
+					ret += '</table>';
+					$(UID['tabForgeForge_Req_'+type]).update(ret);
 				}
 			},
 			
@@ -20660,8 +20798,8 @@
 							if (a > b) return 1;
 							if (a < b) return -1;
 							return 0;
-						});
-					var ret = '<table>';
+						}); 
+					var ret = '<table class=' + UID['row_style'] + '>';
 					ret += '<tr class=' + UID['row_headers'] + ' align=center><td>&nbsp;'+translate('name')+'&nbsp;</td><td>&nbsp;'+translate('level')+'&nbsp;</td><td>&nbsp;'+translate('troops')+'&nbsp;</td><td>&nbsp;'+translate('status')+'&nbsp;</td></tr>';
 					for(var i=0; i<items.length; i++){
 						var lvlItem = '';
@@ -20688,11 +20826,14 @@
 				
 				function getIngredient() {
 					var items = Seed.player.forge.items.ingredients;
-					var ret = '<table>';
+					var ret = '<table class=' + UID['row_style'] + '><tr>';
 					for(var i=0; i<items.length; i++){
-						ret += '<tr><td>'+translate(items[i].name)+'</td><td> x '+  items[i].quantity + '<td></td></tr>';
+						ret += '<td>'+translate(items[i].name)+'</td><td> x '+  items[i].quantity + '<td></td>'+(((i+1)%2==1) ? '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>' : '' );
+						if((i+1)%2==0) {
+							ret+='</tr><tr>';
+						}
 					}
-					ret += '</table>';
+					ret += '</tr></table>';
 					return ret;
 				}
 				
@@ -21686,7 +21827,7 @@
 					if(t.forgeContentType == 0) {
 						var advs = Seed.player.forge.adventurers;
 						for(var i=0;i<advs.length;i++) {
-							var inMission=(Jobs.getJobs(Manifest.data.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+							var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
 							var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
 							
 							setButtonStyle(UID['btnMissionAdvGo_'+advs[i].adventurer_id], (!inMission && !isClaimable));
@@ -22596,44 +22737,29 @@
 			},
 			missionForgeTick: function() {
 				var t = Tabs.Jobs;
-				if(!Data.options.forge.enableAutoMission)
-					return;
+				if(!Data.options.forge.enableAutoMission) return;
 				var advs = Seed.player.forge.adventurers;
+				
 				for(var i=0;i<advs.length;i++) {
 					if(Data.options.forge[advs[i].type].cbAuto) {
-						var inMission=(Jobs.getJobs(Manifest.data.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
-						var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
+						var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+						var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));	
 						
 						if(isClaimable) {
-						
-							MyAjax.claimMission(Data.options.forge[advs[i].type].mission, advs[i].adventurer_id, cb);
-							
-							function cb(rslt) {
-								if(rslt.ok) {
-									Seed.player.forge.adventurers = rslt.dat.result.adventurers;
-									var ret=[];
-									for(var i=0;i<rslt.dat.result.items.length;i++) {
-										ret.push(translate(rslt.dat.result.items[i].toLowerCase()));
+							t.doClaim(advs[i].current_mission, advs[i].adventurer_id);
+						}
+						else if ((!inMission && !isClaimable)) {
+							var missionTaken = false;
+							for(var ii in Data.options.forge) {
+								if(ii != advs[i].type) {
+									if(Data.options.forge[ii].mission == Data.options.forge[advs[i].type].mission) {
+										t.jobFeedback('Mission ('+translate(missionType.replace(/_/g, '-')) + ') alreay taken by another adventurer ! Canceling Mission.');
+										missionTaken = true;
 									}
-									t.jobFeedback(translate('claim') + ' : ' + ret.join(', '));
-									t.trackStats('claim', rslt.dat.result.items);
-								} else {
-									t.jobFeedback(translate('adventurer-claimable') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 								}
 							}
-						
-						} else if ((!inMission && !isClaimable)) {
-							t.trackStats('mission', Data.options.forge[advs[i].type].mission);
-							MyAjax.playerMission(Data.options.forge[advs[i].type].mission, advs[i].adventurer_id, cb2);
-							
-							function cb2(rslt) {
-								if(rslt.ok) {
-									Seed.player.forge.adventurers = rslt.dat.result.adventurers
-									t.jobFeedback(translate('adventurer-in-progress') + ' ! ');
-									
-								} else {
-									t.jobFeedback(translate('adventurer-in-progress') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-								}
+							if(!missionTaken) {
+								t.doMission(Data.options.forge[advs[i].type].mission, advs[i].adventurer_id);
 							}
 						}
 					}
@@ -23021,7 +23147,34 @@
 																				 * qties
 																				 */
 			},
-			
+			doMission: function(missionId, adventurerId) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						Seed.player.forge.adventurers = rslt.dat.result.adventurers
+						Tabs.Jobs.jobFeedback(translate('adventurer-in-progress') + ' ! ');
+						
+					} else {
+						Tabs.Jobs.jobFeedback(translate('adventurer-in-progress') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				Tabs.Jobs.trackStats('mission', missionId);
+				MyAjax.playerMission(missionId, adventurerId, cb);
+			},
+			doClaim: function(mission, adventurerId) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						var ret=[];
+						for(var i=0;i<rslt.dat.result.items.length;i++) {
+							ret.push(translate(rslt.dat.result.items[i].toLowerCase()));
+						}
+						Tabs.Jobs.jobFeedback(translate('claim') + ' : ' + ret.join(', '));
+						Tabs.Jobs.trackStats('claim', rslt.dat.result.items);
+					} else {
+						Tabs.Jobs.jobFeedback(translate('adventurer-claimable') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				MyAjax.claimMission(mission, adventurerId, cb);
+			},
 			showStats: function() {
 				var t = Tabs.Jobs;
 				var div = $(UID['tabJobForge_tabStats_Status']);
