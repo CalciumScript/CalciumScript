@@ -1,6 +1,6 @@
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.825.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2014.1226.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -486,9 +486,9 @@
 		var sanctuaryDragonRank = new Array('common', 'lesser', 'heightened', 'royal', 'exalted', 'omniscient', 'legendary');
 		/* Troops arrays */
 		var all_dragon_list =		['GreatDragon', 'WaterDragon', 'StoneDragon', 'FireDragon', 'WindDragon', 'IceDragon', 'SwampDragon', 'ForestDragon', 'DesertDragon', 'ChronoDragon', 'SpectralDragon', 'KaiserDragon', 'CaveDragon', 'LunaDragon', 'ColossusDragon'];
-		var all_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite'];
-		var attack_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite'];
-		var wave_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite'];
+		var all_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite','AbyssalRavager'];
+		var attack_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite','AbyssalRavager'];
+		var wave_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite','AbyssalRavager'];
 		var spy_unit_types =		['Spy'];
 		var transport_unit_types =	['Porter', 'ATrans', 'PackDrg']; // Beware : Use abbreviations here
 		/* Resources arrays */
@@ -766,22 +766,25 @@
 							res_cap: [{}, {}, {}, {}, {}, {}]
 						},
 						forge: {
+							current_tab : 0,
 							enableAutoMission : false,
-							enableAutoForge: false,
 							crush: {
 								cbAuto:false,
 								select:'',
-								max:10
+								max:10,
+								nbAuto:0
 							},
 							equipment: {
 								cbAuto: false,
 								select: '',
-								max: 50
+								max: 50,
+								nbAuto:0
 							},
 							ingredient: {
 								cbAuto: false,
 								select: '',
-								max: 50
+								max: 50,
+								nbAuto:0
 							},
 							CapitalAdventurer : {
 								cbAuto : false,
@@ -5331,6 +5334,22 @@
 						if(jobs.length != 0) {
 							for(var nbT = 0 ; nbT < jobs.length ; nbT++) {
 								var iRow, iCell;
+								var current_mission = '';
+								var advName = '';
+								if(jobs[nbT].queue != 'repair_hammer') {
+									for(var adv in Forge.data.adventurers) {
+										if(jobs[nbT].queue == Forge.data.adventurers[adv].queue) {
+											for(var advP=0;advP<Seed.player.forge.adventurers.length;advP++) {
+												if(Seed.player.forge.adventurers[advP].type == Forge.data.adventurers[adv].type) {
+													current_mission = translate('mission-'+Seed.player.forge.adventurers[advP].current_mission.replace(/_/g, "-"));
+													advName = translate('adventurer-'+Seed.player.forge.adventurers[advP].type.toLowerCase());
+													break;
+												}
+											}
+											break;
+										}
+									}
+								}
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iRow.title = '';
@@ -5352,14 +5371,12 @@
 									iCell = iRow.insertCell(-1);
 									iCell.style.textAlign = 'left';
 									iCell.style.width = '35%';
-									var adventurer = translate('adventurers');
-									if(jobs[nbT].queue == 'capital_adventurer_mission')
-										adventurer = translate('adventurer-capitaladventurer');
-									if(jobs[nbT].queue == 'water_outpost_adventurer_mission')
-										adventurer = translate('adventurer-wateroutpostadventurer');
-									if(jobs[nbT].queue == 'repair_hammer')
-										adventurer = translate('forge-repair-hammer');
-									iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + adventurer ;
+									var adventurer = advName;
+									if(jobs[nbT].queue == 'repair_hammer') {
+										iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + translate('forge-repair-hammer');
+									} else {
+										iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + adventurer + ' - ' + current_mission;
+									}
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
 									iCell = iRow.insertCell(-1);
@@ -5368,24 +5385,7 @@
 									iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timeRemaining + '</font>';
 									if (!jobs[nbT].cancelled && Data.options.jobs_speedups_enabled)
 										Jobs.addSpeedUpButtons(table, 'tabJobsForge_speedups_0', 'jobs', cityIdx + '_' + jobs[nbT].id);
-
-									// Tabs.Jobs.buildStatFetch = false;
-									try {
-										// document.getElementById(UID['tabJobDragon_FB_'
-										// + cityIdx + '_' +
-										// jobs[0].city_building_type]).innerHTML =
-										// '<font color=#000>' +
-										// translate('Building') + ': ' +
-										// translate(jobs[0].city_building_type) + '
-										// ' + translate('Level').toLowerCase() + '
-										// ' + jobs[0].level + '</font>';
-									} catch (e) {}
 								}
-								//iRow = table.insertRow(-1);
-								//iCell = iRow.insertCell(-1);
-								//iCell.style.textAlign = 'left';
-								//iCell.style.width = '20%';
-								//iCell.innerHTML = '&nbsp;';
 							}
 						}
 					}
@@ -8616,7 +8616,16 @@
 				else att_loc = rep.location.x + ', ' + rep.location.y;
 				if (def.location) def_loc = def.location.x + ', ' + def.location.y;
 				else def_loc = rep.location.x + ', ' + rep.location.y;
-				m += '<table style="margin-top:1px" width=98%>' + '	<tr valign=top align=center>' + '		<td width=49%>' + '			<table class=' + UID['row_style'] + ' width=100%>' + '				<tr>' + '					<td valign=middle colspan=3><b>' + att.name + '</b> (' + att_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner == 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' + '				</tr><tr class=' + UID['row_headers'] + '>' + '					<td valign=middle width=40%><b>' + translate('Troops') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Fought') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('lost') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Might') + '</b></td>' + '				</tr>';
+				m += '<table style="margin-top:1px" width=98%>' + '	<tr valign=top align=center>' + '		<td width=49%>' 
+				+ '			<table class=' + UID['row_style'] + ' width=100%>' 
+				+ '				<tr>' 
+				+ '					<td valign=middle colspan=3><b>' + att.name + '</b> (' + att_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner == 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' 
+				+ '				</tr><tr class=' + UID['row_headers'] + '>' 
+				+ '					<td valign=middle width=47%><b>' + translate('Troops') + '</b></td>' 
+				+ '					<td valign=middle width=19%><b>' + translate('Fought') + '</b></td>' 
+				+ '					<td valign=middle width=17%><b>' + translate('lost') + '</b></td>' 
+				+ '					<td valign=middle width=17%><b>' + translate('Might') + '</b></td>' 
+				+ '				</tr>';
 				if (att.units) {
 					var total_might_lost = 0;
 					for (var p in att.units) {
@@ -8624,7 +8633,8 @@
 							var lost_troops_nb = (att.units[p][0] != att.units[p][1] ? att.units[p][0] - att.units[p][1] : 0);
 							var lost_troops = (att.units[p][0] != att.units[p][1] ? '<span class=' + UID['red'] + '><b>' + numf(att.units[p][0] - att.units[p][1]) + '</b></span>' : 0);
 							var total_might = 0;
-
+							var descEqp = '';
+							
 							for (var i = 0; i < all_unit_types.length; i++) {
 								if (all_unit_types[i] == p) {
 									total_might = lost_troops_nb * Seed.stats.unit[all_unit_types[i]].power;
@@ -8632,8 +8642,20 @@
 									break;
 								}
 							}
+							if(att.equipment) {
+								for(var ieqp=0; ieqp<att.equipment.length; ieqp++) {
+									var eqpTroop = att.equipment[ieqp];
+									if(eqpTroop.troop_type==p) {
+										descEqp += translate(eqpTroop.name) + ' : ';
+										for(var istat in eqpTroop.stats) {
+											descEqp += translate(istat) + ' => ' + eqpTroop.stats[istat] + ', ';
+										}
+										descEqp += '\n';
+									}
+								}
+							}
 
-							m += '			<tr>' + '				<td class=left>' + translate(p) + '</td>' + '				<td align=right>' + numf(att.units[p][0]) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
+							m += '			<tr>' + '				<td class=left>' + translate(p) + (descEqp=='' ? '' : '	<span class="' + UID['information'] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(att.units[p][0]) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
 						}
 					}
 					m += '	<tr>' + '		<td class=left><b>' + translate('Total lost') + '</b></td>' + '		<td align=right colspan=3><span class=' + UID['green'] + '><b>' + numf(total_might_lost) + '</b></span></td>' + '	</tr>';
@@ -8696,13 +8718,16 @@
 						}
 					}
 				}
-				m += '			</table>' + '		</td>' + '		<td width=2%>&nbsp</td>' + '		<td width=49%>' + '			<table class=' + UID['row_style'] + ' width=100%>' + '				<tr>' + '					<td valign=middle colspan=3><b>' + def.name + '</b> (' + def_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner != 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' + '				</tr><tr class=' + UID['row_headers'] + '>' + '					<td valign=middle width=40%><b>' + translate('Troops') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Fought') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('lost') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Might') + '</b></td>' + '				</tr>';
+				m += '			</table>' + '		</td>' + '		<td width=2%>&nbsp</td>' + '		<td width=49%>' + '			<table class=' + UID['row_style'] + ' width=100%>' + '				<tr>' + '					<td valign=middle colspan=3><b>' + def.name + '</b> (' + def_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner != 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' + '				</tr><tr class=' + UID['row_headers'] + '>' + '					<td valign=middle width=47%><b>' + translate('Troops') + '</b></td>' + '					<td valign=middle width=19%><b>' + translate('Fought') + '</b></td>' + '					<td valign=middle width=17%><b>' + translate('lost') + '</b></td>' + '					<td valign=middle width=17%><b>' + translate('Might') + '</b></td>' + '				</tr>';
 				if (def.units) {
 					var total_might_lost = 0;
 					for (var p in def.units) {
 						if (p && def.units[p]) {
 							var name = translate(p),
 								multiplier = 1;
+							if(p=='DefensiveTowerUnit') {
+								name = translate(def.equipped_part.type);
+							}
 							if (def.anthropus) {
 								switch (p) {
 									case 'Porter':
@@ -8773,7 +8798,7 @@
 
 							var lost_troops_nb = (qty != survival ? qty - survival : 0);
 							var lost_troops = (qty != survival ? '<span class=' + UID['red'] + '><b>' + numf(qty - survival) + '</b></span>' : 0);
-
+							var descEqp = '';
 							var total_might = 0;
 
 							for (var i = 0; i < all_unit_types.length; i++) {
@@ -8783,8 +8808,21 @@
 									break;
 								}
 							}
+							
+							if(def.equipment) {
+								for(var ieqp=0; ieqp<def.equipment.length; ieqp++) {
+									var eqpTroop = def.equipment[ieqp];
+									if(eqpTroop.troop_type==p) {
+										descEqp += translate(eqpTroop.name) + ' : ';
+										for(var istat in eqpTroop.stats) {
+											descEqp += translate(istat) + ' => ' + eqpTroop.stats[istat] + ', ';
+										}
+										descEqp += '\n';
+									}
+								}
+							}
 
-							m += '			<tr>' + '				<td class=left>' + name + '</td>' + '				<td align=right>' + numf(qty) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
+							m += '			<tr>' + '				<td class=left>' + name + (descEqp=='' ? '' : '	<span class="' + UID['information'] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(qty) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
 						}
 					}
 					m += '	<tr>' + '		<td class=left><b>' + translate('Total lost') + '</b></td>' + '		<td align=right colspan=3><span class=' + UID['green'] + '><b>' + numf(total_might_lost) + '</b></span></td>' + '	</tr>';
@@ -9802,7 +9840,74 @@
 		};
 		/******************************** Forge package ***********************/
 		var Forge = {
-			data: {}
+			data: {},
+			
+			checkForgeRequirements: function(objName, type) {
+				var t = Forge;
+				var req = Forge.data.recipes[objName].requirements;
+				var ret = {
+					result : true,
+					reason : []
+				};
+				if(t.getBlackSmithLevel() < req.blacksmith_level) {
+					ret.result = false;
+					ret.reason.push('Niveau du Forgeron non atteint');
+				}
+				for(var it in req.items) {
+					if(t.getNbPlayerItem(it, type)<req.items[it]) {
+						ret.result = false;
+						ret.reason.push('Pas assez de '+translate(it.toLowerCase()));
+					}
+				}
+				return ret;
+			},
+			getBlackSmithLevel: function() {
+				var bs = Seed.blacksmith;
+				var j=0;
+				if(bs.experience >= 20000) {
+					ret = 10;
+				} else {
+					for(var i in Forge.data.blacksmith_experience){
+						var nextLvlXp = Forge.data.blacksmith_experience[i];
+						if(bs.experience<nextLvlXp) {
+							if(j != 0)
+								j = j-1;
+							break;
+						}
+						j++;
+					}
+				}
+				return j;
+			},
+			getNbPlayerItem: function(itN, type) {
+				return 
+				var ret=0;
+				var itsP = Seed.player.forge.items[type];
+				for(var i=0;i<itsP.length;i++) {
+					ret = itsP[i].quantity;
+					break;
+				}
+				return ret;
+			},
+			getStatByUnit: function (unit) {
+				var ret = { 
+					melee:0,
+					defense:0,
+					speed:0,
+					range:0,
+					ranged:0,
+					life:0
+				};
+				var itsP = Seed.player.forge.items['equipments'];
+				for(var i=0;i<itsP.length;i++) {
+					if(itsP[i].troop_type==unit && itsP[i].state == 'equipped') {
+						for(var sta in itsP[i].stats){
+							ret[sta] += itsP[i].stats[sta];
+						}
+					}
+				}
+				return ret;
+			}
 		}
 		/******************************** Seed package *******************************/
 		var Seed = {
@@ -11034,75 +11139,6 @@
 				}
 			},
 			
-			fetchLocale: function(notify) {
-				var t = Translation;
-				new MyAjaxRequest('locales', 'locales/' + C.attrs.locale + '.xml', {
-					'_swf_session_id': C.attrs.sessionId
-				}, function(rslt) {
-					if (rslt.ok) {
-						try {
-							t.parseXML(rslt.dat);
-						} catch (e) {
-							rslt.ok = false;
-							rslt.errmsg = e.toString();
-						}
-					} else if (rslt.errmsg.indexOf('404') !== -1) {
-						new MyAjaxRequest('locales', 'locales/en.xml', {
-							'%5Fswf%5Fsession%5Fid': C.attrs.sessionId
-						}, function(rslt) {
-							if (rslt.ok) {
-								try {
-									t.parseXML(rslt.dat);
-								} catch (e) {
-									rslt.ok = false;
-									rslt.errmsg = e.toString();
-								}
-							}
-							if (notify) notify(rslt);
-							return;
-						});
-					}
-					if (notify) notify(rslt);
-				});
-			},
-
-			parseXML: function(xmlStr) {
-				var t = Translation;
-                var now = parseInt( serverTime() );
-                
-				/* Remove sections where invalid tags ar present */
-				if (xmlStr.indexOf('<targeted-messages>') > 0) xmlStr = xmlStr.substring(0, xmlStr.indexOf('<targeted-messages>')) + xmlStr.substring(xmlStr.indexOf('</targeted-messages>') + 20);
-
-				xmlStr = xmlStr.replace(/<[0-9]+/g, '<');
-				xmlStr = xmlStr.replace(/<\/[0-9]+/g, '<\/');
-				
-				// Didi : complete empty balise
-				xmlStr = xmlStr.replace(/<>/g,'<Teamwork_'+now+'>');
-				xmlStr = xmlStr.replace(/<\/>/g,'<\/Teamwork_'+now+'>');
-
-				// Didi : replace illegal starting char
-				xmlStr = xmlStr.replace(/<[-;,\.<>]/g,'<Teamwork-');
-				xmlStr = xmlStr.replace(/<\/[-;,\.<>]/g,'<\/Teamwork-');
-				
-				xmlTmpObj = new XML.ObjTree();
-				var dat = xmlTmpObj.parseXML(xmlStr);
-
-				if (dat.translations) {
-					if (dat.translations.parsererror) {
-						debugLog('erreur parsing : ' + inspectObj(dat.translations.parsererror, 8, 1));
-					}
-					for (sect in dat.translations) {
-						var to_keep = false;
-						for (i = 0; i < t._section.length && !to_keep; i++) {
-							if (sect === t._section[i]) to_keep = true;
-						}
-						if (!to_keep) delete dat.translations[sect];
-					}
-					t.xml = dat.translations;
-				} else
-					verboseLog('Error in the XML file structure: <translations> element not found!');
-			},
-
 			fixResults: function() {
 				var t = Translation.xml;
 
@@ -11275,10 +11311,8 @@
 				return Translation.getContent('forge', key, subkey);
 			}
 		};
-
 		/* Provide language translation services based on the browswer language */
 		var needTranslate = {};
-
 		function translate(str, ignore) {
 			if (TRANSLATION_ARRAY[str] != undefined) {
 				return TRANSLATION_ARRAY[str];
@@ -11297,7 +11331,6 @@
 			}
 			return str;
 		}
-
 		function translateByKey(str, key, section) {
 			if (Translation.loaded) {
 				var newStr;
@@ -13421,7 +13454,16 @@
 				var total = 0;
 				for (var i = 0; i < all_unit_types.length; i++) {
 					var stats = Seed.stats.unit[all_unit_types[i]];
-					m += '	<tr valign=top>' + '		<td class=right>' + translate(all_unit_types[i]) + ' :</td>' + '		<td align=right>' + numf(stats.melee, ' ') + '</td>' + '		<td align=right>' + numf(stats.defense, ' ') + '</td>' + '		<td align=right>' + numf(stats.speed, ' ') + '</td>' + '		<td align=right>' + numf(stats.range, ' ') + '</td>' + '		<td align=right>' + numf(stats.ranged, ' ') + '</td>' + '		<td align=right>' + numf(stats.life, ' ') + '</td>' + '	</tr>';
+					var statsforge = Forge.getStatByUnit(all_unit_types[i]);
+					m += '	<tr valign=top>' 
+					  + '		<td class=right>' + translate(all_unit_types[i]) + ' :</td>' 
+					  + '		<td align=right>' + ( statsforge.melee==0 ? numf(stats.melee, ' ') : '<font style="color:#00CD00">'+numf(stats.melee+statsforge.melee, ' ')+'</font>' )+ '</td>' 
+					  + '		<td align=right>' + ( statsforge.defense==0 ? numf(stats.defense, ' ') : '<font style="color:#00CD00">'+numf(stats.defense+statsforge.defense, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.speed==0 ? numf(stats.speed, ' ') : '<font style="color:#00CD00">'+numf(stats.speed+statsforge.speed, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.range==0 ? numf(stats.range, ' ') : '<font style="color:#00CD00">'+numf(stats.range+statsforge.range, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.ranged==0 ? numf(stats.ranged, ' ') : '<font style="color:#00CD00">'+numf(stats.ranged+statsforge.ranged, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.life==0 ? numf(stats.melee, ' ') : '<font style="color:#00CD00">'+numf(stats.life+statsforge.life, ' ')+'</font>' ) + '</td>' 
+					  + '	</tr>';
 				}
 				for (var i = 0; i < all_dragon_list.length; i++) {
 					var in_list = true;
@@ -18820,7 +18862,8 @@
 				t.contentType = Data.options.jobs.current_tab;
 				t.trainContentType = Data.options.training.current_tab;
 				t.sanctContentType = Data.options.sanctuary.current_tab;
-
+				t.forgeContentType = Data.options.forge.current_tab;
+				
 				/* Enable the jobs */
 				t.setTrainEnable(Data.options.training.enabled);
 				t.selectedQ = Data.options.training.mode;
@@ -18874,6 +18917,7 @@
 				Data.options.jobs.current_tab = t.contentType;
 				Data.options.training.current_tab = t.trainContentType;
 				Data.options.sanctuary.current_tab = t.sanctContentType;
+				Data.options.forge.current_tab = t.forgeContentType;
 				Data.options.training.mode = t.selectedQ;
 				logit('===============  Tabs.Jobs.onUnload:' + Data.options.jobs.current_tab);
 			},
@@ -20615,10 +20659,10 @@
 					+ '		<div class=' + UID['subtitle'] + '>' + translateByKey('forge', null, 'dialogs') + '</div>';
 				var n = '<table>'
 					+ '	<tr>'
-					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td><INPUT type="checkbox" ref="ingredient" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
 					+ '		<td>' + getSelect("ingredient") + '</td>'
-					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxIngredients')+'" class="short" type="textbox" value="'+(Data.options.forge.ingredient.max)+'">'
-					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '		<td>&nbsp;<input ref="ingredient" id="'+setUID('txtForge_MaxIngredients')+'" class="short" type="textbox" value="'+(Data.options.forge.ingredient.max)+'">'
+					+ '		<td>&nbsp;<input ref="ingredient" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
 					+ '	</tr>'
 					+ '<tr><td colspan=4>&nbsp;</td></tr>'
 					+ '	<tr>'
@@ -20627,10 +20671,10 @@
 					+ '	</tr>'
 					+ '<tr><td colspan=4>&nbsp;</td></tr>'
 					+ '	<tr>'
-					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Equipements')+'" '+(Data.options.forge.equipment.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td><INPUT type="checkbox" ref="equipment" id="'+setUID('ckForge_Equipements')+'" '+(Data.options.forge.equipment.cbAuto ? 'checked' : '')+'></td>'
 					+ '		<td>' + getSelect("equipment") + '</td>'
-					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxEquipments')+'" class="short" type="textbox" value="'+(Data.options.forge.equipment.max)+'">'
-					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Equipement')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '		<td>&nbsp;<input  ref="equipment" id="'+setUID('txtForge_MaxEquipments')+'" class="short" type="textbox" value="'+(Data.options.forge.equipment.max)+'">'
+					+ '		<td>&nbsp;<input  ref="equipment" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Equipement')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
 					+ '	</tr>'
 					+ '<tr><td colspan=4>&nbsp;</td></tr>'
 					+ '	<tr>'
@@ -20641,13 +20685,13 @@
 					+ '		<div class=' + UID['subtitle'] + '>' + translate('forge-crush') + '</div>'
 					+ '<table>'
 					+ '	<tr>'
-					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForgeCrush_Enable')+'" '+(Data.options.forge.crush.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td><INPUT ref="crush" type="checkbox" id="'+setUID('ckForge_Crush')+'" '+(Data.options.forge.crush.cbAuto ? 'checked' : '')+'></td>'
 					+ '		<td>' + getCrushSelect() + '</td>'
-					+ '		<td>&nbsp;<input id="'+setUID('txtForgeCrush_Max')+'" class="short" type="textbox" value="'+(Data.options.forge.crush.max)+'">'
-					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForgeCrush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
+					+ '		<td>&nbsp;<input ref="crush" id="'+setUID('txtForgeCrush_Max')+'" class="short" type="textbox" value="'+(Data.options.forge.crush.max)+'">'
+					+ '		<td>&nbsp;<input ref="crush" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForgeCrush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
 					+ '	</tr>'
 					+ '</table>';
-				m += n;
+				//m += n;
 				m += '		<div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '<span id=' + setUID('blacksmith_lvl') + '></span></div>'
 					+ '		<table>'
 					+ '		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>'
@@ -20660,6 +20704,26 @@
 				$(UID['tabJobForge_Content']).update(m);
 				$(UID['btnHammerRepair']).observe('click', lunchRepairHammer);
 				
+				$(UID['txtForge_MaxIngredients']).addEventListener('change', onChangeQty, false);
+				$(UID['txtForge_MaxIngredients']).addEventListener('click', onChangeQty, false);
+				$(UID['txtForge_MaxEquipments']).addEventListener('change', onChangeQty, false);
+				$(UID['txtForge_MaxEquipments']).addEventListener('click', onChangeQty, false);
+				$(UID['txtForgeCrush_Max']).addEventListener('change', onChangeQty, false);
+				$(UID['txtForgeCrush_Max']).addEventListener('click', onChangeQty, false);
+				
+				$(UID['ckForge_Ingredients']).addEventListener('change', checkedCb, false);
+				$(UID['ckForge_Ingredients']).addEventListener('click', checkedCb, false);
+				$(UID['ckForge_Equipements']).addEventListener('change', checkedCb, false);
+				$(UID['ckForge_Equipements']).addEventListener('click', checkedCb, false);
+				$(UID['ckForge_Crush']).addEventListener('change', checkedCb, false);
+				$(UID['ckForge_Crush']).addEventListener('click', checkedCb, false);
+				
+				$(UID['selForgeCrush_equipment']).observe('change', onChangeSelectCrush);
+				
+				$(UID['btnForge_Ingredient']).observe('click', onClickForge);
+				$(UID['btnForge_Equipement']).observe('click', onClickForge);
+				$(UID['btnForgeCrush']).observe('click', onClickCrush);
+
 				var evt = document.createEvent('HTMLEvents');
 				evt.initEvent('change', true, true);
 				
@@ -20736,7 +20800,6 @@
 				}
 				function onChangeSelect(event) {
 					var type = $(event.target.id).readAttribute('ref');
-					var idSel = UID['selForge_'+type];
 					var nameItem = event.target.options[event.target.selectedIndex].value;
 					var reqItem = Forge.data.recipes[nameItem].requirements;
 					
@@ -20762,6 +20825,44 @@
 					
 					ret += '</table>';
 					$(UID['tabForgeForge_Req_'+type]).update(ret);
+				}
+				function onChangeSelectCrush(event) {
+					Data.options.forge.crush.select = event.target.options[event.target.selectedIndex].value;
+				}
+				function checkedCb(event) {
+					var type = event.target.getAttribute('ref');
+					Data.options.forge[type].cbAuto = event.target.checked;
+				}
+				function onChangeQty(event) {
+					var type = event.target.getAttribute('ref');
+					var qty = toNum(event.target.value);
+					
+					if (isNaN(qty) || qty < 0) {
+						event.target.style.backgroundColor = 'red';
+						dispError(translate('Invalid number of '+type, t.container));
+					} else {
+						event.target.value = qty;
+						Data.options.forge[type].max = qty;
+						event.target.style.backgroundColor = '';
+					}
+				}
+				function onClickForge(event) {
+					var t=Tabs.Jobs;
+					var type = event.target.getAttribute('ref');
+					var nameItem = Data.options.forge[type].select;
+					var req = Forge.checkForgeRequirements(nameItem, type+'s');
+					if(!req.result) {
+						var message=req.reason.join(', ');
+						t.jobFeedback(translate('forge-blacksmith') + ' : ' + message);
+					}
+					else {
+						t.forgeItem(nameItem, false);
+					}
+				}
+				function onClickCrush(event) {
+					var t=Tabs.Jobs;
+					var nameItem = Data.options.forge.crush.select;
+					t.crushItem(nameItem, false);
 				}
 			},
 			
@@ -20799,26 +20900,23 @@
 							if (a < b) return -1;
 							return 0;
 						}); 
-					var ret = '<table class=' + UID['row_style'] + '>';
-					ret += '<tr class=' + UID['row_headers'] + ' align=center><td>&nbsp;'+translate('name')+'&nbsp;</td><td>&nbsp;'+translate('level')+'&nbsp;</td><td>&nbsp;'+translate('troops')+'&nbsp;</td><td>&nbsp;'+translate('status')+'&nbsp;</td></tr>';
+					var ret = '' 
+					+ '<table class=' + UID['row_style'] + '>'
+					+ '	<tr class=' + UID['row_headers'] + ' align=center>' 
+					+ '		<td>&nbsp;'+translate('name')+'&nbsp;</td>' 
+					+ '		<td>&nbsp;'+translate('level')+'&nbsp;</td>'
+					+ '		<td>&nbsp;'+translate('troops')+'&nbsp;</td>'
+					+ '		<td>&nbsp;'+translate('status')+'&nbsp;</td>'
+					+ '		<td>&nbsp;'+translate('action')+'&nbsp;</td>'					
+					+ '	</tr>';
 					for(var i=0; i<items.length; i++){
-						var lvlItem = '';
-						var nbStat = 0;
-						for(var tmp in items[i].stats) {
-							nbStat++;
-						}
-						switch (nbStat) {
-							case 1:
-								lvlItem = translate('forge-weak');
-								break;
-							case 2:
-								lvlItem = translate('forge-normal');
-								break;
-							case 3:
-								lvlItem = translate('forge-strong');
-								break;
-						}
-						ret += '<tr><td>&nbsp;'+translate(items[i].name)+'&nbsp;(<b>'+lvlItem+'</b>)&nbsp;</td><td align=center>&nbsp;'+items[i].level+'&nbsp;</td><td>&nbsp;'+translate(items[i].troop_type.toLowerCase())+'&nbsp;</td><td>&nbsp;'+( items[i].state=='equipped' ? translate('filter-equipped') : '' )+'&nbsp;</td></tr>';
+						ret += '<tr>' 
+						+ '	<td>&nbsp;'+translate(items[i].name)+'&nbsp;'+getInfoEquipment(items[i])+'&nbsp;</td>' 
+						+ '	<td align=center>&nbsp;'+items[i].level+'&nbsp;</td>' 
+						+ '	<td>&nbsp;'+translate(items[i].troop_type.toLowerCase())+'&nbsp;</td>' 
+						+ '	<td>&nbsp;'+( items[i].state=='equipped' ? translate('filter-equipped') : '' )+'&nbsp;</td>' 
+						+ '	<td align=center>&nbsp;'+'&nbsp;</td>'
+						+ '</tr>';
 					}
 					ret += '</table>';
 					return ret;
@@ -20828,8 +20926,10 @@
 					var items = Seed.player.forge.items.ingredients;
 					var ret = '<table class=' + UID['row_style'] + '><tr>';
 					for(var i=0; i<items.length; i++){
-						ret += '<td>'+translate(items[i].name)+'</td><td> x '+  items[i].quantity + '<td></td>'+(((i+1)%2==1) ? '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>' : '' );
-						if((i+1)%2==0) {
+						ret += '<td>'+translate(items[i].name)+'</td> ' 
+						+ '<td> x '+  items[i].quantity + '<td>' 
+						+ '</td>'+(((i+1)%3!==0) ? '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>' : '' );
+						if((i+1)%3===0) {
 							ret+='</tr><tr>';
 						}
 					}
@@ -20837,6 +20937,13 @@
 					return ret;
 				}
 				
+				function getInfoEquipment(item) {
+					var display = '';
+					for(var s in item.stats) {
+						display += translate(s) + ' : ' + item.stats[s] + '\n';
+					}
+					return '<span class="'+UID['information']+'" title="'+display+'" />';
+				}
 			},
 
 			/** * stat sub tab */
@@ -23175,6 +23282,42 @@
 				}
 				MyAjax.claimMission(mission, adventurerId, cb);
 			},
+			crushItem: function(nameItem, isAuto) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						for(var i=0;i<rslt.dat.result.disenchant_ingrendients.length;i++) {
+							rslt.dat.result.disenchant_ingrendients[i] = translate(rslt.dat.result.disenchant_ingrendients[i].toLowerCase());
+						}
+						Tabs.Jobs.jobFeedback(translate('forge-salvage-materials') + ' ' + rslt.dat.result.disenchant_ingrendients.joint(', '));
+						if(isAuto)
+							Data.options.forge[type].nbAuto++;
+					}
+					else {
+						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				
+				MyAjax.forgeCrush(nameItem, cb);
+			},
+			forgeItem: function (nameItem, isAuto) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						if(rslt.dat.result.forge_result) {
+							Tabs.Jobs.jobFeedback(translate('forge-success-title') + ' ' + translate(nameItem.toLowerCase()));
+							if(isAuto)
+								Data.options.forge[type].nbAuto++;
+						}
+						else {
+							Tabs.Jobs.jobFeedback(translate('forge-fail-title') + ' ' + translate(nameItem.toLowerCase()));
+						}
+					}
+					else {
+						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				
+				MyAjax.forgeItem(nameItem, cb);
+			},
 			showStats: function() {
 				var t = Tabs.Jobs;
 				var div = $(UID['tabJobForge_tabStats_Status']);
@@ -23187,7 +23330,8 @@
 
 				var trueRunTime = (run_time > 0) ? (run_time / 3600) : 1;
 
-				var m = '<table class=' + UID['table'] + '>' 
+				var m = '<div class=' + UID['subtitle'] + '><b>' + translate('adventurers') + '</b></div>'
+				+ '<table class=' + UID['table'] + '>' 
 				+ '	<tr>' 
 				+ '		<td class=right>' + translate('Start Date') + ': </td>' 
 				+ '		<td colspan=>' + new Date(Data.stats.forgeAdv.start_at * 1000).myString() + '</td>' 
@@ -23221,7 +23365,23 @@
 					+ '			<td>(' + numf(perHour, ' ') + ' /' + translate('h') + ')</td>' 
 					+ '		</tr>';
 				}
-				m += '</table>';
+				m += '</table>'
+				+ '<div class=' + UID['subtitle'] + '><b>' + translate('forge-blacksmith') + '</b></div>'
+				+ '<table class=' + UID['table'] + '>'
+				+ '	<tr valign=top align=right>' 
+				+ '		<td class=right>' + translate('forge-equipment') + ': </td>'
+				+ '		<td>' + Data.options.forge.equipment.nbAuto + ' / ' + Data.options.forge.equipment.max + '</td>'
+				+ ' </tr>'
+				+ '	<tr valign=top align=right>' 
+				+ '		<td class=right>' + translate('forge-ingredient') + ': </td>'
+				+ '		<td>' + Data.options.forge.ingredient.nbAuto + ' / ' + Data.options.forge.ingredient.max + '</td>'
+				+ ' </tr>'
+				+ '	<tr valign=top align=right>' 
+				+ '		<td class=right>' + translate('forge-crush') + ': </td>'
+				+ '		<td>' + Data.options.forge.crush.nbAuto + ' / ' + Data.options.forge.crush.max + '</td>'
+				+ ' </tr>'
+				+ '</table>';
+				
 				div.innerHTML = m;
 			},
 			trackStats: function(type, obj) {
@@ -31738,7 +31898,6 @@
 		XML.ObjTree.prototype.xmlDecl = '<?xml version="1.0" encoding="UTF-8" ?>\n';
 		XML.ObjTree.prototype.attr_prefix = '-';
 		XML.ObjTree.prototype.overrideMimeType = 'text/xml';
-		/* method:parseXML(xmlsource) */
 		XML.ObjTree.prototype.parseXML = function(xml) {
 			var root;
 			if (window.DOMParser) {
@@ -42589,7 +42748,7 @@ return jDataView;
 						'Enable research on all OP': 'Activer la possibilité de lancer des recherches sur tous les OP',
 						'Enable transport of ': 'Activer le transport de ',
 						'Enable use of speed-ups in attacks waves': 'Activer l\'utilisation des accélérateurs de temps dans les vagues d\'attaque',
-						'Enable use of speed-ups in training/resurrection jobs': 'Activer l\'utilisation de accélérateurs de temps dans les formations/résurrections',
+						'Enable use of speed-ups in training/resurrection jobs': 'Activer l\'utilisation de accélérateurs de temps dans les tâches',
 						'Enable verbose logging': 'Activer la journalisation d\'évenements',
 						'Enable window drag': 'Autoriser le déplacement de la fenêtre',
 						'Enable the sentinel tower': 'Activer la sentinelle',
@@ -43025,6 +43184,10 @@ return jDataView;
 						'ajax-req-feeding': 'Amélioration des dragons',
 						'ajax-req-dragonHandle': 'Rejeter/Retirer/Equiper un dragon du sanctuaire',
 						'ajax-req-customization': 'Équiper un dragon d\'armure et d\'écailles',
+						'ajax-req-forge' : 'Toutes requêtes autour de la forge',
+						'ajax-req-other' : 'Autre requête',
+						'ajax-req-trade' : 'Toutes requêtes autour du commerce',
+						'ajax-req-wilderness' : 'Toutes requêtes autour des étendues sauvages',
 						'Zzz': 'Zzz'
 					};
 					break;
@@ -44233,6 +44396,7 @@ return jDataView;
 		background-position:center center;\
 		color: white;\
 		padding-right: 10px;\
+		margin: 0 auto;\
 	}\
 	.' + UID['scrollable'] + ' {\
 		overflow: auto !important;\

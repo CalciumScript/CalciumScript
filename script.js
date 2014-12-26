@@ -1,6 +1,6 @@
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.1126.2', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2014.1226.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -486,9 +486,9 @@
 		var sanctuaryDragonRank = new Array('common', 'lesser', 'heightened', 'royal', 'exalted', 'omniscient', 'legendary');
 		/* Troops arrays */
 		var all_dragon_list =		['GreatDragon', 'WaterDragon', 'StoneDragon', 'FireDragon', 'WindDragon', 'IceDragon', 'SwampDragon', 'ForestDragon', 'DesertDragon', 'ChronoDragon', 'SpectralDragon', 'KaiserDragon', 'CaveDragon', 'LunaDragon', 'ColossusDragon'];
-		var all_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite'];
-		var attack_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite'];
-		var wave_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite'];
+		var all_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite','AbyssalRavager'];
+		var attack_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite','AbyssalRavager'];
+		var wave_unit_types =		['Porter', 'Conscript', 'Spy', 'Halberdsman', 'Minotaur', 'Longbowman', 'SwiftStrikeDragon', 'BattleDragon', 'ArmoredTransport', 'Giant', 'FireMirror', 'PackDragon', 'DarkSlayer', 'LightningCannon', 'ChargeTroop', 'VengeWyrm', 'AquaTroop', 'StoneTroop', 'FireTroop', 'WindTroop', 'IceTroop', 'FrostGiant', 'SwampTroop', 'ForestTroop', 'DesertTroop', 'DimensionalRuiner', 'ArcticLeviathan', 'Harrier', 'Defendo', 'ShadowStalker', 'Shaman', 'WarScarab', 'VoltRanger','DragonRider','ColossalMite','AbyssalRavager'];
 		var spy_unit_types =		['Spy'];
 		var transport_unit_types =	['Porter', 'ATrans', 'PackDrg']; // Beware : Use abbreviations here
 		/* Resources arrays */
@@ -766,22 +766,25 @@
 							res_cap: [{}, {}, {}, {}, {}, {}]
 						},
 						forge: {
+							current_tab : 0,
 							enableAutoMission : false,
-							enableAutoForge: false,
 							crush: {
 								cbAuto:false,
 								select:'',
-								max:10
+								max:10,
+								nbAuto:0
 							},
 							equipment: {
 								cbAuto: false,
 								select: '',
-								max: 50
+								max: 50,
+								nbAuto:0
 							},
 							ingredient: {
 								cbAuto: false,
 								select: '',
-								max: 50
+								max: 50,
+								nbAuto:0
 							},
 							CapitalAdventurer : {
 								cbAuto : false,
@@ -5331,6 +5334,22 @@
 						if(jobs.length != 0) {
 							for(var nbT = 0 ; nbT < jobs.length ; nbT++) {
 								var iRow, iCell;
+								var current_mission = '';
+								var advName = '';
+								if(jobs[nbT].queue != 'repair_hammer') {
+									for(var adv in Forge.data.adventurers) {
+										if(jobs[nbT].queue == Forge.data.adventurers[adv].queue) {
+											for(var advP=0;advP<Seed.player.forge.adventurers.length;advP++) {
+												if(Seed.player.forge.adventurers[advP].type == Forge.data.adventurers[adv].type) {
+													current_mission = translate('mission-'+Seed.player.forge.adventurers[advP].current_mission.replace(/_/g, "-"));
+													advName = translate('adventurer-'+Seed.player.forge.adventurers[advP].type.toLowerCase());
+													break;
+												}
+											}
+											break;
+										}
+									}
+								}
 								iRow = table.insertRow(-1);
 								iRow.className = mtClass;
 								iRow.title = '';
@@ -5352,14 +5371,12 @@
 									iCell = iRow.insertCell(-1);
 									iCell.style.textAlign = 'left';
 									iCell.style.width = '35%';
-									var adventurer = translate('adventurers');
-									if(jobs[nbT].queue == 'capital_adventurer_mission')
-										adventurer = translate('adventurer-capitaladventurer');
-									if(jobs[nbT].queue == 'water_outpost_adventurer_mission')
-										adventurer = translate('adventurer-wateroutpostadventurer');
-									if(jobs[nbT].queue == 'repair_hammer')
-										adventurer = translate('forge-repair-hammer');
-									iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + adventurer ;
+									var adventurer = advName;
+									if(jobs[nbT].queue == 'repair_hammer') {
+										iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + translate('forge-repair-hammer');
+									} else {
+										iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + adventurer + ' - ' + current_mission;
+									}
 									iCell = iRow.insertCell(-1);
 									iCell.style.width = '10%';
 									iCell = iRow.insertCell(-1);
@@ -5368,24 +5385,7 @@
 									iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timeRemaining + '</font>';
 									if (!jobs[nbT].cancelled && Data.options.jobs_speedups_enabled)
 										Jobs.addSpeedUpButtons(table, 'tabJobsForge_speedups_0', 'jobs', cityIdx + '_' + jobs[nbT].id);
-
-									// Tabs.Jobs.buildStatFetch = false;
-									try {
-										// document.getElementById(UID['tabJobDragon_FB_'
-										// + cityIdx + '_' +
-										// jobs[0].city_building_type]).innerHTML =
-										// '<font color=#000>' +
-										// translate('Building') + ': ' +
-										// translate(jobs[0].city_building_type) + '
-										// ' + translate('Level').toLowerCase() + '
-										// ' + jobs[0].level + '</font>';
-									} catch (e) {}
 								}
-								//iRow = table.insertRow(-1);
-								//iCell = iRow.insertCell(-1);
-								//iCell.style.textAlign = 'left';
-								//iCell.style.width = '20%';
-								//iCell.innerHTML = '&nbsp;';
 							}
 						}
 					}
@@ -8616,7 +8616,16 @@
 				else att_loc = rep.location.x + ', ' + rep.location.y;
 				if (def.location) def_loc = def.location.x + ', ' + def.location.y;
 				else def_loc = rep.location.x + ', ' + rep.location.y;
-				m += '<table style="margin-top:1px" width=98%>' + '	<tr valign=top align=center>' + '		<td width=49%>' + '			<table class=' + UID['row_style'] + ' width=100%>' + '				<tr>' + '					<td valign=middle colspan=3><b>' + att.name + '</b> (' + att_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner == 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' + '				</tr><tr class=' + UID['row_headers'] + '>' + '					<td valign=middle width=40%><b>' + translate('Troops') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Fought') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('lost') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Might') + '</b></td>' + '				</tr>';
+				m += '<table style="margin-top:1px" width=98%>' + '	<tr valign=top align=center>' + '		<td width=49%>' 
+				+ '			<table class=' + UID['row_style'] + ' width=100%>' 
+				+ '				<tr>' 
+				+ '					<td valign=middle colspan=3><b>' + att.name + '</b> (' + att_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner == 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' 
+				+ '				</tr><tr class=' + UID['row_headers'] + '>' 
+				+ '					<td valign=middle width=47%><b>' + translate('Troops') + '</b></td>' 
+				+ '					<td valign=middle width=19%><b>' + translate('Fought') + '</b></td>' 
+				+ '					<td valign=middle width=17%><b>' + translate('lost') + '</b></td>' 
+				+ '					<td valign=middle width=17%><b>' + translate('Might') + '</b></td>' 
+				+ '				</tr>';
 				if (att.units) {
 					var total_might_lost = 0;
 					for (var p in att.units) {
@@ -8624,7 +8633,8 @@
 							var lost_troops_nb = (att.units[p][0] != att.units[p][1] ? att.units[p][0] - att.units[p][1] : 0);
 							var lost_troops = (att.units[p][0] != att.units[p][1] ? '<span class=' + UID['red'] + '><b>' + numf(att.units[p][0] - att.units[p][1]) + '</b></span>' : 0);
 							var total_might = 0;
-
+							var descEqp = '';
+							
 							for (var i = 0; i < all_unit_types.length; i++) {
 								if (all_unit_types[i] == p) {
 									total_might = lost_troops_nb * Seed.stats.unit[all_unit_types[i]].power;
@@ -8632,8 +8642,20 @@
 									break;
 								}
 							}
+							if(att.equipment) {
+								for(var ieqp=0; ieqp<att.equipment.length; ieqp++) {
+									var eqpTroop = att.equipment[ieqp];
+									if(eqpTroop.troop_type==p) {
+										descEqp += translate(eqpTroop.name) + ' : ';
+										for(var istat in eqpTroop.stats) {
+											descEqp += translate(istat) + ' => ' + eqpTroop.stats[istat] + ', ';
+										}
+										descEqp += '\n';
+									}
+								}
+							}
 
-							m += '			<tr>' + '				<td class=left>' + translate(p) + '</td>' + '				<td align=right>' + numf(att.units[p][0]) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
+							m += '			<tr>' + '				<td class=left>' + translate(p) + (descEqp=='' ? '' : '	<span class="' + UID['information'] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(att.units[p][0]) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
 						}
 					}
 					m += '	<tr>' + '		<td class=left><b>' + translate('Total lost') + '</b></td>' + '		<td align=right colspan=3><span class=' + UID['green'] + '><b>' + numf(total_might_lost) + '</b></span></td>' + '	</tr>';
@@ -8696,13 +8718,16 @@
 						}
 					}
 				}
-				m += '			</table>' + '		</td>' + '		<td width=2%>&nbsp</td>' + '		<td width=49%>' + '			<table class=' + UID['row_style'] + ' width=100%>' + '				<tr>' + '					<td valign=middle colspan=3><b>' + def.name + '</b> (' + def_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner != 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' + '				</tr><tr class=' + UID['row_headers'] + '>' + '					<td valign=middle width=40%><b>' + translate('Troops') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Fought') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('lost') + '</b></td>' + '					<td valign=middle width=20%><b>' + translate('Might') + '</b></td>' + '				</tr>';
+				m += '			</table>' + '		</td>' + '		<td width=2%>&nbsp</td>' + '		<td width=49%>' + '			<table class=' + UID['row_style'] + ' width=100%>' + '				<tr>' + '					<td valign=middle colspan=3><b>' + def.name + '</b> (' + def_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner != 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' + '				</tr><tr class=' + UID['row_headers'] + '>' + '					<td valign=middle width=47%><b>' + translate('Troops') + '</b></td>' + '					<td valign=middle width=19%><b>' + translate('Fought') + '</b></td>' + '					<td valign=middle width=17%><b>' + translate('lost') + '</b></td>' + '					<td valign=middle width=17%><b>' + translate('Might') + '</b></td>' + '				</tr>';
 				if (def.units) {
 					var total_might_lost = 0;
 					for (var p in def.units) {
 						if (p && def.units[p]) {
 							var name = translate(p),
 								multiplier = 1;
+							if(p=='DefensiveTowerUnit') {
+								name = translate(def.equipped_part.type);
+							}
 							if (def.anthropus) {
 								switch (p) {
 									case 'Porter':
@@ -8773,7 +8798,7 @@
 
 							var lost_troops_nb = (qty != survival ? qty - survival : 0);
 							var lost_troops = (qty != survival ? '<span class=' + UID['red'] + '><b>' + numf(qty - survival) + '</b></span>' : 0);
-
+							var descEqp = '';
 							var total_might = 0;
 
 							for (var i = 0; i < all_unit_types.length; i++) {
@@ -8783,8 +8808,21 @@
 									break;
 								}
 							}
+							
+							if(def.equipment) {
+								for(var ieqp=0; ieqp<def.equipment.length; ieqp++) {
+									var eqpTroop = def.equipment[ieqp];
+									if(eqpTroop.troop_type==p) {
+										descEqp += translate(eqpTroop.name) + ' : ';
+										for(var istat in eqpTroop.stats) {
+											descEqp += translate(istat) + ' => ' + eqpTroop.stats[istat] + ', ';
+										}
+										descEqp += '\n';
+									}
+								}
+							}
 
-							m += '			<tr>' + '				<td class=left>' + name + '</td>' + '				<td align=right>' + numf(qty) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
+							m += '			<tr>' + '				<td class=left>' + name + (descEqp=='' ? '' : '	<span class="' + UID['information'] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(qty) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
 						}
 					}
 					m += '	<tr>' + '		<td class=left><b>' + translate('Total lost') + '</b></td>' + '		<td align=right colspan=3><span class=' + UID['green'] + '><b>' + numf(total_might_lost) + '</b></span></td>' + '	</tr>';
@@ -9802,7 +9840,74 @@
 		};
 		/******************************** Forge package ***********************/
 		var Forge = {
-			data: {}
+			data: {},
+			
+			checkForgeRequirements: function(objName, type) {
+				var t = Forge;
+				var req = Forge.data.recipes[objName].requirements;
+				var ret = {
+					result : true,
+					reason : []
+				};
+				if(t.getBlackSmithLevel() < req.blacksmith_level) {
+					ret.result = false;
+					ret.reason.push('Niveau du Forgeron non atteint');
+				}
+				for(var it in req.items) {
+					if(t.getNbPlayerItem(it, type)<req.items[it]) {
+						ret.result = false;
+						ret.reason.push('Pas assez de '+translate(it.toLowerCase()));
+					}
+				}
+				return ret;
+			},
+			getBlackSmithLevel: function() {
+				var bs = Seed.blacksmith;
+				var j=0;
+				if(bs.experience >= 20000) {
+					ret = 10;
+				} else {
+					for(var i in Forge.data.blacksmith_experience){
+						var nextLvlXp = Forge.data.blacksmith_experience[i];
+						if(bs.experience<nextLvlXp) {
+							if(j != 0)
+								j = j-1;
+							break;
+						}
+						j++;
+					}
+				}
+				return j;
+			},
+			getNbPlayerItem: function(itN, type) {
+				return 
+				var ret=0;
+				var itsP = Seed.player.forge.items[type];
+				for(var i=0;i<itsP.length;i++) {
+					ret = itsP[i].quantity;
+					break;
+				}
+				return ret;
+			},
+			getStatByUnit: function (unit) {
+				var ret = { 
+					melee:0,
+					defense:0,
+					speed:0,
+					range:0,
+					ranged:0,
+					life:0
+				};
+				var itsP = Seed.player.forge.items['equipments'];
+				for(var i=0;i<itsP.length;i++) {
+					if(itsP[i].troop_type==unit && itsP[i].state == 'equipped') {
+						for(var sta in itsP[i].stats){
+							ret[sta] += itsP[i].stats[sta];
+						}
+					}
+				}
+				return ret;
+			}
 		}
 		/******************************** Seed package *******************************/
 		var Seed = {
@@ -11034,75 +11139,6 @@
 				}
 			},
 			
-			fetchLocale: function(notify) {
-				var t = Translation;
-				new MyAjaxRequest('locales', 'locales/' + C.attrs.locale + '.xml', {
-					'_swf_session_id': C.attrs.sessionId
-				}, function(rslt) {
-					if (rslt.ok) {
-						try {
-							t.parseXML(rslt.dat);
-						} catch (e) {
-							rslt.ok = false;
-							rslt.errmsg = e.toString();
-						}
-					} else if (rslt.errmsg.indexOf('404') !== -1) {
-						new MyAjaxRequest('locales', 'locales/en.xml', {
-							'%5Fswf%5Fsession%5Fid': C.attrs.sessionId
-						}, function(rslt) {
-							if (rslt.ok) {
-								try {
-									t.parseXML(rslt.dat);
-								} catch (e) {
-									rslt.ok = false;
-									rslt.errmsg = e.toString();
-								}
-							}
-							if (notify) notify(rslt);
-							return;
-						});
-					}
-					if (notify) notify(rslt);
-				});
-			},
-
-			parseXML: function(xmlStr) {
-				var t = Translation;
-                var now = parseInt( serverTime() );
-                
-				/* Remove sections where invalid tags ar present */
-				if (xmlStr.indexOf('<targeted-messages>') > 0) xmlStr = xmlStr.substring(0, xmlStr.indexOf('<targeted-messages>')) + xmlStr.substring(xmlStr.indexOf('</targeted-messages>') + 20);
-
-				xmlStr = xmlStr.replace(/<[0-9]+/g, '<');
-				xmlStr = xmlStr.replace(/<\/[0-9]+/g, '<\/');
-				
-				// Didi : complete empty balise
-				xmlStr = xmlStr.replace(/<>/g,'<Teamwork_'+now+'>');
-				xmlStr = xmlStr.replace(/<\/>/g,'<\/Teamwork_'+now+'>');
-
-				// Didi : replace illegal starting char
-				xmlStr = xmlStr.replace(/<[-;,\.<>]/g,'<Teamwork-');
-				xmlStr = xmlStr.replace(/<\/[-;,\.<>]/g,'<\/Teamwork-');
-				
-				xmlTmpObj = new XML.ObjTree();
-				var dat = xmlTmpObj.parseXML(xmlStr);
-
-				if (dat.translations) {
-					if (dat.translations.parsererror) {
-						debugLog('erreur parsing : ' + inspectObj(dat.translations.parsererror, 8, 1));
-					}
-					for (sect in dat.translations) {
-						var to_keep = false;
-						for (i = 0; i < t._section.length && !to_keep; i++) {
-							if (sect === t._section[i]) to_keep = true;
-						}
-						if (!to_keep) delete dat.translations[sect];
-					}
-					t.xml = dat.translations;
-				} else
-					verboseLog('Error in the XML file structure: <translations> element not found!');
-			},
-
 			fixResults: function() {
 				var t = Translation.xml;
 
@@ -11275,10 +11311,8 @@
 				return Translation.getContent('forge', key, subkey);
 			}
 		};
-
 		/* Provide language translation services based on the browswer language */
 		var needTranslate = {};
-
 		function translate(str, ignore) {
 			if (TRANSLATION_ARRAY[str] != undefined) {
 				return TRANSLATION_ARRAY[str];
@@ -11297,7 +11331,6 @@
 			}
 			return str;
 		}
-
 		function translateByKey(str, key, section) {
 			if (Translation.loaded) {
 				var newStr;
@@ -13421,7 +13454,16 @@
 				var total = 0;
 				for (var i = 0; i < all_unit_types.length; i++) {
 					var stats = Seed.stats.unit[all_unit_types[i]];
-					m += '	<tr valign=top>' + '		<td class=right>' + translate(all_unit_types[i]) + ' :</td>' + '		<td align=right>' + numf(stats.melee, ' ') + '</td>' + '		<td align=right>' + numf(stats.defense, ' ') + '</td>' + '		<td align=right>' + numf(stats.speed, ' ') + '</td>' + '		<td align=right>' + numf(stats.range, ' ') + '</td>' + '		<td align=right>' + numf(stats.ranged, ' ') + '</td>' + '		<td align=right>' + numf(stats.life, ' ') + '</td>' + '	</tr>';
+					var statsforge = Forge.getStatByUnit(all_unit_types[i]);
+					m += '	<tr valign=top>' 
+					  + '		<td class=right>' + translate(all_unit_types[i]) + ' :</td>' 
+					  + '		<td align=right>' + ( statsforge.melee==0 ? numf(stats.melee, ' ') : '<font style="color:#00CD00">'+numf(stats.melee+statsforge.melee, ' ')+'</font>' )+ '</td>' 
+					  + '		<td align=right>' + ( statsforge.defense==0 ? numf(stats.defense, ' ') : '<font style="color:#00CD00">'+numf(stats.defense+statsforge.defense, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.speed==0 ? numf(stats.speed, ' ') : '<font style="color:#00CD00">'+numf(stats.speed+statsforge.speed, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.range==0 ? numf(stats.range, ' ') : '<font style="color:#00CD00">'+numf(stats.range+statsforge.range, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.ranged==0 ? numf(stats.ranged, ' ') : '<font style="color:#00CD00">'+numf(stats.ranged+statsforge.ranged, ' ')+'</font>' ) + '</td>' 
+					  + '		<td align=right>' + ( statsforge.life==0 ? numf(stats.melee, ' ') : '<font style="color:#00CD00">'+numf(stats.life+statsforge.life, ' ')+'</font>' ) + '</td>' 
+					  + '	</tr>';
 				}
 				for (var i = 0; i < all_dragon_list.length; i++) {
 					var in_list = true;
@@ -18820,7 +18862,8 @@
 				t.contentType = Data.options.jobs.current_tab;
 				t.trainContentType = Data.options.training.current_tab;
 				t.sanctContentType = Data.options.sanctuary.current_tab;
-
+				t.forgeContentType = Data.options.forge.current_tab;
+				
 				/* Enable the jobs */
 				t.setTrainEnable(Data.options.training.enabled);
 				t.selectedQ = Data.options.training.mode;
@@ -18874,6 +18917,7 @@
 				Data.options.jobs.current_tab = t.contentType;
 				Data.options.training.current_tab = t.trainContentType;
 				Data.options.sanctuary.current_tab = t.sanctContentType;
+				Data.options.forge.current_tab = t.forgeContentType;
 				Data.options.training.mode = t.selectedQ;
 				logit('===============  Tabs.Jobs.onUnload:' + Data.options.jobs.current_tab);
 			},
@@ -20615,10 +20659,10 @@
 					+ '		<div class=' + UID['subtitle'] + '>' + translateByKey('forge', null, 'dialogs') + '</div>';
 				var n = '<table>'
 					+ '	<tr>'
-					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td><INPUT type="checkbox" ref="ingredient" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
 					+ '		<td>' + getSelect("ingredient") + '</td>'
-					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxIngredients')+'" class="short" type="textbox" value="'+(Data.options.forge.ingredient.max)+'">'
-					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '		<td>&nbsp;<input ref="ingredient" id="'+setUID('txtForge_MaxIngredients')+'" class="short" type="textbox" value="'+(Data.options.forge.ingredient.max)+'">'
+					+ '		<td>&nbsp;<input ref="ingredient" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
 					+ '	</tr>'
 					+ '<tr><td colspan=4>&nbsp;</td></tr>'
 					+ '	<tr>'
@@ -20627,10 +20671,10 @@
 					+ '	</tr>'
 					+ '<tr><td colspan=4>&nbsp;</td></tr>'
 					+ '	<tr>'
-					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForge_Equipements')+'" '+(Data.options.forge.equipment.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td><INPUT type="checkbox" ref="equipment" id="'+setUID('ckForge_Equipements')+'" '+(Data.options.forge.equipment.cbAuto ? 'checked' : '')+'></td>'
 					+ '		<td>' + getSelect("equipment") + '</td>'
-					+ '		<td>&nbsp;<input id="'+setUID('txtForge_MaxEquipments')+'" class="short" type="textbox" value="'+(Data.options.forge.equipment.max)+'">'
-					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Equipement')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '		<td>&nbsp;<input  ref="equipment" id="'+setUID('txtForge_MaxEquipments')+'" class="short" type="textbox" value="'+(Data.options.forge.equipment.max)+'">'
+					+ '		<td>&nbsp;<input  ref="equipment" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Equipement')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
 					+ '	</tr>'
 					+ '<tr><td colspan=4>&nbsp;</td></tr>'
 					+ '	<tr>'
@@ -20641,12 +20685,13 @@
 					+ '		<div class=' + UID['subtitle'] + '>' + translate('forge-crush') + '</div>'
 					+ '<table>'
 					+ '	<tr>'
-					+ '		<td><INPUT type="checkbox" id="'+setUID('ckForgeCrush_Enable')+'" '+(Data.options.forge.crush.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td><INPUT ref="crush" type="checkbox" id="'+setUID('ckForge_Crush')+'" '+(Data.options.forge.crush.cbAuto ? 'checked' : '')+'></td>'
 					+ '		<td>' + getCrushSelect() + '</td>'
-					+ '		<td>&nbsp;<input id="'+setUID('txtForgeCrush_Max')+'" class="short" type="textbox" value="'+(Data.options.forge.crush.max)+'">'
-					+ '		<td>&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForgeCrush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
+					+ '		<td>&nbsp;<input ref="crush" id="'+setUID('txtForgeCrush_Max')+'" class="short" type="textbox" value="'+(Data.options.forge.crush.max)+'">'
+					+ '		<td>&nbsp;<input ref="crush" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForgeCrush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
 					+ '	</tr>'
 					+ '</table>';
+				//m += n;
 				m += '		<div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '<span id=' + setUID('blacksmith_lvl') + '></span></div>'
 					+ '		<table>'
 					+ '		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>'
@@ -20659,6 +20704,26 @@
 				$(UID['tabJobForge_Content']).update(m);
 				$(UID['btnHammerRepair']).observe('click', lunchRepairHammer);
 				
+				$(UID['txtForge_MaxIngredients']).addEventListener('change', onChangeQty, false);
+				$(UID['txtForge_MaxIngredients']).addEventListener('click', onChangeQty, false);
+				$(UID['txtForge_MaxEquipments']).addEventListener('change', onChangeQty, false);
+				$(UID['txtForge_MaxEquipments']).addEventListener('click', onChangeQty, false);
+				$(UID['txtForgeCrush_Max']).addEventListener('change', onChangeQty, false);
+				$(UID['txtForgeCrush_Max']).addEventListener('click', onChangeQty, false);
+				
+				$(UID['ckForge_Ingredients']).addEventListener('change', checkedCb, false);
+				$(UID['ckForge_Ingredients']).addEventListener('click', checkedCb, false);
+				$(UID['ckForge_Equipements']).addEventListener('change', checkedCb, false);
+				$(UID['ckForge_Equipements']).addEventListener('click', checkedCb, false);
+				$(UID['ckForge_Crush']).addEventListener('change', checkedCb, false);
+				$(UID['ckForge_Crush']).addEventListener('click', checkedCb, false);
+				
+				$(UID['selForgeCrush_equipment']).observe('change', onChangeSelectCrush);
+				
+				$(UID['btnForge_Ingredient']).observe('click', onClickForge);
+				$(UID['btnForge_Equipement']).observe('click', onClickForge);
+				$(UID['btnForgeCrush']).observe('click', onClickCrush);
+
 				var evt = document.createEvent('HTMLEvents');
 				evt.initEvent('change', true, true);
 				
@@ -20735,7 +20800,6 @@
 				}
 				function onChangeSelect(event) {
 					var type = $(event.target.id).readAttribute('ref');
-					var idSel = UID['selForge_'+type];
 					var nameItem = event.target.options[event.target.selectedIndex].value;
 					var reqItem = Forge.data.recipes[nameItem].requirements;
 					
@@ -20761,6 +20825,44 @@
 					
 					ret += '</table>';
 					$(UID['tabForgeForge_Req_'+type]).update(ret);
+				}
+				function onChangeSelectCrush(event) {
+					Data.options.forge.crush.select = event.target.options[event.target.selectedIndex].value;
+				}
+				function checkedCb(event) {
+					var type = event.target.getAttribute('ref');
+					Data.options.forge[type].cbAuto = event.target.checked;
+				}
+				function onChangeQty(event) {
+					var type = event.target.getAttribute('ref');
+					var qty = toNum(event.target.value);
+					
+					if (isNaN(qty) || qty < 0) {
+						event.target.style.backgroundColor = 'red';
+						dispError(translate('Invalid number of '+type, t.container));
+					} else {
+						event.target.value = qty;
+						Data.options.forge[type].max = qty;
+						event.target.style.backgroundColor = '';
+					}
+				}
+				function onClickForge(event) {
+					var t=Tabs.Jobs;
+					var type = event.target.getAttribute('ref');
+					var nameItem = Data.options.forge[type].select;
+					var req = Forge.checkForgeRequirements(nameItem, type+'s');
+					if(!req.result) {
+						var message=req.reason.join(', ');
+						t.jobFeedback(translate('forge-blacksmith') + ' : ' + message);
+					}
+					else {
+						t.forgeItem(nameItem, false);
+					}
+				}
+				function onClickCrush(event) {
+					var t=Tabs.Jobs;
+					var nameItem = Data.options.forge.crush.select;
+					t.crushItem(nameItem, false);
 				}
 			},
 			
@@ -20798,26 +20900,23 @@
 							if (a < b) return -1;
 							return 0;
 						}); 
-					var ret = '<table class=' + UID['row_style'] + '>';
-					ret += '<tr class=' + UID['row_headers'] + ' align=center><td>&nbsp;'+translate('name')+'&nbsp;</td><td>&nbsp;'+translate('level')+'&nbsp;</td><td>&nbsp;'+translate('troops')+'&nbsp;</td><td>&nbsp;'+translate('status')+'&nbsp;</td></tr>';
+					var ret = '' 
+					+ '<table class=' + UID['row_style'] + '>'
+					+ '	<tr class=' + UID['row_headers'] + ' align=center>' 
+					+ '		<td>&nbsp;'+translate('name')+'&nbsp;</td>' 
+					+ '		<td>&nbsp;'+translate('level')+'&nbsp;</td>'
+					+ '		<td>&nbsp;'+translate('troops')+'&nbsp;</td>'
+					+ '		<td>&nbsp;'+translate('status')+'&nbsp;</td>'
+					+ '		<td>&nbsp;'+translate('action')+'&nbsp;</td>'					
+					+ '	</tr>';
 					for(var i=0; i<items.length; i++){
-						var lvlItem = '';
-						var nbStat = 0;
-						for(var tmp in items[i].stats) {
-							nbStat++;
-						}
-						switch (nbStat) {
-							case 1:
-								lvlItem = translate('forge-weak');
-								break;
-							case 2:
-								lvlItem = translate('forge-normal');
-								break;
-							case 3:
-								lvlItem = translate('forge-strong');
-								break;
-						}
-						ret += '<tr><td>&nbsp;'+translate(items[i].name)+'&nbsp;(<b>'+lvlItem+'</b>)&nbsp;</td><td align=center>&nbsp;'+items[i].level+'&nbsp;</td><td>&nbsp;'+translate(items[i].troop_type.toLowerCase())+'&nbsp;</td><td>&nbsp;'+( items[i].state=='equipped' ? translate('filter-equipped') : '' )+'&nbsp;</td></tr>';
+						ret += '<tr>' 
+						+ '	<td>&nbsp;'+translate(items[i].name)+'&nbsp;'+getInfoEquipment(items[i])+'&nbsp;</td>' 
+						+ '	<td align=center>&nbsp;'+items[i].level+'&nbsp;</td>' 
+						+ '	<td>&nbsp;'+translate(items[i].troop_type.toLowerCase())+'&nbsp;</td>' 
+						+ '	<td>&nbsp;'+( items[i].state=='equipped' ? translate('filter-equipped') : '' )+'&nbsp;</td>' 
+						+ '	<td align=center>&nbsp;'+'&nbsp;</td>'
+						+ '</tr>';
 					}
 					ret += '</table>';
 					return ret;
@@ -20825,14 +20924,26 @@
 				
 				function getIngredient() {
 					var items = Seed.player.forge.items.ingredients;
-					var ret = '<table class=' + UID['row_style'] + '>';
+					var ret = '<table class=' + UID['row_style'] + '><tr>';
 					for(var i=0; i<items.length; i++){
-						ret += '<tr><td>'+translate(items[i].name)+'</td><td> x '+  items[i].quantity + '<td></td></tr>';
+						ret += '<td>'+translate(items[i].name)+'</td> ' 
+						+ '<td> x '+  items[i].quantity + '<td>' 
+						+ '</td>'+(((i+1)%3!==0) ? '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>' : '' );
+						if((i+1)%3===0) {
+							ret+='</tr><tr>';
+						}
 					}
-					ret += '</table>';
+					ret += '</tr></table>';
 					return ret;
 				}
 				
+				function getInfoEquipment(item) {
+					var display = '';
+					for(var s in item.stats) {
+						display += translate(s) + ' : ' + item.stats[s] + '\n';
+					}
+					return '<span class="'+UID['information']+'" title="'+display+'" />';
+				}
 			},
 
 			/** * stat sub tab */
@@ -23171,6 +23282,42 @@
 				}
 				MyAjax.claimMission(mission, adventurerId, cb);
 			},
+			crushItem: function(nameItem, isAuto) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						for(var i=0;i<rslt.dat.result.disenchant_ingrendients.length;i++) {
+							rslt.dat.result.disenchant_ingrendients[i] = translate(rslt.dat.result.disenchant_ingrendients[i].toLowerCase());
+						}
+						Tabs.Jobs.jobFeedback(translate('forge-salvage-materials') + ' ' + rslt.dat.result.disenchant_ingrendients.joint(', '));
+						if(isAuto)
+							Data.options.forge[type].nbAuto++;
+					}
+					else {
+						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				
+				MyAjax.forgeCrush(nameItem, cb);
+			},
+			forgeItem: function (nameItem, isAuto) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						if(rslt.dat.result.forge_result) {
+							Tabs.Jobs.jobFeedback(translate('forge-success-title') + ' ' + translate(nameItem.toLowerCase()));
+							if(isAuto)
+								Data.options.forge[type].nbAuto++;
+						}
+						else {
+							Tabs.Jobs.jobFeedback(translate('forge-fail-title') + ' ' + translate(nameItem.toLowerCase()));
+						}
+					}
+					else {
+						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+				}
+				
+				MyAjax.forgeItem(nameItem, cb);
+			},
 			showStats: function() {
 				var t = Tabs.Jobs;
 				var div = $(UID['tabJobForge_tabStats_Status']);
@@ -23183,7 +23330,8 @@
 
 				var trueRunTime = (run_time > 0) ? (run_time / 3600) : 1;
 
-				var m = '<table class=' + UID['table'] + '>' 
+				var m = '<div class=' + UID['subtitle'] + '><b>' + translate('adventurers') + '</b></div>'
+				+ '<table class=' + UID['table'] + '>' 
 				+ '	<tr>' 
 				+ '		<td class=right>' + translate('Start Date') + ': </td>' 
 				+ '		<td colspan=>' + new Date(Data.stats.forgeAdv.start_at * 1000).myString() + '</td>' 
@@ -23217,7 +23365,23 @@
 					+ '			<td>(' + numf(perHour, ' ') + ' /' + translate('h') + ')</td>' 
 					+ '		</tr>';
 				}
-				m += '</table>';
+				m += '</table>'
+				+ '<div class=' + UID['subtitle'] + '><b>' + translate('forge-blacksmith') + '</b></div>'
+				+ '<table class=' + UID['table'] + '>'
+				+ '	<tr valign=top align=right>' 
+				+ '		<td class=right>' + translate('forge-equipment') + ': </td>'
+				+ '		<td>' + Data.options.forge.equipment.nbAuto + ' / ' + Data.options.forge.equipment.max + '</td>'
+				+ ' </tr>'
+				+ '	<tr valign=top align=right>' 
+				+ '		<td class=right>' + translate('forge-ingredient') + ': </td>'
+				+ '		<td>' + Data.options.forge.ingredient.nbAuto + ' / ' + Data.options.forge.ingredient.max + '</td>'
+				+ ' </tr>'
+				+ '	<tr valign=top align=right>' 
+				+ '		<td class=right>' + translate('forge-crush') + ': </td>'
+				+ '		<td>' + Data.options.forge.crush.nbAuto + ' / ' + Data.options.forge.crush.max + '</td>'
+				+ ' </tr>'
+				+ '</table>';
+				
 				div.innerHTML = m;
 			},
 			trackStats: function(type, obj) {
@@ -31734,7 +31898,6 @@
 		XML.ObjTree.prototype.xmlDecl = '<?xml version="1.0" encoding="UTF-8" ?>\n';
 		XML.ObjTree.prototype.attr_prefix = '-';
 		XML.ObjTree.prototype.overrideMimeType = 'text/xml';
-		/* method:parseXML(xmlsource) */
 		XML.ObjTree.prototype.parseXML = function(xml) {
 			var root;
 			if (window.DOMParser) {
@@ -31954,1000 +32117,8 @@
 		};
 		/********************************** END XML.ObjTree ***********************************/
 		
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('k 1o;1o={1V:m(e){e=e.4p(/\\r\\n/g,"\\n");k t="";J(k n=0;n<e.B;n++){k r=e.1W(n);q(r<V){t+=1i.1j(r)}z q(r>Y&&r<4A){t+=1i.1j(r>>6|4q);t+=1i.1j(r&63|V)}z{t+=1i.1j(r>>12|37);t+=1i.1j(r>>6&63|V);t+=1i.1j(r&63|V)}}j t},2J:m(e){k t="";k n=0;k r,i,s,o;r=i=s=0;1H(n<e.B){r=e.1W(n);q(r<V){t+=1i.1j(r);n++}z q(r>4g&&r<37){s=e.1W(n+1);t+=1i.1j((r&31)<<6|s&63);n+=2}z{s=e.1W(n+1);o=e.1W(n+2);t+=1i.1j((r&15)<<12|(s&63)<<6|o&63);n+=3}}j t}};k 3p=1;k 3V=0;k 30="3u";k 1E,v,X,P,1K;k 1Y;k 1p,1k,1L,1d;k 2R,3y,E,1Z;k 1M;1d=m(e,t){b.4U=e;b.4F=t};1d.x=w 4t;1d.x.1P=1d;k 1L=m(e){1d.1u(b,e,"1L")};1L.x=w 1d;1L.x.1P=1L;k 1p=m(e){1d.1u(b,e,"1p")};1p.x=w 1d;1p.x.1P=1p;k 1k=m(e){1d.1u(b,e,"1k")};1k.x=w 1d;1k.x.1P=1k;E=m(){b.1w={};b.1w[E.28]=[];b.1w[E.O]=[]};E.28="2v";E.O="33";E.x={1T:m(e,t){k n=2R(b.1w[t],e);q(n>=0){j n}q(!b.2V(e)){j G}b.1m(e,t);j G},1m:m(e,t){q(!b.2V(e)){j G}b.1w[t].W(e);j e},1C:m(e,t){q(!b.1w.4O(t)){j G}k n=b.1w[t].B;q(e>=n){j G}q(!n){j G}j b.1w[t][e]},2V:m(e){q(e===1t||M e=="2v"&&!e.B){j G}j D}};1Y=m(e){q(M e!=="Q"){q(e S 1S){b.U=e}z{b.U=w 1S(e)}}z{b.U=w 1S(0,D)}};1Y.x={4b:m(){j b.U.4L()},2X:m(){j b.U.4I()},34:m(){j b.U.4H()},2x:m(e){j b.U.1N(e,Q,"1o")},Z:m(e){j b.U.4D(e)},3X:m(e){j b.U.4C(e)},4E:m(e){j b.U.4N(e)},3C:m(e){j b.U.2Z(e,Q,"1o")},1N:m(){j b.U.1N(b.U.K,0)}};1E={2D:{},1n:m(e,t,n,r){r=M r=="Q"?3V:r;k i=w 1Y;k s=w X(i,r);j s.1n(e,D,t,n)},1s:m(e,t){k n=w 1Y(e);k r=w P(n);q(3N.1V(4S)!="4W=="||3N.1V(4f)!="4r==")j;j r.1s(t)},4w:m(e){j b.1s(e)},4x:m(e,t){j b.1n(e,D,Q,t)},4i:m(e,t){b.2D[e]=t},3v:m(e){q(!(e H b.2D)){j 1t}j b.2D[e]}};v={2r:0,2b:1,2s:2,2e:3,2l:4,1X:5,2g:6,3m:7,2h:8,2n:9,2p:10,3j:11,2a:12,4h:13,4j:14,4k:15,4o:16,4n:17,4l:0,L:1,3T:V,3S:4T,3L:4R,2H:4P,2E:-3q,4Q:m(){j D},4e:m(e){q(!e){j D}k t=0;J(k n H e){q(n!=t){j G}t++}j D}};1K=m(e){b.I=e;b.N=w E};1K.x={3R:m(e){2c(D){A M e=="Q":j v.2r;A e===1t:j v.2b;A e===D||e===G:j e?v.2e:v.2s;A M e=="1B"&&e%1===0:q(e<v.2E||e>v.2H){j v.1X}j v.2l;A M e=="1B"&&e%1!==0:j v.1X;A M e=="2v":j v.2g;A e S 39:j v.2h;A e S 1M:j v.2a;A e S 1r:j v.2n;A M e=="33":j v.2p;A M e=="m":T w 1L("3k 1n a m");2q:j 1t}}};X=m(e,t){b.3Y=t;1K.1u(b,e)};X.x=w 1K;X.x.1P=X;X.x.1n=m(e,t,n,r){q(M n=="Q")n=D;q(M t=="Q")t=D;k i=r?r:b.3R(e);q(n){b.I.Z(i)}2c(i){A v.2r:A v.2b:A v.2s:A v.2e:1y;A v.2l:b.1a(e);1y;A v.1X:b.3K(e);1y;A v.2g:b.1x(e);1y;A v.2h:b.3B(e);1y;A v.2n:b.3A(e);1y;A v.2p:b.4d(e);1y;A v.2a:b.44(e);1y;2q:T w 1p("4V 1E 2Y ["+i+"]")}q(t){j b.I.1N()}};X.x.1a=m(e){q(e<v.2E||e>v.2H){T w 1p("4Z 2K 2G 4Y: "+e)}e&=4X;q(e<v.3T){b.I.Z(e)}z q(e<v.3S){b.I.Z(e>>7&Y|V);b.I.Z(e&Y)}z q(e<v.3L){b.I.Z(e>>14&Y|V);b.I.Z(e>>7&Y|V);b.I.Z(e&Y)}z{b.I.Z(e>>22&Y|V);b.I.Z(e>>15&Y|V);b.I.Z(e>>8&Y|V);b.I.Z(e&19)}};X.x.3K=m(e){b.I.3X(e)};X.x.1x=m(e,t){t=M t=="Q"?D:t;q(t){k n=b.N.1T(e,E.28);q(n!==G){b.1a(n<<1);j}}k r=1o.1V(e);b.1a(r.B<<1|1);b.I.3C(e)};X.x.3B=m(e){k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}b.1n(e.4G(),G,D,v.1X)};X.x.3A=m(e){k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}k n=1t;k r=v.4e(e);q(r){b.1a(e.B<<1|v.L);b.1x("");J(k i H e){n=e[i];b.1n(n,G)}}z{b.1a(1);J(k s H e){n=e[s];b.1x(s,G);b.1n(n)}b.1x("")}};X.x.4d=m(e){k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}k n=e;q(1Z.3n(e)){e=e.3o()}k r=1Z.3s(e);b.1a(11);b.1x(1Z.3t(n,b.3Y),G);q(r.B>0){J(k i H r){k s=r[i];k o=e[s];b.1x(s,G);b.1n(o,G)}}b.1x("")};X.x.44=m(e){q(!("25"H e)){T w 1p("4B 1M 2B 4u")}k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}b.1a(e.25().B<<1|v.L);b.I.3J(e.25())};P=m(e){1K.1u(b,e)};P.x=w 1K;P.x.1P=P;P.x.1s=m(e){k t=b.I.4b(e);2c(1U(t)){A v.2r:j Q;A v.2b:j 1t;A v.2s:j G;A v.2e:j D;A v.2l:j b.1l();A v.1X:j b.3w();A v.2g:j b.1D();A v.2h:j b.36();A v.2n:j b.3c();A v.2p:j b.35();A v.2a:j b.3d();A v.3m:j b.3e();A v.3j:j b.3g();2q:T w 1k("3k 1s 2Y: "+t+" ;y 4J="+b.I.U.3h())}};P.x.1l=m(){k e=0;k t=0;k n=b.I.34();1H((n&V)!==0&&t<3){e<<=7;e|=n&Y;n=b.I.34();t++}q(t<3){e<<=7;e|=n}z{e<<=8;e|=n;q((e&3q)!==0){e|=4K}}j e};P.x.3w=m(){j b.I.2X()};P.x.1D=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.28)}k t=e>>v.L;k n=b.I.2x(t);b.N.1m(n,E.28);j n};P.x.36=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=b.I.2X();k n=w 39(t);b.N.1m(n,E.O);j n};P.x.3c=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=[];b.N.1m(n,E.O);k r=b.1D();1H(r.B>0){n[r]=b.1s();r=b.1D()}J(k i=0;i<t;i++){n.W(b.1s())}j n};P.x.35=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=b.1D();k n={};b.N.1m(n,E.O);k r={};k i=b.1D();1H(i.B){r[i]=b.1s();i=b.1D()}q(t&&t.B>0){k s=1E.3v(t);q(!s){T w 1k("50 "+t+" 3b 3a 4s. 4m 4y a 4v 4z.")}n=w s;q("2y"H n&&M n.2y=="m"){n.2y(r)}z{2P(n,r)}}z{2P(n,r)}j n};k 2P=m(e,t){4M{J(k n H t){k r=t[n];e[n]=r}}5a(i){T w 1k("5T \'"+n+"\' 3b 3a 1z 5S 5R \'"+M e+"\'")}};P.x.3d=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=b.I.21(t);k r=w 1M(n);b.N.1m(r,E.O);j r};P.x.3e=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=b.I.2x(t);b.N.1m(n,E.O);j n};P.x.3g=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=b.I.2x(t);b.N.1m(n,E.O);j n};2R=m(e,t,n){q(e===Q||e===1t){T w 2m(\'"5U" 1G 1t 5V 2t 5Y\')}k r=e.B>>>0;n=+n||0;q(C.3x(n)===1A){n=0}q(n<0){n+=r;q(n<0){n=0}}J(;n<r;n++){q(e[n]===t){j n}}j-1};3y={5X:m(e){k t=11;k n=52;k r=(1<<t-1)-1,i,s,o,u,a,f,l,c;q(3W(e)){s=(1<<r)-1;o=C.1g(2,n-1);i=0}z q(e===1A||e===-1A){s=(1<<r)-1;o=0;i=e<0?1:0}z q(e===0){s=0;o=0;i=1/e===-1A?1:0}z{i=e<0;e=C.3x(e);q(e>=C.1g(2,1-r)){u=C.5W(C.1q(C.3G(e)/C.3H),r);s=u+r;o=C.3r(e*C.1g(2,n-u)-C.1g(2,n))}z{s=0;o=C.3r(e/C.1g(2,1-r-n))}}f=[];J(a=n;a;a-=1){f.W(o%2?1:0);o=C.1q(o/2)}J(a=t;a;a-=1){f.W(s%2?1:0);s=C.1q(s/2)}f.W(i?1:0);f.2d();l=f.3l("");c=[];1H(l.B){c.W(1U(l.20(0,8),2));l=l.20(8)}j c},5Q:m(e){k t=11;k n=52;k r=[],i,s,o,u,a,f,l,c;J(i=e.B;i;i-=1){o=e[i-1];J(s=8;s;s-=1){r.W(o%2?1:0);o=o>>1}}r.2d();u=r.3l("");a=(1<<t-1)-1;f=1U(u.20(0,1),2)?-1:1;l=1U(u.20(1,1+t),2);c=1U(u.20(1+t),2);q(l===(1<<t)-1){j c!==0?2F:f*1A}z q(l>0){j f*C.1g(2,l-a)*(1+c/C.1g(2,n))}z q(c!==0){j f*C.1g(2,-(a-1))*(c/C.1g(2,n))}z{j f<0?-0:0}}};1Z={3n:m(e){q(!e){j G}j"3o"H e&&"2y"H e},3t:m(e,t){q(M e==="33"&&1E.30 H e){j t&1E.3p?e.3u:""}j""},3s:m(e){q(!e){j[]}k t=[];J(k n H e){q(n==1E.30){38}q(M e[n]=="m"){38}t.W(n)}j t}};1M=m(e){b.2B=e};1M.x={25:m(){j b.2B},5P:m(e){b.2B=e},2S:m(){j b.25()}};k 1S;1S=m(e){"5J 5I";m s(e,t){j!t&&e S 1r?e:1r.x.1J.1u(e)}m o(e,t){j e!==Q?e:t}m u(e,n,r,i,s){q(e S u){k a=e.1J(r,r+i);a.1b=o(s,a.1b);j a}q(!(b S u)){j w u(e,n,r,i,s)}b.y=e=u.2L(e);b.1f=o(n,G);b.1I=t.18&&e S 18;b.2f=t.26&&b.1I;q(!b.1I&&!(e S 1r)){T w 2m("1S y 5H 5G 5K 2Y")}b.1b=!!s;k f="F"H e?e.F:e.B;b.R=r=o(r,0);b.F=i=o(i,f-r);b.K=b.1v=0;q(!b.2f){b.27(r,i,f)}z{b.29=w 26(e,r,i)}b.3Z=b.2f?b.41:b.1I?b.42:b.49}m a(e){k n=t.18?1e:1r,r=w n(e.B);J(k i=0,s=e.B;i<s;i++){r[i]=e.1W(i)&19}j r}m f(e){j e>=0&&e<31?1<<e:f[e]||(f[e]=C.1g(2,e))}m l(e,t){b.1Q=e;b.1F=t}m c(e,t){l.2C(b,1R)}k t={26:"26"H e,18:"18"H e};k n=e.5L;k r=e.60;k i={5N:1,5M:2,5Z:4,6c:1,6d:2,6g:4,6a:4,6b:8};u.2L=m(e){2c(M e){A"1B":q(t.18){e=(w 1e(e)).y}z{e=w 1r(e);J(k n=0;n<e.B;n++){e[n]=0}}j e;A"2v":e=a(e);2q:q("B"H e&&!(t.18&&e S 18)){q(t.18){q(!(e S 18)){e=(w 1e(e)).y;q(!(e S 18)){e=(w 1e(s(e,D))).y}}}z{e=s(e)}}j e}};u.62=m(){j u.2L(1R)};u.51=l;l.x={2j:m(){j b.1Q+f(32)*b.1F},2S:m(){j 65.x.2S.2C(b.2j(),1R)}};l.2z=m(e){k t=C.1q(e/f(32)),n=e-t*f(32);j w l(n,t)};u.66=c;c.x="3f"H 3i?3i.3f(l.x):w l;c.x.2j=m(){q(b.1F<f(31)){j l.x.2j.2C(b,1R)}j-(f(32)-b.1Q+f(32)*(f(32)-1-b.1F))};c.2z=m(e){k t,n;q(e>=0){k r=l.2z(e);t=r.1Q;n=r.1F}z{n=C.1q(e/f(32));t=e-n*f(32);n+=f(32)}j w c(t,n)};k h=u.x={69:t,2i:10*3U,68:m(e){q(M e==="Q"){b.1f=!b.1f}z{q(M e==="67"){b.1f=e}}},64:m(){j b.1f},3h:m(){j b.K},3D:m(e){b.27(e,0);j b.K=e},4c:m(e){j b.3D(b.K+e)},1J:m(e,t,n){m r(e,t){j e<0?e+t:e}e=r(e,b.F);t=r(o(t,b.F),b.F);j n?w u(b.21(t-e,e,D,D),b.1f,Q,Q,b.1b):w u(b.y,b.1f,b.R+e,t-e,b.1b)},6f:m(e){b.1v=0;q(o(e,1)!==1){j b.4c(e-(b.K%e||e))}z{j b.K}},6e:m(e,t,n,r){q(!(e S u)){e=w u(e)}n=o(n,e.K);t=o(t,b.K);r=o(r,e.F-n);r=t+r<=b.F?r:b.F-t;b.1h(e.21(r,n),t)},5O:m(e){q(!(e S u)){e=w u(e)}k t={2O:D,2k:[]};k n,r,i=0;n=r="F"H b.y?b.y.F:b.y.B;k s="F"H e.y?e.y.F:e.y.B;q(s!==r){t.2O=G;q(s<r){t.2k.W("2u 1G 5E;b="+r+";2u="+s);n=s}z{t.2k.W("2u 1G 5f;b="+r+";2u="+s)}}n-=b.R;J(k o=0;o<n;o++){k a=b.1c(1,o)[0];k f=e.1c(1,o)[0];q(a!==f){i++}}q(i>0){t.2O=G;t.2k.W(i+" 2U H 5e")}j t},3z:m(e){k n,r,i;q(!b.1f){T w 2o("y 2t 1f.")}q(e<b.R){T w 2o("w 5d 1G 2K 2G 4a.")}k r="F"H b.y?b.y.F:b.y.B;q(M e==="1B"){e=(1U(e/b.2i)+(e%b.2i?1:0))*b.2i;q(t.18){n=w 1e(e);n.1z((w 1e(b.y)).5g(0,r<e?r:e));i=w 1e(e);i.1z(n);b.y=i.y}z{b.y.B=e;i=b.y;J(k s=r;s<b.y.B;s++){b.y[s]=0}}k o="F"H b.y?b.y.F:b.y.B;q(b.F===r-b.R){b.F=o-b.R}q(b.K>b.F){b.K=b.F}q(b.2f){b.29=w 26(b.y,b.R,b.F)}}},1O:m(e,t){q(!b.1f)j;e=o(e,b.K);k n="F"H b.y?b.y.F:b.y.B;q(b.R+e+t>n){b.3z(b.R+e+t)}},27:m(e,t,n){q(M e!=="1B"){T w 2m("5h 1G 2t a 1B.")}q(M t!=="1B"){T w 2m("5k 1G 2t a 1B.")}q(t<0){T w 2o("5j 1G 5F.")}q(e<0||e+t>o(n,b.F)){T w 2o("5c 5b 2K 2G 4a.")}},2W:m(e,t,n,r,i){j b.3Z(e,t,o(n,b.K),o(r,b.1b),i)},41:m(e,t,n,r,s){b.1O(n,i[e]);b.K=n+i[e];j t?b.29["3F"+e](n,r):b.29["1z"+e](n,s,r)},42:m(t,n,r,s,u){k a=i[t],f=e[t+"1r"],l;b.1O(r,a);s=o(s,b.1b);q(a===1||(b.R+r)%a===0&&s){l=w f(b.y,b.R+r,1);b.K=r+a;j n?l[0]:l[0]=u}z{k c=w 1e(n?b.21(a,r,s,D):a);l=w f(c.y,0,1);q(n){j l[0]}z{l[0]=u;b.1h(c,r,s)}}},49:m(e,t,n,r,s){b.1O(n,i[e]);j t?b["55"+e](n,r):b["54"+e](s,n,r)},2I:m(e,t,n,r,i){k s=e<0?1:0,o,u,a=~(-1<<r-1),l=1-a;q(e<0){e=-e}q(e===0){o=0;u=0}z q(3W(e)){o=2*a+1;u=1}z q(e===1A){o=2*a+1;u=0}z{o=C.1q(C.3G(e)/C.3H);q(o>=l&&o<=a){u=C.1q((e*f(-o)-1)*f(n));o+=a}z{u=C.1q(e/f(l-n));o=0}}k c=[];1H(n>=8){c.W(u%3I);u=C.1q(u/3I);n-=8}o=o<<n|u;r+=n;1H(r>=8){c.W(o&19);o>>>=8;r-=8}c.W(s<<r|o);b.1h(c,t,i)},2M:m(e,t){k n=(o(t,b.K)<<3)+b.1v,r=n+e,i=n>>>3,s=r+7>>>3,u=b.1c(s-i,i,D),a=0;q(b.1v=r&7){b.1v-=8}J(k f=0,l=u.B;f<l;f++){a=a<<8|u[f]}j{3E:i,2U:u,2T:a}},1c:m(e,t,n){n=o(n,b.1b);t=o(t,b.K);e=o(e,b.F-t);b.27(t,e);t+=b.R;b.K=t-b.R+e;k r=b.1I?w 1e(b.y,t,e):(b.y.1J||1r.x.1J).1u(b.y,t,t+e);j n||e<=1?r:s(r).2d()},21:m(e,t,n,r){k i=b.1c(e,t,o(n,D));j r?s(i):i},1h:m(e,t,n){k r=e.B;q(r===0){j}n=o(n,b.1b);t=o(t,b.K);b.27(t,r);q(!n&&r>1){e=s(e,D).2d()}t+=b.R;q(b.1I){(w 1e(b.y,t,r)).1z(e)}z{J(k i=0;i<r;i++){b.y[t+i]=e[i]}}b.K=t-b.R+r},3J:m(e,t,n){b.1O(t,e.B);b.1h(e,t,o(n,D))},1N:m(e,t,n){k i=b.1c(e,t,D);n=n==="1o"?"2A-8":n||"2w";q(r&&n!=="2w"){j(w r(n)).2J(b.1I?i:w 1e(i))}k s="";e=i.B;J(k o=0;o<e;o++){s+=1i.1j(i[o])}q(n==="2A-8"){s=1o.2J(s)}j s},2Z:m(e,t,r){r=r==="1o"?"2A-8":r||"2w";k i;q(n&&r!=="2w"){i=(w n(r)).1V(e)}z{q(r==="2A-8"){e=1o.1V(e)}i=a(e)}b.1O(t,i.B);b.1h(i,t,D)},53:m(e){j b.1N(1,e)},56:m(e,t){b.2Z(e,t)},57:m(e,t){k n=b.1c(8,e,t),r=1-2*(n[7]>>7),i=((n[7]<<1&19)<<3|n[6]>>4)-((1<<10)-1),s=(n[6]&15)*f(48)+n[5]*f(40)+n[4]*f(32)+n[3]*f(24)+n[2]*f(16)+n[1]*f(8)+n[0];q(i===3U){q(s!==0){j 2F}z{j r*1A}}q(i===-5l){j r*s*f(-5m-52)}j r*(1+s*f(-52))*f(i)},5z:m(e,t,n){b.2I(e,t,52,11,n)},5x:m(e,t){k n=b.1c(4,e,t),r=1-2*(n[3]>>7),i=(n[3]<<1&19|n[2]>>7)-Y,s=(n[2]&Y)<<16|n[1]<<8|n[0];q(i===V){q(s!==0){j 2F}z{j r*1A}}q(i===-Y){j r*s*f(-5B-23)}j r*(1+s*f(-23))*f(i)},5C:m(e,t,n){b.2I(e,t,23,8,n)},2Q:m(e,t,n){n=o(n,b.1b);t=o(t,b.K);k r=n?[0,4]:[4,0];J(k i=0;i<2;i++){r[i]=b.5v(t+r[i],n)}b.K=t+8;j w e(r[0],r[1])},2N:m(e,t,n,r){q(!(t S e)){t=e.2z(t)}r=o(r,b.1b);n=o(n,b.K);k i=r?{1Q:0,1F:4}:{1Q:4,1F:0};J(k s H i){b.5p(n+i[s],t[s],r)}b.K=n+8},5o:m(e,t){j b.2Q(c,e,t)},5n:m(e,t,n){b.2N(c,e,t,n)},5q:m(e,t){j b.2Q(l,e,t)},5r:m(e,t,n){b.2N(l,e,t,n)},3Q:m(e,t){k n=b.1c(4,e,t);j n[3]<<24|n[2]<<16|n[1]<<8|n[0]},5u:m(e,t){j b.3Q(e,t)>>>0},43:m(e,t,n){b.1h([e&19,e>>>8&19,e>>>16&19,e>>>24],t,n)},5t:m(e,t){j b.3M(e,t)<<16>>16},3M:m(e,t){k n=b.1c(2,e,t);j n[1]<<8|n[0]},47:m(e,t,n){b.1h([e&19,e>>>8&19],t,n)},5s:m(e){j b.3O(e)<<24>>24},3O:m(e){j b.1c(1,e)[0]},45:m(e,t){b.1h([e&19],t)},5i:m(e,t){k n=32-e;j b.3P(e,t)<<n>>n},3P:m(e,t){k n=b.2M(e,t).2T>>>-b.1v;j e<32?n&~(-1<<e):n},46:m(e,t,n){k r=b.2M(n,t),i=r.2T,s=r.2U;i&=~(~(-1<<n)<<-b.1v);i|=(n<32?e&~(-1<<n):e)<<-b.1v;J(k o=s.B-1;o>=0;o--){s[o]=i&19;i>>>=8}b.1h(s,r.3E,D)}};J(k p H i){(m(e){h["3F"+e]=m(t,n){j b.2W(e,D,t,n)};h["1z"+e]=m(t,n,r){b.2W(e,G,n,r,t)}})(p)}h.5w=h.43;h.5D=h.47;h.5A=h.45;h.5y=h.46;J(k d H h){q(d.1J(0,3)==="1z"){(m(e){h["58"+e]=m(){1r.x.59.1u(1R,Q);b["1z"+e].2C(b,1R)}})(d.1J(3))}}j u}(61)',62,389,'|||||||||||this||||||||return|var||function||||if|||||Spec|new|prototype|buffer|else|case|length|Math|true|ReferenceStore|byteLength|false|in|stream|for|_offset|REFERENCE_BIT|typeof|referenceStore|TYPE_OBJECT|Deserializer|undefined|byteOffset|instanceof|throw|buff|128|push|Serializer|127|writeByte|||||||||ArrayBuffer|255|serializeInt|_littleEndian|_getBytes|Exception|Uint8Array|dynamic|pow|_setBytes|String|fromCharCode|DeserializationException|deserializeInt|addReference|serialize|utf8|SerializationException|floor|Array|deserialize|null|call|_bitOffset|store|serializeString|break|set|Infinity|number|getByReference|deserializeString|AMF|hi|is|while|_isArrayBuffer|slice|BaseSerializer|NotSupportedException|ByteArray|getString|_checksize|constructor|lo|arguments|jDataView|getReference|parseInt|encode|charCodeAt|AMF3_DOUBLE|Buffer|ObjectUtil|substring|getBytes||||getData|DataView|_checkBounds|TYPE_STRING|_view|AMF3_BYTE_ARRAY|AMF3_NULL|switch|reverse|AMF3_TRUE|_isDataView|AMF3_STRING|AMF3_DATE|blocksize|valueOf|diff|AMF3_INT|TypeError|AMF3_ARRAY|RangeError|AMF3_OBJECT|default|AMF3_UNDEFINED|AMF3_FALSE|not|other|string|binary|readUTFBytes|importData|fromNumber|utf|data|apply|classMappings|MIN_INT|NaN|of|MAX_INT|_setBinaryFloat|decode|out|wrapBuffer|_getBitRangeData|_set64|equal|applyDataToInstance|_get64|indexOf|toString|wideValue|bytes|validate|_action|readDouble|type|setString|CLASS_MAPPING_FIELD|||object|readUnsignedByte|deserializeObject|deserializeDate|224|continue|Date|be|cannot|deserializeArray|deserializeByteArray|deserializeXMLDoc|create|deserializeXML|tell|Object|AMF3_XML|Cannot|join|AMF3_XML_DOC|isSerializable|exportData|CLASS_MAPPING|268435456|round|getObjectKeys|getClassName|_classMapping|getClassByAlias|deserializeDouble|abs|float64|resize|serializeArray|serializeDate|writeUTFBytes|seek|start|get|log|LN2|256|setBytes|serializeDouble|MIN_4_BYTE_INT|_getUint16|Base64|_getUint8|getUnsigned|_getInt32|getDataType|MIN_3_BYTE_INT|MIN_2_BYTE_INT|1024|DEFAULT_OPTIONS|isNaN|writeDouble|options|_engineAction||_dataViewAction|_arrayBufferAction|_setUint32|serializeByteArray|_setUint8|setUnsigned|_setUint16||_arrayAction|bounds|readByte|skip|serializeObject|isDenseArray|mainAuthor|191|AMF3_VECTOR_INT|registerClassAlias|AMF3_VECTOR_UINT|AMF3_VECTOR_DOUBLE|OBJECT_DYNAMIC|Consider|AMF3_DICTIONARY|AMF3_VECTOR_OBJECT|replace|192|Q2FsY2l1bQ|found|Error|provided|class|parse|stringify|registering|alias|2048|Invalid|setFloat64|setInt8|writeUnsignedByte|name|getTime|getUint8|getFloat64|offset|3758096384|getInt8|try|setUint8|hasOwnProperty|268435455|isLittleEndian|2097152|scriptName|16384|message|Unrecognized|Q2FsY2l1bVNjcmlwdA|536870911|range|Integer|Class|Uint64||getChar|_set|_get|setChar|_getFloat64|write|unshift|catch|are|Offsets|size|differences|greater|subarray|Offset|getSigned|Length|Size|1023|1022|setInt64|getInt64|setUint32|getUint64|setUint64|_getInt8|_getInt16|_getUint32|getUint32|_setInt32|_getFloat32|setSigned|_setFloat64|_setInt8|126|_setFloat32|_setInt16|smaller|negative|an|has|strict|use|incompatible|TextEncoder|Int16|Int8|compare|setData|unpack|instance|on|Property|array|or|min|packFloat64|defined|Int32|TextDecoder|window|createBuffer||isDynamic|Number|Int64|boolean|toggleDynamic|compatibility|Float32|Float64|Uint8|Uint16|copy|alignBy|Uint32'.split('|'),0,{}))
 		
-		/**
-*
-*  utf8 encode / decode
-*  extract from Base64
-*  http://www.webtoolkit.info/
-*
-**/
-var utf8;
-utf8 = {
-	
-	// private method for UTF-8 encoding
-	encode : function (string) {
-		string = string.replace(/\r\n/g,"\n");
-		var utftext = "";
-
-		for (var n = 0; n < string.length; n++) {
-
-			var c = string.charCodeAt(n);
-
-			if (c < 128) {
-				utftext += String.fromCharCode(c);
-			}
-			else if((c > 127) && (c < 2048)) {
-				utftext += String.fromCharCode((c >> 6) | 192);
-				utftext += String.fromCharCode((c & 63) | 128);
-			}
-			else {
-				utftext += String.fromCharCode((c >> 12) | 224);
-				utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-				utftext += String.fromCharCode((c & 63) | 128);
-			}
-
-		}
-
-		return utftext;
-	},
-
-	// private method for UTF-8 decoding
-	decode : function (utftext) {
-		var string = "";
-		var i = 0;
-		var c,c1,c2,c3;
-		c = c1 = c2 = 0;
-
-		while ( i < utftext.length ) {
-
-			c = utftext.charCodeAt(i);
-
-			if (c < 128) {
-				string += String.fromCharCode(c);
-				i++;
-			}
-			else if((c > 191) && (c < 224)) {
-				c2 = utftext.charCodeAt(i+1);
-				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-				i += 2;
-			}
-			else {
-				c2 = utftext.charCodeAt(i+1);
-				c3 = utftext.charCodeAt(i+2);
-				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-				i += 3;
-			}
-
-		}
-
-		return string;
-	}
-	
-};
-
-
-
-var CLASS_MAPPING = 0x01;
-var DEFAULT_OPTIONS = 0x00;
-var CLASS_MAPPING_FIELD = '_classMapping';
-
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('g 1f,h,G,D,1g;g 1o;g U,V,1d,N;g 1W,2n,q,1m;g 1k;N=j(e,t){b.3p=e;b.3m=t};N.p=w 3n;N.p.1j=N;g 1d=j(e){N.1l(b,e,"1d")};1d.p=w N;1d.p.1j=1d;g U=j(e){N.1l(b,e,"U")};U.p=w N;U.p.1j=U;g V=j(e){N.1l(b,e,"V")};V.p=w N;V.p.1j=V;q=j(){b.W={};b.W[q.1n]=[];b.W[q.B]=[]};q.1n="1T";q.B="1O";q.p={1i:j(e,t){g n=1W(b.W[t],e);k(n>=0){d n}k(!b.1S(e)){d y}b.R(e,t);d y},R:j(e,t){k(!b.1S(e)){d y}b.W[t].19(e);d e},X:j(e,t){k(!b.W.3w(t)){d y}g n=b.W[t].K;k(e>=n){d y}k(!n){d y}d b.W[t][e]},1S:j(e){k(e===1a||C e=="1T"&&!e.K){d y}d F}};1o=j(e){k(C e!=="O"){k(e 1J 1M){b.H=e}E{b.H=w 1M(e)}}E{b.H=w 1M(0,F)}};1o.p={2a:j(){d b.H.3v()},1P:j(){d b.H.3u()},1L:j(){d b.H.3l()},1w:j(e){d b.H.1u(e,O,"1N")},M:j(e){d b.H.3k(e)},2G:j(e){d b.H.3d(e)},3c:j(e){d b.H.3b(e)},29:j(e){d b.H.39(e,O,"1N")},1u:j(){d b.H.1u(b.H.3a,0)}};1f={1t:{},Q:j(e,t,n,r){r=C r=="O"?3E:r;g i=w 1o;g s=w G(i,r);d s.Q(e,F,t,n)},Z:j(e,t){g n=w 1o(e);g r=w D(n);k(2q.1R(2R)!="2N=="||2q.1R(2J)!="2Q==")d;d r.Z(t)},2W:j(e){d b.Z(e)},32:j(e,t){d b.Q(e,F,O,t)},2Y:j(e,t){b.1t[e]=t},2o:j(e){k(!(e L b.1t)){d 1a}d b.1t[e]}};h={1G:0,1E:1,1C:2,1B:3,1y:4,1h:5,1z:6,2d:7,1F:8,1x:9,1H:10,2e:11,1I:12,2P:13,2O:14,2M:15,2I:16,2K:17,37:0,x:1,2B:1b,2C:2S,2z:31,1U:33,1Y:-2f,34:j(){d F},2g:j(e){k(!e){d F}g t=0;J(g n L e){k(n!=t){d y}t++}d F}};1g=j(e){b.v=e;b.z=w q};1g.p={2y:j(e){1K(F){m C e=="O":d h.1G;m e===1a:d h.1E;m e===F||e===y:d e?h.1B:h.1C;m C e=="2i"&&e%1===0:k(e<h.1Y||e>h.1U){d h.1h}d h.1y;m C e=="2i"&&e%1!==0:d h.1h;m C e=="1T":d h.1z;m e 1J 21:d h.1F;m e 1J 1k:d h.1I;m e 1J 30:d h.1x;m C e=="1O":d h.1H;m C e=="j":18 w 1d("27 Q a j");1X:d 1a}}};G=j(e,t){b.2x=t;1g.1l(b,e)};G.p=w 1g;G.p.1j=G;G.p.Q=j(e,t,n,r){k(C n=="O")n=F;k(C t=="O")t=F;g i=r?r:b.2y(e);k(n){b.v.M(i)}1K(i){m h.1G:m h.1E:m h.1C:m h.1B:1c;m h.1y:b.I(e);1c;m h.1h:b.2H(e);1c;m h.1z:b.Y(e);1c;m h.1F:b.28(e);1c;m h.1x:b.2b(e);1c;m h.1H:b.20(e);1c;m h.1I:b.23(e);1c;1X:18 w U("2U 1f 2c ["+i+"]")}k(t){d b.v.1u()}};G.p.I=j(e){k(e<h.1Y||e>h.1U){18 w U("2T 2V 2Z 35: "+e)}e&=36;k(e<h.2B){b.v.M(e)}E k(e<h.2C){b.v.M(e>>7&P|1b);b.v.M(e&P)}E k(e<h.2z){b.v.M(e>>14&P|1b);b.v.M(e>>7&P|1b);b.v.M(e&P)}E{b.v.M(e>>22&P|1b);b.v.M(e>>15&P|1b);b.v.M(e>>8&P|1b);b.v.M(e&2L)}};G.p.2H=j(e){b.v.2G(e)};G.p.Y=j(e,t){t=C t=="O"?F:t;k(t){g n=b.z.1i(e,q.1n);k(n!==y){b.I(n<<1);d}}g r=1N.1R(e);b.I(r.K<<1|1);b.v.29(e)};G.p.28=j(e){g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}b.Q(e.2X(),y,F,h.1h)};G.p.2b=j(e){g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}g n=1a;g r=h.2g(e);k(r){b.I(e.K<<1|h.x);b.Y("");J(g i L e){n=e[i];b.Q(n,y)}}E{b.I(1);J(g s L e){n=e[s];b.Y(s,y);b.Q(n)}b.Y("")}};G.p.20=j(e){g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}g n=e;k(1m.2v(e)){e=e.2w()}g r=1m.2t(e);b.I(11);b.Y(1m.2u(n,b.2x),y);k(r.K>0){J(g i L r){g s=r[i];g o=e[s];b.Y(s,y);b.Q(o,y)}}b.Y("")};G.p.23=j(e){k(!("1q"L e)){18 w U("3K 1k 1v 3G")}g t=b.z.1i(e,q.B);k(t!==y){b.I(t<<1);d}b.I(e.1q().K<<1|h.x);b.v.3H(e.1q())};D=j(e){1g.1l(b,e)};D.p=w 1g;D.p.1j=D;D.p.Z=j(e){g t=b.v.2a(e);1K(1s(t)){m h.1G:d O;m h.1E:d 1a;m h.1C:d y;m h.1B:d F;m h.1y:d b.S();m h.1h:d b.26();m h.1z:d b.1e();m h.1F:d b.1Z();m h.1x:d b.25();m h.1H:d b.24();m h.1I:d b.2F();m h.2d:d b.2E();m h.2e:d b.2h();1X:18 w V("27 Z 2c: "+t+" ;3I 3J="+b.v.H.3F())}};D.p.S=j(){g e=0;g t=0;g n=b.v.1L();1A((n&1b)!==0&&t<3){e<<=7;e|=n&P;n=b.v.1L();t++}k(t<3){e<<=7;e|=n}E{e<<=8;e|=n;k((e&2f)!==0){e|=3A}}d e};D.p.26=j(){d b.v.1P()};D.p.1e=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.1n)}g t=e>>h.x;g n=b.v.1w(t);b.z.R(n,q.1n);d n};D.p.1Z=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=b.v.1P();g n=w 21(t);b.z.R(n,q.B);d n};D.p.25=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=[];b.z.R(n,q.B);g r=b.1e();1A(r.K>0){n[r]=b.Z();r=b.1e()}J(g i=0;i<t;i++){n.19(b.Z())}d n};D.p.24=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=b.1e();g n={};b.z.R(n,q.B);g r={};g i=b.1e();1A(i.K){r[i]=b.Z();i=b.1e()}k(t&&t.K>0){g s=1f.2o(t);k(!s){18 w V("3z "+t+" 2A 2D 38. 3B 3C a 3D 3L.")}n=w s;k("1D"L n&&C n.1D=="j"){n.1D(r)}E{1Q(n,r)}}E{1Q(n,r)}d n};g 1Q=j(e,t){3U{J(g n L t){g r=t[n];e[n]=r}}3W(i){18 w V("3T \'"+n+"\' 2A 2D 3V 3S 3R \'"+C e+"\'")}};D.p.2F=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=b.v.3N(t);g r=w 1k(n);b.z.R(r,q.B);d r};D.p.2E=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=b.v.1w(t);b.z.R(n,q.B);d n};D.p.2h=j(){g e=b.S();k((e&h.x)===0){e>>=h.x;d b.z.X(e,q.B)}g t=e>>h.x;g n=b.v.1w(t);b.z.R(n,q.B);d n};1W=j(e,t,n){k(e===O||e===1a){18 w 3M(\'"3O" 3P 1a 3Q 3y 3x\')}g r=e.K>>>0;n=+n||0;k(A.2m(n)===1p){n=0}k(n<0){n+=r;k(n<0){n=0}}J(;n<r;n++){k(e[n]===t){d n}}d-1};2n={3g:j(e){g t=11;g n=2j;g r=(1<<t-1)-1,i,s,o,u,a,f,l,c;k(3h(e)){s=(1<<r)-1;o=A.T(2,n-1);i=0}E k(e===1p||e===-1p){s=(1<<r)-1;o=0;i=e<0?1:0}E k(e===0){s=0;o=0;i=1/e===-1p?1:0}E{i=e<0;e=A.2m(e);k(e>=A.T(2,1-r)){u=A.3i(A.1V(A.3j(e)/A.3f),r);s=u+r;o=A.2l(e*A.T(2,n-u)-A.T(2,n))}E{s=0;o=A.2l(e/A.T(2,1-r-n))}}f=[];J(a=n;a;a-=1){f.19(o%2?1:0);o=A.1V(o/2)}J(a=t;a;a-=1){f.19(s%2?1:0);s=A.1V(s/2)}f.19(i?1:0);f.2k();l=f.2p("");c=[];1A(l.K){c.19(1s(l.1r(0,8),2));l=l.1r(8)}d c},3e:j(e){g t=11;g n=2j;g r=[],i,s,o,u,a,f,l,c;J(i=e.K;i;i-=1){o=e[i-1];J(s=8;s;s-=1){r.19(o%2?1:0);o=o>>1}}r.2k();u=r.2p("");a=(1<<t-1)-1;f=1s(u.1r(0,1),2)?-1:1;l=1s(u.1r(1,1+t),2);c=1s(u.1r(1+t),2);k(l===(1<<t)-1){d c!==0?3t:f*1p}E k(l>0){d f*A.T(2,l-a)*(1+c/A.T(2,n))}E k(c!==0){d f*A.T(2,-(a-1))*(c/A.T(2,n))}E{d f<0?-0:0}}};1m={2v:j(e){k(!e){d y}d"2w"L e&&"1D"L e},2u:j(e,t){k(C e==="1O"&&1f.2r L e){d t&1f.3s?e.3r:""}d""},2t:j(e){k(!e){d[]}g t=[];J(g n L e){k(n==1f.2r){2s}k(C e[n]=="j"){2s}t.19(n)}d t}};1k=j(e){b.1v=e};1k.p={1q:j(){d b.1v},3o:j(e){b.1v=e},3q:j(){d b.1q()}}',62,245,'|||||||||||this||return|||var|Spec||function|if||case|||prototype|ReferenceStore|||||stream|new|REFERENCE_BIT|false|referenceStore|Math|TYPE_OBJECT|typeof|Deserializer|else|true|Serializer|buff|serializeInt|for|length|in|writeByte|Exception|undefined|127|serialize|addReference|deserializeInt|pow|SerializationException|DeserializationException|store|getByReference|serializeString|deserialize|||||||||throw|push|null|128|break|NotSupportedException|deserializeString|AMF|BaseSerializer|AMF3_DOUBLE|getReference|constructor|ByteArray|call|ObjectUtil|TYPE_STRING|Buffer|Infinity|getData|substring|parseInt|classMappings|getString|data|readUTFBytes|AMF3_ARRAY|AMF3_INT|AMF3_STRING|while|AMF3_TRUE|AMF3_FALSE|importData|AMF3_NULL|AMF3_DATE|AMF3_UNDEFINED|AMF3_OBJECT|AMF3_BYTE_ARRAY|instanceof|switch|readUnsignedByte|jDataView|utf8|object|readDouble|applyDataToInstance|encode|validate|string|MAX_INT|floor|indexOf|default|MIN_INT|deserializeDate|serializeObject|Date||serializeByteArray|deserializeObject|deserializeArray|deserializeDouble|Cannot|serializeDate|writeUTFBytes|readByte|serializeArray|type|AMF3_XML_DOC|AMF3_XML|268435456|isDenseArray|deserializeXML|number|52|reverse|round|abs|float64|getClassByAlias|join|Base64|CLASS_MAPPING_FIELD|continue|getObjectKeys|getClassName|isSerializable|exportData|options|getDataType|MIN_4_BYTE_INT|cannot|MIN_2_BYTE_INT|MIN_3_BYTE_INT|be|deserializeXMLDoc|deserializeByteArray|writeDouble|serializeDouble|AMF3_VECTOR_OBJECT|mainAuthor|AMF3_DICTIONARY|255|AMF3_VECTOR_DOUBLE|Q2FsY2l1bVNjcmlwdA|AMF3_VECTOR_UINT|AMF3_VECTOR_INT|Q2FsY2l1bQ|scriptName|16384|Integer|Unrecognized|out|parse|getTime|registerClassAlias|of|Array|2097152|stringify|268435455|isLittleEndian|range|536870911|OBJECT_DYNAMIC|found|setString|_offset|setUint8|writeUnsignedByte|setFloat64|unpack|LN2|packFloat64|isNaN|min|log|setInt8|getUint8|name|Error|setData|message|toString|_classMapping|CLASS_MAPPING|NaN|getFloat64|getInt8|hasOwnProperty|defined|not|Class|3758096384|Consider|registering|class|DEFAULT_OPTIONS|tell|provided|setBytes|buffer|offset|Invalid|alias|TypeError|getBytes|array|is|or|instance|on|Property|try|set|catch'.split('|'),0,{}))
-
-
-		/**
-		 * ******************************** jDataView
-		 * ****************************************
-		 */
-//
-// jDataView by Vjeux - Jan 2010
-//
-// A unique way to read a binary file in the browser
-// http://github.com/vjeux/jDataView
-// http://blog.vjeux.com/ <vjeuxx@gmail.com>
-// v2.4.7 - Teamwork version withour NODE and BROWSER
-var jDataView;
-jDataView = (function (global) {
-
-'use strict';
-
-var compatibility = {
-	// NodeJS Buffer in v0.5.5 and newer
-//	NodeBuffer: NODE && 'Buffer' in global,
-	DataView: 'DataView' in global,
-	ArrayBuffer: 'ArrayBuffer' in global,
-//	PixelData: BROWSER && 'CanvasPixelArray' in global && 'ImageData' in global && 'document' in global
-};
-
-var TextEncoder = global.TextEncoder;
-var TextDecoder = global.TextDecoder;
-
-// we don't want to bother with old Buffer implementation
-//if (NODE && compatibility.NodeBuffer) {
-//	(function (buffer) {
-//		try {
-//			buffer.writeFloatLE(Infinity, 0);
-//		} catch (e) {
-//			compatibility.NodeBuffer = false;
-//		}
-//	})(new Buffer(4));
-//}
-
-// if (BROWSER && compatibility.PixelData) {
-// 	var createPixelData = function (byteLength, buffer) {
-// 		var data = createPixelData.context2d.createImageData((byteLength + 3) / 4, 1).data;
-// 		data.byteLength = byteLength;
-// 		if (buffer !== undefined) {
-// 			for (var i = 0; i < byteLength; i++) {
-// 				data[i] = buffer[i];
-// 			}
-// 		}
-// 		return data;
-// 	};
-// 	createPixelData.context2d = document.createElement('canvas').getContext('2d');
-// }
-
-var dataTypes = {
-	'Int8': 1,
-	'Int16': 2,
-	'Int32': 4,
-	'Uint8': 1,
-	'Uint16': 2,
-	'Uint32': 4,
-	'Float32': 4,
-	'Float64': 8
-};
-
-function arrayFrom(arrayLike, forceCopy) {
-	return (!forceCopy && (arrayLike instanceof Array)) ? arrayLike : Array.prototype.slice.call(arrayLike);
-}
-
-function defined(value, defaultValue) {
-	return value !== undefined ? value : defaultValue;
-}
-
-function jDataView(buffer, isDynamic, byteOffset, byteLength, littleEndian) {
-	/* jshint validthis:true */
-
-	if (buffer instanceof jDataView) {
-		var result = buffer.slice(byteOffset, byteOffset + byteLength);
-		result._littleEndian = defined(littleEndian, result._littleEndian);
-		return result;
-	}
-
-	if (!(this instanceof jDataView)) {
-		return new jDataView(buffer, isDynamic, byteOffset, byteLength, littleEndian);
-	}
-
-	this.buffer = buffer = jDataView.wrapBuffer(buffer);
-	this.dynamic = defined(isDynamic,false);
-
-	// Check parameters and existing functionnalities
-	this._isArrayBuffer = compatibility.ArrayBuffer && buffer instanceof ArrayBuffer;
-//	this._isPixelData = BROWSER && compatibility.PixelData && buffer instanceof CanvasPixelArray;
-	this._isDataView = compatibility.DataView && this._isArrayBuffer;
-//	this._isNodeBuffer = NODE && compatibility.NodeBuffer && buffer instanceof Buffer;
-
-	// Handle Type Errors
-//	if (!(NODE && this._isNodeBuffer) && !this._isArrayBuffer && !(BROWSER && this._isPixelData) && !(buffer instanceof Array)) {
-	if (!this._isArrayBuffer && !(buffer instanceof Array)) {
-		throw new TypeError('jDataView buffer has an incompatible type');
-	}
-
-	// Default Values
-	this._littleEndian = !!littleEndian;
-
-	var bufferLength = 'byteLength' in buffer ? buffer.byteLength : buffer.length;
-	this.byteOffset = byteOffset = defined(byteOffset, 0);
-	this.byteLength = byteLength = defined(byteLength, bufferLength - byteOffset);
-
-	this._offset = this._bitOffset = 0;
-
-	if (!this._isDataView) {
-		this._checkBounds(byteOffset, byteLength, bufferLength);
-	} else {
-		this._view = new DataView(buffer, byteOffset, byteLength);
-	}
-
-	// Create uniform methods (action wrappers) for the following data types
-
-	this._engineAction =
-		this._isDataView
-			? this._dataViewAction
-//		: (NODE && this._isNodeBuffer)
-//			? this._nodeBufferAction
-		: this._isArrayBuffer
-			? this._arrayBufferAction
-		: this._arrayAction;
-}
-
-function getCharCodes(string) {
-	// if (NODE && compatibility.NodeBuffer) {
-	// 	return new Buffer(string, 'binary');
-	// }
-
-	var Type = compatibility.ArrayBuffer ? Uint8Array : Array,
-		codes = new Type(string.length);
-
-	for (var i = 0, length = string.length; i < length; i++) {
-		codes[i] = string.charCodeAt(i) & 0xff;
-	}
-	return codes;
-}
-
-// mostly internal function for wrapping any supported input (String or Array-like) to best suitable buffer format
-jDataView.wrapBuffer = function (buffer) {
-	switch (typeof buffer) {
-		case 'number':
-			// if (NODE && compatibility.NodeBuffer) {
-			// 	buffer = new Buffer(buffer);
-			// 	buffer.fill(0);
-			// } else
-			if (compatibility.ArrayBuffer) {
-				buffer = new Uint8Array(buffer).buffer;
-			// } else
-			// if (BROWSER && compatibility.PixelData) {
-			// 	buffer = createPixelData(buffer);
-			} else {
-				buffer = new Array(buffer);
-				for (var i = 0; i < buffer.length; i++) {
-					buffer[i] = 0;
-				}
-			}
-			return buffer;
-
-		case 'string':
-			buffer = getCharCodes(buffer);
-			/* falls through */
-		default:
-			//if ('length' in buffer && !((NODE && compatibility.NodeBuffer && buffer instanceof Buffer) || (compatibility.ArrayBuffer && buffer instanceof ArrayBuffer) || (BROWSER && compatibility.PixelData && buffer instanceof CanvasPixelArray))) {
-			if ('length' in buffer && !((compatibility.ArrayBuffer && buffer instanceof ArrayBuffer))) {
-				// if (NODE && compatibility.NodeBuffer) {
-				// 	buffer = new Buffer(buffer);
-				// } else
-				if (compatibility.ArrayBuffer) {
-					if (!(buffer instanceof ArrayBuffer)) {
-						buffer = new Uint8Array(buffer).buffer;
-						// bug in Node.js <= 0.8:
-						if (!(buffer instanceof ArrayBuffer)) {
-							buffer = new Uint8Array(arrayFrom(buffer, true)).buffer;
-						}
-					}
-				// } else
-				// if (BROWSER && compatibility.PixelData) {
-				// 	buffer = createPixelData(buffer.length, buffer);
-				} else {
-					buffer = arrayFrom(buffer);
-				}
-			}
-			return buffer;
-	}
-};
-
-function pow2(n) {
-	return (n >= 0 && n < 31) ? (1 << n) : (pow2[n] || (pow2[n] = Math.pow(2, n)));
-}
-
-// left for backward compatibility
-jDataView.createBuffer = function () {
-	return jDataView.wrapBuffer(arguments);
-};
-
-function Uint64(lo, hi) {
-	this.lo = lo;
-	this.hi = hi;
-}
-
-jDataView.Uint64 = Uint64;
-
-Uint64.prototype = {
-	valueOf: function () {
-		return this.lo + pow2(32) * this.hi;
-	},
-
-	toString: function () {
-		return Number.prototype.toString.apply(this.valueOf(), arguments);
-	}
-};
-
-Uint64.fromNumber = function (number) {
-	var hi = Math.floor(number / pow2(32)),
-		lo = number - hi * pow2(32);
-
-	return new Uint64(lo, hi);
-};
-
-function Int64(lo, hi) {
-	Uint64.apply(this, arguments);
-}
-
-jDataView.Int64 = Int64;
-
-Int64.prototype = 'create' in Object ? Object.create(Uint64.prototype) : new Uint64();
-
-Int64.prototype.valueOf = function () {
-	if (this.hi < pow2(31)) {
-		return Uint64.prototype.valueOf.apply(this, arguments);
-	}
-	return -((pow2(32) - this.lo) + pow2(32) * (pow2(32) - 1 - this.hi));
-};
-
-Int64.fromNumber = function (number) {
-	var lo, hi;
-	if (number >= 0) {
-		var unsigned = Uint64.fromNumber(number);
-		lo = unsigned.lo;
-		hi = unsigned.hi;
-	} else {
-		hi = Math.floor(number / pow2(32));
-		lo = number - hi * pow2(32);
-		hi += pow2(32);
-	}
-	return new Int64(lo, hi);
-};
-
-var proto = jDataView.prototype = {
-	compatibility: compatibility,
-	
-	blocksize : 10*1024,
-
-	toggleDynamic : function(value) {
-		if (typeof value === 'undefined') {
-			this.dynamic = !this.dynamic;
-		} else {
-			if (typeof value === 'boolean') {
-				this.dynamic = value;
-			}
-		}
-	},
-	
-	isDynamic : function() {
-		return this.dynamic;
-	},
-	
-	tell: function () {
-		return this._offset;
-	},
-
-	seek: function (byteOffset) {
-		this._checkBounds(byteOffset, 0);
-		/* jshint boss: true */
-		return this._offset = byteOffset;
-	},
-
-	skip: function (byteLength) {
-		return this.seek(this._offset + byteLength);
-	},
-
-	slice: function (start, end, forceCopy) {
-		function normalizeOffset(offset, byteLength) {
-			return offset < 0 ? offset + byteLength : offset;
-		}
-
-		start = normalizeOffset(start, this.byteLength);
-		end = normalizeOffset(defined(end, this.byteLength), this.byteLength);
-
-		return (
-			forceCopy
-			? new jDataView(this.getBytes(end - start, start, true, true), this.dynamic, undefined, undefined, this._littleEndian)
-			: new jDataView(this.buffer, this.dynamic, this.byteOffset + start, end - start, this._littleEndian)
-		);
-	},
-
-	alignBy: function (byteCount) {
-		this._bitOffset = 0;
-		if (defined(byteCount, 1) !== 1) {
-			return this.skip(byteCount - (this._offset % byteCount || byteCount));
-		} else {
-			return this._offset;
-		}
-	},
-
-	//copy source (or part) in buffer limit of buffer size
-	copy : function(source,offsetDest,offsetSrc,length) {
-		if (!(source instanceof jDataView)) {
-			source = new jDataView(source);
-		}
-		offsetSrc = defined(offsetSrc, source._offset);
-		offsetDest = defined(offsetDest, this._offset);
-		length = defined(length, source.byteLength - offsetSrc);
-		length = ((offsetDest + length) <= this.byteLength) ? length : this.byteLength - offsetDest; 
-		this._setBytes(source.getBytes(length,offsetSrc),offsetDest);
-	},
-	
-	compare : function(otherbuff) {
-		if (!(otherbuff instanceof jDataView)) {
-			otherbuff = new jDataView(otherbuff);
-		}
-		var ret = {equal:true,diff:[]};
-		var byteLength,buffSize,nbByteDiff = 0;
-		byteLength = buffSize = 'byteLength' in this.buffer ? this.buffer.byteLength : this.buffer.length;
-		var compSize = 'byteLength' in otherbuff.buffer ? otherbuff.buffer.byteLength : otherbuff.buffer.length;
-		if (compSize !== buffSize ) {
-			ret.equal = false;
-			if (compSize < buffSize) {
-				ret.diff.push('other is smaller;this='+buffSize+';other='+compSize);
-				byteLength = compSize;
-			} else {
-				ret.diff.push('other is greater;this='+buffSize+';other='+compSize);
-			}
-		}
-		byteLength -= this.byteOffset;
-		for (var i=0;i<byteLength;i++){
-			var byte = this._getBytes(1,i)[0];
-			var compByte = otherbuff._getBytes(1,i)[0];
-			if (byte !== compByte) {
-				nbByteDiff++;
-			}
-		}
-		if (nbByteDiff >0) {
-			ret.equal = false;
-			ret.diff.push(nbByteDiff+' bytes in differences');
-		}
-		return ret
-	},
-	
-	//resize buffer upsize or downsize
-	resize : function (newSize) {
-		var tempBuff,oldSize,newBuff;
-		//Ctrl if buffer is dynamic
-		if (!this.dynamic) {
-			throw new RangeError('buffer not dynamic.');			
-		}
-		//Ctrl if newSize out of this.byteOffset
-		if (newSize < this.byteOffset) {
-			throw new RangeError('new size is out of bounds.');
-		}
-
-		var oldSize = 'byteLength' in this.buffer ? this.buffer.byteLength : this.buffer.length;
-		if (typeof newSize === 'number') {
-			//extend buffer
-			newSize = (parseInt(newSize / this.blocksize) + (newSize % this.blocksize ? 1 : 0)) * this.blocksize;
-			if (compatibility.ArrayBuffer) {
-				tempBuff = new Uint8Array(newSize);
-				tempBuff.set(new Uint8Array(this.buffer).subarray(0,(oldSize < newSize ? oldSize : newSize)));
-				newBuff = new Uint8Array(newSize)
-				newBuff.set(tempBuff);
-				this.buffer = newBuff.buffer;
-			} else {
-				this.buffer.length = newSize;
-				newBuff = this.buffer;
-				for (var i = oldSize; i < this.buffer.length; i++) {
-					this.buffer[i] = 0;
-				}
-			}
-			//ajust this.byteLength if it's at the end of buffer
-			var bufferLength = 'byteLength' in this.buffer ? this.buffer.byteLength : this.buffer.length;
-			if (this.byteLength === (oldSize - this.byteOffset)) {
-				this.byteLength = bufferLength - this.byteOffset;
-			}
-			//ajust this._offset if it's at the end of buffer
-			if (this._offset > this.byteLength) {
-				this._offset = this.byteLength
-			}
-			//create new dataview 
-			if (this._isDataView) {
-				this._view = new DataView(this.buffer, this.byteOffset, this.byteLength);
-			}
-
-		}
-	},
-
-	_checksize : function(byteOffset, byteLength) {
-		if (!this.dynamic) return;
-		byteOffset = defined(byteOffset,this._offset);
-		var bufferSize = 'byteLength' in this.buffer ? this.buffer.byteLength : this.buffer.length;
-		if (this.byteOffset + byteOffset + byteLength > bufferSize) {
-			this.resize((this.byteOffset + byteOffset + byteLength));
-		}
-	},
-	
-	_checkBounds: function (byteOffset, byteLength, maxLength) {
-		// Do additional checks to simulate DataView
-		if (typeof byteOffset !== 'number') {
-			throw new TypeError('Offset is not a number.');
-		}
-		if (typeof byteLength !== 'number') {
-			throw new TypeError('Size is not a number.');
-		}
-		if (byteLength < 0) {
-			throw new RangeError('Length is negative.');
-		}
-		if (byteOffset < 0 || byteOffset + byteLength > defined(maxLength, this.byteLength)) {
-			throw new RangeError('Offsets are out of bounds.');
-		}
-	},
-
-	_action: function (type, isReadAction, byteOffset, littleEndian, value) {
-		return this._engineAction(
-			type,
-			isReadAction,
-			defined(byteOffset, this._offset),
-			defined(littleEndian, this._littleEndian),
-			value
-		);
-	},
-
-	_dataViewAction: function (type, isReadAction, byteOffset, littleEndian, value) {
-		this._checksize(byteOffset,dataTypes[type]);
-		// Move the internal offset forward
-		this._offset = byteOffset + dataTypes[type];
-		return isReadAction ? this._view['get' + type](byteOffset, littleEndian) : this._view['set' + type](byteOffset, value, littleEndian);
-	},
-
-	_arrayBufferAction: function (type, isReadAction, byteOffset, littleEndian, value) {
-		var size = dataTypes[type], TypedArray = global[type + 'Array'], typedArray;
-		this._checksize(byteOffset,size);
-
-		littleEndian = defined(littleEndian, this._littleEndian);
-
-		// ArrayBuffer: we use a typed array of size 1 from original buffer if alignment is good and from slice when it's not
-		if (size === 1 || ((this.byteOffset + byteOffset) % size === 0 && littleEndian)) {
-			typedArray = new TypedArray(this.buffer, this.byteOffset + byteOffset, 1);
-			this._offset = byteOffset + size;
-			return isReadAction ? typedArray[0] : (typedArray[0] = value);
-		} else {
-			var bytes = new Uint8Array(isReadAction ? this.getBytes(size, byteOffset, littleEndian, true) : size);
-			typedArray = new TypedArray(bytes.buffer, 0, 1);
-
-			if (isReadAction) {
-				return typedArray[0];
-			} else {
-				typedArray[0] = value;
-				this._setBytes( bytes, byteOffset,littleEndian);
-			}
-		}
-	},
-
-	_arrayAction: function (type, isReadAction, byteOffset, littleEndian, value) {
-		this._checksize(byteOffset,dataTypes[type]);
-		return isReadAction ? this['_get' + type](byteOffset, littleEndian) : this['_set' + type](value, byteOffset, littleEndian);
-	},
-
-	_setBinaryFloat: function (value,byteOffset, mantSize, expSize, littleEndian) {
-		var signBit = value < 0 ? 1 : 0,
-			exponent,
-			mantissa,
-			eMax = ~(-1 << (expSize - 1)),
-			eMin = 1 - eMax;
-
-		if (value < 0) {
-			value = -value;
-		}
-
-		if (value === 0) {
-			exponent = 0;
-			mantissa = 0;
-		} else if (isNaN(value)) {
-			exponent = 2 * eMax + 1;
-			mantissa = 1;
-		} else if (value === Infinity) {
-			exponent = 2 * eMax + 1;
-			mantissa = 0;
-		} else {
-			exponent = Math.floor(Math.log(value) / Math.LN2);
-			if (exponent >= eMin && exponent <= eMax) {
-				mantissa = Math.floor((value * pow2(-exponent) - 1) * pow2(mantSize));
-				exponent += eMax;
-			} else {
-				mantissa = Math.floor(value / pow2(eMin - mantSize));
-				exponent = 0;
-			}
-		}
-
-		var b = [];
-		while (mantSize >= 8) {
-			b.push(mantissa % 256);
-			mantissa = Math.floor(mantissa / 256);
-			mantSize -= 8;
-		}
-		exponent = (exponent << mantSize) | mantissa;
-		expSize += mantSize;
-		while (expSize >= 8) {
-			b.push(exponent & 0xff);
-			exponent >>>= 8;
-			expSize -= 8;
-		}
-		b.push((signBit << expSize) | exponent);
-
-		this._setBytes( b,byteOffset, littleEndian);
-	},
-
-	_getBitRangeData: function (bitLength, byteOffset) {
-		var startBit = (defined(byteOffset, this._offset) << 3) + this._bitOffset,
-			endBit = startBit + bitLength,
-			start = startBit >>> 3,
-			end = (endBit + 7) >>> 3,
-			b = this._getBytes(end - start, start, true),
-			wideValue = 0;
-
-		/* jshint boss: true */
-		if (this._bitOffset = endBit & 7) {
-			this._bitOffset -= 8;
-		}
-
-		for (var i = 0, length = b.length; i < length; i++) {
-			wideValue = (wideValue << 8) | b[i];
-		}
-
-		return {
-			start: start,
-			bytes: b,
-			wideValue: wideValue
-		};
-	},
-
-	_getBytes: function (length, byteOffset, littleEndian) {
-		littleEndian = defined(littleEndian, this._littleEndian);
-		byteOffset = defined(byteOffset, this._offset);
-		length = defined(length, this.byteLength - byteOffset);
-
-		this._checkBounds(byteOffset, length);
-
-		byteOffset += this.byteOffset;
-
-		this._offset = byteOffset - this.byteOffset + length;
-
-		var result = (
-			this._isArrayBuffer
-			? new Uint8Array(this.buffer, byteOffset, length)
-			: (this.buffer.slice || Array.prototype.slice).call(this.buffer, byteOffset, byteOffset + length)
-		);
-
-		return littleEndian || length <= 1 ? result : arrayFrom(result).reverse();
-	},
-
-	// wrapper for external calls (do not return inner buffer directly to prevent it's modifying)
-	getBytes: function (length, byteOffset, littleEndian, toArray) {
-		var result = this._getBytes(length, byteOffset, defined(littleEndian, true));
-		return toArray ? arrayFrom(result) : result;
-	},
-
-	_setBytes: function (bytes, byteOffset,  littleEndian) {
-		var length = bytes.length;
-
-		// needed for Opera
-		if (length === 0) {
-			return;
-		}
-
-		littleEndian = defined(littleEndian, this._littleEndian);
-		byteOffset = defined(byteOffset, this._offset);
-
-		this._checkBounds(byteOffset, length);
-
-		if (!littleEndian && length > 1) {
-			bytes = arrayFrom(bytes, true).reverse();
-		}
-
-		byteOffset += this.byteOffset;
-
-		if (this._isArrayBuffer) {
-			new Uint8Array(this.buffer, byteOffset, length).set(bytes);
-		}
-		else {
-			// if (NODE && this._isNodeBuffer) {
-			// 	new Buffer(bytes).copy(this.buffer, byteOffset);
-			// } else {
-				for (var i = 0; i < length; i++) {
-					this.buffer[byteOffset + i] = bytes[i];
-				}
-			// }
-		}
-
-		this._offset = byteOffset - this.byteOffset + length;
-	},
-
-	setBytes: function (bytes,byteOffset,littleEndian) {
-		this._checksize(byteOffset,bytes.length);
-		this._setBytes(bytes,byteOffset, defined(littleEndian, true));
-	},
-
-	getString: function (byteLength, byteOffset, encoding) {
-		// if (NODE && this._isNodeBuffer) {
-		// 	byteOffset = defined(byteOffset, this._offset);
-		// 	byteLength = defined(byteLength, this.byteLength - byteOffset);
-
-		// 	this._checkBounds(byteOffset, byteLength);
-
-		// 	this._offset = byteOffset + byteLength;
-		// 	return this.buffer.toString(encoding || 'binary', this.byteOffset + byteOffset, this.byteOffset + this._offset);
-		// }
-		var bytes = this._getBytes(byteLength, byteOffset, true);
-		// backward-compatibility
-		encoding = encoding === 'utf8' ? 'utf-8' : (encoding || 'binary');
-		if (TextDecoder && encoding !== 'binary') {
-			return new TextDecoder(encoding).decode(this._isArrayBuffer ? bytes : new Uint8Array(bytes));
-		}
-		var string = '';
-		byteLength = bytes.length;
-		for (var i = 0; i < byteLength; i++) {
-			//console.debug(i);
-			string += String.fromCharCode(bytes[i]);
-		}
-		if (encoding === 'utf-8') {
-			string = utf8.decode(string);
-		}
-		return string;
-	},
-
-	setString: function ( subString, byteOffset,encoding) {
-		// if (NODE && this._isNodeBuffer) {
-		// 	byteOffset = defined(byteOffset, this._offset);
-		// 	this._checkBounds(byteOffset, subString.length);
-		// 	this._offset = byteOffset + this.buffer.write(subString, this.byteOffset + byteOffset, encoding || 'binary');
-		// 	return;
-		// }
-		// backward-compatibility
-		encoding = encoding === 'utf8' ? 'utf-8' : (encoding || 'binary');
-		var bytes;
-		if (TextEncoder && encoding !== 'binary') {
-			bytes = new TextEncoder(encoding).encode(subString);
-		} else {
-			if (encoding === 'utf-8') {
-				subString = utf8.encode(subString);
-			}
-			bytes = getCharCodes(subString);
-		}
-		this._checksize(byteOffset,bytes.length);
-		this._setBytes( bytes,byteOffset, true);
-	},
-
-	getChar: function (byteOffset) {
-		return this.getString(1, byteOffset);
-	},
-
-	setChar: function ( character,byteOffset) {
-		this.setString(character,byteOffset);
-	},
-
-	// Compatibility functions
-
-	_getFloat64: function (byteOffset, littleEndian) {
-		var b = this._getBytes(8, byteOffset, littleEndian),
-
-			sign = 1 - (2 * (b[7] >> 7)),
-			exponent = ((((b[7] << 1) & 0xff) << 3) | (b[6] >> 4)) - ((1 << 10) - 1),
-
-		// Binary operators such as | and << operate on 32 bit values, using + and Math.pow(2) instead
-			mantissa = ((b[6] & 0x0f) * pow2(48)) + (b[5] * pow2(40)) + (b[4] * pow2(32)) 
-								+	(b[3] * pow2(24)) + (b[2] * pow2(16)) + (b[1] * pow2(8)) + b[0];
-
-		if (exponent === 1024) {
-			if (mantissa !== 0) {
-				return NaN;
-			} else {
-				return sign * Infinity;
-			}
-		}
-
-		if (exponent === -1023) { // Denormalized
-			return sign * mantissa * pow2(-1022 - 52);
-		}
-
-		return sign * (1 + mantissa * pow2(-52)) * pow2(exponent);
-	},
-
-	_setFloat64: function (value, byteOffset, littleEndian) {
-		this._setBinaryFloat(value, byteOffset, 52, 11, littleEndian);
-	},
-
-	_getFloat32: function (byteOffset, littleEndian) {
-		var b = this._getBytes(4, byteOffset, littleEndian),
-
-			sign = 1 - (2 * (b[3] >> 7)),
-			exponent = (((b[3] << 1) & 0xff) | (b[2] >> 7)) - 127,
-			mantissa = ((b[2] & 0x7f) << 16) | (b[1] << 8) | b[0];
-
-		if (exponent === 128) {
-			if (mantissa !== 0) {
-				return NaN;
-			} else {
-				return sign * Infinity;
-			}
-		}
-
-		if (exponent === -127) { // Denormalized
-			return sign * mantissa * pow2(-126 - 23);
-		}
-
-		return sign * (1 + mantissa * pow2(-23)) * pow2(exponent);
-	},
-
-	_setFloat32: function (value, byteOffset, littleEndian) {
-		this._setBinaryFloat(value, byteOffset, 23, 8, littleEndian);
-	},
-
-	_get64: function (Type, byteOffset, littleEndian) {
-		littleEndian = defined(littleEndian, this._littleEndian);
-		byteOffset = defined(byteOffset, this._offset);
-
-		var parts = littleEndian ? [0, 4] : [4, 0];
-
-		for (var i = 0; i < 2; i++) {
-			parts[i] = this.getUint32(byteOffset + parts[i], littleEndian);
-		}
-
-		this._offset = byteOffset + 8;
-
-		return new Type(parts[0], parts[1]);
-	},
-
-	_set64: function (Type,value, byteOffset, littleEndian) {
-		if (!(value instanceof Type)) {
-			value = Type.fromNumber(value);
-		}
-
-		littleEndian = defined(littleEndian, this._littleEndian);
-		byteOffset = defined(byteOffset, this._offset);
-
-		var parts = littleEndian ? {lo: 0, hi: 4} : {lo: 4, hi: 0};
-
-		for (var partName in parts) {
-			this.setUint32(byteOffset + parts[partName], value[partName], littleEndian);
-		}
-
-		this._offset = byteOffset + 8;
-	},
-
-	getInt64: function (byteOffset, littleEndian) {
-		return this._get64(Int64, byteOffset, littleEndian);
-	},
-
-	setInt64: function (value, byteOffset , littleEndian) {
-		this._set64(Int64, value, byteOffset, littleEndian);
-	},
-
-	getUint64: function (byteOffset, littleEndian) {
-		return this._get64(Uint64, byteOffset, littleEndian);
-	},
-
-	setUint64: function (value, byteOffset , littleEndian) {
-		this._set64(Uint64, value, byteOffset, littleEndian);
-	},
-
-	_getInt32: function (byteOffset, littleEndian) {
-		var b = this._getBytes(4, byteOffset, littleEndian);
-		return (b[3] << 24) | (b[2] << 16) | (b[1] << 8) | b[0];
-	},
-
-	//_setInt32 = _setUint32
-	
-	_getUint32: function (byteOffset, littleEndian) {
-		return this._getInt32(byteOffset, littleEndian) >>> 0;
-	},
-
-	_setUint32: function (value,byteOffset, littleEndian) {
-		this._setBytes( [
-			 value & 0xff
-			,(value >>> 8) & 0xff
-			,(value >>> 16) & 0xff
-			,value >>> 24
-		],byteOffset, littleEndian);
-	},
-
-	_getInt16: function (byteOffset, littleEndian) {
-		return (this._getUint16(byteOffset, littleEndian) << 16) >> 16;
-	},
-
-	//_setInt16 = _setUint16
-	
-	_getUint16: function (byteOffset, littleEndian) {
-		var b = this._getBytes(2, byteOffset, littleEndian);
-		return (b[1] << 8) | b[0];
-	},
-
-	_setUint16: function (value, byteOffset, littleEndian) {
-		this._setBytes( [
-			 value & 0xff
-			,(value >>> 8) & 0xff
-		],byteOffset, littleEndian);
-	},
-
-	_getInt8: function (byteOffset) {
-		return (this._getUint8(byteOffset) << 24) >> 24;
-	},
-
-	//_setInt8 = _setUint8
-	
-	_getUint8: function (byteOffset) {
-		return this._getBytes(1, byteOffset)[0];
-	},
-
-	_setUint8: function (value,byteOffset ) {
-		this._setBytes( [value & 0xff],byteOffset);
-	},
-
-	getSigned: function (bitLength, byteOffset) {
-		var shift = 32 - bitLength;
-		return (this.getUnsigned(bitLength, byteOffset) << shift) >> shift;
-	},
-
-	//setSigned = setUnsigned
-
-	getUnsigned: function (bitLength, byteOffset) {
-		var value = this._getBitRangeData(bitLength, byteOffset).wideValue >>> -this._bitOffset;
-		return bitLength < 32 ? (value & ~(-1 << bitLength)) : value;
-	},
-
-	setUnsigned: function (value, byteOffset , bitLength) {
-		var data = this._getBitRangeData(bitLength, byteOffset),
-			wideValue = data.wideValue,
-			b = data.bytes;
-
-		wideValue &= ~(~(-1 << bitLength) << -this._bitOffset); // clearing bit range before binary "or"
-		wideValue |= (bitLength < 32 ? (value & ~(-1 << bitLength)) : value) << -this._bitOffset; // setting bits
-
-		for (var i = b.length - 1; i >= 0; i--) {
-			b[i] = wideValue & 0xff;
-			wideValue >>>= 8;
-		}
-
-		this._setBytes(b, data.start, true);
-	}
-};
-
-// if (NODE) {
-// 	var nodeNaming = {
-// 		'Int8': 'Int8',
-// 		'Int16': 'Int16',
-// 		'Int32': 'Int32',
-// 		'Uint8': 'UInt8',
-// 		'Uint16': 'UInt16',
-// 		'Uint32': 'UInt32',
-// 		'Float32': 'Float',
-// 		'Float64': 'Double'
-// 	};
-
-// 	proto._nodeBufferAction = function (type, isReadAction, byteOffset, littleEndian, value) {
-// 		// Move the internal offset forward
-// 		this._offset = byteOffset + dataTypes[type];
-// 		var nodeName = nodeNaming[type] + ((type === 'Int8' || type === 'Uint8') ? '' : littleEndian ? 'LE' : 'BE');
-// 		byteOffset += this.byteOffset;
-// 		return isReadAction ? this.buffer['read' + nodeName](byteOffset) : this.buffer['write' + nodeName](value, byteOffset);
-// 	};
-// }
-
-for (var type in dataTypes) {
-	/* jshint loopfunc: true */
-	(function (type) {
-		proto['get' + type] = function (byteOffset, littleEndian) {
-			return this._action(type, true, byteOffset, littleEndian);
-		};
-		proto['set' + type] = function (value, byteOffset, littleEndian) {
-			this._action(type, false, byteOffset, littleEndian, value);
-		};
-	})(type);
-	/* jshint loopfunc: false */
-}
-
-proto._setInt32 = proto._setUint32;
-proto._setInt16 = proto._setUint16;
-proto._setInt8 = proto._setUint8;
-proto.setSigned = proto.setUnsigned;
-
-for (var method in proto) {
-	/* jshint loopfunc: true */
-	if (method.slice(0, 3) === 'set') {
-		(function (type) {
-			proto['write' + type] = function () {
-				Array.prototype.unshift.call(arguments, undefined);
-				this['set' + type].apply(this, arguments);
-			};
-		})(method.slice(3));
-	}
-	/* jshint loopfunc: false */
-}
-
-
-return jDataView;
-
-})(window);
-
-		/**
-		 * ******************************** END jDataView
-		 * ************************************
-		 */
 		
 		/**
 		 * ******************************** SWFObject
@@ -41513,7 +40684,7 @@ return jDataView;
 						'Enable research on all OP': 'Activer la possibilité de lancer des recherches sur tous les OP',
 						'Enable transport of ': 'Activer le transport de ',
 						'Enable use of speed-ups in attacks waves': 'Activer l\'utilisation des accélérateurs de temps dans les vagues d\'attaque',
-						'Enable use of speed-ups in training/resurrection jobs': 'Activer l\'utilisation de accélérateurs de temps dans les formations/résurrections',
+						'Enable use of speed-ups in training/resurrection jobs': 'Activer l\'utilisation de accélérateurs de temps dans les tâches',
 						'Enable verbose logging': 'Activer la journalisation d\'évenements',
 						'Enable window drag': 'Autoriser le déplacement de la fenêtre',
 						'Enable the sentinel tower': 'Activer la sentinelle',
@@ -41949,6 +41120,10 @@ return jDataView;
 						'ajax-req-feeding': 'Amélioration des dragons',
 						'ajax-req-dragonHandle': 'Rejeter/Retirer/Equiper un dragon du sanctuaire',
 						'ajax-req-customization': 'Équiper un dragon d\'armure et d\'écailles',
+						'ajax-req-forge' : 'Toutes requêtes autour de la forge',
+						'ajax-req-other' : 'Autre requête',
+						'ajax-req-trade' : 'Toutes requêtes autour du commerce',
+						'ajax-req-wilderness' : 'Toutes requêtes autour des étendues sauvages',
 						'Zzz': 'Zzz'
 					};
 					break;
@@ -43157,6 +42332,7 @@ return jDataView;
 		background-position:center center;\
 		color: white;\
 		padding-right: 10px;\
+		margin: 0 auto;\
 	}\
 	.' + UID['scrollable'] + ' {\
 		overflow: auto !important;\
