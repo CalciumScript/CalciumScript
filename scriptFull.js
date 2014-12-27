@@ -8471,6 +8471,7 @@
 					if (notify) notify(true);
 				});
 			},
+			
 			displayBattleReport: function(report, aname) {
 				var rep = report.report;
 				var att = rep.attacker;
@@ -8612,10 +8613,18 @@
 				}
 				m += '			</table>' + '		</td>' + '	</tr>' + '</table><br>' + '<div style="height:350px; max-height:350px; overflow-y:auto; white-space:pre-wrap;" width=98%>';
 				/* Battle report troops section */
-				if (att.location) att_loc = att.location.x + ', ' + att.location.y;
-				else att_loc = rep.location.x + ', ' + rep.location.y;
-				if (def.location) def_loc = def.location.x + ', ' + def.location.y;
-				else def_loc = rep.location.x + ', ' + rep.location.y;
+				if (att.location) {
+					att_loc = att.location.x + ', ' + att.location.y;
+				}
+				else {
+					att_loc = rep.location.x + ', ' + rep.location.y;
+				}
+				if (def.location) { 
+					def_loc = def.location.x + ', ' + def.location.y;
+				}
+				else {
+					def_loc = rep.location.x + ', ' + rep.location.y;
+				}
 				m += '<table style="margin-top:1px" width=98%>' + '	<tr valign=top align=center>' + '		<td width=49%>' 
 				+ '			<table class=' + UID['row_style'] + ' width=100%>' 
 				+ '				<tr>' 
@@ -8642,13 +8651,73 @@
 									break;
 								}
 							}
+							for (var idg = 0; idg < all_dragon_list.length; idg++) {
+								if (all_dragon_list[idg] == p) {
+									if(rep.battle_record[1]) {
+										if(rep.battle_record[1].march) {
+											var typeAb = '';
+											switch (rep.attacker.great_dragon_info.type) {
+												case 'Dragons::GreatDragon':
+													break;
+												case 'Dragons::WaterDragon':
+													typeAb = 'water';
+													break;
+												case 'Dragons::StoneDragon':
+													typeAb = 'stone';
+													break;
+												case 'Dragons::FireDragon':
+													typeAb = 'fire';
+													break;
+												case 'Dragons::WindDragon':
+													typeAb = 'wind';
+													break;
+												case 'Dragons::SpectralDragon':
+													break;
+												case 'Dragons::IceDragon':
+													typeAb = 'ice';
+													break;
+												case 'Dragons::SwampDragon':
+													typeAb = 'swamp';
+													break;
+												case 'Dragons::ForestDragon':
+													typeAb = 'forest';
+													break;
+												case 'Dragons::DesertDragon':
+													typeAb = 'desert';
+													break;
+												case 'Dragons::ChronoDragon':
+													typeAb = 'chrono';
+													break;
+												case 'Dragons::KaiserDragon':
+													typeAb = 'kaiser';
+													break;
+												case 'Dragons::CaveDragon':
+													typeAb = 'cave';
+													break;
+												case 'Dragons::LunaDragon':
+													typeAb = 'luna';
+													break;
+												case 'Dragons::ColossusDragon':
+													typeAb = 'colossus';
+													break;
+											}
+					
+											for(var ba=0 ; ba<rep.battle_record[1].march.length ; ba++) {
+												descEqp += translate('dragonpower-' + rep.battle_record[1].march[ba].name.replace(/_/g, '')) + '\n\t' + (translate(typeAb+'dragonpower-'+rep.battle_record[1].march[ba].slot+'-report')).replace('%num', numf(rep.battle_record[1].march[ba].amount, ' ')).replace(/"/g, '\"') + '\n';
+											}
+										}
+									}
+									break;
+								}
+							}
+							
 							if(att.equipment) {
 								for(var ieqp=0; ieqp<att.equipment.length; ieqp++) {
 									var eqpTroop = att.equipment[ieqp];
 									if(eqpTroop.troop_type==p) {
-										descEqp += translate(eqpTroop.name) + ' : ';
+										descEqp += translate(eqpTroop.name) + '\n';
 										for(var istat in eqpTroop.stats) {
-											descEqp += translate(istat) + ' => ' + eqpTroop.stats[istat] + ', ';
+											descEqp += '\t' + translate(istat) + ' => +' + eqpTroop.stats[istat] + '\n';
 										}
 										descEqp += '\n';
 									}
@@ -8659,64 +8728,6 @@
 						}
 					}
 					m += '	<tr>' + '		<td class=left><b>' + translate('Total lost') + '</b></td>' + '		<td align=right colspan=3><span class=' + UID['green'] + '><b>' + numf(total_might_lost) + '</b></span></td>' + '	</tr>';
-					if(rep.battle_record[1]) {
-						if(rep.battle_record[1].march) {
-							var typeAb = '';
-							switch (rep.attacker.great_dragon_info.type) {
-								case 'Dragons::GreatDragon':
-									break;
-								case 'Dragons::WaterDragon':
-									typeAb = 'water';
-									break;
-								case 'Dragons::StoneDragon':
-									typeAb = 'stone';
-									break;
-								case 'Dragons::FireDragon':
-									typeAb = 'fire';
-									break;
-								case 'Dragons::WindDragon':
-									typeAb = 'wind';
-									break;
-								case 'Dragons::SpectralDragon':
-									break;
-								case 'Dragons::IceDragon':
-									typeAb = 'ice';
-									break;
-								case 'Dragons::SwampDragon':
-									typeAb = 'swamp';
-									break;
-								case 'Dragons::ForestDragon':
-									typeAb = 'forest';
-									break;
-								case 'Dragons::DesertDragon':
-									typeAb = 'desert';
-									break;
-								case 'Dragons::ChronoDragon':
-									typeAb = 'chrono';
-									break;
-								case 'Dragons::KaiserDragon':
-									typeAb = 'kaiser';
-									break;
-								case 'Dragons::CaveDragon':
-									typeAb = 'cave';
-									break;
-								case 'Dragons::LunaDragon':
-									typeAb = 'luna';
-									break;
-								case 'Dragons::ColossusDragon':
-									typeAb = 'colossus';
-									break;
-							}
-	
-							for(var ba=0 ; ba<rep.battle_record[1].march.length ; ba++) {
-								m 	+= '	<tr>' + '<td class=left><b>' + translate('battle-arts') + '</b></td>' 
-									+ '<td class=left colspan=2>' + translate('dragonpower-' + rep.battle_record[1].march[ba].name.replace(/_/g, '')) + '</td>' 
-									+ '<td class=left>' 
-									+ '	<span class="' + UID['information'] + '" style="width:auto !important;" title="' + (translate(typeAb+'dragonpower-'+rep.battle_record[1].march[ba].slot+'-report')).replace('%num', numf(rep.battle_record[1].march[ba].amount, ' ')).replace(/"/g, '\"') + '">&nbsp;&nbsp;&nbsp;</span>';
-									+ '</td></tr>';
-							}
-						}
-					}
 				}
 				m += '			</table>' + '		</td>' + '		<td width=2%>&nbsp</td>' + '		<td width=49%>' + '			<table class=' + UID['row_style'] + ' width=100%>' + '				<tr>' + '					<td valign=middle colspan=3><b>' + def.name + '</b> (' + def_loc + ')&nbsp;<span class=' + UID['red'] + '>' + ((rep.winner != 'attacker') ? translate('victorious') : translate('defeated')) + '</span></td>' + '				</tr><tr class=' + UID['row_headers'] + '>' + '					<td valign=middle width=47%><b>' + translate('Troops') + '</b></td>' + '					<td valign=middle width=19%><b>' + translate('Fought') + '</b></td>' + '					<td valign=middle width=17%><b>' + translate('lost') + '</b></td>' + '					<td valign=middle width=17%><b>' + translate('Might') + '</b></td>' + '				</tr>';
 				if (def.units) {
@@ -8813,9 +8824,9 @@
 								for(var ieqp=0; ieqp<def.equipment.length; ieqp++) {
 									var eqpTroop = def.equipment[ieqp];
 									if(eqpTroop.troop_type==p) {
-										descEqp += translate(eqpTroop.name) + ' : ';
+										descEqp += translate(eqpTroop.name) + '\n';
 										for(var istat in eqpTroop.stats) {
-											descEqp += translate(istat) + ' => ' + eqpTroop.stats[istat] + ', ';
+											descEqp += '\t' + translate(istat) + ' => +' + eqpTroop.stats[istat] + '\n';
 										}
 										descEqp += '\n';
 									}
@@ -9684,7 +9695,8 @@
 					[46, 'VoltRanger', 'Ranger'],
 					[47, 'DragonRider', 'DrgRid'],
 					[48, 'ColossusDragon', 'ColDrg'],
-					[49, 'ColossalMite', 'Mite']
+					[49, 'ColossalMite', 'Mite'],
+					[50, 'AbyssalRavager', 'AbyRava']
 				]
 			},
 
@@ -18772,20 +18784,12 @@
 			lastSubTab: 'tabJobInfo',
 			container: null,
 			timer: null,
-			contentType: 0,
+			contentType: 0, /* 0 = info, 1 = train, 2 = build, 3 = research, 4 = resurrect, 5 = sanctuary, 6 = Dragon, 7 = Trade, 8 = Forge - these should be enums but Javascript doesn't support that type */
 			jobsStatTimer: null,
-			/*
-			 * 0 = info, 1 = train, 2 = build, 3 = research, 4 = resurrect, 5 = sanctuary, 6 = Dragon, 7 = Trade, 8 = Forge - these should be enums but Javascript
-			 * doesn't support that type
-			 */
-			trainContentType: 0,
-			/* 0 = train, 1 = config */
-			sanctContentType: 0,
-			/* 0 = dragons overview, 1 = breeding */
-			tradeContentType: 0,
-			/* 0 = buy, 1 = sell */
-			forgeContentType: 0,
-			/* 0 = adventurers, 1 = forge, 2 = inventory */
+			trainContentType: 0, /* 0 = train, 1 = config */
+			sanctContentType: 0, /* 0 = dragons overview, 1 = breeding */
+			tradeContentType: 0, /* 0 = buy, 1 = sell */
+			forgeContentType: 0, /* 0 = adventurers, 1 = forge, 2 = inventory */
 			buildScrollPos: 0,
 			selectedQ: 'min_resource',
 			refreshPlayerBusy: false,

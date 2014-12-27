@@ -3,7 +3,7 @@
 // @namespace http://userscripts.org/scripts/show/173473
 // @icon http://img66.xooimage.com/files/3/6/d/jaws64-2b5041c.png
 // @description Enhanced Power Tools for Dragons of Atlantis, modded by Calcium
-// @version 1.32
+// @version 1.36
 // @grant GM_xmlhttpRequest
 // @grant GM_info
 // @grant GM_setValue
