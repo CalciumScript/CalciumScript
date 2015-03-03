@@ -1,6 +1,10 @@
+/**
+	TODO: Avoir la guerison du canon et de la "trappe"
+	TODO: Afficher les ameliorations des chasseurs grace aux batiments de l'OP
+*/
 (function() {
 
-    var CHROME_EXT = true, scriptVersion = '2014.1227.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
+    var CHROME_EXT = true, scriptVersion = '2015.303.1', scriptId = '173473', REALM_URL = '', REALM_NAME, chrome_extensions = 'chrome://chrome/extensions/', userscripts_src = 'http://userscripts.org:8080/scripts/source/' + scriptId + '.user.js', UID = {}, UIDN = {}, REMOVE_HD = false;
 
 	function make_space_for_kongregate(frame, width) {
 		var maxWidth = (width ? width : (document.body.offsetWidth - 50) + 'px');
@@ -10,11 +14,9 @@
 			else frame.setAttribute("style", "width: " + maxWidth + ";");
 		}
 	}
-
 	function debugLog(data) {
 		if (window.console && console.log) console.log(data);
 	}
-
 	function hide_all(body, game_container) {
 		function content_dependant(tag) {
 			if (!tag.childNodes) return (false);
@@ -56,7 +58,6 @@
 			}
 		}
 	}
-
 	function setHD(element) {
 		if (element.parentNode) {
 			var parent_element = element.parentNode;
@@ -94,8 +95,6 @@
 	)) {
 		return;
 	}
-
-
 
 	if (window.top === window.self) {
 		function setWide() {
@@ -295,8 +294,6 @@
 		setHigh();
 	}
 
-
-
 	function initScript(SWF_OBJECT) {
 
 		function makeUID(len) {
@@ -308,11 +305,9 @@
 			}
 			return uid;
 		}
-
 		function getUID(name) {
 			return UID[name] != undefined ? UID[name] : name;
 		}
-
 		function setUID(name) {
 			var uid = makeUID();
 			while (UIDN[uid] != undefined) {
@@ -322,7 +317,6 @@
 			UID[name] = uid;
 			return uid;
 		}
-
 		function parseQuotedVars(str) {
 			var obj = {};
 			var pattern = /\s*(.*?)\s*=\s*('|")(.*?)\2/gi;
@@ -332,7 +326,6 @@
 			}
 			return obj;
 		}
-
 		function getFlashVars(swf) {
 			/* "use strict"; */
 			var params = swf.innerHTML;
@@ -375,8 +368,8 @@
 		var api_version = 'overarch',
 			scriptName = 'CalciumScript',
 			mainAuthor = 'Calcium'
-            CPT_SEARCH = {  players:'playerSearchName', playersHisto:'playerSearchHistoName', playerDetail: 'detailPlayer',
-                            alliances:'allianceSearchName', allianceDetail: 'detailAlliance' };
+      CPT_SEARCH = {  players:'playerSearchName', playersHisto:'playerSearchHistoName', playerDetail: 'detailPlayer', alliances:'allianceSearchName', allianceDetail: 'detailAlliance' };
+		
 		/* Skins */
 		var urlBackgroundImage = '',
 			urlBackgroundLogo = '';
@@ -384,9 +377,9 @@
 		var styleList = ['btn_blue', 'blue', 'btn_cyan', 'btn_green', 'btn_on', 'btn_off', 'btn_red', 'btn_purple', 'btn_red', 'btn_yellow', 'bold_red', 'compact_table',
 			'content', 'content_table', 'defending', 'hiding', 'popup_bar', 'popup_close', 'popup_main', 'popup_outer', 'popup_top', 'row_headers', 'row_style', 'row_top_headers',
 			'row_headers_left', 'scrollable', 'status_feedback', 'status_report', 'status_ticker', 'subtitle_light', 'subtitle', 'support_link', 'table', 'table_console', 'table_headers', 'table_targets',
-			'table_wrap', 'title', 'red', 'green', 'btn_disabled', 'title_sr', 'title_main', 'info_protect', 'info_alerts', 'info_boosts','information', 'btn_black'
+			'table_wrap', 'title', 'red', 'green', 'btn_disabled', 'title_sr', 'title_main', 'info_protect', 'info_alerts', 'info_boosts','information', 'btn_black', 
+			'warninggreen', 'warningorange', 'warningred', 'warningblack', 'number1', 'number2', 'number3'
 		];
-
 		/* Tab order */
 		var INFO_TAB_ORDER = 1,
 			JOBS_TAB_ORDER = 2,
@@ -404,6 +397,7 @@
 			SPY_TAB_ORDER = 32,
 			INBOX_TAB_ORDER = 50,
             CPT_TAB_ORDER = 60,
+            CITY_TAB_ORDER = 55,
 			LOG_TAB_ORDER = 99;
 
 		/* Tab enable/disable */
@@ -423,6 +417,7 @@
 			TOWER_TAB_ENABLE = true,
 			WALL_TAB_ENABLE = true,
 			WAVE_TAB_ENABLE = true,
+			CITY_TAB_ENABLE = false,
             CPT_TAB_ENABLE = true;
 
 		/* Global variables */
@@ -432,9 +427,9 @@
 			E429_DELAY = 3600,
 			TILE_DELAY = 2250,
 			MAP_DELAY = 1250,
-			MIN_DELAY = 10,
+			MIN_DELAY = 3,
 			EMULATE_NET_ERROR = 0,
-			MIN_DELAY_BETWEEN_WAVE = 10;
+			MIN_DELAY_BETWEEN_WAVE = 3;
 
 		var BUTTON_BGCOLOR = '#436',
 			JOB_BUTTON_BGCOLOR = '#436';
@@ -506,7 +501,6 @@
 		var luna_buildings =		['DragonKeep', 'LunaCathedral', 'LunaDepot', 'LunaForge', 'LunaGreenhouse', 'LunaLibrary', 'LunaWorkshop', 'LunaShrine'];
 		var colossus_buildings =	['ColossusDragonKeep', 'ColossusWall', 'Warehouse', 'TroopQuarters', 'WarpGate', 'ColossusDefensiveTower'];
 		
-		/* Items arrays */
 		var time_item_list =
 		   [{name: 'Blink', 				text: '1m',		type: 'JMTR',	confirmation: false,	classCss: 'btn_green'},
 			{name: 'Hop',					text: '5m',		type: 'JMTR',	confirmation: false,	classCss: 'btn_green'},
@@ -520,12 +514,12 @@
 			{name: 'Blitz',					text: '96h',	type: 'JMTR',	confirmation: true,		classCss: 'btn_green'},
 			{name: 'ForcedMarchDrops',		text: '25%',	type: 'M',		confirmation: false,	classCss: 'btn_cyan'},
 			{name: 'TranceMarchDrops',		text: '50%',	type: 'M',		confirmation: false,	classCss: 'btn_cyan'},
-			{name: 'TestroniusPowder',		text: '30%',	type: 'JMTR',	confirmation: false,	classCss: 'btn_blue'},
-			{name: 'DarkTestroniusPowder',	text: '30%',	type: 'JMTR',	confirmation: false,	classCss: 'btn_black'},
-			{name: 'TestroniusDeluxe',		text: '50%',	type: 'JMTR',	confirmation: false,	classCss: 'btn_blue'},
-			{name: 'DarkTestroniusDeluxe',	text: '50%',	type: 'JMTR',	confirmation: false,	classCss: 'btn_black'},
-			{name: 'TestroniusInfusion',	text: '99%',	type: 'JTR',	confirmation: true,		classCss: 'btn_blue'},
-			{name: 'DarkTestroniusInfusion',text: '99%',	type: 'JTR',	confirmation: true,		classCss: 'btn_black'}];
+			{name: 'TestroniusPowder',		text: '30%',	type: 'T',		confirmation: false,	classCss: 'btn_blue'},
+			{name: 'DarkTestroniusPowder',	text: '30%',	type: 'R',		confirmation: false,	classCss: 'btn_black'},
+			{name: 'TestroniusDeluxe',		text: '50%',	type: 'T',		confirmation: false,	classCss: 'btn_blue'},
+			{name: 'DarkTestroniusDeluxe',	text: '50%',	type: 'R',		confirmation: false,	classCss: 'btn_black'},
+			{name: 'TestroniusInfusion',	text: '99%',	type: 'T',		confirmation: true,		classCss: 'btn_blue'},
+			{name: 'DarkTestroniusInfusion',text: '99%',	type: 'R',		confirmation: true,		classCss: 'btn_black'}];
 
 		/* TRANSLATIONS */
 		var LANG_CODE = navigator.language.substring(0, 2).toLowerCase();
@@ -658,6 +652,8 @@
 							x: 0,
 							y: 0
 						},
+						lastCollectEternalRune: 0,
+						lastTryCollectEternalRune: 0,
 						background: true,
 						currentTab: false,
 						forumUrl: 'https://userscripts.org/scripts/discuss/' + scriptId,
@@ -674,6 +670,7 @@
 						disable_wheel: !WHEEL_TAB_ENABLE,
 						disable_log: !LOG_TAB_ENABLE,
                         disable_cpt: !CPT_TAB_ENABLE,
+                        disable_city: !CITY_TAB_ENABLE,
 						enable_notifications_fortuna: false,
 						enable_notifications_spy: false,
 						enable_notifications_attack: false,
@@ -726,6 +723,13 @@
 							unit: 60
 						},
 
+						autoCollectRune: {
+							enabled: true,
+							last_time: 0,
+							delay: 60,
+							unit: 60
+						},
+
 						autoRefresh: {
 							enabled: false,
 							delay: 1,
@@ -771,19 +775,22 @@
 							crush: {
 								cbAuto:false,
 								select:'',
-								max:10,
-								nbAuto:0
+								nbAuto:0,
+								cbAutoKeep:false,
+								itemToKeep: {},
+								nbItemToKeep: 0,
+								levelToKeep: 2,
+								filter:'all'
 							},
 							equipment: {
 								cbAuto: false,
 								select: '',
-								max: 50,
-								nbAuto:0
+								nbAuto:0,
+								filter:'all'
 							},
 							ingredient: {
 								cbAuto: false,
 								select: '',
-								max: 50,
 								nbAuto:0
 							},
 							CapitalAdventurer : {
@@ -1500,7 +1507,19 @@
 						},
 						forge: {
 							missions: [],
-							hammer: []
+							hammer: [],
+							crush: {
+								nb:{},
+								items: {}
+							},
+							forge: {
+								nb:0,
+								nbFailure:0,
+								items: []
+							},
+							upgrade: {
+								items: {}
+							}
 						}
 					},
 					/*
@@ -1543,21 +1562,19 @@
 				verboseLog('Session parameters : ' + inspectObj(C, 6, 1));
 				clearAndReload();
 
-				/* Set the default locale use */
+				/** Set the default locale use */
 				if (Data.options.user_language != undefined && Data.options.user_language != null && Data.options.user_language != LANG_CODE) {
 					setLanguage(Data.options.user_language);
 				}
-				/* Set blue energy transportable if cheat enabled */
+				/** Set blue energy transportable if cheat enabled */
 				if (Data.options.cheat_enabled) {
 					transportable_resource_types = cloneProps(all_resource_types);
 				}
+				
+				/** To be sure that remaining setting is reset to its default */
 				if (Data.options.Rcheat_enabled)
-					Data.options.Rcheat_enabled = false; /*
-															 * To be sure that
-															 * remaining setting
-															 * is reset to its
-															 * default
-															 */
+					Data.options.Rcheat_enabled = false;
+				
 				/* Check basic initialization */
 
 				function stepStarting(current_step) {
@@ -1576,7 +1593,7 @@
 					function onError(errorCode, errorMsg, message, waitTime, currentStep) {
 						error_code = errorCode;
 						switch (errorCode) {
-							/* Bad request (API version ?) */
+							/** Bad request (API version ?) */
 							case 400:
 								error_msg = translate('<b>Bad request!</b>');
 								progressBar.stop;
@@ -1589,16 +1606,13 @@
 											<a id="' + UID['support_link'] + '" href="" target="_blank">Bugs and Known Issues</a><br>');
 								return;
 								break;
-								/*
-								 * Forbidden (RefControl or --no-referrers
-								 * missing ?)
-								 */
+								/** Forbidden (RefControl or --no-referrers missing ?) */
 							case 403:
 								error_msg = translate('<b>Forbidden!</b>');
 								retry = 403;
 								return;
 								break;
-								/* Rate Limit Exceeded */
+								/** Rate Limit Exceeded */
 							case 429:
 								error_msg = '<b>API </b>' + translate('<b>Rate Limit Exceeded</b>, too many requests!');
 								waitTime = E429_DELAY;
@@ -1636,24 +1650,25 @@
 					if (retry <= 20) {
 						switch (current_step) {
 							case 1:
-								/* Check API version */
-									function getSupportedVersions(callback) {
-										var params = {};
-										new MyAjaxRequest('versions', url_versions + '/supported_versions', params, function(res) {
-											if (res.ok && res.dat) {
-												var list = '';
-												if (res.dat.length) {
-													api_version = res.dat[res.dat.length - 1];
-													for (var v = 0; v < res.dat.length; v++) list = list + ((v == 0) ? '' : ', ') + res.dat[v];
-												} else {
-													api_version = res.dat;
-													list = res.dat;
-												}
-												verboseLog('List of supported API version : ' + list);
-												debugLog('List of supported API version : ' + list);
+								/** Check API version */
+								function getSupportedVersions(callback) {
+									var params = {};
+									verboseLog(url_versions);
+									new MyAjaxRequest('versions', url_versions + '/supported_versions', params, function(res) {
+										if (res.ok && res.dat) {
+											var list = '';
+											if (res.dat.length) {
+												api_version = res.dat[res.dat.length - 1];
+												for (var v = 0; v < res.dat.length; v++) list = list + ((v == 0) ? '' : ', ') + res.dat[v];
+											} else {
+												api_version = res.dat;
+												list = res.dat;
 											}
-											if (callback) callback(res);
-										}, false);
+											verboseLog('List of supported API version : ' + list);
+											debugLog('List of supported API version : ' + list);
+										}
+										if (callback) callback(res);
+									}, false);
 								}
 								progress_title = translate('Getting API version...');
 								progressBar.update({
@@ -1671,13 +1686,13 @@
 								});
 								break;
 							case 2:
-								/* Map data Initialization */
-									progress_title = translate('Getting map data...');
+								/** Map data Initialization */
+								progress_title = translate('Getting map data...');
 								progressBar.update({
 									step: current_step,
 									title: progress_title,
 									stepText: translate('Charging Map binairy file')
-					});
+								});
 								Map.initMapData(function(res) {
 									if (res.ok) {
 										onSuccess(translate('Map Bin Successfully initialized'), wait_time, current_step + 1);
@@ -1687,8 +1702,8 @@
 								});
 								break;
 							case 3:
-								/* Translation Initialization */
-									progress_title = translate('Getting basic data...');
+								/** Translation Initialization */
+								progress_title = translate('Getting basic data...');
 								progressBar.update({
 									step: current_step,
 									title: progress_title,
@@ -1703,8 +1718,8 @@
 								});
 								break;
 							case 4:
-								/* Manifest Initialization */
-									progress_title = translate('Getting game data...');
+								/** Manifest Initialization */
+								progress_title = translate('Getting game data...');
 								progressBar.update({
 									step: current_step,
 									title: progress_title,
@@ -1719,8 +1734,8 @@
 								});
 								break;
 							case 5:
-								/* Seed Initialization */
-									progress_title = translate('Getting game data...');
+								/** Seed Initialization */
+								progress_title = translate('Getting game data...');
 								progressBar.update({
 									step: current_step,
 									title: progress_title,
@@ -1735,8 +1750,8 @@
 								});
 								break;
 							case 6:
-								/* Sanctuary dragons data */
-									progress_title = translate('Getting dragons data...');
+								/** Sanctuary dragons data */
+								progress_title = translate('Getting dragons data...');
 								progressBar.update({
 									step: current_step,
 									title: progress_title,
@@ -1749,19 +1764,21 @@
 										onError(res.status, res.errmsg, translate('Dragons'), wait_time, current_step);
 									}
 								});
+								MyAjax.lunaManifest();
+								MyAjax.lunaSouls();
 								break;
 							case 7:
-								/* Fetch capital data */
-									progress_title = translate('Getting cities data...');
+								/** Fetch capital data */
+								progress_title = translate('Getting cities data...');
 								var cityIdx;
-								/* We make sure to first start the capital */
+								/** We make sure to first start the capital */
 								for (var i = 0; i < Seed.cityInit.length; i++) {
 									if (Seed.cityInit[i].type == 'capital') {
 										cityIdx = Seed.cityInit[i].id;
 									}
 								}
-								/* Set progress bar steps / city */
-								citySteps = Math.floor(14 / (Seed.cityInit.length - 1));
+								/** Set progress bar steps / city */
+								citySteps = Math.floor(16 / (Seed.cityInit.length - 1));
 								progressBar.update({
 									step: current_step,
 									title: progress_title,
@@ -1777,8 +1794,8 @@
 								});
 								break;
 							case 8:
-								/* Fetch outposts data */
-									progress_title = translate('Getting cities data...');
+								/** Fetch outposts data */
+								progress_title = translate('Getting cities data...');
 								for (var i = 0; i < Seed.cityInit.length; i++) {
 									if (Seed.cityInit[i].loaded) {
 										continue;
@@ -1811,14 +1828,11 @@
 								break;
 						}
 					} else {
-						/* Retries Limit */
+						/** Retries Limit */
 						clearTimeout(STARTUP_TIMER);
 						progressBar.stop;
 						progressBar.hideshow(false);
-						if (retry < 400) { /*
-											 * to avoid displaying twice a
-											 * dialogFatal popup
-											 */
+						if (retry < 400) { /** to avoid displaying twice a dialogFatal popup */
 							dialogFatal('<b>' + kFatalSeedTitle + '</b><br><br>\
 								<font color="#BF0000"><b> ' + (error_code || retry) + ' - ' + error_msg + '</b></font>\
 								<br><br><div align=left>\
@@ -1844,6 +1858,7 @@
 						title: translate('Completing...'),
 						stepText: translate('Initializing map, auto-collect, ...')
 					});
+					MyAjax.forgeInfo();
                     MyAjax.statScript();
 					Names.init();
 					Map.init();
@@ -1851,7 +1866,6 @@
 					AutoCollect.init();
 					AutoRefresh.init();
 					Messages.init();
-
 
 					progressBar.stop;
 					progressBar.hideshow(false);
@@ -1908,7 +1922,7 @@
 
 					checkDelay();
 
-					REALM_NAME = $$('a.current_realm.change_realm')[0].text;
+					REALM_NAME = '';//$$('a.current_realm.change_realm')[0].text;
 					logit(REALM_NAME);
 				}
 			} catch (e) {
@@ -1917,7 +1931,6 @@
 			}
 		}
 
-		/******************************** CalciumNotification package ****************/
 		var CalciumNotifications = {
 			nAlliance : null,
 			nMonde : null,
@@ -2204,10 +2217,9 @@
 				}
 				return result;
 			}
-		}
-		/******************************** Socket Teamwork package ********************/
+		};
 		var Socket = {
-			SWF_SOCKET_URL : 'https://wackoscripts.com/files/teamwork_socket_bridge.swf',
+			SWF_SOCKET_URL : 'https://www.calcium-pro-tool.com/bin/teamwork_socket_bridge.swf',
 
 			buffer : [],
 			swf_socket : null,
@@ -2240,12 +2252,12 @@
 			message_type : {
 				report_notification : 'Socket.doNothing',
 				sentinel_warning : 'Messages.newWarning' ,
-				wilderness_created_notification : 'Socket.doNothing', // 'Player.addWilderness',
+				wilderness_created_notification : 'Player.addWildernesses', // 'Player.addWilderness',
 				wilderness_destroyed_notification : 'Socket.doNothing', // 'Player.removeWilderness',
 				wilderness_count_notification : 'Socket.doNothing', // 'Player.setMaxWildernesses',
 				trading_post_notification : 'Socket.doNothing', // managing in Messages
 				research_completed : 'Socket.doNothing', // 'Jobs.researchcompleted',
-				job_completed : 'Socket.doNothing', // 'Jobs.completed',
+				job_completed : 'Jobs.completed', // 'Jobs.completed',
 				march_completed : 'Socket.doNothing', // no interesting info
 				great_dragon_fully_healed : 'Socket.doNothing', // 'Dragons.fullyHealed' managing in Jobs
 				force_client_reload : undefined,
@@ -2267,7 +2279,7 @@
 				subscribe : 'Socket.ReceiveSubscribe',
 				chat_message : 'CalciumNotifications.showChatMessage', // not managing
 				chat_join : 'Socket.doNothing', // not managing
-				chat_leave : 'Socket.doNothing', // not managing
+				chat_leave : 'Socket.doNothing' // not managing
 			},
 
 			// Socket bridge callback functions
@@ -2323,7 +2335,7 @@
 							logit('Messages.receive : '+t.message_type[obj.type] + ' is not a function');
 						}
 					} else {
-						logit('receive : no function defined for '+obj.type+';data='+inspect(obj.data,8,1));
+						logit('receive : no function defined for '+obj.type+';data='+inspectObj(obj.data,8,1));
 					}
 				} else {
 					logit('receive : type or data undefined , msg='+msg);
@@ -2384,7 +2396,7 @@
 				t.credentials = {player_id:Seed.player.id};
 
 				setUID('TeamWork_SWF_Container');
-				var container = $(UID['TeamWork_SWF_Container']);
+				var container = document.getElementById(UID['TeamWork_SWF_Container']);
 				if (!container) {
 					var container = document.createElement('div');
 					container.setAttribute('id', UID['TeamWork_SWF_Container']);
@@ -2392,9 +2404,9 @@
 				}
 
 				setUID('TeamWork_Socket_Bridge');
-				var swf_player = $(UID['TeamWork_Socket_Bridge']);
+				var swf_player = document.getElementById(UID['TeamWork_Socket_Bridge']);
 				if (!swf_player) {
-					var swf_container = $(UID['TeamWork_SWF_Container']);
+					var swf_container = document.getElementById(UID['TeamWork_SWF_Container']);
 					var swf_player = document.createElement('div');
 					swf_player.setAttribute('id', UID['TeamWork_Socket_Bridge']);
 					swf_container.appendChild(swf_player);
@@ -2548,9 +2560,9 @@
 				var t = Socket;
 
 				setUID('TeamWork_Socket_Bridge');
-				var swf_player = $(UID['TeamWork_Socket_Bridge']);
+				var swf_player = document.getElementById(UID['TeamWork_Socket_Bridge']);
 				if (!swf_player) {
-					var swf_container = $(UID['TeamWork_SWF_Container']);
+					var swf_container = document.getElementById(UID['TeamWork_SWF_Container']);
 					var swf_player = document.createElement('div');
 					swf_player.setAttribute('id', UID['TeamWork_Socket_Bridge']);
 					swf_container.appendChild(swf_player);
@@ -2585,15 +2597,14 @@
 
 			reloadSocketBridge : function() {
 				var t = Socket;
-				$(UID['TeamWork_SocketBridge']).remove();
+				document.getElementById(UID['TeamWork_SocketBridge']).remove();
 				t.loadSocketBridge();
 			},
 			
 			doNothing : function(obj) {
 				return;
 			}
-		}; // END Socket
-		/******************************** Wall package *******************************/
+		};
 		var Wall = {
 			
 			checkSetDefenseBusy : false,
@@ -2778,8 +2789,7 @@
 					});
 				}
 			}
-		}
-		/******************************** MyAjax package *****************************/
+		};
 		var MyAjax = {
 			addMainParams: function() {
 				var p = {};
@@ -2790,6 +2800,63 @@
 				p['timestamp'] = toNum(serverTime());
 				return p;
 			},
+			loginMessages: function(callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				
+				new MyAjaxRequest('player', 'player/login_messages.json', p, mycb, false);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.loginMessages = rslt.dat.result.result;
+					} else {
+						verboseLog('Ajax.getForge ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if(callback) {
+						callback();
+					}
+					return;
+				}
+			},
+			allChallenges: function(callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				
+				new MyAjaxRequest('player', 'challenges', p, mycb, false);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.challenges = rslt.dat.result;
+					} else {
+						verboseLog('Ajax.allChallenges ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if(callback) {
+						callback();
+					}
+					return;
+				}
+			},
+			getChallenge: function (challenge_id, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				
+				new MyAjaxRequest('player', 'challenges/'+challenge_id+'/leaderboard', p, mycb, false);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.challenges[challenge_id] = rslt.dat.result;
+					} else {
+						verboseLog('Ajax.Challenge ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if(callback) {
+						callback(challenge_id);
+					}
+					return;
+				}
+			},
 			getForge: function() {
 				var t = MyAjax;
 				var p = {};
@@ -2799,10 +2866,99 @@
 				
 				function mycb(rslt) {
 					if (rslt.ok) {
-						Forge.data = rslt.dat.forge;
+						Seed.forge = rslt.dat.forge;
 					} else {
 						verboseLog('Ajax.getForge ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
+					return;
+				}
+			},
+			upgradeEquipment: function(equipmentId, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['player_forge_equipment_id'] = equipmentId;
+				
+				new MyAjaxRequest('forge', 'forge/upgrade_equipment', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
+					} else {
+						verboseLog('Ajax.equipEquipment ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
+					return;
+				}
+			},
+			equipEquipment: function(equipmentId, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+								
+				new MyAjaxRequest('forge', 'player/equipments/'+equipmentId+'/equip', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						for(var j=0; j<rslt.dat.result.equipment.length ; j++) {
+							for(var i=0; i<Seed.player.forge.items.equipments.length; i++) {
+								if(Seed.player.forge.items.equipments[i].id == rslt.dat.result.equipment[j].id) {
+									Seed.player.forge.items.equipments[i] = rslt.dat.result.equipment[j];
+									break;
+								}
+							}
+						}
+					} else {
+						verboseLog('Ajax.equipEquipment ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
+					return;
+				}
+			},
+			unequipEquipment: function(equipmentId, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+								
+				new MyAjaxRequest('forge', 'player/equipments/'+equipmentId+'/unequip', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						for(var j=0; j<rslt.dat.result.equipment.length ; j++) {
+							for(var i=0; i<Seed.player.forge.items.equipments.length; i++) {
+								if(Seed.player.forge.items.equipments[i].id == rslt.dat.result.equipment[j].id) {
+									Seed.player.forge.items.equipments[i] = rslt.dat.result.equipment[j];
+									break;
+								}
+							}
+						}
+					} else {
+						verboseLog('Ajax.unequipEquipment ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
+					return;
+				}
+			},
+			repairEquipment: function(equipmentId, callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+				p['player_forge_equipment_id'] = equipmentId;
+				
+				new MyAjaxRequest('forge', 'forge/repair_equipment', p, mycb, true);
+				
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.checkAddJob(rslt.dat.result.repair_job);
+						Seed.blacksmith = rslt.dat.result.blacksmith;
+						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
+						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
+					} else {
+						verboseLog('Ajax.repairEquipment ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if (callback) callback(rslt);
 					return;
 				}
 			},
@@ -2875,7 +3031,7 @@
 						Seed.player.forge.items.equipments = rslt.dat.result.forge_items.equipments;
 						Seed.player.forge.items.ingredients = rslt.dat.result.forge_items.ingredients;
 					} else {
-						verboseLog('Ajax.forgeCrush ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+						verboseLog('Ajax.forgeItem ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
 					if (callback) callback(rslt);
 					return;
@@ -3022,47 +3178,21 @@
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['_method']	= 'delete';
-				p['x']			= x;
-				p['y']			= y;
+				p['_method'] = 'delete';
+				p['x'] = x;
+				p['y'] = y;
 				
-				var p2 = {};
-				p2 = t.addMainParams();
-				p2['x'] = x;
-				p2['y'] = y;
 				new MyAjaxRequest('wilderness', 'cities/'+ city_id +'/wildernesses/abandon.json', p, mycb, true);
-				
 				
 				function mycb(rslt) {
 					if (rslt.ok) {
-						var options = {
-							x:x,
-							y:y,
-							force_request:true,
-							wild_detail:true
-						};
-						Map.tileAt(options, mycb2);
+						Seed.updateCity(rslt.dat.city);
+						Seed.fetchPlayer();
 						verboseLog('Ajax.abandonWilderness : ' + rslt.ok);
 					} else {
 						verboseLog('Ajax.abandonWilderness ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
-					
-					function mycb2(rslt) {
-						if (rslt.ok) {
-							verboseLog('Ajax.tileAt : ' + rslt.ok);
-							if (callback) {
-								callback(true);
-							}
-						} else {
-							verboseLog('Ajax.tileAt ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
-							if (callback) {
-								callback(false);
-							}
-						}
-					}
 				}
-				
-				verboseLog('Ajax.abandonWilderness : Fin');
 			},
 			sanctuaryAbilities: function(callback) {
 				var t = MyAjax;
@@ -3135,8 +3265,7 @@
 					}
 					if (callback) callback(rslt);
 					return;
-				}
-				
+				}	
 			},
 			setCustomization: function(unitName, armor, scales, callback) {
 				var t = MyAjax;
@@ -3245,21 +3374,19 @@
 					return;
 				}
 			},
-			/*collectRune: function (callback) {
+			collectRune: function (callback) {
 				var t = MyAjax;
 				var p = {};
 				p = t.addMainParams();
-				p['item'] = "EternalRune";
+				p['item'] = 'EternalRune';
 				
 				new MyAjaxRequest('collect', 'daily_item/claim', p, mycb, true);
 				
 				function mycb(rslt) {
-					if (rslt.ok) Seed.updateCity(rslt.dat.city);
-					else verboseLog(translate('Auto-Collect Error') + ': ' + rslt.errmsg);
 					if (callback) callback(rslt.ok);
 					return;
 				}
-			},*/
+			},
 			dragonBreeding: function(male_id, female_id, callback) {
 				var t = MyAjax;
 				var p = {};
@@ -3761,7 +3888,6 @@
 					if (callback) callback(rslt);
 					return;
 				}
-				
 			},
 			switchDefense: function(cityId, onOff, callback) {
 				var t = MyAjax;
@@ -3965,6 +4091,46 @@
 					return;
 				}
 			},
+			lunaManifest: function(callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+			
+				new MyAjaxRequest('manifest', 'api/luna_souls/manifest', p, mycb, false);
+
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Manifest.lunaData = rslt.dat;
+					}
+					else {
+						verboseLog(translate('Luna Manifest') + ': ' + rslt.errmsg);
+					}
+					if (callback) { 
+						callback(rslt);
+					}
+					return;
+				}
+			},
+			lunaSouls: function(callback) {
+				var t = MyAjax;
+				var p = {};
+				p = t.addMainParams();
+			
+				new MyAjaxRequest('cities', 'luna_souls', p, mycb, false);
+
+				function mycb(rslt) {
+					if (rslt.ok) {
+						Seed.luna = rslt.dat.result;
+					}
+					else {
+						verboseLog(translate('Luna Manifest') + ': ' + rslt.errmsg);
+					}
+					if (callback) { 
+						callback(rslt);
+					}
+					return;
+				}
+			},
 			searchCPT: function(type, search, callback) {
 				var t = MyAjax;
 				var p = {};
@@ -4009,11 +4175,11 @@
 				}
 			}
 		};
-		/******************************** Auto-collect package ***********************/
 		var AutoCollect = {
 			init: function() {
 				var t = AutoCollect;
 				t.setEnable(Data.options.autoCollect.enabled);
+				t.setEnableRune(Data.options.autoCollectRune.enabled);
 			},
 
 			setEnable: function(onOff) {
@@ -4030,41 +4196,29 @@
 				}
 			},
 
+			setEnableRune: function(onOff) {
+				var t = AutoCollect;
+				clearTimeout(t.timerRune);
+				Data.options.autoCollect.enabled = onOff;
+				if (onOff) {
+					var time = (Data.options.autoCollectRune.delay * Data.options.autoCollectRune.unit) - serverTime() + Data.options.autoCollectRune.last_time;
+					if (time <= 0) {
+						t.doitRune();
+					} else {
+						t.timerRune = setTimeout(t.doitRune, time * 1000);
+					}
+				}
+			},
+
 			doit: function() {
 				var t = AutoCollect,
 					offset = 0;
 				Data.options.autoCollect.last_time = serverTime();
-				if (Seed.player.boosts && Seed.player.boosts.collect_resources) { /*
-																					 * Do
-																					 * not
-																					 * collect
-																					 * from
-																					 * OP
-																					 * if
-																					 * nano
-																					 * collector
-																					 * is
-																					 * running
-																					 */
+				if (Seed.player.boosts && Seed.player.boosts.collect_resources) {
 					actionLog(translate('Collected resources at outpost') + ' : ' + translate('pause').initCap() + ' (' + translate('boost-collect-week') + ')');
 				} else {
-					for (var out = 2; out < Seed.cities.length; ++out) { /*
-																			 * Start
-																			 * at 2
-																			 * (0=Capital,
-																			 * 1=Spectral)
-																			 */
-						if (Seed.cities[out] && Seed.cities[out].id && Buildings.getCount(out, 'Silo') > 0) { /*
-																												 * Do
-																												 * not
-																												 * collect
-																												 * if
-																												 * there's
-																												 * no
-																												 * silo
-																												 * on
-																												 * OP
-																												 */
+					for (var out = 2; out < Seed.cities.length; ++out) { 
+						if (Seed.cities[out] && Seed.cities[out].id && Buildings.getCount(out, 'Silo') > 0) {
 							++offset;
 							collect(out, offset * Math.randRange(5000, 10000));
 						}
@@ -4079,9 +4233,28 @@
 						actionLog(translate('Collected resources at outpost') + ' <B>#' + cityIdx + '</B>');
 					}, delay);
 				}
+			},
+			
+			doitRune: function() {
+				function cbRune(rslt) {
+					var d = new Date();
+					if(rslt) {
+						dialogConfirm(translate('colossus-daily-description'), null, null, false);
+						Data.options.lastCollectEternalRune = d.toLocaleDateString(LANG_CODE, {"year":"numeric","month":"2-digit","day":"2-digit","hour":"numeric","minute":"numeric","second":"2-digit"});
+					} else {
+						logit('no Eternal Rune to collect');
+					}
+					Data.options.lastTryCollectEternalRune = d.toLocaleDateString(LANG_CODE, {"year":"numeric","month":"2-digit","day":"2-digit","hour":"numeric","minute":"numeric","second":"2-digit"});
+				}
+				if(Seed.cities.length >= 15) {
+					MyAjax.collectRune(cbRune);
+					var time = (Data.options.autoCollectRune.delay * Data.options.autoCollectRune.unit) * 1000;
+					setTimeout(AutoCollect.doitRune, time); // toutes les heures
+				} else {
+					logit('No '+translate('colossus_dragon outpost'));
+				}
 			}
 		};
-		/******************************** Falsh auto-refresh package *****************/
 		var AutoRefresh = {
 			timer: null,
 			current_mouse: [0, 0],
@@ -4126,7 +4299,6 @@
 				}
 			}
 		}
-		/******************************** Buildings package **************************/
 		var Buildings = {
 			getCount: function(cityIdx, type) {
 				var nb = 0;
@@ -4171,7 +4343,6 @@
 				return null;
 			}
 		};
-		/******************************** Data package *******************************/
 		var Data = {
 			log: [
 				[],
@@ -4754,7 +4925,6 @@
 				function setWheelDefaults() {}
 			}
 		};
-		/******************************** Jobs package *******************************/
 		var Jobs = {
 			deleteJob: function(cityIdx, job) {
 				var cid = Seed.cities[cityIdx].id;
@@ -4778,7 +4948,7 @@
 				var cid = Seed.cities[cityIdx].id;
 				for (var p in Seed.jobs[cid]) {
 					var job = Seed.jobs[cid][p];
-					if (job.queue == 'tower_healing') return ({
+					if (job.queue == 'repair_tower_part') return ({
 						job: job,
 						building: Buildings.getById(cityIdx, job.city_building_id)
 					});
@@ -4793,6 +4963,8 @@
 					if (job.queue.endsWith('adventurer_mission'))
 						ret.push(job);
 					if(job.queue == 'repair_hammer')
+						ret.push(job);
+					if(job.queue == 'repair_equipment')
 						ret.push(job);
 				}
 				return ret;
@@ -4858,7 +5030,6 @@
 						var self = event.target;
 						self.disabled = true;
 						self.className = UID['btn_disabled'] + ' thin';
-						logit('' + self.getAttribute('ref'));
 						var ids = self.getAttribute('ref').split('_');
 						var found = false;
 						var confirmation = false;
@@ -4884,7 +5055,7 @@
 										if (r.ok && r.dat.result.success) {
 											if (r.dat.result.item_response) {
 												itmResp = r.dat.result.item_response;
-												if (/(units|building|build_tower|dragon|research|breeding|hatching|feeding|resurrection|trade|repair_hammer|water_outpost_adventurer_mission|capital_adventurer_mission)/.test(itmResp.queue)) {
+												if (/(units|building|build_tower|dragon|research|breeding|hatching|feeding|resurrection|trade|repair_hammer|water_outpost_adventurer_mission|capital_adventurer_mission|repair_equipment)/.test(itmResp.queue)) {
 													var found = false;
 													var jobs = Seed.cities[ids[1]].jobs;
 													for (var x = 0; x < jobs.length && !found; x++) {
@@ -4919,7 +5090,7 @@
 								if (r.ok && r.dat.result.success) {
 									if (r.dat.result.item_response) {
 										itmResp = r.dat.result.item_response;
-										if (/(units|building|build_tower|dragon|research|breeding|hatching|feeding|resurrection|trade|repair_hammer|water_outpost_adventurer_mission|capital_adventurer_mission)/.test(itmResp.queue)) {
+										if (/(units|building|build_tower|dragon|research|breeding|hatching|feeding|resurrection|trade|repair_hammer|water_outpost_adventurer_mission|capital_adventurer_mission|repair_equipment)/.test(itmResp.queue)) {
 											var found = false;
 											var jobs = Seed.cities[ids[1]].jobs;
 											for (var x = 0; x < jobs.length && !found; x++) {
@@ -5323,72 +5494,75 @@
 					row--;
 				}
 				var cityIdx = 0;
-					if (Seed.cities[cityIdx]) {
-						var options = {
-							noPlayer: true,
-							cities: []
-						};
-						var city = Seed.cities[cityIdx];
-						var jobs = Jobs.getForgeJob(cityIdx);
-						
-						if(jobs.length != 0) {
-							for(var nbT = 0 ; nbT < jobs.length ; nbT++) {
-								var iRow, iCell;
-								var current_mission = '';
-								var advName = '';
-								if(jobs[nbT].queue != 'repair_hammer') {
-									for(var adv in Forge.data.adventurers) {
-										if(jobs[nbT].queue == Forge.data.adventurers[adv].queue) {
-											for(var advP=0;advP<Seed.player.forge.adventurers.length;advP++) {
-												if(Seed.player.forge.adventurers[advP].type == Forge.data.adventurers[adv].type) {
-													current_mission = translate('mission-'+Seed.player.forge.adventurers[advP].current_mission.replace(/_/g, "-"));
-													advName = translate('adventurer-'+Seed.player.forge.adventurers[advP].type.toLowerCase());
-													break;
-												}
+				if (Seed.cities[cityIdx]) {
+					var options = {
+						noPlayer: true,
+						cities: []
+					};
+					var city = Seed.cities[cityIdx];
+					var jobs = Jobs.getForgeJob(cityIdx);
+					
+					if(jobs.length != 0) {
+						for(var nbT = 0 ; nbT < jobs.length ; nbT++) {
+							var iRow, iCell;
+							var current_mission = '';
+							var advName = '';
+							if(jobs[nbT].queue != 'repair_hammer' && jobs[nbT].queue != 'repair_equipment') {
+								for(var adv in Seed.forge.adventurers) {
+									if(jobs[nbT].queue == Seed.forge.adventurers[adv].queue) {
+										for(var advP=0;advP<Seed.player.forge.adventurers.length;advP++) {
+											if(Seed.player.forge.adventurers[advP].type == Seed.forge.adventurers[adv].type) {
+												current_mission = translate('mission-'+Seed.player.forge.adventurers[advP].current_mission.replace(/_/g, "-"));
+												advName = translate('adventurer-'+Seed.player.forge.adventurers[advP].type.toLowerCase());
+												break;
 											}
-											break;
 										}
+										break;
 									}
 								}
-								iRow = table.insertRow(-1);
-								iRow.className = mtClass;
-								iRow.title = '';
+							}
+							iRow = table.insertRow(-1);
+							iRow.className = mtClass;
+							iRow.title = '';
+							iCell = iRow.insertCell(-1);
+							iCell.style.textAlign = 'left';
+							iCell.style.width = '20%';
+							iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
+							var timeRemaining = ((jobs[nbT].run_at - serverTime()) > 0) ? timestr(jobs[nbT].run_at - serverTime()) : 0;
+							if (timeRemaining == 0) {
+								iCell = iRow.insertCell(-1);
+								iCell.setAttribute('colspan', '3');
+								iCell.innerHTML = translate('Awaiting task completion notification') + '...';
+								Jobs.deleteJob(cityIdx, jobs[nbT]);
+								if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
+								options.cities.push(city.id);
+								Seed.fetchPlayer(options);
+							} else {
+								iRow.setAttribute('ref', cityIdx + '_' + jobs[nbT].id);
 								iCell = iRow.insertCell(-1);
 								iCell.style.textAlign = 'left';
-								iCell.style.width = '20%';
-								iCell.innerHTML = '<b>' + ((cityIdx == CAPITAL.id) ? city.name : translate(city.name)) + '</b>';
-								var timeRemaining = ((jobs[nbT].run_at - serverTime()) > 0) ? timestr(jobs[nbT].run_at - serverTime()) : 0;
-								if (timeRemaining == 0) {
-									iCell = iRow.insertCell(-1);
-									iCell.setAttribute('colspan', '3');
-									iCell.innerHTML = translate('Awaiting task completion notification') + '...';
-									Jobs.deleteJob(cityIdx, jobs[nbT]);
-									if (cityIdx != 0) options.cities.push(Seed.cities[CAPITAL.id].id);
-									options.cities.push(city.id);
-									Seed.fetchPlayer(options);
+								iCell.style.width = '35%';
+								var adventurer = advName;
+								if(jobs[nbT].queue == 'repair_hammer') {
+									iCell.innerHTML = translate('forge-repair-hammer');
+								} else if(jobs[nbT].queue == 'repair_equipment') {
+									var it = Forge.getItemById(jobs[nbT].equipment_id, 'equipments');
+									iCell.innerHTML = translate('forge-repaire-state') + ' : ' + translate(it.name.toLowerCase()) + '(lvl ' + it.level + ')' ;
 								} else {
-									iRow.setAttribute('ref', cityIdx + '_' + jobs[nbT].id);
-									iCell = iRow.insertCell(-1);
-									iCell.style.textAlign = 'left';
-									iCell.style.width = '35%';
-									var adventurer = advName;
-									if(jobs[nbT].queue == 'repair_hammer') {
-										iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + translate('forge-repair-hammer');
-									} else {
-										iCell.innerHTML = translateByKey('forge', null, 'dialogs') + ' - ' + adventurer + ' - ' + current_mission;
-									}
-									iCell = iRow.insertCell(-1);
-									iCell.style.width = '10%';
-									iCell = iRow.insertCell(-1);
-									iCell.style.textAlign = 'left';
-									iCell.style.width = '25%';
-									iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timeRemaining + '</font>';
-									if (!jobs[nbT].cancelled && Data.options.jobs_speedups_enabled)
-										Jobs.addSpeedUpButtons(table, 'tabJobsForge_speedups_0', 'jobs', cityIdx + '_' + jobs[nbT].id);
+									iCell.innerHTML = adventurer + ' - ' + current_mission;
 								}
+								iCell = iRow.insertCell(-1);
+								iCell.style.width = '10%';
+								iCell = iRow.insertCell(-1);
+								iCell.style.textAlign = 'left';
+								iCell.style.width = '25%';
+								iCell.innerHTML = '<font color=' + TIMER_COLOR + '>' + timeRemaining + '</font>';
+								if (!jobs[nbT].cancelled && Data.options.jobs_speedups_enabled)
+									Jobs.addSpeedUpButtons(table, 'tabJobsForge_speedups_0', 'jobs', cityIdx + '_' + jobs[nbT].id);
 							}
 						}
 					}
+				}
 				
 				for (var cityIdx = 0; cityIdx < idle_cities.length; ++cityIdx) {
 					if (Seed.cities[idle_cities[cityIdx]]) {
@@ -5903,11 +6077,38 @@
 						// iCell.innerHTML = '&nbsp;';
 					}
 				}
+			},
+			completed: function(data) {
+				switch (data.job_type) {
+					case 'ChronoJobs::WaterOutpostAdventurerMission':
+					case 'ChronoJobs::CapitalAdventurerMission':
+						break;
+					case 'ChronoJobs::RepairEquipment':
+						for(var iEq=0;iEq<Seed.player.forge.items.equipments.length;iEq++) {
+							if(Seed.player.forge.items.equipments[iEq].id == data.args.equipment_id) {
+								Seed.player.forge.items.equipments[iEq].state = 'unequipped';
+								if(Tabs.Jobs.contentType == 8 && Tabs.Jobs.forgeContentType == 2) {
+									Tabs.Jobs.tabJobForge_tabInventory();
+								}
+								break;
+							}
+						}
+						break;
+					case 'ChronoJobs::Feeding': // Fin d'une amélioration d'un dragon du sanctuaire
+						break;
+					case 'ChronoJobs::MarchUnits': // Toujours le retour d'une marche ?
+						Marches.socketUpdate(data);
+						break;
+					case 'ChronoJobs::Retreat': // Toujours le retour à la maison d'une marche ? 
+						break;
+					default :
+						logit('Jobs.completed - Job type not taken : ' + data.job_type);
+				}
 			}
 		};
-		/******************************** Manifest package ***************************/
 		var Manifest = {
 			data: {},
+			lunaData: {},
 
 			init: function(callback) {
 				Manifest.fetchManifest(function(res) {
@@ -6312,7 +6513,6 @@
 				}
 			}
 		};
-		/******************************** Map package ********************************/
 		var Map = {
 			map_bin: null,
 			is_refreshing: false,
@@ -7270,7 +7470,6 @@
 				if (done) Map.is_refreshing = false;
 			}
 		};
-		/******************************** March package ******************************/
 		var Marches = {
 			table_output: {
 				attacks: {},
@@ -7306,6 +7505,16 @@
 				});
 			},
 
+			socketUpdate: function(data) {
+				var t = Marches;
+				data.march.status = 'retreating';
+				if(t.find(data.march.id)) {
+					t.update(data.march);
+				} else {
+					t.add(data.march);
+				}
+			},
+
 			add: function(march, type) {
 				var t = Marches;
 				if (is_null(type)) {
@@ -7331,7 +7540,6 @@
 				}
 				(Data.marches[type])[march.id] = cloneProps(march);
 				(Data.marches[type])[march.id].has_report = ((type == 'transport') ? true : false);
-				/* t.trace('Marches.add', march.id); */
 			},
 			remove: function(march_id, type) {
 				var t = Marches;
@@ -7346,7 +7554,6 @@
 							if (Data.marches.ressources[march_id]) delete(Data.marches.ressources[march_id]);
 						}
 					} else {
-						/* t.trace('Marches.remove', march_id); */
 						delete((Data.marches[type])[march_id]);
 					}
 			},
@@ -7358,8 +7565,9 @@
 					var m = (Data.marches[type])[march.id];
 					if (m) {
 						m.mergeWith(march);
-						if (is_null(m.real_run_at) && m.run_at && m.duration && m.status == 'marching') m.real_run_at = m.run_at + toNum(m.duration);
-						/* t.trace('Marches.update', march.id); */
+						if (is_null(m.real_run_at) && m.run_at && m.duration && m.status == 'marching') {
+							m.real_run_at = m.run_at + toNum(m.duration);
+						}
 					}
 				}
 			},
@@ -7680,18 +7888,7 @@
 						switch (table_output[id].row_status) {
 							/* Finish state */
 							case 0:
-								if (retreating && time_left > 0) { /*
-																	 * added a
-																	 * check to
-																	 * prevent
-																	 * hidding
-																	 * of
-																	 * marches
-																	 * before
-																	 * they
-																	 * finish
-																	 * retreating.
-																	 */
+								if (retreating && time_left > 0) { /* added a check to prevent hidding of marches before they finish retreating. */
 									table_output[id].row_status = 2;
 									/* march Recall Button */
 									iRow.cells[4].innerHTML = '';
@@ -7713,12 +7910,7 @@
 							case 1:
 							case 2:
 								if (retreating) {
-									table_output[id].row_status = 3; /*
-																		 * Change
-																		 * to
-																		 * retreating
-																		 * state
-																		 */
+									table_output[id].row_status = 3; /* Change to retreating state */
 									/* march Status */
 									var html_status = '';
 									html_status += '<b>' + translate('Returning') + ':</b>';
@@ -7966,7 +8158,6 @@
 				nCell.appendChild(button);
 			}
 		};
-		/******************************** MemberShips package ************************/
 		var MemberShips = {
 			fetchMembership: function(id, callback, doDetail) {
 				var t = MemberShips;
@@ -8214,7 +8405,6 @@
 				}, MAP_DELAY * Math.floor(Math.random() * (-1) + 2));
 			}
 		}
-		/******************************** Messages package ***************************/
 		var Messages = {
 			readList: [],
 			fetchTimer: null,
@@ -8710,11 +8900,13 @@
 									break;
 								}
 							}
-							
+							var nbEqp=0;
+							var classEqp='';
 							if(att.equipment) {
 								for(var ieqp=0; ieqp<att.equipment.length; ieqp++) {
 									var eqpTroop = att.equipment[ieqp];
 									if(eqpTroop.troop_type==p) {
+										nbEqp++;
 										descEqp += translate(eqpTroop.name) + '\n';
 										for(var istat in eqpTroop.stats) {
 											descEqp += '\t' + translate(istat) + ' => +' + eqpTroop.stats[istat] + '\n';
@@ -8723,8 +8915,23 @@
 									}
 								}
 							}
-
-							m += '			<tr>' + '				<td class=left>' + translate(p) + (descEqp=='' ? '' : '	<span class="' + UID['information'] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(att.units[p][0]) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
+							
+							switch(nbEqp) {
+								case 0:
+									classEqp = 'warningblack';
+									break;
+								case 1:
+		 							classEqp = 'number1';
+									break;
+								case 2:
+		 							classEqp = 'number2';
+									break;
+								case 3:
+		 							classEqp = 'number3';
+									break;
+							}
+							
+							m += '			<tr>' + '				<td class=left>' + translate(p) + (descEqp=='' ? '' : '	<span class="' + UID[classEqp] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(att.units[p][0]) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
 						}
 					}
 					m += '	<tr>' + '		<td class=left><b>' + translate('Total lost') + '</b></td>' + '		<td align=right colspan=3><span class=' + UID['green'] + '><b>' + numf(total_might_lost) + '</b></span></td>' + '	</tr>';
@@ -8820,10 +9027,13 @@
 								}
 							}
 							
+							var nbEqp=0;
+							var classEqp='';
 							if(def.equipment) {
 								for(var ieqp=0; ieqp<def.equipment.length; ieqp++) {
 									var eqpTroop = def.equipment[ieqp];
 									if(eqpTroop.troop_type==p) {
+										nbEqp++;
 										descEqp += translate(eqpTroop.name) + '\n';
 										for(var istat in eqpTroop.stats) {
 											descEqp += '\t' + translate(istat) + ' => +' + eqpTroop.stats[istat] + '\n';
@@ -8832,8 +9042,23 @@
 									}
 								}
 							}
+							
+							switch(nbEqp) {
+								case 0:
+									classEqp = 'warningblack';
+									break;
+								case 1:
+		 							classEqp = 'number1';
+									break;
+								case 2:
+		 							classEqp = 'number2';
+									break;
+								case 3:
+		 							classEqp = 'number3';
+									break;
+							}
 
-							m += '			<tr>' + '				<td class=left>' + name + (descEqp=='' ? '' : '	<span class="' + UID['information'] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(qty) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
+							m += '			<tr>' + '				<td class=left>' + name + (descEqp=='' ? '' : '	<span class="' + UID[classEqp] + '" style="width:auto !important;" title="' + descEqp + '"></span>') + ' </td>' + '				<td align=right>' + numf(qty) + '</td>' + '				<td align=right>' + lost_troops + '</td>' + '				<td align=right>' + numf(total_might) + '</td>' + '			</tr>';
 						}
 					}
 					m += '	<tr>' + '		<td class=left><b>' + translate('Total lost') + '</b></td>' + '		<td align=right colspan=3><span class=' + UID['green'] + '><b>' + numf(total_might_lost) + '</b></span></td>' + '	</tr>';
@@ -9642,7 +9867,6 @@
 				t.messageDeletion = false;
 			}
 		};
-		/******************************** Names package ******************************/
 		var Names = {
 			troops: {
 				'names': [
@@ -9751,7 +9975,6 @@
 				o.byName = byName;
 			}
 		};
-		/******************************** Recall march package ***********************/
 		var RecallMarch = {
 			init: function() {
 				var t = RecallMarch;
@@ -9808,7 +10031,6 @@
 				return found;
 			}
 		};
-		/******************************** RequestQueue package ***********************/
 		var RequestQueue = {
 			que: {},
 			add: function(id, func, maxWaitMillis, can_be_bypassed) {
@@ -9850,13 +10072,10 @@
 				} else return t.que[id] ? true : false;
 			}
 		};
-		/******************************** Forge package ***********************/
 		var Forge = {
-			data: {},
-			
 			checkForgeRequirements: function(objName, type) {
 				var t = Forge;
-				var req = Forge.data.recipes[objName].requirements;
+				var req = Seed.forge.recipes[objName].requirements;
 				var ret = {
 					result : true,
 					reason : []
@@ -9877,10 +10096,10 @@
 				var bs = Seed.blacksmith;
 				var j=0;
 				if(bs.experience >= 20000) {
-					ret = 10;
+					j = 10;
 				} else {
-					for(var i in Forge.data.blacksmith_experience){
-						var nextLvlXp = Forge.data.blacksmith_experience[i];
+					for(var i in Seed.forge.blacksmith_experience){
+						var nextLvlXp = Seed.forge.blacksmith_experience[i];
 						if(bs.experience<nextLvlXp) {
 							if(j != 0)
 								j = j-1;
@@ -9891,13 +10110,59 @@
 				}
 				return j;
 			},
-			getNbPlayerItem: function(itN, type) {
-				return 
-				var ret=0;
-				var itsP = Seed.player.forge.items[type];
+			getItemById: function (itemId, type) {
+				var ret= {};
+				var itsP = Seed.player.forge.items['equipments'];
 				for(var i=0;i<itsP.length;i++) {
-					ret = itsP[i].quantity;
-					break;
+					if(itemId == itsP[i].id) {
+						ret = itsP[i];
+						break;
+					}
+				}
+				itsP = Seed.player.forge.items['ingredients'];
+				for(var i=0;i<itsP.length;i++) {
+					if(itemId == itsP[i].id) { 
+						ret = itsP[i];
+						break;
+					}
+				}
+				return ret;
+			},
+			getItemByName: function(itemName, first) {
+				var ret= [];
+				var itsP = Seed.player.forge.items['equipments'];
+				for(var i=0;i<itsP.length;i++) {
+					if(itemName == itsP[i].name) {
+						ret.push(itsP[i]);
+						if(first)
+							break;
+					}
+				}
+				itsP = Seed.player.forge.items['ingredients'];
+				for(var i=0;i<itsP.length;i++) {
+					if(itemName == itsP[i].name) { 
+						ret.push(itsP[i]);
+						if(first)
+							break;
+					}
+				}
+				return ret;
+			},			
+			getNbPlayerItem: function(itN) {
+				var ret=0;
+				var itsP = Seed.player.forge.items['equipments'];
+				for(var i=0;i<itsP.length;i++) {
+					if(itsP[i].name==itN) {
+						ret = itsP[i].quantity;
+						break;
+					}
+				}
+				itsP = Seed.player.forge.items['ingredients'];
+				for(var i=0;i<itsP.length;i++) {
+					if(itsP[i].name==itN) {
+						ret = itsP[i].quantity;
+						break;
+					}
 				}
 				return ret;
 			},
@@ -9921,9 +10186,12 @@
 				return ret;
 			}
 		}
-		/******************************** Seed package *******************************/
 		var Seed = {
+			loginMessages: {},
+			challenges: {},
+			luna: {},
 			blacksmith: {},
+			forge: {},
 			cities: [],
 			/* cities */
 			cityIdx: {},
@@ -10022,14 +10290,18 @@
 								setTimeout(Seed.fetchCity, Math.randRange(i * 1000, i * 3000), options.cities[i], callback);
 							}
 						}
-						if (!options.jobs && !options.dragons) return;
+						if (!options.jobs && !options.dragons && !options.forge) return;
 					}
 					if (options && options.jobs) {
 						setTimeout(Seed.fetchJobs, Math.randRange(i * 1000, i * 3000), callback);
-						if (!options.dragons) return;
+						if (!options.dragons && !options.forge) return;
 					}
 					if (options && options.dragons) {
 						setTimeout(Seed.fetchDragons, Math.randRange(i * 1000, i * 3000), callback);
+						if (!options.forge) return;
+					}
+					if (options && options.forge) {
+						setTimeout(MyAjax.getForge, Math.randRange(i * 1000, i * 3000), callback);
 						return;
 					}
 				}
@@ -10051,14 +10323,18 @@
 									setTimeout(Seed.fetchCity, Math.randRange(i * 1000, i * 3000), options.cities[i], callback);
 								}
 							}
-							if (!options.jobs && !options.dragons) return;
+							if (!options.jobs && !options.dragons && !options.forge) return;
 						}
 						if (options && options.jobs) {
 							setTimeout(Seed.fetchJobs, Math.randRange(i * 1000, i * 3000), callback);
-							if (!options.dragons) return;
+							if (!options.dragons && !options.forge) return;
 						}
 						if (options && options.dragons) {
 							setTimeout(Seed.fetchDragons, Math.randRange(i * 1000, i * 3000), callback);
+							if(!options.forge) return;
+						}
+						if (options && options.forge) {
+							setTimeout(MyAjax.getForge, Math.randRange(i * 1000, i * 3000), callback);
 							return;
 						}
 
@@ -10099,6 +10375,7 @@
 							rslt.ok = false;
 							rslt.errmsg = e.toString();
 						}
+						
 					}
 					if (callback) callback(rslt);
 					return;
@@ -10213,20 +10490,14 @@
 				var now = serverTime();
 				for (var c = 0; c < t.refresh_cities.length && !found; c++)
 					if (t.refresh_cities[c].id == cityId) found = true;
-					/*
-					 * if city not queued to refresh and time elapsed since last
-					 * refresh done is greater than 1 minute
-					 */
+					/** if city not queued to refresh and time elapsed since last refresh done is greater than 1 minute */
 				if (!found) t.refresh_cities.push({
 					id: cityId,
 					isRefreshing: is_refreshing
 				});
 			},
 
-			tick: function() { /*
-								 * called once per second - to check for job
-								 * completion
-								 */
+			tick: function() { /** called once per second - to check for job completion */
 				var t = Seed;
 				var now = toNum(serverTime());
 				var lock_food = false;
@@ -10238,28 +10509,13 @@
 						if (((actual < production.capacity && production.rate > 0) ||
 							(actual > (production.vault_capacity || 0) && production.rate < 0)) && !lock_food) {
 							if (t.lastRefresh && t.lastRefresh != 0) {
-								/*
-								 * Case when a delay is to take into account
-								 * when city data has just been updated
-								 */
+								/** Case when a delay is to take into account when city data has just been updated */
 								actual = actual + ((production.rate / 3600) * toNum(now - t.lastRefresh));
 								t.lastRefresh = 0;
 							} else
 								actual = actual + (production.rate / 3600);
 							if (actual > production.capactity) actual = production.capacity;
-							if (actual < (production.vault_capacity || 0)) actual = (production.vault_capacity || 0); /*
-																														 * Case
-																														 * of
-																														 * food
-																														 * with
-																														 * negative
-																														 * production
-																														 * rate
-																														 */
-							/*
-							 * update the Seed resource total only if the city
-							 * is not queued for refresh
-							 */
+							if (actual < (production.vault_capacity || 0)) actual = (production.vault_capacity || 0);
 							if (!t.refresh_cities[CAPITAL.id])
 								t.cities[CAPITAL.id].resources[all_resource_types[p]] = actual;
 						}
@@ -10271,7 +10527,7 @@
 					return;
 				}
 
-				/* check for job completion */
+				/** check for job completion */
 				for (var cityIdx in t.jobs) {
 					for (var jobId in t.jobs[cityIdx]) {
 						var job = t.jobs[cityIdx][jobId];
@@ -10664,50 +10920,26 @@
 					t.jobs[cityId] = {};
 				}
 				if (job.queue == 'march') {
-
 					if ((march = Marches.find(job.march_id)) == null) {
-
 						if (job.run_at < serverTime()) {
 							return;
 						}
-						debugLog('checkAddJob MISSING MARCH:\n' + inspectObj(job, 5, 1)); /*
-																							 * +'\n'+
-																							 * inspectObj(Data.marches,
-																							 * 6,
-																							 * 1));
-																							 */
+						debugLog('checkAddJob MISSING MARCH:\n' + inspectObj(job, 5, 1)); 
 
 					} else {
-
 						march.run_at = job.run_at;
 						march.duration = job.duration;
 						march.job_id = job.id;
 						if (march.status == 'marching') march.real_run_at = job.run_at + toNum(job.duration);
-						if (march.real_run_at < march.run_at) march.real_run_at = march.run_at; /*
-																								 * Take
-																								 * into
-																								 * account
-																								 * the
-																								 * server
-																								 * overload
-																								 * :))
-																								 */
-						/* Marches.trace('CheckAddJob', march.id); */
-
+						if (march.real_run_at < march.run_at) march.real_run_at = march.run_at; 
 					}
 				}
 				if (!t.jobs[cityId][job.id]) t.jobs[cityId][job.id] = cloneProps(job);
-
-				// if (job.queue == 'march') return;
 				if (job.queue == 'building') {
-
 					Tabs.Jobs.last_built[cityId] = {
 						id: job.city_building_id,
 						level: job.level
 					};
-					// logit('Last built =
-					// '+inspectObj(Tabs.Jobs.last_built,6,1));
-
 				}
 				var found = false;
 
@@ -10751,7 +10983,6 @@
 				}
 			}
 		};
-		/******************************** SoundPlayer package ************************/
 		var SoundPlayer = {
 			alertString: '',
 			shortString: '',
@@ -10761,15 +10992,15 @@
 			spy_active: false,
 			spy_repeat_timer: null,
 
-			SWF_PLAYER_URL: 'https://wackoscripts.com/mp3/teamwork.swf',
+			SWF_PLAYER_URL: 'https://www.calcium-pro-tool.com/bin/teamwork.swf',
 			SOUND_TYPES: ['attack', 'spy', 'building', 'research', 'units', 'fortuna'],
 			DEFAULT_SOUND_URL: {
-				attack: 'https://wackoscripts.com/mp3/tower.mp3',
-				spy: 'https://wackoscripts.com/mp3/spy.mp3',
-				building: 'https://wackoscripts.com/mp3/construction.mp3',
-				units: 'https://wackoscripts.com/mp3/training.mp3',
-				research: 'https://wackoscripts.com/mp3/research.mp3',
-				fortuna: 'https://wackoscripts.com/mp3/wheel.mp3'
+				attack: 'https://www.calcium-pro-tool.com/bin/tower.mp3',
+				spy: 'https://www.calcium-pro-tool.com/bin/spy.mp3',
+				building: 'https://www.calcium-pro-tool.com/bin/construction.mp3',
+				units: 'https://www.calcium-pro-tool.com/bin/training.mp3',
+				research: 'https://www.calcium-pro-tool.com/bin/research.mp3',
+				fortuna: 'https://www.calcium-pro-tool.com/bin/wheel.mp3'
 			},
 
 
@@ -11039,25 +11270,24 @@
 				MyAjax.messageSend(Data.options.tower.msg_subject, body, Seed.player.alliance.id, false);
 			}
 		}
-		/******************************** Player package *****************************/
 		var Player = {
-			
 			getWildernesses : function() {
 				return Seed.player.player_wildernesses;
 			},
-			
 			getNbWildernesses : function() {
 				return Player.getWildernesses().length;
 			},
-			
 			addWildernesses : function(w) {
 				Player.getWildernesses().push(w);
 			},
-			
-			removeWildernesses : function(w) {
+			removeWildernesses : function(x, y) {
+				for(var i=0;i<Player.getWildernesses().length;i++) {
+					if(Seed.player.player_wildernesses[i].x == x && Seed.player.player_wildernesses[i].y == y) {
+						delete Seed.player.player_wildernesses[i];
+					}
+				}
 			}
 		};
-		/******************************** Translation package ************************/
 		var Translation = {
 			loaded: false,
 			tempXML: '',
@@ -11124,10 +11354,7 @@
 				
 				function cb(rslt) {
 					if(rslt.ok) {
-						Translation.tmpXML = AMF.parse(rslt.dat);
-						new MyAjaxRequest('locales', 'locales/' + C.attrs.locale + '/get_serialized_new', {'_swf_session_id': C.attrs.sessionId}, cb2, null, true);
-						
-						function cb2(rslt2) {
+						var cb2 = function(rslt2) {
 							if(rslt2.ok) {
 								var temp =  AMF.parse(rslt2.dat);
 								
@@ -11143,6 +11370,9 @@
 								notify(rslt2);
 							return;
 						}
+						
+						Translation.tmpXML = AMF.parse(rslt.dat);
+						new MyAjaxRequest('locales', 'locales/' + C.attrs.locale + '/get_serialized_new', {'_swf_session_id': C.attrs.sessionId}, cb2, null, true);
 					} else {
 						if (notify)
 							notify(rslt);
@@ -11323,9 +11553,43 @@
 				return Translation.getContent('forge', key, subkey);
 			}
 		};
-		/* Provide language translation services based on the browswer language */
+		var Troop = {
+
+			getSelectAll: function(idSelect, allOption, noneOption, selectItem) {
+				var ret = '<SELECt id="'+idSelect+'">';
+				if(allOption) {
+					ret +='<OPTION value="all" '+(selectItem=='all' ? 'selected' : '')+'>'+translate('all')+'</OPTION>';
+				}
+				if(noneOption) {
+					ret +='<OPTION value="none" '+(selectItem=='none' ? 'selected' : '')+'>'+translate('none')+'</OPTION>';
+				}
+				ret += '<optgroup label="'+translate('troops')+'">';
+		 		for(var i=0; i<all_unit_types.length; i++) {
+					ret +='<OPTION value="' + all_unit_types[i] + '" '+(selectItem==all_unit_types[i] ? 'selected' : '')+'>'+translate(all_unit_types[i].toLowerCase())+'</OPTION>';
+				}
+				ret += '/<optgroup>';
+				ret += '</SELECT>';
+				return ret;
+			},
+
+			getLunaTroopByBuilding: function(buildingName) {
+				var ret = [];
+				var mUnits = Manifest.data.units;
+				for(var i=0;i<mUnits.length;i++) {
+					if(mUnits[i].requirements.luna) {
+						for(var building in mUnits[i].requirements.luna.buildings) {
+							if(building == buildingName) {
+								ret.push(mUnits[i]);
+								break;
+							}
+						}
+					}
+				}
+				return ret;
+			}
+		};
 		var needTranslate = {};
-		function translate(str, ignore) {
+		var translate = function(str, ignore) {
 			if (TRANSLATION_ARRAY[str] != undefined) {
 				return TRANSLATION_ARRAY[str];
 			} else if (Translation.loaded) {
@@ -11343,7 +11607,7 @@
 			}
 			return str;
 		}
-		function translateByKey(str, key, section) {
+		var translateByKey = function(str, key, section) {
 			if (Translation.loaded) {
 				var newStr;
 				if (section) {
@@ -11365,9 +11629,6 @@
 			}
 			return str;
 		}
-		/******************************** Translation package ************************/
-
-		/******************************** VerboseLog package *************************/
 		var VerboseLog = {
 			init: function() {
 				VerboseLog.setEnable(Data.options.verboseLog.enabled);
@@ -11377,9 +11638,6 @@
 				Data.options.verboseLog.enabled = onOff;
 			}
 		};
-		/******************************** VerboseLog package *************************/
-
-		/******************************** Wackoscript package ************************/
 		var WackoScript = {
 			/* Didi : Internet Ressource manager */
 			url_binary_file: [],
@@ -11444,10 +11702,7 @@
 				}
 			}
 		};
-		/******************************** Wackoscript package ************************/
-		
-		/** ************** Functions *************** */
-		function buttonSpyNow(container, target) {
+		var buttonSpyNow = function(container, target) {
 			function checkSpy(targetObj, notify) {
 				var cityId = Seed.cities[CAPITAL.id].id;
 				var cityIdx = CAPITAL.id;
@@ -11487,9 +11742,8 @@
 					}, 1000);
 				}
 			}
-		}
-
-		function checkCoords(tab, units, options) {
+		};
+		var checkCoords = function(tab, units, options) {
 			var ex = document.getElementById(UID[tab + '_CoordsX']);
 			var ey = document.getElementById(UID[tab + '_CoordsY']);
 			var x = toNum(ex.value);
@@ -11560,8 +11814,7 @@
 				}
 			});
 		}
-
-		function checkMarch(targetMsg, feedback_element, marchCount, retryDelay, count_type, max_type, generalId, checkGeneral) {
+		var checkMarch = function(targetMsg, feedback_element, marchCount, retryDelay, count_type, max_type, generalId, checkGeneral) {
 			var checkresult = 0;
 			if (MyAjax.marchBusy) {
 				checkresult = 1;
@@ -11579,9 +11832,8 @@
 				return (checkresult);
 			}
 			return (checkresult);
-		}
-
-		function checkTroops(cityIdx, units) {
+		};
+		var checkTroops = function (cityIdx, units) {
 			/* returns null if ok, else error message */
 			var totalTroops = 0,
 				unit_qty = 0,
@@ -11604,15 +11856,13 @@
 			if (totalTroops > muster_point.max_troops) return (2);
 			if (muster_point.slots <= 0) return (2);
 			return null;
-		}
-
-		function dispFeedback(target, msg) {
+		};
+		var dispFeedback = function(target, msg) {
 			if (msg && msg != '')
 				msg = new Date().toTimeString().substring(0, 8) + ' ' + msg;
 			if (target && document.getElementById(target)) document.getElementById(target).innerHTML = msg;
-		}
-
-		function objAddTo(o, name, val, transcoding) {
+		};
+		var objAddTo = function(o, name, val, transcoding) {
 			var qty, item;
 			if (Names.transco[name] && transcoding) {
 				qty = Names.transco[name][1] * val;
@@ -11623,18 +11873,16 @@
 			}
 			if (!o[item]) o[item] = qty;
 			else o[item] += qty;
-		}
-
-		function generalList(cityIdx) {
+		};
+		var generalList = function(cityIdx) {
 			var ret = {};
 			var generals = Seed.cities[cityIdx].generals;
 			for (var i = 0; i < generals.length; i++) {
 				ret[generals[i].id] = generals[i].name + ' (' + translate('rank') + ':' + generals[i].rank + ' / ' + translate('victory')  + ':' + generals[i].victory + ')';
 			}
 			return ret;
-		}
-
-		function getAllianceRelationship(id, name) {
+		};
+		var getAllianceRelationship = function(id, name) {
 			var found = false;
 			var ret = name;
 			if (Data.dynamic.players.friends) {
@@ -11654,9 +11902,8 @@
 				}
 			}
 			return ret;
-		}
-
-		function getAllianceState(id) {
+		};
+		var getAllianceState = function(id) {
 			var found = false;
 			var ret = '0';
 			if (Data.dynamic.players.friends) {
@@ -11676,9 +11923,8 @@
 				}
 			}
 			return ret;
-		}
-
-		function getAvailableDragon(include_exclude, dragon_list) {
+		};
+		var getAvailableDragon = function(include_exclude, dragon_list) {
 			/*
 			 * include_exclude : true = list of dragons that can be sent, false =
 			 * list of dragons to not send
@@ -11702,9 +11948,8 @@
 				return curName;
 			else
 				return null;
-		}
-
-		function getAvailableGeneral() {
+		};
+		var getAvailableGeneral = function() {
 			var general = null;
 			var rank = 6;
 			for (var p in Seed.generals) {
@@ -11716,9 +11961,8 @@
 				}
 			}
 			return general;
-		}
-
-		function getBoosts() {
+		};
+		var getBoosts = function() {
 			var ret = [];
 			for (var i in Seed.player.boosts) {
                 var longName = '';
@@ -11802,17 +12046,15 @@
 				}
 			});
 			return ret;
-		}
-
-		function getBuildingById(cityIdx, bId) {
+		};
+		var getBuildingById = function(cityIdx, bId) {
 			var b = Seed.cities[cityIdx].buildings;
 			for (var i = 0; i < b.length; i++) {
 				if (b[i].id == bId) return b[i].type;
 			}
 			return '';
-		}
-
-		function getCityType(id) {
+		};
+		var getCityType = function(id) {
 			var type = '';
 			for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 				if (Seed.cities[cityIdx] && Seed.cities[cityIdx].id == id) {
@@ -11868,9 +12110,8 @@
 				else type = '<br><U><div id=' + setUID('goto_reinforcement') + ' ref="' + id + '"><A><span class=' + UID['bold_red'] + '>OP : ' + translate(type) + '</span></A></div></U>';
 			}
 			return type;
-		}
-
-		function getCityShortType(cityIdx) {
+		};
+		var getCityShortType = function(cityIdx) {
 			var type = '';
 			switch (toNum(cityIdx)) {
 				case CAPITAL.id:
@@ -11919,13 +12160,12 @@
 					break;
 			}
 			return type;
-		}
-
-		function getErrorText(error, type) {
+		};
+		var getErrorText = function(error, type) {
 			return (isNaN(error) ? error : translate(marchErrorTexts[error][type]));
-		}
-
-		function getMarchTime(x, y, units) {
+			//
+		};
+		var getMarchTime = function(x, y, units) {
 			var dist = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, x, y);
 			var speed = 99999;
 			for (var unit in units) {
@@ -11937,9 +12177,8 @@
 			}
 			var time = dist / ((Seed.cities[CAPITAL.id].figures.marches.speed_multiplier * speed) / 6000) + 30;
 			return time;
-		}
-
-		function getMinDelay() {
+		};
+		var getMinDelay = function() {
 			var count = 0,
 				delay = 0,
 				min_time = 700000,
@@ -11962,9 +12201,8 @@
 				count: count,
 				delay: delay
 			};
-		}
-
-		function getMusterPoint(cityIdx) {
+		};
+		var getMusterPoint = function(cityIdx) {
 			var lvl = (Buildings.getLevel(cityIdx, 'MusterPoint')).max;
 			if (is_null(Seed.cities[cityIdx].figures.marches.maximum_troops)) {
 				if (lvl)
@@ -11975,9 +12213,8 @@
 				slots: ((!lvl) ? 0 : lvl - Seed.numMarches),
 				max_troops: maxLvl
 			});
-		}
-
-		function getProtectionTime() {
+		};
+		var getProtectionTime = function() {
 			var protection_time = 0,
 				found = false;
 			if (is_protected() && Seed.player.boosts.safety) {
@@ -11988,9 +12225,8 @@
 				}
 			}
 			return protection_time;
-		}
-
-		function getSoulCapacity() {
+		};
+		var getSoulCapacity = function() {
 			if (Seed.cities[SPECTRAL_OUTPOST.id]) {
 				var min = 0;
 				if (Seed.cities[CAPITAL.id].souls) {
@@ -12007,9 +12243,8 @@
 					max: 0
 				};
 			}
-		}
-
-		function getTotTrainTable() {
+		};
+		var getTotTrainTable = function() {
 			var now = serverTime();
 			var totalTrain = [];
 			for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
@@ -12035,9 +12270,8 @@
 				return a.total - b.total
 			});
 			return totalTrain;
-		}
-
-		function getTroopNumbers(cityIdx, troopType) {
+		};
+		var getTroopNumbers = function(cityIdx, troopType) {
 			var incity = 0,
 				indefense = 0,
 				marches = 0,
@@ -12084,9 +12318,8 @@
 				total: incity + marches + indefense,
 				all: incity + marches + indefense + intraining + inresurrection + inmosauleum
 			};
-		}
-
-		function getTroops(trps, sep) {
+		};
+		var getTroops = function(trps, sep) {
 			var result = '';
 			var tRes = [];
 			for (var i in trps) {
@@ -12095,9 +12328,8 @@
 			}
 			if (tRes.length > 0) result = tRes.join(',' + sep);
 			return result;
-		}
-
-		function isTrainable(cityIdx, unit) {
+		};
+		var isTrainable = function(cityIdx, unit) {
 			var trainables = Seed.stats.unit[unit].trainable,
 				found = false;
 			var city_type = getCityShortType(cityIdx);
@@ -12105,31 +12337,28 @@
 				if (city_type == trainables[i]) found = true;
 			}
 			return found;
-		}
-
-		function isUnderProtection() {
+		};
+		var isUnderProtection = function() {
 			if (Seed.player.boosts.safety) return true;
 			else return false;
-		}
-
-		function onClickMsg(event) {
+		};
+		var onClickMsg = function(event) {
 			var ids = event.target.getAttribute('ref').split('_');
 			dialogSendMsg(ids[1], ids[0], true);
-		}
-
-		function raiseMessage(what, element, error, prefix, delay) {
+		};
+		var raiseMessage = function(what, element, error, prefix, delay) {
 			var prefixMsg = (prefix ? getErrorText(0, 'vb') + ' ' : '');
 			var verboseMsg = prefixMsg + getErrorText(error, 'vb');
 			var feedbackMsg = getErrorText(error, 'fb');
 			verboseLog(what + ' ' + verboseMsg + ': ' + translate('Retry in') + ' ' + delay + ' ' + translate('seconds'));
 			dispFeedback(element, feedbackMsg + ': ' + translate('Retry in') + ' ' + delay + ' ' + translate('seconds'));
-		}
-
-		function refreshPlayerData(container, notify) {
+		};
+		var refreshPlayerData = function(container, notify) {
 			var options = {
 				cities: [],
 				jobs: true,
-				dragons: true
+				dragons: true,
+				forge: false
 			};
 			options.cities.push(Seed.cities[CAPITAL.id].id);
 			var dial = new ModalDialog(container, 300, 165, '', false, null);
@@ -12152,9 +12381,8 @@
 					return;
 				}
 			}, options);
-		}
-
-		function saveBookmark(container, x, y, type, level, id, name, units, ai, include_great_dragon, include_exclude, great_dragons, comment, cptDESC) {
+		};
+		var saveBookmark = function(container, x, y, type, level, id, name, units, ai, include_great_dragon, include_exclude, great_dragons, comment, cptDESC) {
 			var target_desc = '';
             if( typeof(cptDESC) !== 'undefined' )
                 target_desc = cptDESC;
@@ -12227,9 +12455,8 @@
 			setTimeout(function() {
 				dial.destroy()
 			}, 1000);
-		}
-
-		function setButtonStyle(button, enabled, class_enabled, class_disabled) {
+		};
+		var setButtonStyle = function(button, enabled, class_enabled, class_disabled) {
 			if (!button) return;
 			if (enabled) {
 				button.disabled = false;
@@ -12240,9 +12467,8 @@
 				Element.removeClassName(button, (class_enabled ? UID[class_enabled] : UID['btn_blue']));
 				Element.addClassName(button, (class_disabled ? UID[class_disabled] : UID['btn_disabled']));
 			}
-		}
-
-		function set_defense_forces(container, city_id, units, notify) {
+		};
+		var set_defense_forces = function(container, city_id, units, notify) {
 			var dial = new ModalDialog(container, 300, 165, '', false, null);
 			dial.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + translate('Message') + '</b></center></div>';
 			dial.getContentDiv().innerHTML = translate('wall-choose-defenders');
@@ -12259,9 +12485,8 @@
 					return;
 				}
 			}
-		}
-
-		function setTroopTable(tab, rownum, prefix, unit_types, units, units_save, listener, multilines) {
+		};
+		var setTroopTable = function(tab, rownum, prefix, unit_types, units, units_save, listener, multilines) {
 			var row = [];
 			row.push(tab.insertRow(rownum));
 			row.push(tab.insertRow(rownum + 1));
@@ -12301,14 +12526,1917 @@
 				c++;
 			}
 			return tab;
-		}
-
-		function is_protected() {
+		};
+		var is_protected = function() {
 			return Seed.cities[CAPITAL.id].protected
-		}
+		};
+		var actionLog = function(msg) {
+			Tabs.Log.addMsg(msg, 0);
+		};
+		var consoleLog = function(msg) {
+			Tabs.Log.addMsg(msg, 1);
+		};
+		var verboseLog = function(msg) {
+			if (Data.options && Data.options.verboseLog.enabled) {
+				consoleLog(msg);
+			}
+		};
+		/***********************************************************************
+		 * MyAjaxRequest : Performs the following actions: - Places all
+		 * parameters into an object - Determines method - Sets maximum timeout -
+		 * Validates returned data and passes back results to originating
+		 * function
+		 * 
+		 * Returns the following data: - ok (boolean) - dat (object if present) -
+		 * errmsg (string if present)
+		 **********************************************************************/
+		var MyAjaxRequest = function(req_type, url, params, callback, isPost, binary) {
 
+			if (Data.stats.requests == null || !Data.stats.requests) {
+				Data.stats.requests = {
+					start_at: 0,
+					run_time: 0,
+					last_block: 0,
+					count_block: 0,
+					ajax_type: {}
+				};
+			}
+			if (Data.stats.requests.ajax_type == null || !Data.stats.requests.ajax_type) {
+				Data.stats.requests.ajax_type = {
+					binary: {
+						time: [],
+						error: []
+					},
+					versions: {
+						time: [],
+						error: []
+					},
+					locales: {
+						time: [],
+						error: []
+					},
+					cookie: {
+						time: [],
+						error: []
+					},
+					manifest: {
+						time: [],
+						error: []
+					},
+					player: {
+						time: [],
+						error: []
+					},
+					cities: {
+						time: [],
+						error: []
+					},
+					jobs: {
+						time: [],
+						error: []
+					},
+					dragons: {
+						time: [],
+						error: []
+					},
+					alliances: {
+						time: [],
+						error: []
+					},
+					membership: {
+						time: [],
+						error: []
+					},
+					activity: {
+						time: [],
+						error: []
+					},
+					map: {
+						time: [],
+						error: []
+					},
+					tile_at: {
+						time: [],
+						error: []
+					},
+					building: {
+						time: [],
+						error: []
+					},
+					research: {
+						time: [],
+						error: []
+					},
+					training: {
+						time: [],
+						error: []
+					},
+					resurrect: {
+						time: [],
+						error: []
+					},
+					canceljob: {
+						time: [],
+						error: []
+					},
+					marches: {
+						time: [],
+						error: []
+					},
+					cancelmarch: {
+						time: [],
+						error: []
+					},
+					reports: {
+						time: [],
+						error: []
+					},
+					reports_del: {
+						time: [],
+						error: []
+					},
+					reports_read: {
+						time: [],
+						error: []
+					},
+					message: {
+						time: [],
+						error: []
+					},
+					minigame: {
+						time: [],
+						error: []
+					},
+					save_minigame: {
+						time: [],
+						error: []
+					},
+					leaderboards: {
+						time: [],
+						error: []
+					},
+					collect: {
+						time: [],
+						error: []
+					},
+					claim: {
+						time: [],
+						error: []
+					},
+					defended: {
+						time: [],
+						error: []
+					},
+					defense: {
+						time: [],
+						error: []
+					},
+					items: {
+						time: [],
+						error: []
+					},
+					breeding: {
+						time: [],
+						error: []
+					},
+					feeding: {
+						time: [],
+						error: []
+					},
+					dragonHandle: {
+						time: [],
+						error: []
+					},
+					customization: {
+						time: [],
+						error: []
+					},
+					wilderness: {
+						time: [],
+						error: []
+					},
+					trade: {
+						time: [],
+						error: []
+					},
+					forge: {
+						time: [],
+						error: []
+					},
+                    other: {
+						time: [],
+						error: []
+					}
+				};
+			}
 
-		/******************************** Info Tab ***********************************/
+			var options = {
+				onSuccess: onSuccess,
+				onFailure: onFailure,
+				on403: on403
+			};
+			var ajax, msg, headers = {};
+
+			options.method = (isPost || isPost == 1) ? 'POST' : 'GET';
+			options.parameters = params;
+			options.timeoutSecs = 60;
+			options.binary = binary;
+
+			function onSuccess(r) {
+				var success = true,
+					errmsg = '';
+				if (r.status === 200 && r.responseText) {
+					if (url.indexOf(".xml") !== -1 || binary) {
+						callback({
+							ok: true,
+							dat: r.responseText
+						});
+					} else {
+						var data = r.responseText;
+						try {
+							data = JSON.parse(r.responseText);
+							if (data.result) {
+								success = data.result.success;
+								if (!success && data.result.reason) errmsg = data.result.reason;
+								else if (!success && data.result && data.result.errors) {
+									if (typeof data.result.errors == "string")
+										errmsg = data.result.errors
+									else errmsg = data.result.errors.join(' ');
+								} else if (!success && !data.result && data.errors) {
+									if (typeof data.errors == "string")
+										errmsg = data.errors
+									else errmsg = data.errors.join(' ');
+								}
+							}
+						} catch (e) {
+							logit('could not parse responseText = ' + r.responseText);
+							success = false;
+							errmsg = r.responseText;
+						}
+						callback({
+							ok: success,
+							dat: data,
+							errmsg: errmsg
+						});
+					}
+				} else {
+					msg = 'The request was successful but no data was returned';
+					callback({
+						ok: false,
+						errmsg: msg
+					});
+				}
+			}
+
+			function onFailure(r) {
+				if (Data.stats.requests.ajax_type) {
+					if (Data.stats.requests.ajax_type[req_type]) Data.stats.requests.ajax_type[req_type].error.push(toNum(serverTime()));
+					else logit('MyAjaxRequest, ' + req_type + ' not defined in Data.stats.requests.ajax_type');
+				}
+				var res = {
+					ok: false,
+					status: r.status,
+					errmsg: r.statusText
+				};
+				if (r.status > 200 && r.responseText && !(/(404|429|502|509)/.test(r.status))) {
+					res.dat = r.responseText;
+					res.errmsg = r.responseText;
+				} else if (r.status == 404) {
+					res.errmsg = 'The page you were looking for doesn\'t exist (404)';
+				} else if (r.status == 429) {
+					if (!E429_TIMER || (E429_TIMER - toNum(serverTime())) < 0) {
+						E429_TIMER = toNum(serverTime()) + 3600;
+						Data.stats.requests.last_block = toNum(serverTime());
+						Data.stats.requests.count_block++;
+					}
+					res.errmsg = '<b>API </b>' + translate('<b>Rate Limit Exceeded</b>, too many requests!');
+				} else if (r.status == 502) {
+					res.errmsg = (r.statusText || 'Bad gateway');
+				} else if (r.status == 509) {
+					res.errmsg = translate('<b>Rate Limit Exceeded</b>, too many requests!');
+				} else {
+					res.errmsg = 'This browser is not compatible at this time';
+				}
+				callback(res);
+			}
+
+			function on403(r) {
+				dialogFatal('<b>' + kFatalSeedTitle + '</b><br><br>' + '<br>' + '<font color="#C00"><b> ' + r.statusText + '</b></font>' + '<br><br><div align=left>' + '<b>Previous Requirements</b><br><br>' + '<b>FIREFOX</b>' + '<ul><li>Download and install <a href="https://addons.mozilla.org/es-ES/firefox/addon/refcontrol/">RefControl</a>' + '</li><li>Once installed click Tools - RefControlOptions' + '</li><li>Click Add Site and type in <b>wonderhill.com</b>' + '</li><li>Check the Block - Send no referer radio box' + '</li><li>Click OK and then OK again' + '</li></ul><br>' + '<b>CHROME</b>' + '<ul><li>Right click on your "Chrome" icon (either on your Desktop or your Taskbar)' + '</li><li>Choose properties' + '</li><li>At the end of your target line, place these parameters: <b>--no-referrers</b>' + '</li><li>Click OK' + '</li></ul><br><br></div>' + '<a id="' + UID['support_link'] + '" href="" target="_blank">Bugs and Known Issues</a><br>');
+				var res = {
+					ok: false,
+					status: r.status,
+					errmsg: r.statusText
+				};
+				callback(res);
+			}
+
+			if (E429_TIMER && (E429_TIMER - toNum(serverTime())) > 0) {
+				onFailure({
+					status: 429,
+					statusText: 'lock by script'
+				});
+			} else {
+				if (Data.stats.requests.ajax_type) {
+					if (Data.stats.requests.ajax_type[req_type]) Data.stats.requests.ajax_type[req_type].time.push(toNum(serverTime()));
+					else logit('MyAjaxRequest, ' + req_type + ' not defined in Data.stats.requests.ajax_type');
+				}
+				ajax = new AjaxRequest(url, options, req_type);
+			}
+		};
+		/***********************************************************************
+		 * AjaxRequest : Performs the following actions: - Generates an
+		 * appropriate request header - Parses the request parameters - Sends
+		 * the actual request - Determines if request was successful based on
+		 * returned status only - Handles a request timed out condition
+		 * 
+		 * Returns the following data: - responseText (should be JSON but could
+		 * be almost anything) - status (integar) - statusText (string if
+		 * present) - ajax (raw ajax request)
+		 **********************************************************************/
+		var AjaxRequest = function(url, opts, req_type) {
+			var timer = null,
+				ajax, headers = {}, h, params, overrideMimeType;
+
+			function onreadystatechange(ajax) {
+				if (ajax.readyState === 4) {
+					clearTimeout(timer);
+					var response = {
+						responseText: ajax.responseText,
+						status: ajax.status,
+						statusText: ajax.statusText,
+						ajax: ajax
+					}
+					if ((ajax.status >= 200 && ajax.status < 300) || ajax.status === 304) {
+						if (opts.onSuccess) opts.onSuccess(response);
+					} else {
+						debugLog(url + ' Failed : ' + inspectObj(response, 8, 1));
+						if (opts.onFailure) opts.onFailure(response);
+						if (opts['on' + ajax.status])
+							opts['on' + ajax.status](response);
+					}
+				}
+			}
+			if(req_type == 'manifest') {
+				url = ((url.indexOf('http') == -1) ? C.attrs.apiServer.substring(0, C.attrs.apiServer.length-4) + '/' + url : url);
+			} else {
+				url = ((url.indexOf('http') == -1) ? C.attrs.apiServer + '/' + url : url);
+			}
+			/* Parse request parameters */
+			params = typeof opts === 'string' ? opts.parameters : Object.toQueryString(opts.parameters).replace(/\_/g, '%5F').replace(/\(/g, '%28').replace(/\)/g, '%29');
+
+			/* Change Accept request header based on browser */
+			headers['Accept'] = IsChrome ? '*/*' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8,*/*;q=0.6,*/*;q=0.4';
+			/* Add request header specific to POST request only */
+			if (opts.method == 'POST') {
+				headers['x-s3-aws'] = SHA1("Draoumculiasis" + params + "LandCrocodile" + url + "Bevar-Asp");
+				headers['content-type'] = 'application/x-www-form-urlencoded';
+			} else {
+				if (params.length > 0) url += (url.include('?') ? '&' : '?') + params;
+			}
+			if (opts && opts.headers && opts.headers.overrideMime) overrideMimeType = opts.headers.overrideMime;
+			/* change content-type and mime type if binary function */
+			if (opts.binary || req_type == 'manifest') {
+				headers['content-type'] = 'text/plain; charset=x-user-defined';
+				overrideMimeType = 'text/plain; charset=x-user-defined';
+			}
+
+			var isGM = typeof GM_info === 'object' && typeof GM_info.version === 'string' && typeof GM_getValue != 'undefined' && typeof GM_getValue('a', 'b') != 'undefined';
+			if (typeof GM_xmlhttpRequest === 'function' && isGM) {
+				GM_xmlhttpRequest({
+					method: opts.method,
+					url: url,
+					data: (opts.method === 'POST' ? params : null),
+					headers: headers,
+					overrideMimeType: overrideMimeType,
+					ontimeout: (opts.timeoutSecs ? opts.timeoutSecs * 1000 : 0),
+					onreadystatechange: onreadystatechange
+				});
+			} else {
+				ajax = new XMLHttpRequest();
+				if (overrideMimeType) ajax.overrideMimeType(overrideMimeType);
+				ajax.onreadystatechange = function() {
+					if (ajax.readyState === 4) {
+						clearTimeout(timer);
+						var response = {
+							responseText: ajax.responseText,
+							status: ajax.status,
+							statusText: ajax.statusText,
+							ajax: ajax
+						}
+						if ((ajax.status >= 200 && ajax.status < 300) || ajax.status === 304) {
+							if (opts.onSuccess) opts.onSuccess(response);
+						} else {
+							if (opts.onFailure) opts.onFailure(response);
+							if (opts['on' + ajax.status])
+								opts['on' + ajax.status](response);
+						}
+					}
+				}
+				ajax.open(opts.method, url, true);
+				/* Add request headers to ajax request */
+				for (h in headers) ajax.setRequestHeader(h, headers[h]);
+				if (opts.timeoutSecs) timer = setTimeout(function() {
+					ajax.abort();
+					if (opts.onFailure) {
+						/*
+						 * CHECK: 599 is custom error code. See if better option
+						 * exists.
+						 */
+						opts.onFailure({
+							responseText: null,
+							status: 599,
+							statusText: 'Request Timed Out',
+							ajax: ajax
+						});
+					}
+				}, opts.timeoutSecs * 1000);
+				/* Send request with params if POST otherwise just send request */
+				ajax.send((opts.method == 'POST') ? params : null);
+			}
+		};
+		var downloadDataURI = function(options) {
+			if (!options || !options.data) return;
+			if (options.data && !options.filename) options.filename = "download." + options.data.split(",")[0].split(";")[0].substring(5).split("/")[1];
+			if (!options.url) options.url = "https://download-data-uri.appspot.com/"; 
+			var t = '<FORM method="post" action="' + options.url + '" style="display:none">' + '<input type="hidden" name="filename" value="' + options.filename + '"/>' + '<input type="hidden" name="data" value="' + options.data + '"/>' + '<input id=xxpbButSubmit type=submit value=SUBMIT></form>';
+			var e = document.createElement('div');
+			e.innerHTML = t;
+			document.body.appendChild(e);
+			setTimeout(function() {
+				document.getElementById('xxpbButSubmit').click();
+			}, 0);
+		};
+		var dialogConfirm = function(msg, onContinue, onCancel, two_buttons) {
+			var save_popUp = {
+				x: Data.options.popUp.x,
+				y: Data.options.popUp.y
+			};
+			var confirmPop = new PopUp('newversion' + serverTime(), 800 + Math.randRange(1, 50), 300, 300, 150, true);
+			confirmPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + ' style="margin-top:5px; padding-top:5px;  padding-bottom:5px;"><center><b>' + scriptName + ': ' + translate('Confirmation') + '!</b></center></div>';
+			var layoutDiv = document.createElement('div');
+			layoutDiv.className = 'container';
+			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
+			layoutDiv.style.color = '#000';
+			layoutDiv.style.height = '100%';
+			var layout = '<table align=center valign=center style="height: 100%">' + '<tr align=center height=60%>' + '<td>' + msg + '</td>' + '</tr>' + '<tr align=center>' + '<td>' + '<input id=' + setUID('btn_ok') + ' type=button class=confirm_button value="' + translate('OK') + '" />';
+			if (two_buttons) {
+				layout += '	&nbsp; &nbsp;' + '<input id=' + setUID('btn_cancel') + ' type=button class=confirm_button value=' + translate('Cancel') + ' />';
+			}
+			layout += '</td></tr></table>';
+			if (confirmPop.getMainDiv().lastChild)
+				confirmPop.getMainDiv().removeChild(confirmPop.getMainDiv().lastChild);
+			confirmPop.getMainDiv().appendChild(layoutDiv);
+			layoutDiv.innerHTML = layout;
+
+			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
+				confirmPop.show(false);
+				Data.options.popUp = {
+					open: Data.options.popUp.open,
+					drag: Data.options.popUp.drag,
+					x: save_popUp.x,
+					y: save_popUp.y
+				};
+				if (onContinue && typeof(onContinue) == "function") onContinue();
+			}, false);
+
+			if (two_buttons) {
+				document.getElementById(UID['btn_cancel']).addEventListener('click', function() {
+					confirmPop.show(false);
+					Data.options.popUp = {
+						open: Data.options.popUp.open,
+						drag: Data.options.popUp.drag,
+						x: save_popUp.x,
+						y: save_popUp.y
+					};
+					if (onCancel && typeof(onCancel) == "function") onCancel();
+				}, false);
+			}
+			confirmPop.show(true);
+		};
+		var dialogCopyPaste = function() {
+			var save_popUp = {
+				x: Data.options.popUp.x,
+				y: Data.options.popUp.y
+			};
+			var copyPastePop = new PopUp('copyPaste', 100, 50, 500, 750, true);
+			copyPastePop.getTopDiv().innerHTML = '<div class=' + UID['title'] + ' style="width=90%; margin-top:5px; padding-top:5px;  padding-bottom:5px;"><center><b>' + scriptName + ': ' + translate('Message') + '!</b></center></div>';
+			var layoutDiv = document.createElement('div');
+			layoutDiv.className = 'container';
+			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
+			layoutDiv.style.color = '#000';
+			layoutDiv.style.height = '100%';
+			setUID('dcp_type');
+			var layout = '<br><table width=80% align=center><tr>' + '	<td width=15%><label>' + translate('View') + '</label></td>' + '	<td width=5%><input type=radio name=' + UID['dcp_type'] + ' value=0 /></td><td align=left width=30%><label>' + translate('All') + '</label></td>' + '	<td width=5%><input type=radio name=' + UID['dcp_type'] + ' value=1 /></td><td align=left width=30%><label>' + translate('Map data') + '</label></td>' + '</tr></table>' + '<br>' + '<table class=jewel valign=center width=100%>' + '<tr align=center>' + '<td><div id=' + setUID('div_data') + ' style="height:610px; max-height:610; overflow-y:auto"></div></td>' + '</tr>' + '</table>' + '<br>' + '<table width=100%>' + '<tr align=center>' + '<td><input id=' + setUID('btn_ok') + ' type=button class=confirm_button value="' + translate('Close') + '" /></td>' + '</tr></table>';
+			var child_found = true;
+			while (child_found) {
+				if (copyPastePop.getMainDiv().lastChild)
+					copyPastePop.getMainDiv().removeChild(copyPastePop.getMainDiv().lastChild);
+				else
+					child_found = false;
+			}
+			copyPastePop.getMainDiv().appendChild(layoutDiv);
+			layoutDiv.innerHTML = layout;
+			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
+				copyPastePop.show(false);
+				Data.options.popUp = {
+					open: Data.options.popUp.open,
+					drag: Data.options.popUp.drag,
+					x: save_popUp.x,
+					y: save_popUp.y
+				};
+			}, false);
+			var r = document.getElementsByName(UID['dcp_type']);
+			for (i = 0; i < r.length; i++) {
+				r[i].addEventListener('change', enableChanged, false);
+			}
+			r[0].checked = true;
+			show_all();
+
+			function enableChanged(event) {
+				if (toNum(event.target.value) == 1) show_map();
+				else show_all();
+			}
+			function show_map() {
+				try {
+					var json_data = '{"map":' + JSON.stringify(Data.map) + '}';
+				} catch (e) {}
+				document.getElementById(UID['div_data']).innerHTML = '<textarea cols="110" rows="50" wrap="PHYSICAL">' + json_data + '</TEXTAREA>';
+			}
+			function show_all() {
+				try {
+					var keys = getKeys(Data.defaults);
+					for (var i = 0; i < keys.length; i++) {
+						if (/(marches|requests)/i.test(keys[i]))
+							keys.splice(i, 1);
+					}
+					var json_data = '{';
+					for (var i = 0; i < keys.length; i++) {
+						var name = keys[i];
+						try {
+							json_data += '"' + name + '":' + JSON.stringify(Data[name]);
+						} catch (e) {
+							debugLog(e);
+						}
+						if (i < keys.length - 1) json_data += ','
+					}
+					json_data += '}';
+				} catch (e) {}
+				document.getElementById(UID['div_data']).innerHTML = '<textarea cols="110" rows="50" wrap="PHYSICAL">' + json_data + '</TEXTAREA>';
+			}
+			copyPastePop.show(true);
+		};
+		var dialogFatal = function(msg) {
+			var pop = new PopUp('fatal', 800 + Math.randRange(1, 50), 300, 400, 300, true);
+			pop.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ': ' + translate('Error') + '!</b></center></div>';
+			var layoutDiv = document.createElement('div');
+			layoutDiv.className = 'container';
+			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
+			layoutDiv.style.color = '#000';
+			layoutDiv.style.height = '100%';
+			var layout = '<div style="height:270px; max-height:270px; overflow-y:auto">' + '<table width=100%><tr align=center><td width=96%><BR>' + msg + '</td></tr></table></div>';
+			pop.getMainDiv().appendChild(layoutDiv);
+			layoutDiv.innerHTML = layout;
+			pop.show(true);
+			document.getElementById(UID['support_link']).addEventListener('click', redirect, false);
+
+			function redirect() {
+				window.open(scriptUrlError, 'www.calciumscript.net');
+			}
+		};
+		var dialogSendMsg = function(name, id, is_player) {
+			var save_popUp = {
+				x: Data.options.popUp.x,
+				y: Data.options.popUp.y
+			};
+			var MsgSendPop = new PopUp('send_msg', 800 + Math.randRange(1, 50), 300, 500, 250, true);
+			MsgSendPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + ' style="margin-top:5px; padding-top:5px;  padding-bottom:5px;"><center><b>' + scriptName + ': ' + translate('Message') + '</b></center></div>';
+			var layoutDiv = document.createElement('div');
+			layoutDiv.className = 'container';
+			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
+			layoutDiv.style.color = '#000';
+			layoutDiv.style.height = '100%';
+			var layout = '<table class=' + UID['table'] + ' width=100% style="color:#000;">' + '	<tr valign=top>' + '		<td><label>' + translate('To') + ' :</label></td>' + '		<td><label><b>' + name + '</b></td>' + '	</tr><tr valign=top>' + '		<td><label>' + translate('Subject') + ' :</label></td>' + '		<td><input id=' + setUID('Message_subject') + ' size=50 maxlength=160 type=text /></td>' + '	</tr><tr valign=top>' + '		<td><label>' + translate('Message') + ' :</label></td>' + '		<td><textarea id=' + setUID('Message_body') + ' cols="60" rows="8" wrap="PHYSICAL"></textarea></td>' + '	</tr><tr align=center>' + '		<td colspan=2><br><input id=' + setUID('btn_ok') + ' type=button class="confirm_button" value="' + translate('Send') + '" />&nbsp; &nbsp; &nbsp;' + '			<input id=' + setUID('btn_cancel') + ' type=button class="confirm_button" value=' + translate('Cancel') + ' /></td>' + '	</tr>' + '</table>';
+			if (MsgSendPop.getMainDiv().lastChild)
+				MsgSendPop.getMainDiv().removeChild(MsgSendPop.getMainDiv().lastChild);
+			MsgSendPop.getMainDiv().appendChild(layoutDiv);
+			layoutDiv.innerHTML = layout;
+			var butOk = document.getElementById(UID['btn_ok']);
+			butOk.disabled = true;
+			Element.removeClassName(butOk, "confirm_button");
+			Element.addClassName(butOk, UID['btn_disabled']);
+
+			function setButOk(event) {
+				var subject = document.getElementById(UID['Message_subject']);
+				var body = document.getElementById(UID['Message_body']);
+				var butOk = document.getElementById(UID['btn_ok']);
+				if (subject && body && subject.value != null && subject.value != '' && body.value != null && body.value != '') {
+					butOk.disabled = false;
+					Element.removeClassName(butOk, UID['btn_disabled']);
+					Element.addClassName(butOk, "confirm_button");
+				} else {
+					butOk.disabled = true;
+					Element.removeClassName(butOk, "confirm_button");
+					Element.addClassName(butOk, UID['btn_disabled']);
+				}
+			}
+			document.getElementById(UID['Message_subject']).addEventListener('change', setButOk, false);
+			document.getElementById(UID['Message_body']).addEventListener('change', setButOk, false);
+			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
+				var subject = document.getElementById(UID['Message_subject']);
+				var body = document.getElementById(UID['Message_body']);
+				if (subject && body && subject.value != null && subject.value != '' && body.value != null && body.value != '') {
+					MsgSendPop.show(false);
+					Data.options.popUp = {
+						open: Data.options.popUp.open,
+						drag: Data.options.popUp.drag,
+						x: save_popUp.x,
+						y: save_popUp.y
+					};
+					MyAjax.messageSend(subject.value, body.value, id, is_player);
+				}
+			}, false);
+			document.getElementById(UID['btn_cancel']).addEventListener('click', function() {
+				MsgSendPop.show(false);
+				Data.options.popUp = {
+					open: Data.options.popUp.open,
+					drag: Data.options.popUp.drag,
+					x: save_popUp.x,
+					y: save_popUp.y
+				};
+			}, false);
+			MsgSendPop.show(true);
+		};
+		var updaterConfirm = function(msg, onContinue, onCancel, two_buttons) {
+			var save_popUp = {
+				x: Data.options.popUp.x,
+				y: Data.options.popUp.y
+			};
+			updaterPop = new PopUp('updater', 800 + Math.randRange(1, 50), 300, 300, 150, true);
+			updaterPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ': ' + translate('Confirmation') + '!</b></center></div>';
+			var layoutDiv = document.createElement('div');
+			layoutDiv.className = 'container';
+			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
+			layoutDiv.style.color = '#000';
+			layoutDiv.style.height = '100%';
+			var layout = '<table align=center valign=center style="height: 100%">' + '<tr align=center height=60%>' + '<td>' + msg + '</td>' + '</tr>' + '<tr align=center>' + '<td>' + '<input id=' + setUID('btn_ok') + ' type=button class=confirm_button value="' + translate('OK') + '" />';
+			if (two_buttons) {
+				layout += '	&nbsp; &nbsp;' + '<input id=' + setUID('btn_cancel') + ' type=button class=confirm_button value=' + translate('Cancel') + ' />';
+			}
+			layout += '</td></tr></table>';
+			if (updaterPop.getMainDiv().lastChild)
+				updaterPop.getMainDiv().removeChild(updaterPop.getMainDiv().lastChild);
+			updaterPop.getMainDiv().appendChild(layoutDiv);
+			layoutDiv.innerHTML = layout;
+
+			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
+				updaterPop.show(false);
+				Data.options.popUp = {
+					open: Data.options.popUp.open,
+					drag: Data.options.popUp.drag,
+					x: save_popUp.x,
+					y: save_popUp.y
+				};
+				if (onContinue && typeof(onContinue) == "function") onContinue();
+			}, false);
+
+			if (two_buttons) {
+				document.getElementById(UID['btn_cancel']).addEventListener('click', function() {
+					updaterPop.show(false);
+					Data.options.popUp = {
+						open: Data.options.popUp.open,
+						drag: Data.options.popUp.drag,
+						x: save_popUp.x,
+						y: save_popUp.y
+					};
+					if (onCancel && typeof(onContinue) == "function") onCancel();
+				}, false);
+			}
+			updaterPop.show(true);
+		};
+		var ModalDialog = function(curtainDiv, width, height, styleName, allowClose, notifyClose) {
+			this.allowClose = function(onOff) {
+				if (onOff) document.getElementById(UID['ModalDialog_btnClose']).style.display = 'block';
+				else document.getElementById(UID['ModalDialog_btnClose']).style.display = 'none';
+			}
+			this.destroy = function() {
+				if (!this.destroyed) {
+					this.curtainDiv.removeChild(this.curtain);
+					this.curtainDiv.removeChild(this.div);
+				}
+			}
+			this.hide = function() {
+				this.curtainDiv.style.display = 'none';
+				this.curtainDiv.style.display = 'none';
+			}
+			this.show = function() {
+				this.curtainDiv.style.display = 'block';
+				this.curtainDiv.style.display = 'block';
+			}
+			this.getContentDiv = function() {
+				return document.getElementById(UID['ModalDialog_Close']);
+			}
+			this.getTopDiv = function() {
+				return document.getElementById(UID['ModalDialog_Top']);
+			}
+			var offset = Element.positionedOffset(curtainDiv);
+			this.curtainDiv = curtainDiv;
+			this.curtain = document.createElement('div');
+			this.curtain.style.top = (offset.top) + 'px';
+			this.curtain.style.left = (offset.left) + 'px';
+			this.curtain.style.width = curtainDiv.offsetWidth + 'px';
+			this.curtain.style.height = (curtainDiv.offsetHeight) + 'px';
+			this.curtain.style.backgroundColor = '#000';
+			this.curtain.style.opacity = '0.6';
+			this.curtain.style.zIndex = parseInt(curtainDiv.style.zIndex) + 1;
+			this.curtain.style.position = 'absolute';
+			this.curtain.style.margin = curtainDiv.style.margin;
+			this.curtain.style.padding = curtainDiv.style.padding;
+			curtainDiv.appendChild(this.curtain);
+
+			this.div = document.createElement('div');
+			if (styleName)
+				this.div.className = styleName;
+			else this.div.className = 'container';
+
+			this.div.style.backgroundColor = 'rgb(245,245,228)';
+			this.div.style.color = '#000';
+			this.div.style.width = width + 'px';
+			this.div.style.height = height + 'px';
+			this.div.style.position = 'absolute';
+			this.div.style.zindex = parseInt(curtainDiv.style.zIndex) + 2;
+			this.div.style.top = ((curtainDiv.offsetHeight - height) / 2 + offset.top) + 'px';
+			this.div.style.left = ((curtainDiv.offsetWidth - width) / 2 + offset.left) + 'px';
+			this.div.innerHTML = '' + '<table height=100% width=100%>' + '	<tr valign=middle height=10%>' + '		<td width=100% valign=top>' + '		<div id=' + setUID('ModalDialog_Top') + ' class="' + UID['popup_top'] + '"></div>' + '		</td>' + '	</tr>' + '	<tr valign=middle height=70%>' + '		<td>' + '		<div id=' + setUID('ModalDialog_Close') + ' style="text-align:center"></div>' + '		</td>' + '	</tr>' + '	<tr valign=middle align=center>' + '		<td width=100% align=center>' + '		<div style="text-align:center;"><center>' + '			<input id=' + setUID('ModalDialog_btnClose') + ' type=button value="' + translate('Close') + '" style="display:none" />' + '		</center></div>' + '		</td>' + '	</tr>' + '</table>';
+			curtainDiv.appendChild(this.div);
+			this.allowClose(allowClose);
+			this.notifyClose = notifyClose;
+			var t = this;
+			document.getElementById(UID['ModalDialog_btnClose']).addEventListener('click', function() {
+				t.destroyed = true;
+				t.curtainDiv.removeChild(t.curtain);
+				t.curtainDiv.removeChild(t.div);
+				if (t.notifyClose) notifyClose();
+			}, false);
+		};
+		var tabManager = {
+			tabList: {},
+			/* {name, obj, div} */
+			currentTab: null,
+
+			init: function(mainDiv) {
+				var t = tabManager;
+				var sorter = [];
+				for (k in Tabs) {
+					if ((k == 'Waves' && nvl(Data.options.disable_wave, !WAVE_TAB_ENABLE)) ||
+						(k == 'Multiple' && nvl(Data.options.disable_multi, !MULTI_TAB_ENABLE)) ||
+						(k == 'Spies' && nvl(Data.options.disable_spies, !SPY_TAB_ENABLE)) ||
+						(k == 'Bookmarks' && nvl(Data.options.disable_bookmark, !BOOKMARK_TAB_ENABLE)) ||
+						(k == 'Inbox' && nvl(Data.options.disable_inbox, !INBOX_TAB_ENABLE)) ||
+						(k == 'Search' && nvl(Data.options.disable_search, !SEARCH_TAB_ENABLE)) ||
+						(k == 'Alliance' && nvl(Data.options.disable_alliance, !ALLIANCE_TAB_ENABLE)) ||
+						(k == 'Single' && nvl(Data.options.disable_single, !SINGLE_TAB_ENABLE)) ||
+						(k == 'Wall' && nvl(Data.options.disable_wall, !WALL_TAB_ENABLE)) ||
+						(k == 'Wheel' && nvl(Data.options.disable_wheel, !WHEEL_TAB_ENABLE)) ||
+						(k == 'Log' && nvl(Data.options.disable_log, !LOG_TAB_ENABLE)) ||
+						(k == 'City' && nvl(Data.options.disable_city, !CITY_TAB_ENABLE)) ||
+                        (k == 'CPT' && nvl(Data.options.disable_cpt, !CPT_TAB_ENABLE)))
+						Tabs[k].tabDisabled = true;
+					else if (k == 'Waves' || k == 'Multiple' || k == 'Spies' || k == 'Search' || k == 'Alliance' ||
+						k == 'Single' || k == 'Wheel' || k == 'Inbox' || k == 'Log')
+						Tabs[k].tabDisabled = false;
+					if (!Tabs[k].tabDisabled) {
+						t.tabList[k] = {};
+						t.tabList[k].name = k;
+						t.tabList[k].uid = setUID('tab_' + k);
+						t.tabList[k].obj = Tabs[k];
+						if (Tabs[k].tabLabel != null)
+							t.tabList[k].label = translate(Tabs[k].tabLabel);
+						else t.tabList[k].label = k;
+						if (k == 'Inbox') {
+							var inbox_uid = setUID('tabInbox_UnreadCount');
+							t.tabList[k].label = '<div id=' + inbox_uid + '>' + translate(Tabs[k].tabLabel) + '&nbsp<span class=' + UID['red'] + '>0000</span></div>';
+						}
+						if (Tabs[k].tabOrder != null)
+							sorter.push([Tabs[k].tabOrder, t.tabList[k]]);
+						else sorter.push([1000, t.tabList[k]]);
+						t.tabList[k].div = document.createElement('div');
+					}
+				}
+
+				sorter.sort(function(a, b) {
+					return a[0] - b[0]
+				});
+
+				var ntabs = sorter.length;
+				if (ntabs > 9) {
+					var line1 = 9;
+					var addStyle = 'style="border-bottom:none; padding-bottom:0;"';
+					var addClass = ' line1';
+				} else {
+					var line1 = sorter.length;
+					var addStyle = '';
+					var addClass = '';
+				}
+
+				var m = '<div class=' + UID['title_main'] + ' style="padding-top:5px; padding-bottom:5px;"><table width=95% align=center>' + '	<tr align=center><td width=45% align=left>' + scriptName + ' by ' + mainAuthor + ' - v' + scriptVersion + '&nbsp(' + api_version + ')</td>' + '		<td width=33% align=center><SPAN id=' + setUID('tabManager_Alert') + '></span></td>' + '		<td width=22% align=left><SPAN id=' + setUID('tabManager_Time') + '></span></td>' + '	</tr></table></div>';
+
+				m += '<ul class=tabs ' + addStyle + '>';
+				m += '<li class="tab first' + addClass + '"><a id=' + sorter[0][1].uid + '>' + sorter[0][1].label + '</a></li>';
+				for (var i = 1; i < line1; i++)
+					m += '<li class="tab' + addClass + '"><a id=' + sorter[i][1].uid + '>' + sorter[i][1].label + '</a></li>';
+				m += '</ul>';
+				if (sorter.length > line1) {
+					header_2lines = true;
+					m += '<ul class="tabs line2">';
+					for (var i = line1; i < sorter.length; i++) {
+						if (i == line1) var addClass = ' first';
+						else var addClass = '';
+						m += '<li class="tab line2' + addClass + '"><a id=' + sorter[i][1].uid + '>' + sorter[i][1].label + '</a></li>';
+					}
+					m += '</ul>';
+				}
+				m += '<div id=' + div_player_attack + '></div>' + '<div id=' + div_player_spy + '></div>' + '<div id=' + div_player_building + '></div>' + '<div id=' + div_player_units + '></div>' + '<div id=' + div_player_research + '></div>' + '<div id=' + div_player_fortuna + '></div>';
+				mainPop.getTopDiv().innerHTML = m;
+
+				t.currentTab = null;
+				for (k in t.tabList) {
+					if (t.tabList[k].name == Data.options.currentTab)
+						t.currentTab = t.tabList[k];
+					document.getElementById(t.tabList[k].uid).addEventListener('click', this.e_clickedTab, false);
+					var div = t.tabList[k].div;
+					div.className = 'container';
+					div.style.display = 'none';
+					mainDiv.appendChild(div);
+					try {
+						t.tabList[k].obj.init(div);
+					} catch (e) {
+						div.innerHTML += "INIT ERROR: " + e;
+					}
+				}
+				if (t.currentTab == null)
+					t.currentTab = sorter[0][1];
+				t.setTabStyle(document.getElementById(t.currentTab.uid), true);
+				t.currentTab.div.style.display = 'block';
+				t.showClock();
+			},
+			hideTab: function() {
+				var t = tabManager;
+				t.currentTab.obj.hide();
+			},
+			showTab: function() {
+				var t = tabManager;
+				t.currentTab.obj.show();
+			},
+			setTabStyle: function(e, selected) {
+				if (selected) {
+					e.style.zIndex = 1;
+					e.className = 'tab selected';
+				} else {
+					e.style.zIndex = 0;
+					e.className = 'tab';
+				}
+			},
+			e_clickedTab: function(event) {
+				var t = tabManager,
+					element;
+				if (event.target.tagName == 'A')
+					element = event.target;
+				else {
+					var parentElement = event.target.parentNode;
+					while (parentElement.tagName != 'A')
+						parentElement = parentElement.parentNode;
+					element = parentElement;
+				}
+				var id = element.getAttribute('id');
+				for (k in t.tabList)
+					if (t.tabList[k].uid == element.id) {
+						var newTab = t.tabList[k];
+						break;
+					}
+				if (t.currentTab.name != newTab.name) {
+					t.setTabStyle(document.getElementById(newTab.uid), true);
+					t.setTabStyle(document.getElementById(t.currentTab.uid), false);
+					t.currentTab.obj.hide();
+					t.currentTab.div.style.display = 'none';
+					t.currentTab = newTab;
+					newTab.div.style.display = 'block';
+					Data.options.currentTab = newTab.name;
+				}
+				if (document.getElementById(UID['tabInbox_UnreadCount'])) {
+					if (newTab.name == 'Inbox') color = 'yellow';
+					else color = 'red';
+					document.getElementById(UID['tabInbox_UnreadCount']).innerHTML = translate('Inbox') + (Messages.unread_count > 0 ? '&nbsp<font color=' + color + '>' + Messages.unread_count + '</font>' : '');
+				}
+				newTab.obj.show();
+			},
+			showClock: function() {
+				var t = tabManager;
+				var now = new Date();
+				now.setTime(now.getTime() + ((Data.options.utc_time) ? (now.getTimezoneOffset() * 60000) : 0));
+				document.getElementById(UID['tabManager_Time']).innerHTML = '<font color="#FFFFFF"><b>' + now.toTimeString().substring(0, 8) + ' ' + ((Data.options.utc_time) ? ' UTC' : '') + '</b></font>';
+				document.getElementById(UID['tabManager_Alert']).innerHTML = SoundPlayer.shortString;
+				if (document.getElementById(UID['short_alerts']))
+					document.getElementById(UID['short_alerts']).addEventListener('click', function() {
+						SoundPlayer.StopSound('attack');
+						SoundPlayer.StopSound('spy');
+						if (SoundPlayer.attack_repeat_timer) {
+							clearTimeout(SoundPlayer.attack_repeat_timer);
+							SoundPlayer.attack_repeat_timer = null;
+						}
+						if (SoundPlayer.spy_repeat_timer) {
+							clearTimeout(SoundPlayer.spy_repeat_timer);
+							SoundPlayer.spy_repeat_timer = null;
+						}
+						var t = tabManager;
+						for (k in t.tabList)
+							if (t.tabList[k].name == 'Tower') {
+								var newTab = t.tabList[k];
+								break;
+							}
+						if (t.currentTab.name != newTab.name) {
+							t.setTabStyle(document.getElementById(newTab.uid), true);
+							t.setTabStyle(document.getElementById(t.currentTab.uid), false);
+							t.currentTab.obj.hide();
+							t.currentTab.div.style.display = 'none';
+							t.currentTab = newTab;
+							newTab.div.style.display = 'block';
+							Data.options.currentTab = newTab.name;
+						}
+						newTab.obj.show();
+						Tabs.Tower.tabTowerWall();
+					}, false);
+				setTimeout(t.showClock, 1000);
+			}
+		};
+		var WinManager = {
+			wins: {},
+			/* prefix : PopUp obj */
+			get: function(prefix) {
+				var t = WinManager;
+				return t.wins[prefix];
+			},
+			add: function(prefix, pop) {
+				var t = WinManager;
+				t.wins[prefix] = pop;
+			},
+			del: function(prefix) {
+				var t = WinManager;
+				delete t.wins[prefix];
+			}
+		};
+		var PopUp = function(prefix, x, y, width, height, enableDrag, onClose) {
+			var pop = WinManager.get(prefix);
+			if (pop) {
+				pop.show(false);
+				return pop;
+			}
+			this.BASE_ZINDEX = 100;
+
+			/* protos ... */
+			this.show = show;
+			this.toggleHide = toggleHide;
+			this.getTopDiv = getTopDiv;
+			this.getMainDiv = getMainDiv;
+			this.getLayer = getLayer;
+			this.setLayer = setLayer;
+			this.setEnableDrag = setEnableDrag;
+			this.getLocation = getLocation;
+			this.setLocation = setLocation;
+			this.focusMe = focusMe;
+			this.unfocusMe = unfocusMe;
+			this.centerMe = centerMe;
+			this.destroy = destroy;
+			this.setModal = setModal;
+			this.setHeight = setHeight;
+
+			/* object vars ... */
+			this.div = document.createElement('div');
+			document.body.appendChild(this.div);
+
+			this.prefix = prefix;
+			this.onClose = onClose;
+
+			if (x < 0 || x > document.body.offsetWidth) x = 0;
+			if (y < 0 || y > document.body.offsetHeight) y = 0;
+
+			/* Scramble */
+			rndPopup = ['outer', 'bar', 'top', 'main', 'close'];
+			for (var s = 0; s < rndPopup.length; s++) {
+				rndPopup[rndPopup[s]] = setUID(prefix + '_' + rndPopup[s]);
+			}
+			var t = this;
+			this.div.id = rndPopup['outer'];
+			this.div.className = UID['popup_outer'];
+			this.div.style.zIndex = this.BASE_ZINDEX;
+			this.div.style.position = 'absolute';
+			this.div.style.display = 'none';
+			this.div.style.width = width + 'px';
+			this.div.style.height = height + 'px';
+			this.div.style.top = (y || 0) + 'px';
+			this.div.style.left = (x || 0) + 'px';
+
+			var m = '<span id=' + rndPopup['close'] + ' class="' + UID['popup_close'] + '">X</span>'
+				+ '<TABLE cellspacing=0 width=100% height=100%>'
+				+ '<TR id="' + rndPopup['bar'] + '" class="' + UID['popup_bar'] + '">'
+				+ '<TD width=100% valign=bottom>'
+				+ '<SPAN id="' + rndPopup['top'] + '" class="' + UID['popup_top'] + '"></span></td>'
+				+ '</tr>'
+				+ '<TR><TD height=100% valign=top colspan=2 id="' + rndPopup['main'] + '" class="' + UID['popup_main'] + '" style="background-image:url(\'' + urlBackgroundImage + '\')"></td></tr></table>';
+			this.div.innerHTML = m;
+			document.getElementById(rndPopup['close']).addEventListener('click', e_XClose, false);
+			document.getElementById(rndPopup['bar']).addEventListener('dblclick', function() {
+				toggleHideBody(rndPopup['main'], height)
+			}, false);
+
+			if (enableDrag) {
+				this.dragger = new Draggable(this.div, {
+					handle: rndPopup['bar'],
+					scroll: window,
+					onEnd: function(dragger, event) {
+						var el = dragger.element;
+						var offset = Element.cumulativeOffset(el);
+						Data.options.popUp.x = offset.left;
+						Data.options.popUp.y = offset.top;
+					}
+				});
+			}
+
+			this.div.addEventListener('mousedown', e_divClicked, false);
+			WinManager.add(prefix, this);
+
+			function setModal(onOff) {}
+
+			function e_divClicked() {
+				t.focusMe();
+			}
+
+			function e_XClose() {
+				t.show(false);
+				if (t.onClose != null) t.onClose();
+			}
+
+			function focusMe() {
+				t.setLayer(15);
+			} /* old = 5 */
+
+			function unfocusMe() {
+				t.setLayer(-15);
+			} /* old = -5 */
+
+			function getLocation() {
+				return {
+					x: toNum(this.div.style.left),
+					y: toNum(this.div.style.top)
+				};
+			}
+
+			function setLocation(loc) {
+				t.div.style.left = loc.x + 'px';
+				t.div.style.top = loc.y + 'px';
+			}
+
+			function destroy() {
+				document.body.removeChild(t.div);
+				WinManager.del(t.prefix);
+			}
+
+			function centerMe(parent) {
+				if (parent == null)
+					var coords = Element.cumulativeOffset(document.body);
+				else var coords = Element.cumulativeOffset(parent);
+				var left = ((document.body.offsetWidth - toNum(t.div.style.width)) / 2) + coords.left;
+				var top = ((document.body.offsetHeight - toNum(t.div.style.height)) / 2) + coords.top;
+				if (left < 0) left = 0;
+				if (top < 0) top = 0;
+				t.div.style.left = x + 'px';
+				t.div.style.top = y + 'px';
+			}
+
+			function setEnableDrag(b) {
+				Data.options.popUp.drag = b;
+			}
+
+			function setHeight(h) {
+				t.div.style.height = h + 'px';
+			}
+
+			function setLayer(zi) {
+				t.div.style.zIndex = '' + (this.BASE_ZINDEX + zi);
+			}
+
+			function getLayer() {
+				return parseInt(t.div.style.zIndex) - this.BASE_ZINDEX;
+			}
+
+			function getTopDiv() {
+				return document.getElementById(rndPopup['top']);
+			}
+
+			function getMainDiv() {
+				return document.getElementById(rndPopup['main']);
+			}
+
+			function show(b) {
+				if (b) {
+					t.div.style.display = 'block';
+					t.focusMe();
+				} else {
+					t.div.style.display = 'none';
+				}
+				return b;
+			}
+
+			function toggleHide(t) {
+				if (t.div.style.display == 'block')
+					return t.show(false);
+				else return t.show(true);
+			}
+
+			function toggleHideBody(id, height) {
+				var element = document.getElementById(id);
+				if (element.style.display == 'block') {
+					element.style.display = 'none';
+					element.style.height = '0px';
+					t.setHeight((header_2lines ? '72' : '52'));
+				} else {
+					element.style.display = 'block';
+					element.style.height = '100%';
+					t.setHeight(height);
+				}
+			}
+		};
+		var addScript = function(scriptText) {
+			var scr = document.createElement('script');
+			scr.innerHTML = scriptText;
+			document.body.appendChild(scr);
+		};
+		var addStyle = function(css) {
+			var target = document.getElementsByTagName('head')[0];
+			if (target.getElementsByTagName('style').length > 0)
+				target.removeChild(target.getElementsByTagName('style')[0]);
+			var obj = document.createElement('style');
+			obj.type = 'text/css';
+			obj.appendChild(document.createTextNode(css));
+			target.appendChild(obj);
+		};
+		var checkDelay = function() {
+			MAP_DELAY = 750;
+			MIN_DELAY = 3;
+			MIN_DELAY_BETWEEN_WAVE = 3;
+		};
+		var clearAndReload = function() {
+			var localStorageVersion = localStorage.getItem('118446_version');
+			if (!localStorageVersion || localStorageVersion != scriptVersion) {
+				localStorage.setItem('118446_sendMessage', 'yes');
+				dialogConfirm(translate('New version has been installed...') + '<br>' + translate('Do you want to delete existing Permanent Data') + ' ?<br><br>' + translate('This should not clear map and alliance data.'),
+					function() {
+						try {
+							Data.clearStorage(true);
+							Data.setDefaultValues('all');
+						} catch (e) {}
+						localStorage.setItem('118446_version', scriptVersion);
+						setTimeout(reloadTools, 2000);
+					},
+					function() {
+						localStorage.setItem('118446_version', scriptVersion);
+					}, true
+				);
+			}
+		};
+		var cloneProps = function(src) {
+			var newObj = (src instanceof Array) ? [] : {};
+			for (i in src) {
+				if (matTypeof(src[i]) == 'function') continue;
+				if (src[i] && typeof src[i] == 'object') {
+					newObj[i] = cloneProps(src[i]);
+				} else
+					newObj[i] = src[i];
+			}
+			return newObj;
+		};
+		var decodeEntity = function(str) {
+			var ta = document.createElement('textarea');
+			ta.innerHTML = str;
+			return ta.value;
+		};
+		var dispError = function(msg, target) {
+			var target = target != undefined ? target : document.body;
+			var dial = new ModalDialog(target, 300, 150, '', true);
+			dial.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + translate('Error') + '</b></center></div>';
+			dial.getContentDiv().innerHTML = msg;
+		};
+		var findSimilarWord = function(word, source) {
+			var pattern = new RegExp(RegExp.escape(word) + '[\\w]+', 'i');
+			var match = source.match(pattern);
+			return match ? match[0].capitalize() : word;
+		};
+		var getDistance = function(d, f, c, e) { 
+			var a = 750;
+			var g = a / 2;
+			var b = Math.abs(c - d);
+			if (b > g) b = a - b;
+			var h = Math.abs(e - f);
+			if (h > g) h = a - h;
+			return Math.round(100 * Math.sqrt(b * b + h * h)) / 100;
+		};
+		var getKeys = function(obj) {
+			var arr = [];
+			for (var key in obj) {
+				if (obj.hasOwnProperty(key)) arr.push(key);
+			}
+			return arr;
+		};
+		var implodeUrlArgs = function(obj) {
+			var a = [];
+			for (var k in obj)
+				a.push(k + '=' + encodeURI(obj[k]));
+			return a.join('&');
+		};
+		var inspectObj = function(obj, maxLevels, level, doFunctions) {
+			var str = '',
+				type, msg;
+			if (level == null) level = 0;
+			if (maxLevels == null) maxLevels = 1;
+			if (maxLevels < 1) return 'Inspect Error: Levels number must be > 0';
+			if (obj == null) return 'ERROR: Object is NULL\n';
+			var indent = '';
+			for (var i = 0; i < level; i++)
+				indent += ' ';
+			for (property in obj) {
+				try {
+					type = matTypeof(obj[property]);
+					if (doFunctions == true && (type == 'function')) {
+						str += indent + '(' + type + ') ' + property + "[FUNCTION]\n";
+					} else if (type != 'function') {
+						str += indent + '(' + type + ') ' + property + ((obj[property] == null) ? (': null') : ('')) + ' = ' + obj[property] + "\n";
+					}
+					if ((type == 'object' || type == 'array') && (obj[property] != null) && (level + 1 < maxLevels))
+						str += inspectObj(obj[property], maxLevels, level + 1, doFunctions); /* recurse */
+				} catch (err) {
+					if (typeof(err) == 'string') msg = err;
+					else if (err.message) msg = err.message;
+					else if (err.description) msg = err.description;
+					else msg = 'Unknown';
+					str += '(Error) ' + property + ': ' + msg + "\n";
+				}
+			}
+			str += "\n";
+			return str;
+		};
+		var is_null = function(obj) {
+			if (!obj || obj == undefined || obj == null || obj == '') return true;
+			else return false;;
+		};
+		var logit = function(msg) {
+			var serverID = SERVER_ID;
+			var now = new Date();
+			debugLog(serverID + ' @ ' + now.toTimeString().substring(0, 8) + '.' + now.getMilliseconds() + ': ' + msg);
+			if (Data.log) consoleLog(msg.replace(/\n/g, '<br/>'));
+		};
+		var makeRandomTitle = function() {
+			scriptTitle = scriptName.split('');
+			var tags = ['SPAN', 'FONT', 'BDO', 'CENTER', 'DIV', 'LABEL', 'B', 'STRONG', 'P', 'TD'];
+			var len = tags.length - 1;
+			var newTitle = [];
+			for (var i = 0; i < scriptTitle.length; i++) {
+				if (scriptTitle[i] == ' ') newTitle.push('&nbsp;');
+				var t = tags[Math.ceil(Math.random() * len)];
+				newTitle.push('<' + t + '>' + scriptTitle[i] + '</' + t + '>');
+			}
+			scriptTitle = '<span class=' + UID['title'] + '>' + newTitle.join('') + '<span>';
+		};
+		var matTypeof = function(v) {
+			if (v == undefined)
+				return 'undefined';
+			if (typeof(v) == 'object') {
+				if (!v)
+					return 'null';
+				else if (v.constructor.toString().indexOf("Array") >= 0 && typeof(v.splice) == 'function')
+					return 'array';
+				else return 'object';
+			}
+			return typeof(v);
+		};
+		var numf = function(nNombre, separateurMilliers) {
+			var sNombre = String(nNombre);
+			var i;
+			if (separateurMilliers == undefined) separateurMilliers = ' ';
+
+			function separeMilliers(_sNombre) {
+				var sRetour = "";
+				while (_sNombre.length % 3 != 0) {
+					_sNombre = "0" + _sNombre;
+				}
+				for (i = 0; i < _sNombre.length; i += 3) {
+					if (i == _sNombre.length - 1) separateurMilliers = '';
+					sRetour += _sNombre.substr(i, 3) + separateurMilliers;
+				}
+				while (sRetour.substr(0, 1) == "0") {
+					sRetour = sRetour.substr(1);
+				}
+				return sRetour.substr(0, sRetour.lastIndexOf(separateurMilliers));
+			}
+			return nvl(separeMilliers(sNombre), '0');
+		};
+		var nvl = function(obj, val) {
+			if (typeof obj == 'undefined' || obj === undefined || obj === null || obj === '') return val;
+			return obj;
+		};
+		var reloadTools = function() {
+			var serverId = SERVER_ID;
+			var go_to= '';
+			if (serverId == '??') window.location.reload(true);
+			if (REALM_URL.indexOf("kabam.com") >= 0) {
+				go_to = REALM_URL;
+			} else {
+				go_to = REALM_URL + serverId;
+			}
+			var t = '<FORM target="_top" action="' + go_to + '" method=post><INPUT id=xxpbButReload type=submit value=RELOAD><INPUT type=hidden name=s value="' + serverId + '"</form>';
+			var e = document.createElement('div');
+			e.innerHTML = t;
+			document.body.appendChild(e);
+			setTimeout(function() {
+				document.getElementById('xxpbButReload').click();
+			}, 0);
+		};
+		var searchDOM = function(node, condition, maxLevel, doMult) {
+			var found = [];
+			eval('var compFunc = function (node) { return (' + condition + ') }');
+			doOne(node, 1);
+			if (!doMult) {
+				if (found.length == 0) return null;
+				return found[0];
+			}
+			return found;
+
+			function doOne(node, curLevel) {
+				try {
+					if (compFunc(node)) found.push(node);
+				} catch (e) {}
+
+				if (!doMult && found.length > 0) return;
+				if (++curLevel < maxLevel && node.childNodes != undefined) {
+					for (var c = 0; c < node.childNodes.length; c++) {
+						doOne(node.childNodes[c], curLevel);
+					}
+				}
+			}
+		};
+		var sendNewVersionMsg = function() {
+			var localStorageVersion = localStorage.getItem('118446_sendMessage');
+			if (!localStorageVersion || localStorageVersion == 'yes') {
+				localStorage.setItem('118446_sendMessage', 'no');
+				try {
+					var lang = (is_null(Data.options.user_language) ? LANG_CODE : Data.options.user_language).toLowerCase(),
+						subject = '',
+						body = '';
+					if (lang == 'fr') {
+						subject = 'Nouveautés de la v' + scriptVersion;
+						body = 'Merci ' + Seed.player.name + ' d\'avoir installé la version <b>' + scriptVersion + '</b> de <b>' + scriptName + '</b>.<br><br>' + 'N\'hésites pas à venir nous voir<br>' + '<br><b>Sur Facebook :</b>' + '<br>- <a href="https://www.facebook.com/groups/DoAscripts/" target="_blank"><u>DOA Scripts</u></a>' + '<br><b>Sur Userscripts :</b>' + '<br>- <a href="http://userscripts.org/scripts/show/' + scriptId + '" target="_blank"><u>' + scriptName + '</u></a><br>';
+					} else {
+						subject = 'News in the v' + scriptVersion;
+						body = 'Thanks ' + Seed.player.name + ' to have installed the release <b>' + scriptVersion + '</b> of <b>' + scriptName + '</b>.<br>' + 'Please fill free to visit us<br>' + '<br><b>On Facebook :</b>' + '<br>- <a href="https://www.facebook.com/groups/DoAscripts/" target="_blank"><u>DOA Scripts</u></a>' + '<br><b>On Userscripts :</b>' + '<br>- <a href="http://userscripts.org:8080/scripts/show/' + scriptId + ' target="_blank"><u>' + scriptName + '</u></a><br>';
+					}
+					body += '<br><br><b>' + mainAuthor + '</b>';
+					MyAjax.messageSend(subject, body, Seed.player.id, true);
+				} catch (e) {}
+			}
+		};
+		var serverTime = function() {
+			return toNum(new Date().getTime() / 1000) + Seed.serverTimeOffset;
+		};
+		var SHA1 = function(msg) {
+			function rotate_left(n, s) {
+				var t4 = (n << s) | (n >>> (32 - s));
+				return t4;
+			};
+
+			function lsb_hex(val) {
+				var str = "";
+				var i;
+				var vh;
+				var vl;
+				for (i = 0; i <= 6; i += 2) {
+					vh = (val >>> (i * 4 + 4)) & 0x0f;
+					vl = (val >>> (i * 4)) & 0x0f;
+					str += vh.toString(16) + vl.toString(16);
+				}
+				return str;
+			};
+
+			function cvt_hex(val) {
+				var str = "";
+				var i;
+				var v;
+				for (i = 7; i >= 0; i--) {
+					v = (val >>> (i * 4)) & 0x0f;
+					str += v.toString(16);
+				}
+				return str;
+			};
+
+			function Utf8Encode(string) {
+				string = string.replace(/\r\n/g, "\n");
+				var utftext = "";
+				for (var n = 0; n < string.length; n++) {
+					var c = string.charCodeAt(n);
+					if (c < 128) {
+						utftext += String.fromCharCode(c);
+					} else if ((c > 127) && (c < 2048)) {
+						utftext += String.fromCharCode((c >> 6) | 192);
+						utftext += String.fromCharCode((c & 63) | 128);
+					} else {
+						utftext += String.fromCharCode((c >> 12) | 224);
+						utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+						utftext += String.fromCharCode((c & 63) | 128);
+					}
+				}
+				return utftext;
+			};
+			var blockstart;
+			var i, j;
+			var W = new Array(80);
+			var H0 = 0x67452301;
+			var H1 = 0xEFCDAB89;
+			var H2 = 0x98BADCFE;
+			var H3 = 0x10325476;
+			var H4 = 0xC3D2E1F0;
+			var A, B, C, D, E;
+			var temp;
+			msg = Utf8Encode(msg);
+			var msg_len = msg.length;
+
+			var word_array = new Array();
+			for (i = 0; i < msg_len - 3; i += 4) {
+				j = msg.charCodeAt(i) << 24 | msg.charCodeAt(i + 1) << 16 |
+					msg.charCodeAt(i + 2) << 8 | msg.charCodeAt(i + 3);
+				word_array.push(j);
+			}
+			switch (msg_len % 4) {
+				case 0:
+					i = 0x080000000;
+					break;
+				case 1:
+					i = msg.charCodeAt(msg_len - 1) << 24 | 0x0800000;
+					break;
+				case 2:
+					i = msg.charCodeAt(msg_len - 2) << 24 | msg.charCodeAt(msg_len - 1) << 16 | 0x08000;
+					break;
+				case 3:
+					i = msg.charCodeAt(msg_len - 3) << 24 | msg.charCodeAt(msg_len - 2) << 16 | msg.charCodeAt(msg_len - 1) << 8 | 0x80;
+					break;
+			}
+			word_array.push(i);
+			while ((word_array.length % 16) != 14) word_array.push(0);
+			word_array.push(msg_len >>> 29);
+			word_array.push((msg_len << 3) & 0x0ffffffff);
+
+			for (blockstart = 0; blockstart < word_array.length; blockstart += 16) {
+				for (i = 0; i < 16; i++) W[i] = word_array[blockstart + i];
+				for (i = 16; i <= 79; i++) W[i] = rotate_left(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+				A = H0;
+				B = H1;
+				C = H2;
+				D = H3;
+				E = H4;
+				for (i = 0; i <= 19; i++) {
+					temp = (rotate_left(A, 5) + ((B & C) | (~B & D)) + E + W[i] + 0x5A827999) & 0x0ffffffff;
+					E = D;
+					D = C;
+					C = rotate_left(B, 30);
+					B = A;
+					A = temp;
+				}
+				for (i = 20; i <= 39; i++) {
+					temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & 0x0ffffffff;
+					E = D;
+					D = C;
+					C = rotate_left(B, 30);
+					B = A;
+					A = temp;
+				}
+				for (i = 40; i <= 59; i++) {
+					temp = (rotate_left(A, 5) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC) & 0x0ffffffff;
+					E = D;
+					D = C;
+					C = rotate_left(B, 30);
+					B = A;
+					A = temp;
+				}
+				for (i = 60; i <= 79; i++) {
+					temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & 0x0ffffffff;
+					E = D;
+					D = C;
+					C = rotate_left(B, 30);
+					B = A;
+					A = temp;
+				}
+				H0 = (H0 + A) & 0x0ffffffff;
+				H1 = (H1 + B) & 0x0ffffffff;
+				H2 = (H2 + C) & 0x0ffffffff;
+				H3 = (H3 + D) & 0x0ffffffff;
+				H4 = (H4 + E) & 0x0ffffffff;
+			}
+			var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
+			return temp.toLowerCase();
+		};
+		var TimeStampToDate = function (xmlDate) {
+			var dt = new Date();
+			var dtS = xmlDate.slice(xmlDate.indexOf('T') + 1, xmlDate.indexOf('.'));
+			var TimeArray = dtS.split(":");
+			dt.setUTCHours(TimeArray[0], TimeArray[1], TimeArray[2]);
+			dtS = xmlDate.slice(0, xmlDate.indexOf('T'))
+			TimeArray = dtS.split("-");
+			dt.setUTCFullYear(TimeArray[0], TimeArray[1], TimeArray[2]);
+			return dt;
+		};
+		var timestrh = function(time) {
+			time = toNum(time);
+			var m = [];
+			var t = time;
+			if (t < 61) return t + 's';
+			if (t > 86400) {
+				t %= 86400;
+			}
+			if (t > 3600 || time > 3600) {
+				m.push(toNum(t / 3600));
+				m.push('h ');
+				t %= 3600;
+			}
+			m.push(toNum(t / 60));
+			m.push('m ');
+			m.push(t % 60);
+			m.push('s');
+			var str = m.join('');
+			if (str[str.length - 1] == ' ')
+				str = str.substring(0, str.length - 1);
+			return str;
+		};
+		var timestr = function(time, full) {
+			time = toNum(time);
+			var m = [];
+			var t = time;
+			if (t < 61) return t + 's';
+			if (t > 86400) {
+				m.push(toNum(t / 86400));
+				m.push('d ');
+				t %= 86400;
+			}
+			if (t > 3600 || time > 3600) {
+				m.push(toNum(t / 3600));
+				m.push('h ');
+				t %= 3600;
+			}
+			m.push(toNum(t / 60));
+			m.push('m');
+			if (full || time <= 3600) {
+				m.push(' ');
+				m.push(t % 60);
+				m.push('s');
+			}
+			var str = m.join('');
+			if (str[str.length - 1] == ' ')
+				str = str.substring(0, str.length - 1);
+			return str;
+		};
+		var timestrShort = function(time) {
+			time = toNum(time);
+			if (time > 86400) {
+				var m = [];
+				time /= 3600;
+				m.push(toNum(time / 24));
+				m.push('d ');
+				m.push(toNum(time % 24));
+				m.push('h');
+				return m.join('');
+			} else return timestr(time);
+		};
+		var toggleFlash = function() {
+			logit('toggleFlash');
+			var cont = document.getElementById('container');
+			if (cont.style.display == 'none') {
+				if (!IsChrome && SWF_CONTAINER && SWF_CONTAINER_INNERHTML) SWF_CONTAINER.innerHTML = SWF_CONTAINER_INNERHTML;
+				cont.style.display = 'block';
+				if (swf_object) setTimeout(function() {
+					logit('Mute sound');
+					swf_object.musicMute();
+				}, 15000);
+			} else {
+				if (!IsChrome && SWF_CONTAINER && SWF_CONTAINER_INNERHTML) SWF_CONTAINER.innerHTML = '';
+				cont.style.display = 'none';
+			}
+		};
+		var toNum = function(n, min) {
+			var x = parseInt(n, 10);
+			if (!n || n == '' || n == null || n == undefined || isNaN(x)) x = 0;
+			if (min && !isNaN(min) && x < min) x = min;
+			return x;
+		};
+		var AutoUpdater = {
+			days: 1,
+			name: "DoA Power Tools Plus III From Jawz(modded by Calcium)",
+			shortname: scriptName,
+			version: scriptVersion,
+			manualChk: false,
+			time: new Date().getTime(),
+			call: function(response, secure) {
+				if (GM_xmlhttpRequest) {
+					GM_xmlhttpRequest({
+						method: 'GET',
+						url: 'http' + (secure ? 's' : '') + '://userscripts.org/scripts/source/' + scriptId + '.meta.js',
+						onload: function(xpr) {
+							AutoUpdater.compare(xpr, response);
+						},
+						onerror: function(xpr) {
+							if (secure) AutoUpdater.call(response, false);
+						}
+					});
+				} else {
+					function myOwnHttpRequest(details) {
+						var xml_http = null;
+						xml_http = new XMLHttpRequest();
+						if (!xml_http) {
+							if (details.onerror) details.onerror({
+								responseText: '',
+								readyState: 4,
+								status: 0,
+								statusText: 'GM_xmlhttpRequest failed (missing xml_http object)',
+								finalUrl: details.url
+							});
+							else logit('GM_xmlhttpRequest failed (missing xml_http object), URL: ' + details.url);
+							return;
+						}
+						xml_http.onreadystatechange = function() {
+							var ready_state = xml_http.readyState;
+							var status3or4 = (ready_state == 3 || ready_state == 4);
+							var http_response = {
+								responseText: (status3or4 ? xml_http.responseText : ''),
+								readyState: ready_state,
+								status: (status3or4 ? xml_http.status : null),
+								statusText: (status3or4 ? xml_http.statusText : null),
+								finalUrl: (ready_state == 4 ? details.url : null)
+							};
+							if (details.onreadystatechange) details.onreadystatechange(http_response);
+							if (ready_state == 4) {
+								if (xml_http.status >= 200 && xml_http.status < 300) {
+									if (details.onload) details.onload(http_response);
+								} else {
+									if (details.onerror) details.onerror(http_response);
+								}
+							}
+						};
+						xml_http.open(details.method, details.url, true);
+						if (details.headers)
+							for (var this_header in details.headers) xml_http.setRequestHeader(this_header, details.headers[this_header]);
+						try {
+							xml_http.send(details.data);
+						} catch (e) {
+							if (details.onerror) details.onerror({
+								responseText: '',
+								readyState: 4,
+								responseHeaders: '',
+								status: 403,
+								statusText: 'Forbidden',
+								finalUrl: details.url
+							});
+							else logit('GM_xmlhttpRequest failed (forbidden), URL: ' + details.url);
+						}
+					};
+					myOwnHttpRequest({
+						method: 'GET',
+						url: 'http' + (secure ? 's' : '') + '://userscripts.org/scripts/source/' + scriptId + '.meta.js',
+						onload: function(xpr) {
+							AutoUpdater.compare(xpr, response);
+						},
+						onerror: function(xpr) {
+							if (secure) AutoUpdater.call(response, false);
+						}
+					});
+				}
+			},
+
+			enable: function() {
+				debugLog('Enable ' + this.shortname + ' updates');
+				localStorage.setItem('118446_updater', new Date().getTime() + '');
+				AutoUpdater.call(true, true);
+			},
+			compareVersion: function(r_version, l_version) {
+				var r_parts = r_version.split('.'),
+					l_parts = l_version.split('.'),
+					r_len = r_parts.length,
+					l_len = l_parts.length,
+					r = l = 0;
+				for (var i = 0, len = (r_len > l_len ? r_len : l_len); i < len && r == l; ++i) {
+					r = +(r_parts[i] || '0');
+					l = +(l_parts[i] || '0');
+				}
+				return (r !== l) ? r > l : false;
+			},
+			compare: function(xpr, response) {
+				this.xversion = /\/\/\s*@version\s+(.+)\s*\n/i.exec(xpr.responseText);
+				this.xname = /\/\/\s*@name\s+(.+)\s*\n/i.exec(xpr.responseText);
+				if ((this.xversion) && (this.xname[1] == this.name)) {
+					this.xversion = this.xversion[1];
+					this.xname = this.xname[1];
+				} else {
+					if ((xpr.responseText.match("the page you requested doesn't exist")) || (this.xname[1] != this.name))
+						localStorage.setItem('118446_updater', 'off');
+					return false;
+				}
+				var updated = this.compareVersion(this.xversion, this.version);
+				if (updated) {
+					if (CHROME_EXT) {
+						updaterConfirm(translate('A new version of') + ' ' + this.shortname + ' ' + translate('is available.\nGo to your Chrome extensions \n(') + chrome_extensions + translate('),\nenable the developer mode and click on the button to update extensions'), function() {}, null, false);
+					} else {
+						updaterConfirm(translate('A new version of') + ' ' + this.shortname + ' ' + translate('is available.\nDo you wish to install the latest version ?'),
+							function() {
+								try {
+									location.href = userscripts_src;
+								} catch (e) {}
+							},
+							function() {}, true
+						);
+					}
+				} else {
+					if (AutoUpdater.manualChk) updaterConfirm(translate('No new version of') + ' ' + this.shortname + ' ' + translate('available').toLowerCase() + '.', function() {}, null, false);
+				}
+			},
+			manualCheck: function() {
+				/*
+				 * localStorage.setItem('118446_updater', new Date().getTime() +
+				 * ''); AutoUpdater.manualChk = true; AutoUpdater.call(true,
+				 * true);
+				 */
+			},
+			check: function() {
+				try {
+					if (localStorage.getItem('118446_updater') == "off") {
+						/* this.enable(); */
+					}
+					else {
+						/*
+						 * if (+this.time >
+						 * (+localStorage.getItem('118446_updater') + 1000 *
+						 * 86400 * this.days)) {
+						 * localStorage.setItem('118446_updater', this.time +
+						 * ''); this.call(false, true); } debugLog('Check ' +
+						 * this.shortname + ' for updates');
+						 * localStorage.setItem('118446_updater', new
+						 * Date().getTime() + ''); AutoUpdater.call(true, true);
+						 */
+					}
+				} catch (e) {
+					debugLog('AutoUpdater Check error : ' + e);
+					logit(inspectObj(e, 8, 1));
+				}
+			}
+		};
+		var sortObjectByKey = function(obj, langKey){
+			var keys = getKeys(obj);
+			var sorted_obj = {};
+
+			langKey = typeof langKey !== 'undefined' ? langKey : false;
+			
+			keys.sort(function(a,b) {
+				if(langKey) {
+					if(translate(a.toLowerCase())>translate(b.toLowerCase())) {
+						return 1;
+					}
+					if(translate(a.toLowerCase())<translate(b.toLowerCase())){
+						return -1;
+					}
+					return 0;
+				} else {
+					if(a>b) {
+						return 1;
+					}
+					if(a<b){
+						return -1;
+					}
+					return 0;
+				}
+			});
+
+			keys.each(function(key, i){
+				var val = obj[key];
+				if(val instanceof Array){
+					var arr = [];
+					val.each(function(){
+						arr.push(sortObjectByKey(this, langKey));
+					}); 
+					val = arr;
+
+				}else if(val instanceof Object){
+					val = sortObjectByKey(val, langKey);
+				}
+				sorted_obj[key] = val;
+			});
+			return sorted_obj;
+		};
+		var progressBar = {
+			steps: 0,
+			step: 0,
+			delay: 10000,
+			totalTime: 0,
+			currentTime: 0,
+			timer: 0,
+			title: '',
+			stepText: '',
+			displayed: false,
+			by_count: false,
+
+			init: function(x, y, width, height, title, bar_width, modal, container) {
+				var t = progressBar;
+				if (modal)
+					progressBarPop = new ModalDialog(container, width, height, '', false);
+				else progressBarPop = new PopUp('progress_bar', x, y, width, height, function() {
+					tabManager.hideTab();
+				});
+				progressBarPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + title + '</b></center></div>';
+				var layoutDiv = document.createElement('div');
+				layoutDiv.className = 'container';
+				layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
+				layoutDiv.style.color = '#000';
+				layoutDiv.style.height = '100%';
+				var layout = '<center><BR><B><div id=' + setUID('initTitle') + '></div></B>' + '<br><div id=' + setUID('initProgressBar') + ' style="width:' + bar_width + 'px"></div>' + '<br><div class=jewel id=' + setUID('initStepText') + '></div></center>';
+				if (modal)
+					progressBarPop.getContentDiv().appendChild(layoutDiv);
+				else progressBarPop.getMainDiv().appendChild(layoutDiv);
+				t.hideshow(true);
+				t.displayed = true;
+				layoutDiv.innerHTML = layout;
+			},
+			hideshow: function(onOff) {
+				var t = progressBar;
+				if (!onOff && t.displayed) {
+					progressBarPop.show(false);
+					t.displayed = false;
+					if (t.timer) clearInterval(t.timer);
+				}
+				if (onOff && !t.displayed) {
+					progressBarPop.show(true);
+					t.displayed = true;
+				}
+			},
+			start: function(options) {
+				var t = progressBar;
+				t.hideshow(true);
+				t.steps = options.steps;
+				t.delay = options.delay || t.delay;
+				t.title = options.title || t.title;
+				t.stepText = options.stepText || t.stepText;
+				t.by_count = options.byCount || t.by_count;
+				t.totalTime = t.steps * t.delay;
+				t.step = 0;
+				t.currentTime = 0;
+				document.getElementById(UID['initTitle']).innerHTML = t.title;
+				document.getElementById(UID['initStepText']).innerHTML = t.stepText;
+				if (!t.by_count) {
+					clearInterval(t.timer);
+					t.timer = setInterval(t._progress, 500);
+				}
+			},
+			stop: function() {
+				var t = progressBar;
+				t.delay = 10000;
+				if (t.timer) clearInterval(t.timer);
+			},
+			pause: function() {
+				var t = progressBar;
+				if (t.timer) clearInterval(t.timer);
+			},
+			resume: function() {
+				var t = progressBar;
+				if (!t.timer) t.timer = setInterval(t._progress, 250);
+			},
+			update: function(options) {
+				var t = progressBar;
+				t.hideshow(true);
+				t.step = options.step;
+				t.title = options.title || t.title;
+				t.stepText = options.stepText || t.stepText;
+				t.currentTime = t.delay * t.step;
+				if (document.getElementById(UID['initTitle'])) document.getElementById(UID['initTitle']).innerHTML = t.title;
+				if (document.getElementById(UID['initStepText'])) document.getElementById(UID['initStepText']).innerHTML = t.stepText;
+				if (t.by_count) t._progress();
+			},
+
+			_progress: function() {
+				var t = progressBar;
+				if (!t.by_count) t.currentTime += 500;
+				var perc = toNum((t.currentTime / t.totalTime) * 200);
+				if (perc > 200) perc = 200;
+				var _progressBar = '<table class=progress_bar><tr>';
+				for (var n = 0; n < perc; n++)
+					_progressBar += '<td class=progress_on></td>';
+				for (var n = perc; n < 200; n++)
+					_progressBar += '<td class=progress_off></td>';
+				_progressBar += '</tr></table>';
+				if (document.getElementById(UID['initProgressBar'])) document.getElementById(UID['initProgressBar']).innerHTML = _progressBar;
+				if (perc >= 200) t.stop();
+			}
+		};
+		
 		Tabs.Info = {
 			tabOrder: INFO_TAB_ORDER,
 			tabLabel: 'Info',
@@ -12345,8 +14473,7 @@
 				}
 				t.container = div;
 
-				$(div).update(
-					'<div class=' + UID['title_main'] + ' style="padding-top:3px; padding-bottom:3px;">' + '<table width=80% align=center>' + '	<tr align=center><td width="100px"><a id=' + setUID('tabInfo_ScriptUpdate') + ' style="color:#FFFFFF;text-decoration:none;">' + translate('Version update') + '</a></td>' + '		<td width="100px"><a href="' + Data.options.wikiUrl + '" target="_blank" style="color:#FFFFFF;text-decoration:none;">' + kWikiLink + '</a></td>' + '		<td width="100px"><a href="' + Data.options.forumUrl + '" target="_blank" style="color:#FFFFFF;text-decoration:none;">' + kForumLink + '</a></td>' + '</tr></table></div>' + '<table width=100%><tr>' + '	<td width=20%><input id=' + setUID('tabInfo_Refresh') + ' type=button value="' + translate('Refresh') + '"></input></td>' + '	<td width=20% align=center><input id=' + setUID('tabInfo_Toggle') + ' type=button value="' + translate('Toggle Flash') + '"></input></td>' + '	<td width=20% align=center>' + ((REALM_URL == null || REALM_URL == '' || !REALM_URL) ? '' : '<input id=' + setUID('tabInfo_Reload') + ' type=button value="' + translate('Reload') + '"></input>') + '</td>'
+				t.container.innerHTML = '<div class=' + UID['title_main'] + ' style="padding-top:3px; padding-bottom:3px;">' + '<table width=80% align=center>' + '	<tr align=center><td width="100px"><a id=' + setUID('tabInfo_ScriptUpdate') + ' style="color:#FFFFFF;text-decoration:none;">' + translate('Version update') + '</a></td>' + '		<td width="100px"><a href="' + Data.options.wikiUrl + '" target="_blank" style="color:#FFFFFF;text-decoration:none;">' + kWikiLink + '</a></td>' + '		<td width="100px"><a href="' + Data.options.forumUrl + '" target="_blank" style="color:#FFFFFF;text-decoration:none;">' + kForumLink + '</a></td>' + '</tr></table></div>' + '<table width=100%><tr>' + '	<td width=20%><input id=' + setUID('tabInfo_Refresh') + ' type=button value="' + translate('Refresh') + '"></input></td>' + '	<td width=20% align=center><input id=' + setUID('tabInfo_Toggle') + ' type=button value="' + translate('Toggle Flash') + '"></input></td>' + '	<td width=20% align=center>' + ((REALM_URL == null || REALM_URL == '' || !REALM_URL) ? '' : '<input id=' + setUID('tabInfo_Reload') + ' type=button value="' + translate('Reload') + '"></input>') + '</td>'
 					+ '	<td width=20% align=center><input style="margin-left:5px;width:100px;" class="' + UID[t.show_fulscreen ? 'btn_on' : 'btn_off'] + '" type=button value="Fullscreen" id=' + setUID('Tabs.Info.fullScreen') + ' /></td>' + '</tr></table>' 
 					+ '<ul class=tabs style="border-bottom:none; padding-bottom:0;height:23px">' 
 					+ '	<li class="tab first line1"><a id=' + setUID('tabInfoOverview') + '>' + translate('Overview') + '</a></li>' 
@@ -12359,21 +14486,21 @@
 					+ '<ul class="tabs first line2">'
 					+ '	<li class="tab line2"><a id=' + setUID('tabInfoWilderness') + '>' + translate('wildernesses') + '</a></li>'
 					+ '</ul>'
-					+ '<div id=' + setUID('tabInfo_Content') + ' class="' + UID['scrollable'] + '" style="margin-top:1px !important; height:650px; max-height:650px;"></div>');
+					+ '<div id=' + setUID('tabInfo_Content') + ' class="' + UID['scrollable'] + '" style="margin-top:1px !important; height:650px; max-height:650px;"></div>';
 
-				$(UID['tabInfo_Refresh']).observe('click', t.refresh);
-				$(UID['tabInfo_Toggle']).observe('click', toggleFlash);
-				$(UID['tabInfoOverview']).observe('click', t.tabInfoOverview);
-				$(UID['tabInfo_ScriptUpdate']).observe('click', AutoUpdater.manualCheck);
-				$(UID['tabInfoInventory']).observe('click', t.tabInfoInventory);
-				$(UID['tabInfoQuests']).observe('click', t.tabInfoQuests);
-				$(UID['tabInfoTroops']).observe('click', t.tabInfoTroops);
-				$(UID['tabInfoStats']).observe('click', t.tabInfoStats);
-				$(UID['tabInfoHelp']).observe('click', t.tabInfoHelp);
-				$(UID['tabInfoWilderness']).observe('click', t.tabInfoWilderness);
-				$(UID['Tabs.Info.fullScreen']).observe('click', toggleFulscreen);
+				document.getElementById(UID['tabInfo_Refresh']).addEventListener('click', t.refresh);
+				document.getElementById(UID['tabInfo_Toggle']).addEventListener('click', toggleFlash);
+				document.getElementById(UID['tabInfoOverview']).addEventListener('click', t.tabInfoOverview);
+				document.getElementById(UID['tabInfo_ScriptUpdate']).addEventListener('click', AutoUpdater.manualCheck);
+				document.getElementById(UID['tabInfoInventory']).addEventListener('click', t.tabInfoInventory);
+				document.getElementById(UID['tabInfoQuests']).addEventListener('click', t.tabInfoQuests);
+				document.getElementById(UID['tabInfoTroops']).addEventListener('click', t.tabInfoTroops);
+				document.getElementById(UID['tabInfoStats']).addEventListener('click', t.tabInfoStats);
+				document.getElementById(UID['tabInfoHelp']).addEventListener('click', t.tabInfoHelp);
+				document.getElementById(UID['tabInfoWilderness']).addEventListener('click', t.tabInfoWilderness);
+				document.getElementById(UID['Tabs.Info.fullScreen']).addEventListener('click', toggleFulscreen);
 				if (REALM_URL && REALM_URL != null && REALM_URL != '') {
-					$(UID['tabInfo_Reload']).observe('click', reloadTools);
+					document.getElementById(UID['tabInfo_Reload']).addEventListener('click', reloadTools);
 				}
 
 				t.contentType = Data.options.info.current_tab;
@@ -12396,18 +14523,17 @@
 					event.target.className = UID[t.show_fulscreen ? 'btn_on' : 'btn_off'];
 					swf_width = t.show_fulscreen ? '99%' : maxWidth + 'px';
 
-					$('container').setStyle({
+					document.getElementById('container').setStyle({
 						width: swf_width
 					});
-					$('castlemania_swf').setStyle({
+					document.getElementById('castlemania_swf').setStyle({
 						width: swf_width
 					});
-					$('castlemania_swf_container').setStyle({
+					document.getElementById('castlemania_swf_container').setStyle({
 						width: swf_width
 					});
 				}
 			},
-
 			show: function() {
 				var t = Tabs.Info;
 				switch (toNum(t.contentType)) {
@@ -12434,16 +14560,13 @@
 						break;
 				}
 			},
-
 			hide: function() {
 				clearTimeout(Tabs.Info.timer);
 			},
-
 			onUnload: function() {
 				logit('===============  Tabs.Info.onUnload');
 				Data.options.info.current_tab = Tabs.Info.contentType;
 			},
-
 			tabInfoOverview: function() {
 				var t = Tabs.Info;
 				var city = Seed.cities[CAPITAL.id];
@@ -12458,10 +14581,10 @@
 
 				clearTimeout(t.timer);
 
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInfoOverview']).className = 'selected';
-				$(UID['tabInfoOverview']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInfoOverview']).className = 'selected';
+				document.getElementById(UID['tabInfoOverview']).style.zIndex = 1;
 
 				t.lastSubTab = 'tabInfoOverview';
 				t.contentType = 0;
@@ -12471,33 +14594,90 @@
 					+ '<tr><td align=left>' + city.name + '</td>' 
 					+ '<td align=center>' + city.x + ',' + city.y + '</td>' 
 					+ '<td align=center><font color=yellow>' + alliance_name + '</font></td>'
-					//+ '<td align=right>'
-					//+ translate('Wall')
-					//+ '	<div class="onoffswitch">'
-					//+    	'<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" ' + (Seed.cities[CAPITAL.id].defended ? '' : 'checked') + ' >'
-					//+    	'<label class="onoffswitch-label" for="myonoffswitch">'
-					//+        '<span class="onoffswitch-inner"></span>'
-					//+        '<span class="onoffswitch-switch"></span>'
-					//+    	'</label>'
-					//+ '	</div>'
-					//+ '</td>'
 					+ '<td align=right><input id=' + setUID('tabInfo_setDefense') + ' type=button value="' + translate('Wall') + ' ' + wallStatus + '" class=' + UID[(Seed.cities[CAPITAL.id].defended ? 'btn_off' : 'btn_on')] + '></input>';
 				if(Seed.cities[CAPITAL.id].defensive_tower != null)
 					m += '&nbsp;<input id=' + setUID('tabInfo_setDefensiveTower') + ' type=button value="' + translate('DefensiveTower') + ' ' + towerStatus + '" class=' + UID[(Seed.cities[CAPITAL.id].defensive_tower.tower_defending ? 'btn_off' : 'btn_on')] + '></input></td>';
 				m += '</tr></table></div>';
 				
-				m += dispCurrRessources(CAPITAL.id) + dispCurrPopulation(CAPITAL.id) + dispOneHourBan() + SoundPlayer.alertString.replace('&incoming_spy&', (SoundPlayer.getFirstAlert()).spy).replace('&incoming_attack&', (SoundPlayer.getFirstAlert()).attack) + dispUnits(CAPITAL.id) + '<br>' + '<table class=' + UID['table'] + ' width=100%>' + dispBoosts() + '	<tr>' + '		<td class=right width=20%>' + translate('Marching') + ': </td>' + '		<td width=30%>' + Seed.numMarches + dispMarchesCount() + '</td>' + '		<td class=right width=20%>' + translate('Wildernesses') + ': </td>' + '		<td width=30%>' + dispWildsCount() + '</td>' + '	</tr>' + dispOutpostJob('dragon', CAPITAL.id) + dispDefenseTowerHealing(CAPITAL.id) + dispOutpostJob('outpost', CAPITAL.id) + dispBuildingJob(CAPITAL.id) + dispDefenseTowerJob(CAPITAL.id) + dispResearchJob(CAPITAL.id) + dispTrainingJobs(CAPITAL.id) + '</table>' + '</div>';
+				m += dispCurrRessources(CAPITAL.id) 
+					+ dispCurrPopulation(CAPITAL.id) 
+					+ dispOneHourBan() 
+					+ SoundPlayer.alertString.replace('&incoming_spy&', (SoundPlayer.getFirstAlert()).spy).replace('&incoming_attack&', (SoundPlayer.getFirstAlert()).attack) 
+					+ dispUnits(CAPITAL.id) + '<br>' 
+					+ '<table class=' + UID['table'] + ' width=100%>' + dispBoosts() 
+					+ '	<tr>' 
+					+ '		<td class=right width=20%>' + translate('Marching') + ': </td>' 
+					+ '		<td width=30%>' + Seed.numMarches + dispMarchesCount() + '</td>' 
+					+ '		<td class=right width=20%>' + translate('Wildernesses') + ': </td>' 
+					+ '		<td width=30%>' + dispWildsCount() + '</td>' 
+					+ '	</tr>' 
+					+ dispOutpostJob('dragon', CAPITAL.id) 
+					+ dispDefenseTowerHealing(CAPITAL.id) 
+					+ dispOutpostJob('outpost', CAPITAL.id) 
+					+ dispBuildingJob(CAPITAL.id) 
+					+ dispDefenseTowerJob(CAPITAL.id) 
+					+ dispResearchJob(CAPITAL.id) 
+					+ dispTrainingJobs(CAPITAL.id) 
+					+ '</table>' 
+					+ '</div>';
 
 				/* Outposts ... */
 				if (Seed.cities.length > 0) {
 					for (var cityIdx = 1; cityIdx < Seed.cities.length; ++cityIdx) {
 						if (Seed.cities[cityIdx]) {
-							m += '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' + t.cityTitle(cityIdx) + '<table class=' + UID['table'] + ' width=100%>' + ((cityIdx == SPECTRAL_OUTPOST.id) ? dispSoulCapacity() : '') + dispOutpostJob('dragon', cityIdx) + dispOutpostJob('outpost', cityIdx) + dispBuildingJob(cityIdx) + dispResearchJob(cityIdx) + dispTrainingJobs(cityIdx) + dispResurrectionJobs(cityIdx) + '</table>' + '</div>';
+							m += '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' + t.cityTitle(cityIdx) 
+							+ '<table class=' + UID['table'] + ' width=100%>' + ((cityIdx == SPECTRAL_OUTPOST.id) ? dispSoulCapacity() : '') 
+								+ dispOutpostJob('dragon', cityIdx) 
+								+ dispOutpostJob('outpost', cityIdx) 
+								+ dispBuildingJob(cityIdx) 
+								+ dispResearchJob(cityIdx) 
+								+ dispTrainingJobs(cityIdx) 
+								+ dispResurrectionJobs(cityIdx) 
+								+ dispCollectRune(cityIdx)
+							+ '</table>' 
+							+ '</div>';
 						}
 					}
 				}
 
-				m += '<br><div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' + '<div class=' + UID['subtitle'] + '><table class=' + UID['table'] + '>' + '<tr><td align=left width=35%>' + translate('dragon-sanctuary') + '</td>' + '<td align=right width=65%>&nbsp;</td>' + '</tr></table></div>' + '<table class=' + UID['table'] + ' width=100%>' + dispBreedingJob() + dispFeedHatchJob('hatching', CAPITAL.id) + dispFeedHatchJob('feeding', CAPITAL.id) + '</table>' + '</div>' + '<br>' + '<table style="margin-top:3px" width=100%>' + '	<tr class=' + UID['row_headers'] + ' align=center>' + '		<td width=50%>' + translate('Generals').toUpperCase() + '</td>' + '		<td width=50%>' + translate('Great dragons').toUpperCase() + '</td>' + '	</tr>' + '	<tr valign=top align=center>' + '		<td width=50% style="border-right: 1px solid;">';
+				m += '<br>' 
+				+ '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' 
+				+ '	<div class=' + UID['subtitle'] + '>' 
+				+ '		<table class=' + UID['table'] + '>' 
+				+ '			<tr>' 
+				+ '				<td align=left width=35%>' + translate('dragon-sanctuary') + '</td>' 
+				+ '				<td align=right width=65%>&nbsp;</td>' 
+				+ '			</tr>' 
+				+ '		</table>' 
+				+ '	</div>' 
+				+ '	<table class=' + UID['table'] + ' width=100%>' 
+				+ dispBreedingJob() 
+				+ dispFeedHatchJob('hatching', CAPITAL.id) 
+				+ dispFeedHatchJob('feeding', CAPITAL.id) 
+				+ '	</table>'
+				+ '</div>'
+				+ '<br>'
+				+ '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' 
+				+ '	<div class=' + UID['subtitle'] + '>' 
+				+ '		<table class=' + UID['table'] + '>' 
+				+ '			<tr>' 
+				+ '				<td align=left width=35%>' + translateByKey('forge', null, 'dialogs') + '</td>' 
+				+ '				<td align=right width=65%>&nbsp;</td>' 
+				+ '			</tr>' 
+				+ '		</table>' 
+				+ '	</div>' 	
+				+ '	<table class=' + UID['table'] + ' width=100%>' 
+				+ dispForgeJob(CAPITAL.id)
+				+ '	</table>'
+				+ '</div>'
+				+ '<br>' 
+				+ '<table style="margin-top:3px" width=100%>' 
+				+ '	<tr class=' + UID['row_headers'] + ' align=center>' 
+				+ '		<td width=50%>' + translate('Generals').toUpperCase() + '</td>' 
+				+ '		<td width=50%>' + translate('Great dragons').toUpperCase() + '</td>' 
+				+ '	</tr>' 
+				+ '	<tr valign=top align=center>' 
+				+ '		<td width=50% style="border-right: 1px solid;">';
 
 				/* Generals */
 				m += '		<table class=' + UID['table'] + '>';
@@ -12514,19 +14694,12 @@
 							var march = (Data.marches[type])[pm];
 
 							if (march.march_type != "TransportMarch" && march.march_type != "SpyMarch") {
-
-								try {
-									if (city.generals[i].name == march.general.first_name) {
-
-										loc = march.x + ',' + march.y;
-										if (march.status == 'encamped')
-											className = 'bluejwl';
-										else
-											className = 'jewel';
-									}
-
-								} catch (e) {
-									verboseLog(translate('Error') + ': ' + 'general first_name not available' + e.name + ' ' + e.message);
+								if (city.generals[i].name == march.general.first_name) {
+									loc = march.x + ',' + march.y;
+									if (march.status == 'encamped')
+										className = 'bluejwl';
+									else
+										className = 'jewel';
 								}
 							}
 						}
@@ -12564,26 +14737,21 @@
 				m += '		</table>' + '		</td>' + '	</tr>' + '</table>'
 
 				/* Marches, building, research, training */
-				$(UID['tabInfo_Content'])
-					.update(m)
-					.observe('scroll', onScroll)
-					.scrollTop = t.infoScrollPos;
+				document.getElementById(UID['tabInfo_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfo_Content']).addEventListener('scroll', onScroll);
+				document.getElementById(UID['tabInfo_Content']).scrollTop = t.infoScrollPos;
 
-				$(UID['tabInfo_Unitsbox'])
-					.observe('scroll', onScrollLeft)
-					.scrollLeft = t.infoScrollLeft;
+				document.getElementById(UID['tabInfo_Unitsbox']).addEventListener('scroll', onScrollLeft);
+				document.getElementById(UID['tabInfo_Content']).scrollLeft = t.infoScrollLeft;
 
-				$(UID['tabInfo_setDefense'])
-					.observe('click', switchDefense);
+				document.getElementById(UID['tabInfo_setDefense']).addEventListener('click', switchDefense);
 				
 				if(Seed.cities[CAPITAL.id].defensive_tower != null)
-					$(UID['tabInfo_setDefensiveTower'])
-						.observe('click', switchDefensiveTower);
+					document.getElementById(UID['tabInfo_setDefensiveTower']).addEventListener('click', switchDefensiveTower);
 
 				/* Review the rows height in the Units table to realign rows */
-				var rU = $(UID['tabInfoUnits_Unit']).getElementsByTagName('TR');
-				var rD = $(UID['tabInfoUnits_Detail']).getElementsByTagName('TR');
-
+				var rU = document.getElementById(UID['tabInfoUnits_Unit']).getElementsByTagName('TR');
+				var rD = document.getElementById(UID['tabInfoUnits_Detail']).getElementsByTagName('TR');
 				for (var n = 0; n < rU.length; n++) {
 
 					var x = rU[n].getElementsByTagName('TD')[0];
@@ -12601,16 +14769,14 @@
 				
 				function onScroll(event) {
 					if (t.contentType == 0) {
-						t.infoScrollPos = $(UID['tabInfo_Content']).scrollTop;
+						t.infoScrollPos = document.getElementById(UID['tabInfo_Content']).scrollTop;
 					}
 				}
-
 				function onScrollLeft(event) {
 					if (t.contentType == 0) {
-						t.infoScrollLeft = $(UID['tabInfo_Unitsbox']).scrollLeft;
+						t.infoScrollLeft = document.getElementById(UID['tabInfo_Unitsbox']).scrollLeft;
 					}
 				}
-
 				function countArmorDragon(dragon_type) {
 					var armors = ['BodyArmor', 'ClawGuards', 'TailGuard', 'Helmet'],
 						ret = 0,
@@ -12628,7 +14794,6 @@
 
 					return retour;
 				}
-
 				function dispBoosts() {
 					var x = '',
 						m = '',
@@ -12674,7 +14839,6 @@
 
 					return x;
 				}
-
 				function dispBreedingJob() {
 					var m = '',
 						jobs = Jobs.getJobs('breeding', false, -1);
@@ -12711,13 +14875,21 @@
 					}
 					return m;
 				}
+				function dispCollectRune(cityIdx) {
+					if(cityIdx==14) {
+						var ret = '<tr><td width=20% class=right>' + translate('eternalrune') + ': </td>'+'<td align=left width=80% colspan=3><b>' + Data.options.lastCollectEternalRune + '</b></td></tr>';
+						ret += '<tr><td width=20% class=right>' + translate('leaderboard-last-refresh') + ': </td>'+'<td align=left width=80% colspan=3><b>' + Data.options.lastTryCollectEternalRune + '</b></td></tr>';
+						return ret;
 
+					} else {
+						return '';
+					}
+				}
 				function dispBuildingJob(cityIdx) {
 					var m = '<tr><td width=20% class=right>' + translate('Building') + ': </td>',
 						job = Jobs.getBuildingJob(cityIdx);
 
 					if (job && job.job.run_at > serverTime()) {
-
 						m += '<td width=50% align=left colspan=2>' + translate(job.building.type) + ' (' + job.job.level + ') &nbsp;</td>' + '<td width=30%><font color=' + TIMER_COLOR + '>' + timestr(job.job.run_at - serverTime(), true) + '</font></td>' + '</tr>';
 					} else {
 						m += '<td align=left width=80% colspan=3><span class=' + UID['bold_red'] + '>' + translate('None').toUpperCase() + '</span></td></tr>';
@@ -12725,21 +14897,19 @@
 
 					return m;
 				}
-				
 				function dispDefenseTowerJob(cityIdx) {
 					var m = '<tr><td width=20% class=right>' + translate('Building') + ': </td>',
 						job = Jobs.getDefenseTowerJob(cityIdx);
 
 					if (job && job.job.run_at > serverTime()) {
 
-						m += '<td width=50% align=left colspan=2>' + translate(job.building.type) + ' (' + job.job.level + ') &nbsp;</td>' + '<td width=30%><font color=' + TIMER_COLOR + '>' + timestr(job.job.run_at - serverTime(), true) + '</font></td>' + '</tr>';
+						m += '<td width=50% align=left>' + translate(job.building.type) + ' (' + job.job.level + ') &nbsp;</td>' + '<td width=30%><font color=' + TIMER_COLOR + '>' + timestr(job.job.run_at - serverTime(), true) + '</font></td>' + '</tr>';
 					} else {
-						m += '<td align=left width=80% colspan=3><span class=' + UID['bold_red'] + '>' + translate('DefensiveTower') + ' ' + translate('None').toUpperCase() + '</span></td></tr>';
+						m += '<td align=left width=80% colspan=2><span class=' + UID['bold_red'] + '>' + translate('DefensiveTower') + ' ' + translate('None').toUpperCase() + '</span></td></tr>';
 					}
 
 					return m;
 				}
-				
 				function dispDefenseTowerHealing(cityIdx) {
 					var m = '<tr><td width=20% class=right>' + translate('Repairing') + ': </td>',
 						job = Jobs.getDefenseTowerHealing(cityIdx);
@@ -12753,7 +14923,6 @@
 
 					return m;
 				}
-				
 				function dispCurrRessources(cityIdx) {
 					var m = '<table style="margin-top:3px" width=100% class=' + UID['row_style'] + '>' + '	<tr class=' + UID['row_headers'] + ' align=center>' + '		<td width=20%>' + translate('Type') + '</td>' + '		<td width=20%>' + translate('Reserves') + '</td>' + '		<td width=15%>' + translate('Per Hour') + '</td>' + '		<td width=20%>' + translate('Consumption') + '</td>' + '		<td width=25%>' + translate('Capacity') + '</td>' + '	</tr>';
 
@@ -12782,7 +14951,6 @@
 
 					return m;
 				}
-
 				function dispCurrPopulation(cityIdx) {
 					var city = Seed.cities[cityIdx].figures.population;
 					var num = city.current - city.laborers - city.armed_forces;
@@ -12793,7 +14961,6 @@
 
 					return m;
 				}
-
 				function dispFeedHatchJob(type, cityIdx) {
 					var m = '',
 						jobs = Jobs.getJobs(type, false, cityIdx);
@@ -12823,7 +14990,6 @@
 
 					return m;
 				}
-
 				function dispMarchesCount() {
 					var left = '',
 						m = '';
@@ -12863,7 +15029,6 @@
 
 					return m;
 				}
-
 				function dispOneHourBan() {
 					var t = Tabs.Info,
 						m = '';
@@ -12879,7 +15044,6 @@
 
 					return m;
 				}
-
 				function dispOutpostJob(type, cityIdx) {
 					var m = '',
 						job = Jobs.getJobs(type, true, cityIdx)[0];
@@ -12890,7 +15054,44 @@
 
 					return m;
 				}
-
+				function dispForgeJob(cityIdx) {
+					var m = '';
+					var jobs = Jobs.getForgeJob(cityIdx);
+					for(var i=0;i<jobs.length;i++) {
+						var job=jobs[i];
+						if (job && job.run_at > serverTime()) {
+							var fLab='', sLab='';
+							switch (job.queue) {
+								case 'repair_hammer' :
+									fLab = translate('forge-repair-hammer');
+									break;
+								case 'repair_equipment' :
+									var it = Forge.getItemById(job.equipment_id, 'equipments');
+									fLab = translate('forge-repaire-state');
+									sLab = translate(it.name.toLowerCase()) + '(lvl ' + it.level + ')';
+									break;
+								default :
+									for(var adv in Seed.forge.adventurers) {
+										if(job.queue == Seed.forge.adventurers[adv].queue) {
+											for(var advP=0;advP<Seed.player.forge.adventurers.length;advP++) {
+												if(Seed.player.forge.adventurers[advP].type == Seed.forge.adventurers[adv].type) {
+													sLab = translate('mission-'+Seed.player.forge.adventurers[advP].current_mission.replace(/_/g, "-"));
+													fLab = translate('adventurer-'+Seed.player.forge.adventurers[advP].type.toLowerCase());
+													break;
+												}
+											}
+											break;
+										}
+									}
+							}
+							
+							m += '<tr><td class=right width=20%>' + fLab + ':</td>' 
+							+ '<td width=50%>' + sLab + '</td>' 
+							+ '<td width=30%><font color=' + TIMER_COLOR + '>' + timestr(job.run_at - serverTime(), true) + '</font></td></tr>';
+						}
+					}
+					return m;
+				}
 				function dispResearchJob(cityIdx) {
 					var m = '<tr>' + '		<td class=right width=20%>' + translate('Researching') + ': </td>';
 					var job = Jobs.getJobs('research', true, cityIdx)[0];
@@ -12905,7 +15106,6 @@
 
 					return m;
 				}
-
 				function dispResurrectionJobs(cityIdx) {
 					var m = '',
 						trains = [];
@@ -12938,7 +15138,6 @@
 					}
 					return m;
 				}
-
 				function dispSoulCapacity() {
 					var m = '',
 						cap = getSoulCapacity(),
@@ -12952,7 +15151,6 @@
 					}
 					return m;
 				}
-
 				function dispTrainingJobs(cityIdx) {
 					var m = '',
 						trains = [];
@@ -12985,7 +15183,6 @@
 					}
 					return m;
 				}
-
 				function dispUnits(cityIdx) {
 					var m = '<table width=100% style="margin-top:3px;">' + '	<tr valign=top>' + '		<td width="180px">' + '			<table class=' + UID['row_style'] + ' width=100% id=' + setUID('tabInfoUnits_Unit') + '>' + '				<tr class=' + UID['row_headers'] + ' align=center>' + '					<td width="180px">' + translate('Troops') + '</td>' + '				</tr>';
 					for (var i = 0; i < all_unit_types.length; i++) {
@@ -13000,7 +15197,6 @@
 					m += '			</table>' + '			</div></div>' + '		</td>' + '	</tr>' + '</table>';
 					return m;
 				}
-
 				function dispWildsCount() {
 					var max = toNum(Seed.player.max_wildernesses);
 					var cur = toNum(Seed.player.player_wildernesses.length);
@@ -13008,7 +15204,6 @@
 					m += ' / ' + max;
 					return m;
 				}
-
 				function switchDefensiveTower(event) {
 					var t = Tabs.Info;
 					var button = event.target;
@@ -13030,7 +15225,6 @@
 					button.className = UID[(state ? 'btn_off' : 'btn_on')];
 					button.value = translate('DefensiveTower') + ' ' + translate(state ? 'defensivetower-orders-defend-city' : 'defensivetower-orders-inactive').toUpperCase();
 				}
-				
 				function switchDefense(event) {
 					var t = Tabs.Info;
 					var button = event.target;
@@ -13053,15 +15247,14 @@
 					button.value = translate('Wall') + ' ' + translate(state ? 'wall-orders-defend-city' : 'wall-orders-hide').toUpperCase();
 				}
 			},
-
 			tabInfoInventory: function() {
 				clearTimeout(Tabs.Info.timer);
 				var t = Tabs.Info;
 				clearTimeout(t.timer);
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInfoInventory']).className = 'selected';
-				$(UID['tabInfoInventory']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInfoInventory']).className = 'selected';
+				document.getElementById(UID['tabInfoInventory']).style.zIndex = 1;
 				t.lastSubTab = 'tabInfoInventory';
 				t.contentType = 1;
 				Data.options.info.current_tab = t.contentType;
@@ -13149,13 +15342,13 @@
 					}
 				}
 				m += '</table></div>';
-				$(UID['tabInfo_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfo_Content']).innerHTML = m;
 				for (var i = 0; i < iu.length; i++)
-					$(UID['tabInfoInv_' + iu[i]]).addEventListener('click', useSingleItem, false);
+					document.getElementById(UID['tabInfoInv_' + iu[i]]).addEventListener('click', useSingleItem, false);
 				
 				for (var i = 0; i < ium.length; i++) {
-					$(UID['tabInfoInv_' + ium[i]]).addEventListener('click', useMoreItem, false);
-					$(UID['tabInfoInv_' + ium[i] + '_nb']).addEventListener('change', ctrlNbItem, false);
+					document.getElementById(UID['tabInfoInv_' + ium[i]]).addEventListener('click', useMoreItem, false);
+					document.getElementById(UID['tabInfoInv_' + ium[i] + '_nb']).addEventListener('change', ctrlNbItem, false);
 				}
 
 				function ctrlNbItem(event) {
@@ -13182,7 +15375,7 @@
 				}
 				function useMoreItem(event) {
 					var id = event.target.getAttribute('ref');
-					var nb = $(UID['tabInfoInv_' + id + '_nb']).value;
+					var nb = document.getElementById(UID['tabInfoInv_' + id + '_nb']).value;
 					event.target.disabled = true;
 					Element.removeClassName(event.target, UID['btn_green']);
 					Element.addClassName(event.target, UID['btn_disabled']);
@@ -13199,13 +15392,12 @@
 					});
 				}
 			},
-
 			tabInfoQuests: function() {
 				var t = Tabs.Info;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInfoQuests']).className = 'selected';
-				$(UID['tabInfoQuests']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInfoQuests']).className = 'selected';
+				document.getElementById(UID['tabInfoQuests']).style.zIndex = 1;
 				t.lastSubTab = 'tabInfoQuests';
 				t.contentType = 2;
 				Data.options.info.current_tab = t.contentType;
@@ -13251,24 +15443,24 @@
 					if (!first) m += '</table></div></td></tr>';
 				}
 				m += '</table></div>';
-				$(UID['tabInfo_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfo_Content']).innerHTML = m;
 				for (var c = 0; c < cl.length; c++) {
-					$(cl[c]).addEventListener('click', toggleHideShow, false);
-					var categ = $(cl[c]).getAttribute('ref');
+					document.getElementById(cl[c]).addEventListener('click', toggleHideShow, false);
+					var categ = document.getElementById(cl[c]).getAttribute('ref');
 					var id = 'tabInfo_questList_' + categ;
 					var acc_id = 'tabInfo_accordion_' + categ;
-					var el = $(UID[id]);
+					var el = document.getElementById(UID[id]);
 					if (Data.options.collapsed.quests[categ]) {
 						el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 					} else {
 						el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 					}
 				}
 
 				for (var q = 0; q < ql.length; q++)
-					$(ql[q]).addEventListener('click', claimRewards, false);
+					document.getElementById(ql[q]).addEventListener('click', claimRewards, false);
 
 				function isClaimed(name) {
 					var found = false;
@@ -13314,14 +15506,14 @@
 					var categ = element.getAttribute('ref');
 					var id = 'tabInfo_questList_' + categ;
 					var acc_id = 'tabInfo_accordion_' + categ;
-					var el = $(UID[id]);
+					var el = document.getElementById(UID[id]);
 					if (el.style.display == 'none') {
 						el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 						Data.options.collapsed.quests[categ] = false;
 					} else {
 						el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 						Data.options.collapsed.quests[categ] = true;
 					}
 				}
@@ -13333,7 +15525,7 @@
 					Element.removeClassName(event.target, UID['btn_green']);
 					Element.addClassName(event.target, UID['btn_disabled']);
 					var FBid = 'tabInfo_QFb_' + event.target.getAttribute('ref');
-					var FBel = $(UID[FBid]);
+					var FBel = document.getElementById(UID[FBid]);
 					new MyAjax.claimQuest(name, function(rslt) {
 						if (rslt.ok) {
 							actionLog('<B>' + translate('Quest') + ' ' + name + '</B> ' + translate('claimed') + ' ' + translate('Successfully'));
@@ -13349,21 +15541,20 @@
 					return str.toLowerCase().replace(/_/g, '-');
 				}
 			},
-
 			tabInfoTroops: function() {
 				var t = Tabs.Info;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInfoTroops']).className = 'selected';
-				$(UID['tabInfoTroops']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInfoTroops']).className = 'selected';
+				document.getElementById(UID['tabInfoTroops']).style.zIndex = 1;
 				t.lastSubTab = 'tabInfoTroops';
 				t.contentType = 4;
 				Data.options.info.current_tab = t.contentType;
 				var m = '<div class=' + UID['title'] + '>' + translate('Troops') + ' ' + translate('Overview') + '</div>' + '<div class=' + UID['status_ticker'] + ' style="margin-bottom: 5px !important">' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabInfoTroopsMight') + '>' + translate('Might') + '</a></li>' + '	<li class="tab"><a id=' + setUID('tabInfoTroopsFood') + '>' + translate('Consumption') + '</a></li>' + '	<li class="tab"><a id=' + setUID('tabInfoTroopsStats') + '>' + translate('Statistics') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabInfoTroops_Content') + ' style="height:560px; ; max-height:560px; overflow-y:auto">';
-				$(UID['tabInfo_Content']).innerHTML = m;
-				$(UID['tabInfoTroopsMight']).addEventListener('click', t.tabInfoTroopsMight, false);
-				$(UID['tabInfoTroopsFood']).addEventListener('click', t.tabInfoTroopsFood, false);
-				$(UID['tabInfoTroopsStats']).addEventListener('click', t.tabInfoTroopsStats, false);
+				document.getElementById(UID['tabInfo_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfoTroopsMight']).addEventListener('click', t.tabInfoTroopsMight, false);
+				document.getElementById(UID['tabInfoTroopsFood']).addEventListener('click', t.tabInfoTroopsFood, false);
+				document.getElementById(UID['tabInfoTroopsStats']).addEventListener('click', t.tabInfoTroopsStats, false);
 				switch (t.troopContentType || 0) {
 					case 0:
 						t.tabInfoTroopsMight();
@@ -13376,15 +15567,14 @@
 						break;
 				}
 			},
-
 			tabInfoTroopsMight: function() {
 				var t = Tabs.Info;
-				$(UID['tabInfoTroopsMight']).className = 'selected';
-				$(UID['tabInfoTroopsMight']).style.zIndex = 1;
-				$(UID['tabInfoTroopsFood']).className = '';
-				$(UID['tabInfoTroopsFood']).style.zIndex = 0;
-				$(UID['tabInfoTroopsStats']).className = '';
-				$(UID['tabInfoTroopsStats']).style.zIndex = 0;
+				document.getElementById(UID['tabInfoTroopsMight']).className = 'selected';
+				document.getElementById(UID['tabInfoTroopsMight']).style.zIndex = 1;
+				document.getElementById(UID['tabInfoTroopsFood']).className = '';
+				document.getElementById(UID['tabInfoTroopsFood']).style.zIndex = 0;
+				document.getElementById(UID['tabInfoTroopsStats']).className = '';
+				document.getElementById(UID['tabInfoTroopsStats']).style.zIndex = 0;
 				t.troopContentType = 0;
 				Data.options.info.troop_sub_tab = t.troopContentType;
 				var city = Seed.cities[CAPITAL.id];
@@ -13399,17 +15589,16 @@
 					m += '	<tr valign=top>' + '		<td class=right>' + translate(all_unit_types[i]) + ' :</td>' + '		<td align=right>' + numf(numTroops.total, ' ') + '</td>' + '		<td align=right>' + numf(unit_might, ' ') + '</td>' + '		<td align=right>' + numf(total_might, ' ') + '</td>' + '	</tr>';
 				}
 				m += '	<tr><td colspan=4>&nbsp</td></tr>' + '	<tr><td>&nbsp</td><td colspan=3 align=center><hr></td></tr>' + '	<tr valign=top>' + '		<td class=right>' + translate('Troops') + ' :</td>' + '		<td align=right></td>' + '		<td align=right></td>' + '		<td align=right><b>' + numf(total, ' ') + '</b></td>' + '	</tr>' + '	<tr valign=top>' + '		<td class=right>' + translate('Building') + ' + ' + translate('Quests') + ' :</td>' + '		<td align=right></td>' + '		<td align=right></td>' + '		<td align=right><b>' + numf(Seed.player.might - total, ' ') + '</b></td>' + '	</tr>' + '	<tr><td>&nbsp</td><td colspan=3 align=center><hr></td></tr>' + '	<tr valign=top>' + '		<td class=right>' + translate('Total') + ' :</td>' + '		<td align=right></td>' + '		<td align=right></td>' + '		<td align=right><font color=red><b>' + numf(Seed.player.might) + '</b></font></td>' + '	</tr>' + '</table></div>';
-				$(UID['tabInfoTroops_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfoTroops_Content']).innerHTML = m;
 			},
-
 			tabInfoTroopsFood: function() {
 				var t = Tabs.Info;
-				$(UID['tabInfoTroopsMight']).className = '';
-				$(UID['tabInfoTroopsMight']).style.zIndex = 0;
-				$(UID['tabInfoTroopsFood']).className = 'selected';
-				$(UID['tabInfoTroopsFood']).style.zIndex = 1;
-				$(UID['tabInfoTroopsStats']).className = '';
-				$(UID['tabInfoTroopsStats']).style.zIndex = 0;
+				document.getElementById(UID['tabInfoTroopsMight']).className = '';
+				document.getElementById(UID['tabInfoTroopsMight']).style.zIndex = 0;
+				document.getElementById(UID['tabInfoTroopsFood']).className = 'selected';
+				document.getElementById(UID['tabInfoTroopsFood']).style.zIndex = 1;
+				document.getElementById(UID['tabInfoTroopsStats']).className = '';
+				document.getElementById(UID['tabInfoTroopsStats']).style.zIndex = 0;
 				t.troopContentType = 1;
 				Data.options.info.troop_sub_tab = t.troopContentType;
 				var city = Seed.cities[CAPITAL.id];
@@ -13436,7 +15625,7 @@
 				var production = figures.production + (figures.production * figures.multipliers.wilderness) + (figures.production * figures.multipliers.boosts) + (figures.production * figures.multipliers.research);
 				var total_rate = production - total;
 				m += '	<tr><td colspan=4>&nbsp</td></tr>' + '	<tr><td>&nbsp</td><td colspan=3 align=center><hr></td></tr>' + '	<tr valign=top>' + '		<td class=right>' + translate('Troops') + ' :</td>' + '		<td align=right></td>' + '		<td align=right></td>' + '		<td align=right><b>' + numf(-1 * ((Data.options.info.consumption_sel == 1) ? total_incity : total)) + '</b></td>' + '	</tr>' + '	<tr valign=top>' + '		<td class=right>' + translate('Production') + ' (' + translate('Per Hour') + ') :</td>' + '		<td align=right></td>' + '		<td align=right></td>' + '		<td align=right><b>' + numf(production) + '</b></td>' + '	</tr>' + '	<tr><td>&nbsp</td><td colspan=3 align=center><hr></td></tr>' + '	<tr valign=top>' + '		<td class=right>' + translate('Hourly rate') + ' :</td>' + '		<td align=right></td>' + '		<td align=right></td>' + '		<td align=right><font color=red><b>' + numf((Data.options.info.consumption_sel == 1) ? rate : total_rate) + '</b></font></td>' + '	</tr>' + '</table></div>';
-				$(UID['tabInfoTroops_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfoTroops_Content']).innerHTML = m;
 				var r = document.getElementsByName(UID['tabInfoTroopFood_Sel']);
 				for (i = 0; i < r.length; i++) {
 					r[i].addEventListener('change', enableChanged, false);
@@ -13449,15 +15638,14 @@
 					t.tabInfoTroopsFood();
 				}
 			},
-
 			tabInfoTroopsStats: function() {
 				var t = Tabs.Info;
-				$(UID['tabInfoTroopsMight']).className = '';
-				$(UID['tabInfoTroopsMight']).style.zIndex = 0;
-				$(UID['tabInfoTroopsFood']).className = '';
-				$(UID['tabInfoTroopsFood']).style.zIndex = 0;
-				$(UID['tabInfoTroopsStats']).className = 'selected';
-				$(UID['tabInfoTroopsStats']).style.zIndex = 1;
+				document.getElementById(UID['tabInfoTroopsMight']).className = '';
+				document.getElementById(UID['tabInfoTroopsMight']).style.zIndex = 0;
+				document.getElementById(UID['tabInfoTroopsFood']).className = '';
+				document.getElementById(UID['tabInfoTroopsFood']).style.zIndex = 0;
+				document.getElementById(UID['tabInfoTroopsStats']).className = 'selected';
+				document.getElementById(UID['tabInfoTroopsStats']).style.zIndex = 1;
 				t.troopContentType = 2;
 				Data.options.info.troop_sub_tab = t.troopContentType;
 				var city = Seed.cities[CAPITAL.id];
@@ -13550,15 +15738,14 @@
 					}
 				}
 				m += '</table></div>';
-				$(UID['tabInfoTroops_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfoTroops_Content']).innerHTML = m;
 			},
-
 			tabInfoHelp: function() {
 				var t = Tabs.Info;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInfoHelp']).className = 'selected';
-				$(UID['tabInfoHelp']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInfoHelp']).className = 'selected';
+				document.getElementById(UID['tabInfoHelp']).style.zIndex = 1;
 				t.lastSubTab = 'tabInfoHelp';
 				t.contentType = 3;
 				Data.options.info.current_tab = t.contentType;
@@ -13596,15 +15783,14 @@
 						+ '				Once you have completed your purchase, you will receive the Bonus Package associated with the Ruby amount you selected, and the recipient will get the Rubies!<br><br>' 
 						+ '				<br>'
 						+ '				</div></td></tr></table></div></div>';
-				$(UID['tabInfo_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfo_Content']).innerHTML = m;
 			},
-
 			tabInfoWilderness : function() {
 				var t = Tabs.Info;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInfoWilderness']).className = 'selected';
-				$(UID['tabInfoWilderness']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInfoWilderness']).className = 'selected';
+				document.getElementById(UID['tabInfoWilderness']).style.zIndex = 1;
 				t.lastSubTab = 'tabInfoWilderness';
 				t.contentType = 6;
 				
@@ -13634,15 +15820,19 @@
 				var ws = [];
 				for ( var i=0; i < w.length; i++ ) {
 					m += '<tr><td>' + translate(w[i].type) + '</td><td>' + w[i].level + '</td><td>' + w[i].x + ' / ' + w[i].y + '</td>';
-					//m += '<td><input id=' + setUID('tabInfoWilderness_' + i) + ' ref=' + w[i].x + '_' + w[i].y + ' class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value=" ' + translate('X') +' "/></td>';
+					m += '<td><input id=' + setUID('tabInfoWilderness_' + i) + ' ref=' + w[i].x + '_' + w[i].y + ' class="Xtrasmall ' + UID['btn_red'] + '" style="width:auto !important;" type=submit value="' + Translation.tmpXML.confirmations['attack-wild']['abandon-description'] +'"/></td>';
                     m += '<td> </td>';
                     m += '</tr>';
-					// ws.push('tabInfoWilderness_' + i);
+					ws.push('tabInfoWilderness_' + i);
 				}
 				m += '</table></div>';
-				$(UID['tabInfo_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfo_Content']).innerHTML = m;
 				
-				function abandonWilderness() {
+				for(var i=0;i<ws.length;i++) {
+					document.getElementById(UID[ws[i]]).addEventListener('click', abandonWilderness);
+				}
+				
+				function abandonWilderness(event) {
 					var ids = event.target.getAttribute('ref').split('_');
 					var x = ids[0];
 					var y = ids[1];
@@ -13663,21 +15853,20 @@
 					return m;
 				}
 			},
-			
 			tabInfoStats: function() {
 				var t = Tabs.Info;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInfoStats']).className = 'selected';
-				$(UID['tabInfoStats']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInfoStats']).className = 'selected';
+				document.getElementById(UID['tabInfoStats']).style.zIndex = 1;
 				t.lastSubTab = 'tabInfoStats';
 				t.contentType = 5;
 				Data.options.info.current_tab = t.contentType;
 
 				var m = '<div class=' + UID['title'] + '>' + translate('Attacks Stats') + '</div>' + '<div id=' + setUID('tabInfoStats_Statbox') + ' class=' + UID['status_ticker'] + '>' + '<div id=' + setUID('tabInfoStats_Status') + '></div>' + '<div id=' + setUID('tabInfoStats_Percent') + '></div>' + '<br/>' + '<center><input id=' + setUID('tabInfoStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '<br></div>';
 
-				$(UID['tabInfo_Content']).innerHTML = m;
-				$(UID['tabInfoStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabInfo_Content']).innerHTML = m;
+				document.getElementById(UID['tabInfoStats_Clear']).addEventListener('click', function() {
 					clearStats();
 					showStats();
 				}, false);
@@ -13698,7 +15887,7 @@
 
 				function showStats() {
 					var t = Tabs.Info;
-					var div = $(UID['tabInfoStats_Status']);
+					var div = document.getElementById(UID['tabInfoStats_Status']);
 					if (div == null) return;
 					if (!Data.stats.total.start_at || Data.stats.total.start_at == undefined || Data.stats.total.start_at == 0) Data.stats.total.start_at = Data.stats.requests.start_at;
 					var run_time = (serverTime() - Data.stats.total.start_at);
@@ -13745,7 +15934,6 @@
 					div.innerHTML = m;
 				}
 			},
-
 			cityTitle: function(cityIdx, UID_button) {
 				var t = Tabs.Info;
 				var city = Seed.cities[cityIdx];
@@ -13777,7 +15965,6 @@
 
 				return '<div class=' + UID['subtitle'] + '><table class=' + UID['table'] + '>' + '<tr><td align=left width=35%>' + ((city.type == 'Outpost') ? translate(city.name) : city.name) + '</td>' + '<td align=center width=30%>' + city.x + ',' + city.y + '</td>' + '<td align=center width=200px><font color=yellow>' + alliance_name + '</font></td>' + '<TD width=35% align=right>' + wallStatus + '</td>' + '</tr></table></div>';
 			},
-
 			refresh: function() {
 				logit('fetchPlayer from Tab.Info refresh');
 				var t = Tabs.Info;
@@ -13789,7 +15976,6 @@
 				});
 				t.show();
 			},
-
 			highLightDiff: function() {
 				for(var i = 0; i < Tabs.Info.diff.length ; i++) {
 					Effect.Pulsate(UID['tabInfoInv_' + Tabs.Info.diff[i] + '_hl'], { pulses: 5, duration: 2.0 });
@@ -13797,16 +15983,6 @@
 				Tabs.Info.diff = [];
 			}
 		}
-		/**
-		 * ****************************** Info Tab
-		 * **********************************
-		 */
-
-
-		/**
-		 * ****************************** Alliance features Tab
-		 * *********************
-		 */
 		Tabs.Alliance = {
 			tabOrder: ALLIANCE_TAB_ORDER,
 			tabLabel: 'Alliance',
@@ -13843,25 +16019,25 @@
 				t.container = div;
 				m = '<div class=' + UID['title'] + '>' + translate('Alliance features') + '</div>' + '<div id=' + setUID('tabAlliance_Status') + ' style="margin-bottom:5px !important">' + '	<table width=100%>' + '		<tr>' + '			<td align=center width=25%><input type=button value="' + translate('Refresh list') + '" id=' + setUID('tabAlliance_RefreshList') + ' /></td>' + '			<td align=center width=25%><input type=button value="' + translate('Message alliance') + '" id=' + setUID('tabAlliance_MsgAll') + ' /></td>' + '			<td align=center width=25%>' + ((t.my_role == 'vassal' || t.my_role == 'none') ? '&nbsp;' : '<input type=button value="' + translate('Refresh applicants') + '" id=' + setUID('tabAlliance_RefreshApplicants') + ' />') + '</td>' + '			<td align=center width=25%><input type=button value="' + translate('actions-resign').initCap() + '" id=' + setUID('tabAlliance_Regin') + ' /></td>' + '		</tr>' + '	</table>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabAllianceList') + '>' + translate('members') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAllianceActivity') + '>' + translate('Activity') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAllianceTrans') + '>' + translate('Transport') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAllianceReinforcement') + '>' + translate('reinforcements') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAllianceAuto') + '>L.I.T.</a></li>' + '	<li class=tab><a id=' + setUID('tabAlliances') + '>' + translate('Alliances') + ' Top 100</a></li>' + '</ul>' + '<div id=' + setUID('tabAlliance_Content') + ' style="padding-top:0px; height:655px; ; max-height:655px; overflow-y:auto"></div>';
 
-				$(t.container).update(m);
+				t.container.innerHTML = m;
 
-				$(UID['tabAlliance_RefreshList']).observe('click', t.refreshList);
-				$(UID['tabAllianceList']).observe('click', t.tabAllianceList);
-				$(UID['tabAllianceActivity']).observe('click', t.tabAllianceActivity);
-				$(UID['tabAllianceTrans']).observe('click', t.tabAllianceTrans);
-				$(UID['tabAllianceReinforcement']).observe('click', t.tabAllianceReinforcement);
-				$(UID['tabAllianceAuto']).observe('click', t.tabAllianceAuto);
-				$(UID['tabAlliance_MsgAll']).observe('click', function() {
+				document.getElementById(UID['tabAlliance_RefreshList']).addEventListener('click', t.refreshList);
+				document.getElementById(UID['tabAllianceList']).addEventListener('click', t.tabAllianceList);
+				document.getElementById(UID['tabAllianceActivity']).addEventListener('click', t.tabAllianceActivity);
+				document.getElementById(UID['tabAllianceTrans']).addEventListener('click', t.tabAllianceTrans);
+				document.getElementById(UID['tabAllianceReinforcement']).addEventListener('click', t.tabAllianceReinforcement);
+				document.getElementById(UID['tabAllianceAuto']).addEventListener('click', t.tabAllianceAuto);
+				document.getElementById(UID['tabAlliance_MsgAll']).addEventListener('click', function() {
 					dialogSendMsg(translate('Alliance'), (Seed.player.alliance.id || 0));
 				});
-				$(UID['tabAlliance_Regin']).observe('click', function() {
+				document.getElementById(UID['tabAlliance_Regin']).addEventListener('click', function() {
 					t.onClickResign(function() {
 						t.show()
 					});
 				});
-				$(UID['tabAlliances']).observe('click', t.tabAlliances, false);
-				if ($(UID['tabAlliance_RefreshApplicants']))
-					$(UID['tabAlliance_RefreshApplicants']).observe('click', t.refreshApplicants);
+				document.getElementById(UID['tabAlliances']).addEventListener('click', t.tabAlliances, false);
+				if (document.getElementById(UID['tabAlliance_RefreshApplicants']))
+					document.getElementById(UID['tabAlliance_RefreshApplicants']).addEventListener('click', t.refreshApplicants);
 
 				window.addEventListener('unload', t.onUnload, false);
 
@@ -13873,17 +16049,17 @@
 			show: function() {
 				var t = Tabs.Alliance;
 				if (Seed.player.alliance && Seed.player.alliance.id > 0) {
-					setButtonStyle($(UID['tabAlliance_RefreshList']), true);
-					if ($(UID['tabAlliance_RefreshApplicants'])) setButtonStyle($(UID['tabAlliance_RefreshApplicants']), true);
-					setButtonStyle($(UID['tabAlliance_MsgAll']), true);
+					setButtonStyle(document.getElementById(UID['tabAlliance_RefreshList']), true);
+					if (document.getElementById(UID['tabAlliance_RefreshApplicants'])) setButtonStyle(document.getElementById(UID['tabAlliance_RefreshApplicants']), true);
+					setButtonStyle(document.getElementById(UID['tabAlliance_MsgAll']), true);
 					if (t.my_role == 'overlord')
-						setButtonStyle($(UID['tabAlliance_Regin']), false, 'btn_off');
-					else setButtonStyle($(UID['tabAlliance_Regin']), true, 'btn_off');
+						setButtonStyle(document.getElementById(UID['tabAlliance_Regin']), false, 'btn_off');
+					else setButtonStyle(document.getElementById(UID['tabAlliance_Regin']), true, 'btn_off');
 				} else {
-					setButtonStyle($(UID['tabAlliance_RefreshList']), false);
-					if ($(UID['tabAlliance_RefreshApplicants'])) setButtonStyle($(UID['tabAlliance_RefreshApplicants']), false);
-					setButtonStyle($(UID['tabAlliance_MsgAll']), false);
-					setButtonStyle($(UID['tabAlliance_Regin']), false, 'btn_off');
+					setButtonStyle(document.getElementById(UID['tabAlliance_RefreshList']), false);
+					if (document.getElementById(UID['tabAlliance_RefreshApplicants'])) setButtonStyle(document.getElementById(UID['tabAlliance_RefreshApplicants']), false);
+					setButtonStyle(document.getElementById(UID['tabAlliance_MsgAll']), false);
+					setButtonStyle(document.getElementById(UID['tabAlliance_Regin']), false, 'btn_off');
 				}
 				t.marchTick();
 				if (!t.checkMembersBusy) {
@@ -14058,10 +16234,10 @@
 			/** ALLIANCE MEMBERS LIST SUB-TAB ** */
 			tabAllianceList: function() {
 				var t = Tabs.Alliance;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAllianceList']).className = 'selected';
-				$(UID['tabAllianceList']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAllianceList']).className = 'selected';
+				document.getElementById(UID['tabAllianceList']).style.zIndex = 1;
 				t.lastSubTab = 'tabAllianceList';
 
 				t.contentType = 0;
@@ -14072,15 +16248,15 @@
 				else kLastupdate = '';
 
 				var m = '<div id=' + setUID('tabAlliance_Results') + ' style="height:640px">' + '	<div class=' + UID['title'] + '>' + translate('Members list ') + kLastupdate + '</div>' + '	<div id=' + setUID('tabAlliance_ResultList') + ' class=' + UID['status_ticker'] + ' style="height:620px; max-height:620px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' + '	<div id=' + setUID('tabAlliance_RequestHeader') + ' class=' + UID['title'] + '>' + translate('Applicants') + '</div>' + '	<div id=' + setUID('tabAlliance_RequestList') + ' class=' + UID['status_ticker'] + ' style="display:none; height:100px; max-height:100px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabAlliance_Content']).innerHTML = m;
+				document.getElementById(UID['tabAlliance_Content']).innerHTML = m;
 				if (t.my_role == 'vassal' || t.my_role == 'none' || Data.dynamic.players.applicants.length == 0) {
-					$(UID['tabAlliance_ResultList']).style.height = "620px";
-					$(UID['tabAlliance_RequestHeader']).style.display = "none";
-					$(UID['tabAlliance_RequestList']).style.display = "none";
+					document.getElementById(UID['tabAlliance_ResultList']).style.height = "620px";
+					document.getElementById(UID['tabAlliance_RequestHeader']).style.display = "none";
+					document.getElementById(UID['tabAlliance_RequestList']).style.display = "none";
 				} else {
-					$(UID['tabAlliance_ResultList']).style.height = "490px";
-					$(UID['tabAlliance_RequestHeader']).style.display = "block";
-					$(UID['tabAlliance_RequestList']).style.display = "block";
+					document.getElementById(UID['tabAlliance_ResultList']).style.height = "490px";
+					document.getElementById(UID['tabAlliance_RequestHeader']).style.display = "block";
+					document.getElementById(UID['tabAlliance_RequestList']).style.display = "block";
 				}
 
 				var m = '<table class=' + UID['row_style'] + '>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td id=' + setUID('tabAlliance_tal_0') + ' width="40px"><A><span>' + translate('Dist') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_tal_1') + ' width="55px"><A><span>' + translate('Coords') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_tal_2') + ' width="150px" style="overflow-x:auto"><A><span>' + translate('Player name') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_tal_3') + ' width="65px" style="overflow-x:auto"><A><span>' + translate('Role') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_tal_4') + ' width="65px" align=right><A><span>' + translate('Might') + '</span></A></td>' + '		<td width="60px" align=right>' + translate('Evol') + '</td>' + '		<td id=' + setUID('tabAlliance_tal_5') + ' width="65px" align=right><A><span>' + translate('Joined') + '</span></A></td>' + '	</tr>';
@@ -14125,13 +16301,13 @@
 						ul.push(UIDMsg + '_' + Data.dynamic.players.memberships_evolution[old].id);
 					}
 				}
-				$(UID['tabAlliance_ResultList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabAlliance_ResultList']).innerHTML = m + '</table>';
 				for (var h = 0; h < 6; h++)
-					$(UID['tabAlliance_tal_' + h]).addEventListener('click', sortMembList, false);
+					document.getElementById(UID['tabAlliance_tal_' + h]).addEventListener('click', sortMembList, false);
 				for (var u = 0; u < ul.length; u++)
-					$(ul[u]).addEventListener('click', onClickMsg, false);
+					document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 				for (var u = 0; u < ur.length; u++)
-					$(ur[u]).addEventListener('click', onRejectMember, false);
+					document.getElementById(ur[u]).addEventListener('click', onRejectMember, false);
 
 				if (t.my_role != 'vassal' && t.my_role != 'none' || is_null(Data.dynamic.players.applicants) || Data.dynamic.players.applicants.length > 0) {
 					var m = '<table class=' + UID['row_style'] + '>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td id=' + setUID('tabAlliance_taa_0') + ' width="40px"><A><span>' + translate('Dist') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_taa_1') + ' width="55px"><A><span>' + translate('Coords') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_taa_2') + ' width="150px" style="overflow-x:auto"><A><span>' + translate('Player name') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_taa_3') + ' width="65px" align=right><A><span>' + translate('Might') + '</span></A></td>' + '	</tr>';
@@ -14150,13 +16326,13 @@
 						ua.push(UIDAcc + '_' + i);
 						ur.push(UIDRej + '_' + i);
 					}
-					$(UID['tabAlliance_RequestList']).innerHTML = m + '</table>';
+					document.getElementById(UID['tabAlliance_RequestList']).innerHTML = m + '</table>';
 					for (var h = 0; h < 4; h++)
-						$(UID['tabAlliance_taa_' + h]).addEventListener('click', sortApplicantList, false);
+						document.getElementById(UID['tabAlliance_taa_' + h]).addEventListener('click', sortApplicantList, false);
 					for (var u = 0; u < ul.length; u++) {
-						$(ul[u]).addEventListener('click', onClickMsg, false);
-						$(ua[u]).addEventListener('click', onAcceptApplicant, false);
-						$(ur[u]).addEventListener('click', onRejectApplicant, false);
+						document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
+						document.getElementById(ua[u]).addEventListener('click', onAcceptApplicant, false);
+						document.getElementById(ur[u]).addEventListener('click', onRejectApplicant, false);
 					}
 				}
 
@@ -14383,10 +16559,10 @@
 			/** ALLIANCE TRANSPORT SUB-TAB ** */
 			tabAllianceTrans: function() {
 				var t = Tabs.Alliance;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAllianceTrans']).className = 'selected';
-				$(UID['tabAllianceTrans']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAllianceTrans']).className = 'selected';
+				document.getElementById(UID['tabAllianceTrans']).style.zIndex = 1;
 				t.lastSubTab = 'tabAllianceTrans';
 				t.contentType = 1;
 
@@ -14408,24 +16584,24 @@
 					}
 				}
 				m += '<tr><td align=right class=right>' + translate('Load capacity') + '&nbsp:</td>' + '		<td colspan=4 align=left><div id=' + setUID('tabAlliance_Total') + '></div></td>' + '	</tr>' + '</table><br>' + '<table class=' + UID['table'] + ' style="margin-top:3px" width=60%>' + '	<tr valign=top><td style="font-size:2px">&nbsp</td>' + '	</tr><tr valign=top align=center>' + '		<td width=25%><label><input id=' + setUID('tabAlliance_AdaptTrsp') + ' type=button class="' + UID['btn_green'] + '" value="' + translate('Adapt Transport') + '" /></label></td>' + '		<td width=25%><label><input id=' + setUID('tabAlliance_AdaptTSpeed') + ' type=button class="' + UID['btn_green'] + '" value="' + translate('Adapt Transp. by speed') + '" /></label></td>' + '	</tr><tr valign=top><td style="font-size:2px">&nbsp</td>' + '	</tr><tr valign=top align=center>' + '		<td width=25%><label><input id=' + setUID('tabAlliance_clearAll') + ' type=button class="' + UID['btn_green'] + '" value="' + translate('Clear all') + '" /></label></td>' + '		<td width=25%><label><input id=' + setUID('tabAlliance_Launch') + ' type=button value="' + translate('Send transport') + '" /></label></td>' + '	</tr>' + '</table>' + '<br></div>' + '<div id=' + setUID('tabAlliance_TFeedbackBox') + ' class=' + UID['status_ticker'] + ' style="margin-top:5px; margin-bottom:5px !important">' + '	<div id=' + setUID('tabAlliance_TReport') + ' style="margin-top:5px;height:165px; max-height:165px; width:540px; max-width:540px; overflow:auto;">' + '		<table id=' + setUID('tabAlliance_TMarches') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div>' + '</div></div>';
-				$(UID['tabAlliance_Content']).innerHTML = m;
+				document.getElementById(UID['tabAlliance_Content']).innerHTML = m;
 
-				$(UID['tabAlliance_Yoyo']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAlliance_Yoyo']).addEventListener('click', function(event) {
 					Data.options.alliance.recall = event.target.checked
 				}, false);
-				$(UID['tabAlliance_clearAll']).addEventListener('click', onClickClearAll, false);
-				$(UID['tabAlliance_AdaptTrsp']).addEventListener('click', function() {
+				document.getElementById(UID['tabAlliance_clearAll']).addEventListener('click', onClickClearAll, false);
+				document.getElementById(UID['tabAlliance_AdaptTrsp']).addEventListener('click', function() {
 					onClickAdaptTrsp(1)
 				}, false);
-				$(UID['tabAlliance_AdaptTSpeed']).addEventListener('click', function() {
+				document.getElementById(UID['tabAlliance_AdaptTSpeed']).addEventListener('click', function() {
 					onClickAdaptTrsp(2)
 				}, false);
-				$(UID['tabAlliance_Launch']).addEventListener('click', sendTransp, false);
-				troopTable($(UID['tabAlliance_TTroops']), 1, 'TR', eventTroopsTransport);
+				document.getElementById(UID['tabAlliance_Launch']).addEventListener('click', sendTransp, false);
+				troopTable(document.getElementById(UID['tabAlliance_TTroops']), 1, 'TR', eventTroopsTransport);
 				for (i = 0; i < transportable_resource_types.length; i++) {
 					if(transportable_resource_types[i] != 'lunar_energy' && transportable_resource_types[i] != 'blue_energy') {
-						$(UIDRes + '_' + i).addEventListener('change', resourceChanged, false);
-						butMax = $(UIDMax + '_' + i);
+						document.getElementById(UIDRes + '_' + i).addEventListener('change', resourceChanged, false);
+						butMax = document.getElementById(UIDMax + '_' + i);
 						butMax.addEventListener('click', setResourceMax, false);
 						setButtonStyle(butMax, true, 'btn_green');
 					}
@@ -14480,19 +16656,19 @@
 						var troopTotGiven = 0;
 						var isGood=true;
 						for (var i = 0; i < transport_unit_types.length; ++i) {
-							var nbTemp = toNum($('TR_'+i).value);
+							var nbTemp = toNum(document.getElementById('TR_'+i).value);
 							if (isNaN(x) || x < 0) {
 								isGood=false;
-								$('TR_'+i).style.backgroundColor = 'red';
+								document.getElementById('TR_'+i).style.backgroundColor = 'red';
 							} else {
 								troopTotGiven += nbTemp;
-								$('TR_'+i).style.backgroundColor = '';
+								document.getElementById('TR_'+i).style.backgroundColor = '';
 							}
 						}
 						
 						if ( troopTotGiven > (getMusterPoint(CAPITAL.id)).max_troops) {
 							for (var i = 0; i < transport_unit_types.length; ++i) {
-								$('TR_'+i).style.backgroundColor = 'red';
+								document.getElementById('TR_'+i).style.backgroundColor = 'red';
 							}
 						} else {
 							Data.options.alliance.data.transports[Names.troops.byAbbr[transport_unit_types[args[1]]][1]] = x;
@@ -14524,7 +16700,7 @@
 						if(transportable_resource_types[r] != 'lunar_energy' && transportable_resource_types[r] != 'blue_energy') {
 							if (r != args[1]) t.totalResources = toNum(t.totalResources) + toNum(Data.options.alliance.data.resources[transportable_resource_types[r]]);
 							if (r == args[1]) actualStock = Math.round(toNum(Seed.cities[CAPITAL.id].resources[transportable_resource_types[r]]));
-								$(UID['tabAlliance_Res'] + '_' + r).style.backgroundColor = '';
+								document.getElementById(UID['tabAlliance_Res'] + '_' + r).style.backgroundColor = '';
 						}
 					}
 					if (isNaN(x) || x < 0 || (x + toNum(t.totalResources)) > toNum(t.maxResources))
@@ -14532,7 +16708,7 @@
 					else event.target.style.backgroundColor = '';
 					event.target.value = toNum(x);
 					Data.options.alliance.data.resources[transportable_resource_types[args[1]]] = toNum(x);
-					$(UID['tabAlliance_Rem'] + '_' + args[1]).innerHTML = '( ' + numf(actualStock - toNum(x), ' ') + ' )';
+					document.getElementById(UID['tabAlliance_Rem'] + '_' + args[1]).innerHTML = '( ' + numf(actualStock - toNum(x), ' ') + ' )';
 					t.displayTotal();
 				}
 
@@ -14686,10 +16862,10 @@
 			/** ALLIANCE AUTO-BANK SUB-TAB ** */
 			tabAllianceAuto: function() {
 				var t = Tabs.Alliance;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAllianceAuto']).className = 'selected';
-				$(UID['tabAllianceAuto']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAllianceAuto']).className = 'selected';
+				document.getElementById(UID['tabAllianceAuto']).style.zIndex = 1;
 				t.lastSubTab = 'tabAllianceAuto';
 				t.contentType = 4;
 
@@ -14705,23 +16881,23 @@
 					m += '<tr><td class=right width=60px>' + translate(desc) + ' :</td>' + '	<td width=90px>' + '		<input type=text id=' + UIDRes + '_' + p + ' maxlength=10 style="width:70px" size=2 value="' + toNum(Data.options.alliance.auto.resources[transportable_resource_types[p]]) + '"\></td>' + '	<td width=30px>' + '		<input class=small id=' + UIDMax + '_' + p + ' ref=' + p + ' type=button style="width:auto !important;" value=" Max " \></td>' + '	<td align=right width=90px><div id=' + UIDStk + '_' + p + '>' + actualStock + '</div></td>' + '<td></td></tr>';
 				}
 				m += '<tr><td align=right class=right>' + translate('Load capacity') + '&nbsp:</td>' + '		<td colspan=4 align=left><div id=' + setUID('tabAlliance_ATotal') + '></div></td>' + '	</tr><tr>' + '		<td colspan=3 class=right>' + translate('Maximize resource to transport according to max load') + ':&nbsp;</td>' + '		<td><input id=' + setUID('tabAlliance_MaxLoad') + ' type=checkbox ' + (Data.options.alliance.auto.max_load ? 'CHECKED' : '') + ' /></td>' + '	</tr><tr>' + '		<td colspan=3 class=right>' + translate('Delay Between Transports') + ':&nbsp;</td>' + '		<td><input id=' + setUID('tabAlliance_AutoDelayMin') + ' type=text size=1 maxlength=4 value="' + Data.options.alliance.auto.delay_min + '" />' + '			 to <span id=' + setUID('tabAlliance_AutoDelayMax') + '>' + Data.options.alliance.auto.delay_max + '</span>&nbsp;' + translate('seconds') + '		</td>' + '	</tr><tr>' + '		<td colspan=3 class=right> ' + translate('Maximum simultaneous marches') + ':&nbsp;</td>' + '		<td><input id=' + setUID('tabAlliance_AutoMaxMarches') + ' type=text size=1 maxlength=2 value="' + Data.options.alliance.auto.max_marches + '" /></td>' + '	</tr>' + '</table><br><br>' + '<center><input id=' + setUID('tabAlliance_AOnOff') + ' type=button value="OnOff" /></center>' + '<br></div>' + '<div id=' + setUID('tabAlliance_FeedbackBox') + ' class=' + UID['status_ticker'] + ' style="margin-top:5px; margin-bottom:5px !important">' + '	<div id=' + setUID('tabAlliance_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '	<div id=' + setUID('tabAlliance_AReport') + ' style="margin-top:5px;height:105px; max-height:105px; width:540px; max-width:540px; overflow:auto;">' + '		<table id=' + setUID('tabAlliance_AMarches') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div>' + '</div></div>';
-				$(UID['tabAlliance_Content']).innerHTML = m;
+				document.getElementById(UID['tabAlliance_Content']).innerHTML = m;
 
-				$(UID['tabAlliance_AutoYoyo']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAlliance_AutoYoyo']).addEventListener('click', function(event) {
 					Data.options.alliance.auto.recall = event.target.checked
 				}, false);
-				$(UID['tabAlliance_MaxLoad']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAlliance_MaxLoad']).addEventListener('click', function(event) {
 					Data.options.alliance.auto.max_load = event.target.checked
 				}, false);
-				$(UID['tabAlliance_AutoDelayMin']).addEventListener('change', delayChanged, false);
-				$(UID['tabAlliance_AutoMaxMarches']).addEventListener('change', maxMarchesChanged, false);
-				$(UID['tabAlliance_AOnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabAlliance_AutoDelayMin']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabAlliance_AutoMaxMarches']).addEventListener('change', maxMarchesChanged, false);
+				document.getElementById(UID['tabAlliance_AOnOff']).addEventListener('click', function() {
 					t.setEnable(!Data.options.alliance.auto.enabled);
 				}, false);
-				troopTable($(UID['tabAlliance_ATroops']), 1, 'TR', eventTroopsTransport);
+				troopTable(document.getElementById(UID['tabAlliance_ATroops']), 1, 'TR', eventTroopsTransport);
 				for (i = 0; i < transportable_resource_types.length; i++) {
-					$(UIDRes + '_' + i).addEventListener('change', resourceChanged, false);
-					butMax = $(UIDMax + '_' + i);
+					document.getElementById(UIDRes + '_' + i).addEventListener('change', resourceChanged, false);
+					butMax = document.getElementById(UIDMax + '_' + i);
 					butMax.addEventListener('click', setResourceMax, false);
 					setButtonStyle(butMax, true, 'btn_green');
 				}
@@ -14732,11 +16908,11 @@
 				function delayChanged(event) {
 					var min = toNum(event.target.value);
 					var max = toNum(min * 1.5);
-					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 10) || min > 3600) {
+					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 3) || min > 3600) {
 						event.target.style.backgroundColor = 'red';
 						return;
 					}
-					$(UID['tabAlliance_AutoDelayMax']).innerHTML = max;
+					document.getElementById(UID['tabAlliance_AutoDelayMax']).innerHTML = max;
 					event.target.style.backgroundColor = '';
 					Data.options.alliance.auto.delay_min = min;
 					Data.options.alliance.auto.delay_max = max;
@@ -14766,7 +16942,7 @@
 						t.maxResources = t.maxResources + (toNum(qty) * toNum(load));
 					}
 					var avail = numf(toNum(t.maxResources) - toNum(t.totalResources), ' ');
-					$(UID['tabAlliance_ATotal']).innerHTML = '<B>' + numf(toNum(t.totalResources), ' ') + '</B> / <B>' +
+					document.getElementById(UID['tabAlliance_ATotal']).innerHTML = '<B>' + numf(toNum(t.totalResources), ' ') + '</B> / <B>' +
 						numf(toNum(t.maxResources), ' ') + '</B> (<B>' + avail + '</B> disponible)';
 				}
 
@@ -14789,7 +16965,7 @@
 				}
 
 				function maxMarchesChanged(event) {
-					var val = toNum($(UID['tabAlliance_AutoMaxMarches']).value);
+					var val = toNum(document.getElementById(UID['tabAlliance_AutoMaxMarches']).value);
 					if (val < 0 || val > Seed.cities[CAPITAL.id].figures.marches.maximum) {
 						event.target.style.backgroundColor = 'red';
 						return;
@@ -14807,7 +16983,7 @@
 						if (r != args[1])
 							t.totalResources = toNum(t.totalResources) + toNum(Data.options.alliance.auto.resources[transportable_resource_types[r]]);
 					for (i = 0; i < transportable_resource_types.length; i++)
-						$(UID['tabAlliance_ARes'] + '_' + i).style.backgroundColor = '';
+						document.getElementById(UID['tabAlliance_ARes'] + '_' + i).style.backgroundColor = '';
 					if (isNaN(x) || x < 0 || (x + toNum(t.totalResources)) > toNum(t.maxResources))
 						event.target.style.backgroundColor = 'red';
 					else
@@ -14871,10 +17047,10 @@
 			/** ALLIANCE REINFORCEMENT SUB-TAB ** */
 			tabAllianceReinforcement: function() {
 				var t = Tabs.Alliance;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAllianceReinforcement']).className = 'selected';
-				$(UID['tabAllianceReinforcement']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAllianceReinforcement']).className = 'selected';
+				document.getElementById(UID['tabAllianceReinforcement']).style.zIndex = 1;
 				t.lastSubTab = 'tabAllianceReinforcement';
 				t.contentType = 2;
 
@@ -14891,23 +17067,23 @@
 					m += '<tr><td class=right width="100px">' + translate(Names.troops.byName[all_unit_types[i]][1]) + ':</td>' + '	<td width="75px">' + '		<input type=text id=' + UIDTrp + '_' + i + ' maxlength=6 style="width:55px" size=2 value="' + num + '"\></td>' + '	<td width="30px">' + '		<input class=small id=' + UIDMax + '_' + i + ' ref=' + i + ' type=button  style="width:auto !important;" value=" Max " \></td>' + '	<td align=right width="70px">' + stk + '</td>' + '	<td align=right width="80px"><span id=' + UIDRem + '_' + i + ' ref=' + i + '>' + remaining + '</span></td>' + '</tr>';
 				}
 				m += '</table><br><br>' + '<table class=' + UID['table'] + ' style="margin-top:3px" width=60%>' + '	<tr valign=top align=center>' + '		<td width=25%><label><input id=' + setUID('tabAlliance_clearAllR') + ' type=button class="' + UID['btn_green'] + '" value="' + translate('Clear all') + '" /></label></td>' + '		<td width=25%><label><input id=' + setUID('tabAlliance_LaunchR') + ' type=button value="' + translate('Send reinforcement') + '" /></label></td>' + '		<td width=25%><label><input id=' + setUID('tabAlliance_LaunchAllR') + ' type=button value="' + translate('Send Max in reinf') + '" /></label></td>' + '	</tr>' + '</table>' + '<br></div></div>';
-				$(UID['tabAlliance_Content']).innerHTML = m;
-				$(UID['tabAlliance_clearAllR']).addEventListener('click', onClickClearAll, false);
-				$(UID['tabAlliance_LaunchR']).addEventListener('click', SendReinforcement, false);
-				$(UID['tabAlliance_LaunchAllR']).addEventListener('click', sendMaxReinforcements, false);
+				document.getElementById(UID['tabAlliance_Content']).innerHTML = m;
+				document.getElementById(UID['tabAlliance_clearAllR']).addEventListener('click', onClickClearAll, false);
+				document.getElementById(UID['tabAlliance_LaunchR']).addEventListener('click', SendReinforcement, false);
+				document.getElementById(UID['tabAlliance_LaunchAllR']).addEventListener('click', sendMaxReinforcements, false);
 				for (i = 0; i < all_unit_types.length; i++) {
-					$(UIDTrp + '_' + i).addEventListener('change', eventTroopsReinforcemment, false);
-					butMax = $(UIDMax + '_' + i);
+					document.getElementById(UIDTrp + '_' + i).addEventListener('change', eventTroopsReinforcemment, false);
+					butMax = document.getElementById(UIDMax + '_' + i);
 					butMax.addEventListener('click', setTroupsMax, false);
 					setButtonStyle(butMax, true, 'btn_green');
 				}
 
 				if (isUnderProtection()) {
-					setButtonStyle($(UID['tabAlliance_LaunchR']), false);
-					setButtonStyle($(UID['tabAlliance_LaunchAllR']), false);
+					setButtonStyle(document.getElementById(UID['tabAlliance_LaunchR']), false);
+					setButtonStyle(document.getElementById(UID['tabAlliance_LaunchAllR']), false);
 				} else {
-					setButtonStyle($(UID['tabAlliance_LaunchR']), true);
-					setButtonStyle($(UID['tabAlliance_LaunchAllR']), true);
+					setButtonStyle(document.getElementById(UID['tabAlliance_LaunchR']), true);
+					setButtonStyle(document.getElementById(UID['tabAlliance_LaunchAllR']), true);
 				}
 
 				t.getMemberList();
@@ -14920,14 +17096,14 @@
 					for (var r = 0; r < all_unit_types.length; r++) {
 						if (r != args[1]) t.totalForces = toNum(t.totalForces) + toNum(Data.options.alliance.data.units[all_unit_types[r]]);
 						if (r == args[1]) currentForces = toNum(Seed.cities[CAPITAL.id].units[all_unit_types[r]]);
-						$(UID['tabAlliance_Trp'] + '_' + r).style.backgroundColor = '';
+						document.getElementById(UID['tabAlliance_Trp'] + '_' + r).style.backgroundColor = '';
 					}
 					if (isNaN(x) || x < 0 || (x + toNum(t.totalForces)) > (getMusterPoint(CAPITAL.id)).max_troops)
 						event.target.style.backgroundColor = 'red';
 					else event.target.style.backgroundColor = '';
 					event.target.value = x;
 					Data.options.alliance.data.units[all_unit_types[args[1]]] = x;
-					$(UID['tabAlliance_RemT'] + '_' + args[1]).innerHTML = '( ' + numf(currentForces - x, ' ') + ' )';
+					document.getElementById(UID['tabAlliance_RemT'] + '_' + args[1]).innerHTML = '( ' + numf(currentForces - x, ' ') + ' )';
 				}
 
 				function onClickClearAll() {
@@ -15143,10 +17319,10 @@
 			/** ALLIANCES TOP 100 SUB-TAB ** */
 			tabAlliances: function() {
 				var t = Tabs.Alliance;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAlliances']).className = 'selected';
-				$(UID['tabAlliances']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAlliances']).className = 'selected';
+				document.getElementById(UID['tabAlliances']).style.zIndex = 1;
 				t.lastSubTab = 'tabAlliances';
 
 				t.contentType = 3;
@@ -15158,7 +17334,7 @@
 				else kLastupdate = '';
 
 				var m = '<div id=' + setUID('tabAlliance_Results') + ' style="height:640px">' + '	<div class=' + UID['title'] + '>' + translate('Alliances') + 'Top 100 ' + kLastupdate + '</div>' + '	<div id=' + setUID('tabAlliance_ResultList') + ' class=' + UID['status_ticker'] + ' style="height:620px; max-height:620px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabAlliance_Content']).innerHTML = m;
+				document.getElementById(UID['tabAlliance_Content']).innerHTML = m;
 
 				var m = '<table class=' + UID['row_style'] + '>' + '	<tr><td align=left colspan=4>' + '		<input type=button value="' + translate('Refresh list') + '" id=' + setUID('tabAlliance_RefreshAlliances') + ' />' + '	</td></tr>' + '	<tr valign=top><td style="font-size:2px">&nbsp</td>' + '	</tr>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td id=' + setUID('tabAlliance_taa_0') + ' width="40px" align=center><A><span>' + translate('Rank') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_taa_1') + ' width="150px" style="overflow-x:auto"><A><span>' + translate('Alliance') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_taa_2') + ' width="150px" style="overflow-x:auto"><A><span>' + translate('role-overlord') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_taa_3') + ' width="45px" align=center><A><span>' + translate('members') + '</span></A></td>' + '		<td id=' + setUID('tabAlliance_taa_4') + ' width="65px" align=right><A><span>' + translate('Might') + '</span></A></td>' + '		<td width="60px" align=right>' + translate('Evol') + '</td>' + '	</tr>';
 				var am = [],
@@ -15188,14 +17364,14 @@
 					am.push(UIDMsg + '_' + Data.dynamic.players.alliances[i].id);
 					if (!Seed.player.alliance || Seed.player.alliance.id == 0) ai.push(UIDInv + '_' + i);
 				}
-				$(UID['tabAlliance_ResultList']).innerHTML = m + '</table>';
-				$(UID['tabAlliance_RefreshAlliances']).addEventListener('click', refreshAlllianceList, false);
+				document.getElementById(UID['tabAlliance_ResultList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabAlliance_RefreshAlliances']).addEventListener('click', refreshAlllianceList, false);
 				for (var h = 0; h < 5; h++)
-					$(UID['tabAlliance_taa_' + h]).addEventListener('click', sortAllianceList, false);
+					document.getElementById(UID['tabAlliance_taa_' + h]).addEventListener('click', sortAllianceList, false);
 				for (var x = 0; x < am.length; x++)
-					$(am[x]).addEventListener('click', onClickMsg, false);
+					document.getElementById(am[x]).addEventListener('click', onClickMsg, false);
 				for (var x = 0; x < ai.length; x++)
-					$(ai[x]).addEventListener('click', onClickInvite, false);
+					document.getElementById(ai[x]).addEventListener('click', onClickInvite, false);
 
 				function sortAllianceList(event) {
 					var t = Tabs.Alliance;
@@ -15384,10 +17560,10 @@
 			/** ALLIANCE ACTIVITY SUB-TAB ** */
 			tabAllianceActivity: function() {
 				var t = Tabs.Alliance;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAllianceActivity']).className = 'selected';
-				$(UID['tabAllianceActivity']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAllianceActivity']).className = 'selected';
+				document.getElementById(UID['tabAllianceActivity']).style.zIndex = 1;
 				t.lastSubTab = 'tabAllianceActivity';
 
 				t.contentType = 5;
@@ -15399,12 +17575,12 @@
 				else kLastupdate = '';
 
 				var m = '<div id=' + setUID('tabAlliance_Results') + ' style="height:640px">' + '	<div class=' + UID['title'] + '>' + translate('Activity') + ' ' + kLastupdate + '</div>' + '	<div id=' + setUID('tabAlliance_ResultList') + ' class=' + UID['status_ticker'] + ' style="height:620px; max-height:620px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' + '	<div id=' + setUID('tabAlliance_ReportDetail') + ' class=' + UID['status_ticker'] + ' style="height:555px; max-height:555px; overflow:auto; white-space:nowrap; display:none; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabAlliance_Content']).innerHTML = m;
+				document.getElementById(UID['tabAlliance_Content']).innerHTML = m;
 
 				var m = '<table class=' + UID['row_style'] + '>' + '	<tr><td align=left colspan=6>' + '		<input type=button value="' + translate('Refresh') + '" id=' + setUID('tabAlliance_RefreshActivity') + ' />' + '	</td></tr>' + '	<tr valign=top><td style="font-size:2px">&nbsp</td>' + '	</tr>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td width="40px" align=center><A><span>' + translate('ago') + '</span></A></td>' + '		<td width="150px" style="overflow-x:auto"><A><span>' + translate('members') + '</span></A></td>' + '		<td width="20px" style="overflow-x:auto"><A><span>' + translate('Role') + '</span></A></td>' + '		<td width="150px" align=center><A><span>' + translate('Enemy') + '</span></A></td>' + '		<td width="60px" align=right><A><span>' + translate('status') + '</span></A></td>' + '		<td width="60px" align=right>' + translate('reports') + '</td>' + '	</tr>';
 				if (t.report_num == -1) {
-					$(UID['tabAlliance_ResultList']).style.height = "620px";
-					$(UID['tabAlliance_ReportDetail']).style.display = "none";
+					document.getElementById(UID['tabAlliance_ResultList']).style.height = "620px";
+					document.getElementById(UID['tabAlliance_ReportDetail']).style.display = "none";
 					for (var i = 0; i < Data.dynamic.players.activity.length; i++) {
 						var act = Data.dynamic.players.activity[i];
 						var time = timestrShort(toNum(serverTime()) - toNum(act.time));
@@ -15415,8 +17591,8 @@
 						m += '<tr><td align=center>' + time + '</td>' + '	<td align=left>' + mate + '</td>' + '	<td align=center><b>' + (act.def ? '&gt' : '<span class=' + UID['red'] + '>&lt</span>') + '</b></td>' + '	<td align=left>' + enemy + '</td>' + '	<td align=left>' + (act.won ? translate('won') : '<span class=' + UID['red'] + '>' + translate('lost') + '</span>') + '</td>' + '	<td><input id=' + setUID('tabAlliance_view_' + i) + ' ref=' + i + ' class=Xtrasmall style="width:auto !important;" type=submit value="' + translate('View') + '" /></td>' + '</tr>';
 					}
 				} else {
-					$(UID['tabAlliance_ResultList']).style.height = "60px";
-					$(UID['tabAlliance_ReportDetail']).style.display = "block";
+					document.getElementById(UID['tabAlliance_ResultList']).style.height = "60px";
+					document.getElementById(UID['tabAlliance_ReportDetail']).style.display = "block";
 					var act = Data.dynamic.players.activity[t.report_num];
 					var time = timestrShort(toNum(serverTime()) - toNum(act.time));
 					var mate = '<span title="' + act.aname + ', ' + translate('might') + ' ' + numf(act.amight, ' ') + ' (' + act.ax + '/' + act.ay + ')"><b>' + act.aname + '</b></span>';
@@ -15425,21 +17601,21 @@
 					var enemy = '<span title="' + act.pname + enemy_alli + ', ' + translate('might') + ' ' + numf(act.pmight, ' ') + ' (' + act.px + '/' + act.py + ')"><b>' + act.pname + '</b>' + enemy_alli + '</span>';
 					m += '<tr><td align=center>' + time + '</td>' + '	<td align=left>' + mate + '</td>' + '	<td align=center>' + (act.def ? '&gt' : '<span class=' + UID['red'] + '>&lt</span>') + '</td>' + '	<td align=left>' + enemy + '</td>' + '	<td align=left>' + (act.won ? translate('won') : '<span class=' + UID['red'] + '>' + translate('lost') + '</span>') + '</td>' + '	<td><input id=' + setUID('tabAlliance_Hide') + ' class=Xtrasmall style="width:auto !important;" type=submit value="' + translate('wall-orders-hide') + '" /></td>' + '</tr>';
 				}
-				$(UID['tabAlliance_ResultList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabAlliance_ResultList']).innerHTML = m + '</table>';
 
-				var refreshBut = $(UID['tabAlliance_RefreshActivity']);
+				var refreshBut = document.getElementById(UID['tabAlliance_RefreshActivity']);
 				refreshBut.addEventListener('click', refreshActivityList, false);
 				if (Seed.player.alliance && Seed.player.alliance.id > 0) setButtonStyle(refreshBut, true);
 				else setButtonStyle(refreshBut, false);
 
 				if (t.report_num == -1) {
 					for (var i = 0; i < Data.dynamic.players.activity.length; i++) {
-						var butView = $(UID['tabAlliance_view_' + i]);
+						var butView = document.getElementById(UID['tabAlliance_view_' + i]);
 						butView.addEventListener('click', onViewReport, false);
 						Element.addClassName(butView, UID['btn_green']);
 					}
 				} else {
-					var butHide = $(UID['tabAlliance_Hide']);
+					var butHide = document.getElementById(UID['tabAlliance_Hide']);
 					butHide.addEventListener('click', onHideReport, false);
 					Element.addClassName(butHide, UID['btn_green']);
 					showReport();
@@ -15549,7 +17725,7 @@
 					var t = Tabs.Alliance,
 						m = '';
 					m += '<center><div id=' + setUID('displayMsg_ReportContent') + ' style="height:555px; max-height:555px; width:98%; max-width:98%; overflow-y:auto;">' + Messages.displayBattleReport(Messages.activity[Data.dynamic.players.activity[t.report_num].id], Data.dynamic.players.activity[t.report_num].aname) + '</div></center>';
-					$(UID['tabAlliance_ReportDetail']).innerHTML = m;
+					document.getElementById(UID['tabAlliance_ReportDetail']).innerHTML = m;
 				}
 			},
 
@@ -15573,7 +17749,7 @@
 					t.maxResources = t.maxResources + (toNum(qty) * toNum(load));
 				}
 				var avail = numf(toNum(t.maxResources) - toNum(t.totalResources), ' ');
-				$(UID['tabAlliance_Total']).innerHTML = '<B>' + numf(toNum(t.totalResources), ' ') + '</B> / <B>' +
+				document.getElementById(UID['tabAlliance_Total']).innerHTML = '<B>' + numf(toNum(t.totalResources), ' ') + '</B> / <B>' +
 					numf(toNum(t.maxResources), ' ') + '</B> (<B>' + avail + '</B> disponible)';
 			},
 			autoTransportTick: function() {
@@ -15655,12 +17831,12 @@
 						for (var x = 0; x < transportable_resource_types.length; x++) {
 							var actualStock = numf(Math.round(toNum(Seed.cities[CAPITAL.id].resources[transportable_resource_types[x]])));
 							var UIDStk = UID['tabAlliance_AStk'] + '_' + x;
-							if ($(UIDStk)) $(UIDStk).innerHTML = actualStock;
+							if (document.getElementById(UIDStk)) document.getElementById(UIDStk).innerHTML = actualStock;
 						}
 						for (var y = 0; y < transport_unit_types.length; ++y) {
 							var trpStk = numf(toNum(Seed.cities[CAPITAL.id].units[Names.troops.byAbbr[transport_unit_types[y]][1]]), ' ');
 							var UIDTrpStk = UID['tabAlliance_ATStk'] + '_' + y;
-							if ($(UIDTrpStk)) $(UIDTrpStk).innerHTML = '(&nbsp;' + trpStk + '&nbsp;)';
+							if (document.getElementById(UIDTrpStk)) document.getElementById(UIDTrpStk).innerHTML = '(&nbsp;' + trpStk + '&nbsp;)';
 						}
 					} else {
 						t.autoErrors++
@@ -15782,8 +17958,8 @@
 						break;
 				}
 				clearTimeout(t.marchTimer);
-				if ($(UID[element_target]))
-					Marches.updateTable($(UID[element_target]), 'transport');
+				if (document.getElementById(UID[element_target]))
+					Marches.updateTable(document.getElementById(UID[element_target]), 'transport');
 				t.marchTimer = setTimeout(t.marchTick, 1000);
 			},
 			getTarget: function(targetId) {
@@ -15854,14 +18030,14 @@
 					}
 				}
 				m += '</select>';
-				$(UID[element_target]).innerHTML = m;
-				$(UID[element_select]).addEventListener('change', t.playerSelChanged, false);
+				document.getElementById(UID[element_target]).innerHTML = m;
+				document.getElementById(UID[element_select]).addEventListener('change', t.playerSelChanged, false);
 				t.playerCityDesc();
 				t.playerSelChanged();
 			},
 			onClickResign: function(notify) {
 				var t = Tabs.Alliance;
-				setButtonStyle($(UID['tabAlliance_Regin']), false, 'btn_off', 'btn_disabled');
+				setButtonStyle(document.getElementById(UID['tabAlliance_Regin']), false, 'btn_off', 'btn_disabled');
 				dialogConfirm(translate('leave-current'),
 					function() {
 						try {
@@ -15908,7 +18084,7 @@
 						} catch (e) {}
 					},
 					function() {
-						setButtonStyle($(UID['tabAlliance_Regin']), true, 'btn_off', 'btn_disabled');
+						setButtonStyle(document.getElementById(UID['tabAlliance_Regin']), true, 'btn_off', 'btn_disabled');
 					}, true
 				);
 			},
@@ -15926,7 +18102,7 @@
 						element_target = 'tabAlliance_TransPlayer';
 						break;
 				}
-				var id = $(UID[element_target]);
+				var id = document.getElementById(UID[element_target]);
 				var sel = nvl(id.value, 'none');
 				id.value = sel;
 				switch (t.contentType) {
@@ -15963,7 +18139,7 @@
 				for (var cityIdx = 1; cityIdx < Seed.cities.length && !found; cityIdx++) {
 					if (Seed.cities[cityIdx] && type_id == Seed.cities[cityIdx].id) {
 						found = true;
-						$(UID[element_target]).innerHTML = '<B>' + translate(Seed.cities[cityIdx].name) + '</b>' +
+						document.getElementById(UID[element_target]).innerHTML = '<B>' + translate(Seed.cities[cityIdx].name) + '</b>' +
 							' &nbsp; (' + Seed.cities[cityIdx].x + ', ' + Seed.cities[cityIdx].y +
 							') &nbsp; <B>' + translate('Distance') + ': </b>' +
 							getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Seed.cities[cityIdx].x, Seed.cities[cityIdx].y);
@@ -15973,7 +18149,7 @@
 					for (var i = 0; i < Data.dynamic.players.memberships.length && !found; i++) {
 						if (Data.dynamic.players.memberships[i].id == type_id) {
 							found = true;
-							$(UID[element_target]).innerHTML = translate('City') + ' &nbsp; <B>' + Data.dynamic.players.memberships[i].city + '</b>' +
+							document.getElementById(UID[element_target]).innerHTML = translate('City') + ' &nbsp; <B>' + Data.dynamic.players.memberships[i].city + '</b>' +
 								' &nbsp; (' + Data.dynamic.players.memberships[i].x + ', ' + Data.dynamic.players.memberships[i].y +
 								') &nbsp; <B>' + translate('Distance') + ': </b>' + Data.dynamic.players.memberships[i].dist;
 						}
@@ -15982,7 +18158,7 @@
 			},
 			setEnable: function(onOff) {
 				var t = Tabs.Alliance;
-				var but = $(UID['tabAlliance_AOnOff']);
+				var but = document.getElementById(UID['tabAlliance_AOnOff']);
 				Data.options.alliance.auto.enabled = onOff;
 				if (but) {
 					if (onOff) {
@@ -15995,18 +18171,8 @@
 						but.className = UID['btn_off'];
 					}
 				}
-			},
-		}
-		/**
-		 * ****************************** Alliance features Tab
-		 * *********************
-		 */
-
-
-		/**
-		 * ****************************** Attacks Tab
-		 * *******************************
-		 */
+			}
+		};
 		Tabs.Attacks = {
 			tabOrder: ATTACK_TAB_ORDER,
 			tabLabel: 'Attacks',
@@ -16037,14 +18203,14 @@
 
 				div.innerHTML = '' + '<div id=' + setUID('tabAttack_Title') + ' class=' + UID['title'] + '>' + translate('Attack') + ' ' + translate(Data.options.attacks.choice) + ' </div>' + '<div class=' + UID['status_ticker'] + ' id=' + setUID('tabAttack_Status') + ' style="margin-bottom:5px !important">' + '	<center><input type=button value="OnOff" id=' + setUID('tabAttack_OnOff') + ' /></center>' + '	<div id=' + setUID('tabAttack_Report') + ' style="margin-top:5px;height:140px; max-height:140px; width:540px; max-width:540px; overflow:auto;">' + '		<table id=' + setUID('tabAttack_Marches') + ' class=' + UID['table'] + '></table>' + '	</div>' + '	<div id=' + setUID('tabAttack_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabAttackLevels') + '>' + translate('Levels') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAttackTarget') + '>' + translate('Targets') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAttackStats') + '>' + translate('Statistics') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAttackMaps') + '>' + translate('Map') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabAttackConfig') + '>' + translate('Config') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabAttack_Content') + ' style="padding-top:0px; height:440px; overflow:auto"></div>';
 
-				$(UID['tabAttack_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabAttack_OnOff']).addEventListener('click', function() {
 					t.setAttackEnable(!Data.options.attacks.enabled);
 				}, false);
-				$(UID['tabAttackLevels']).addEventListener('click', t.tabAttackLevels, false);
-				$(UID['tabAttackConfig']).addEventListener('click', t.tabAttackConfig, false);
-				$(UID['tabAttackTarget']).addEventListener('click', t.tabAttackTarget, false);
-				$(UID['tabAttackStats']).addEventListener('click', t.tabAttackStats, false);
-				$(UID['tabAttackMaps']).addEventListener('click', t.tabAttackMaps, false);
+				document.getElementById(UID['tabAttackLevels']).addEventListener('click', t.tabAttackLevels, false);
+				document.getElementById(UID['tabAttackConfig']).addEventListener('click', t.tabAttackConfig, false);
+				document.getElementById(UID['tabAttackTarget']).addEventListener('click', t.tabAttackTarget, false);
+				document.getElementById(UID['tabAttackStats']).addEventListener('click', t.tabAttackStats, false);
+				document.getElementById(UID['tabAttackMaps']).addEventListener('click', t.tabAttackMaps, false);
 				if (Data.stats.attacks == null)
 					t.clearStats();
 				t.contentType = toNum(Data.options.attacks.current_tab);
@@ -16060,7 +18226,7 @@
 				t.marchTick();
 				Data.options.attacks.current_tab = (t.contentType || Data.options.attacks.current_tab);
 				if (t.contentType == 2)
-					$(UID['tabAttack_Content']).scrollTop = gAttScrollPos;
+					document.getElementById(UID['tabAttack_Content']).scrollTop = gAttScrollPos;
 				switch (t.contentType) {
 					case 0:
 						t.tabAttackLevels();
@@ -16142,7 +18308,7 @@
 			setAttackEnable: function(onOff) {
 				var t = Tabs.Attacks;
 				clearTimeout(t.attackTimer);
-				var but = $(UID['tabAttack_OnOff']);
+				var but = document.getElementById(UID['tabAttack_OnOff']);
 				Data.options.attacks.enabled = onOff;
 				if (onOff) {
 					Messages.addBattleReportListener(t.gotBattleReport);
@@ -16190,7 +18356,7 @@
 			marchTick: function() {
 				var t = Tabs.Attacks;
 				clearTimeout(t.marchTimer);
-				Marches.updateTable($(UID['tabAttack_Marches']), 'attacks');
+				Marches.updateTable(document.getElementById(UID['tabAttack_Marches']), 'attacks');
 				t.marchTimer = setTimeout(t.marchTick, 1000);
 			},
 
@@ -16244,7 +18410,7 @@
 							var t = Tabs.Attacks,
 								attackDelay, retryDelay;
 							if (rslt) {
-								var delay_min = toNum(Data.options.attacks.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 10));
+								var delay_min = toNum(Data.options.attacks.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 3));
 								var delay_max = toNum(Data.options.attacks.delay_max, toNum(delay_min * 1.5));
 								attackDelay = Math.floor(Math.random() * (delay_max - delay_min + 1) + delay_min);
 								t.attackTimer = setTimeout(t.autoCheckTargets, attackDelay * 1000);
@@ -16460,10 +18626,10 @@
 			/** * Attacks Tab - Levels Sub-Tab ** */
 			tabAttackLevels: function() {
 				var t = Tabs.Attacks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAttackLevels']).className = 'selected';
-				$(UID['tabAttackLevels']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAttackLevels']).className = 'selected';
+				document.getElementById(UID['tabAttackLevels']).style.zIndex = 1;
 				t.lastSubTab = 'tabAttackLevels';
 
 				t.contentType = 0;
@@ -16521,20 +18687,20 @@
 				}
 
 				m += '</table><div class=short></div></div>';
-				$(UID['tabAttack_Content']).innerHTML = m;
+				document.getElementById(UID['tabAttack_Content']).innerHTML = m;
 				for (var x = 1; x < 12; x++) {
-					$(UID['tabAttackLevels_LvlOnOff_' + x]).addEventListener('change', enableChanged, false);
-					$(UID['tabAttackLevels_LvlDist_' + x]).addEventListener('change', distChanged, false);
-					$(UID['tabAttackLevels_GreatDrag_' + x]).addEventListener('change', dragChanged, false);
+					document.getElementById(UID['tabAttackLevels_LvlOnOff_' + x]).addEventListener('change', enableChanged, false);
+					document.getElementById(UID['tabAttackLevels_LvlDist_' + x]).addEventListener('change', distChanged, false);
+					document.getElementById(UID['tabAttackLevels_GreatDrag_' + x]).addEventListener('change', dragChanged, false);
 				}
 				for (var i = 0; i < currentTroops.length; ++i) {
 					for (var x = 1; x < 12; x++) {
-						$(UID['tabAttackLevels_LvlTroops_' + x + '_' + currentTroops[i]]).addEventListener('change', troopsChanged, false);
+						document.getElementById(UID['tabAttackLevels_LvlTroops_' + x + '_' + currentTroops[i]]).addEventListener('change', troopsChanged, false);
 					}
 				}
 				for (var j = 0; j < currentDragons.length; ++j) {
 					for (var x = 1; x < 12; x++) {
-						$(UID['tabAttackLevels_LvlDragons_' + x + '_' + currentDragons[j]]).addEventListener('change', exceptDragonsChanged, false);
+						document.getElementById(UID['tabAttackLevels_LvlDragons_' + x + '_' + currentDragons[j]]).addEventListener('change', exceptDragonsChanged, false);
 					}
 				}
 
@@ -16584,10 +18750,10 @@
 			/** * Attacks Tab - Config Sub-Tab ** */
 			tabAttackConfig: function() {
 				var t = Tabs.Attacks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAttackConfig']).className = 'selected';
-				$(UID['tabAttackConfig']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAttackConfig']).className = 'selected';
+				document.getElementById(UID['tabAttackConfig']).style.zIndex = 1;
 				t.lastSubTab = 'tabAttackConfig';
 
 				t.contentType = 1;
@@ -16604,31 +18770,31 @@
 					  + '	</tr><tr>' + '		<td class=right>' + translate('Send even without Dragon') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabAttackConfig_SendWithoutDragon') + ' type=checkbox ' + (Data.options.attacks.send_without_dragon ? 'CHECKED' : '') + ' /></td>' + '		</tr>'
 					  + '	</tr></table>';
 
-				$(UID['tabAttack_Content']).innerHTML = m;
-				$(UID['tabAttackConfig_DelAttacks']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabAttack_Content']).innerHTML = m;
+				document.getElementById(UID['tabAttackConfig_DelAttacks']).addEventListener('change', function(event) {
 					Data.options.attacks.delete_reports = event.target.checked;
 				}, false);
-				$(UID['tabAttackConfig_StopOnLoss']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabAttackConfig_StopOnLoss']).addEventListener('change', function(event) {
 					Data.options.attacks.stop_on_loss = event.target.checked;
 				}, false);
-				$(UID['tabAttackConfig_LogAttack']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabAttackConfig_LogAttack']).addEventListener('change', function(event) {
 					Data.options.attacks.log_attacks = event.target.checked;
 				}, false);
-				$(UID['tabAttackConfig_ClearAll']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabAttackConfig_ClearAll']).addEventListener('change', function(event) {
 					Data.options.attacks.clear_all_targets = event.target.checked;
 				}, false);
-				$(UID['tabAttackConfig_SendWithoutDragon']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAttackConfig_SendWithoutDragon']).addEventListener('click', function(event) {
 					Data.options.attacks.send_without_dragon = event.target.checked;
 				}, false);
-				$(UID['tabAttackConfig_DelayMin']).addEventListener('change', delayChanged, false);
-				$(UID['tabAttackConfig_DelayMax']).addEventListener('change', delayChanged, false);
-				$(UID['tabAttackConfig_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
-				$(UID['tabAttackConfig_ClearLast']).addEventListener('click', clearLast, false);
+				document.getElementById(UID['tabAttackConfig_DelayMin']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabAttackConfig_DelayMax']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabAttackConfig_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
+				document.getElementById(UID['tabAttackConfig_ClearLast']).addEventListener('click', clearLast, false);
 
 				function delayChanged(event) {
-					var min = toNum($(UID['tabAttackConfig_DelayMin']).value);
-					var max = toNum($(UID['tabAttackConfig_DelayMax']).value);
-					if (min < nvl(MIN_DELAY, 10) || min > 3600 || (max - min) < 5) {
+					var min = toNum(document.getElementById(UID['tabAttackConfig_DelayMin']).value);
+					var max = toNum(document.getElementById(UID['tabAttackConfig_DelayMax']).value);
+					if (min < nvl(MIN_DELAY, 3) || min > 3600 || (max - min) < 5) {
 						var dial = new ModalDialog(t.container, 300, 150, '', true);
 						dial.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + translate('Error') + '</b></center></div>';
 						dial.getContentDiv().innerHTML = '<b>' + translate('Invalid delays') + '</b><br><br>' + translate('First value must be between') + ' ' + MIN_DELAY + ' ' + translate('and') + ' 3600. ' + translate('Second value must be at least') + ' 5 ' + translate('above the first value');
@@ -16639,7 +18805,7 @@
 				}
 
 				function maxMarchesChanged(event) {
-					var val = toNum($(UID['tabAttackConfig_MaxMarches']).value);
+					var val = toNum(document.getElementById(UID['tabAttackConfig_MaxMarches']).value);
 					if (val < 0 || val > Seed.cities[CAPITAL.id].figures.marches.maximum) {
 						event.target.style.backgroundColor = 'red';
 						return;
@@ -16682,10 +18848,10 @@
 			/** * Attacks Tab - Targets Sub-Tab ** */
 			tabAttackTarget: function() {
 				var t = Tabs.Attacks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAttackTarget']).className = 'selected';
-				$(UID['tabAttackTarget']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAttackTarget']).className = 'selected';
+				document.getElementById(UID['tabAttackTarget']).style.zIndex = 1;
 				t.lastSubTab = 'tabAttackTarget';
 
 				t.contentType = 2;
@@ -16698,7 +18864,7 @@
 					return a.d - b.d;
 				});
 
-				$(UID['tabAttack_Title']).innerHTML = translate('Attack') + ' ' + translate(Data.options.attacks.choice);
+				document.getElementById(UID['tabAttack_Title']).innerHTML = translate('Attack') + ' ' + translate(Data.options.attacks.choice);
 				var m = '<div class=' + UID['title'] + '>' + translate('Attacks') + '&nbsp;' + translate(Data.options.attacks.choice) + '</div>';
 
 				setUID('tabAttackTarget_MapChoice');
@@ -16758,45 +18924,45 @@
 				}
 				m += '</table></div>';
 
-				$(UID['tabAttack_Content']).innerHTML = m;
-				$(UID['tabAttack_Content']).scrollTop = gAttScrollPos;
+				document.getElementById(UID['tabAttack_Content']).innerHTML = m;
+				document.getElementById(UID['tabAttack_Content']).scrollTop = gAttScrollPos;
 
 				/* Hilight owned resources and don't attack them */
 				for (var i = 0; i < targets.length; i++) {
 					for (var j = 0; j < ownedWilderness.length; j++) {
 						if (ownedWilderness[j].x == targets[i].x && ownedWilderness[j].y == targets[i].y) {
-							$(UID['tabAttackTarget_TabRow_' + i]).className = UID['row_owned'];
+							document.getElementById(UID['tabAttackTarget_TabRow_' + i]).className = UID['row_owned'];
 							targets[i].A = false;
 							break;
 						}
 					}
 				}
 
-				$(UID['tabAttack_Content']).addEventListener('scroll', onScroll, false);
-				$(UID['tabAttackTarget_MapChoice']).addEventListener('change', onMapChoice, false);
+				document.getElementById(UID['tabAttack_Content']).addEventListener('scroll', onScroll, false);
+				document.getElementById(UID['tabAttackTarget_MapChoice']).addEventListener('change', onMapChoice, false);
 
 				for (var i = 0; i < targets.length; i++) {
-					var butAttack = $(UID['tabAttackTarget_AttackNow_' + i]);
+					var butAttack = document.getElementById(UID['tabAttackTarget_AttackNow_' + i]);
 					butAttack.addEventListener('click', butAttackNow, false);
-					var butSpy = $(UID['tabAttackTarget_SpyNow_' + i]);
+					var butSpy = document.getElementById(UID['tabAttackTarget_SpyNow_' + i]);
 					butSpy.addEventListener('click', butSpyNow, false);
-					var butBookmark = $(UID['tabAttackTarget_Bookmark_' + i]);
+					var butBookmark = document.getElementById(UID['tabAttackTarget_Bookmark_' + i]);
 					butBookmark.addEventListener('click', addBookmark, false);
 					if (t.selectedMapName == 'City' || t.selectedMapName == 'Outpost' || t.selectedMapName == 'Wildernesses') {
 						if (!targets[i].F || targets[i].F == 0)
-							$(UID['tabAttackTarget_SkipAttack_' + i]).addEventListener('click', toggleAttackable, false);
+							document.getElementById(UID['tabAttackTarget_SkipAttack_' + i]).addEventListener('click', toggleAttackable, false);
 					}
 					setButtonStyle(butAttack, targets[i].A, 'btn_green', 'btn_red');
 					setButtonStyle(butSpy, targets[i].A, 'btn_green', 'btn_red');
 					setButtonStyle(butBookmark, targets[i].A);
 				}
 				for (var u = 0; u < ul.length; u++)
-					$(ul[u]).addEventListener('click', onClickMsg, false);
+					document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 
 				tick();
 
 				function onScroll(event) {
-					if (t.contentType == 2) gAttScrollPos = $(UID['tabAttack_Content']).scrollTop;
+					if (t.contentType == 2) gAttScrollPos = document.getElementById(UID['tabAttack_Content']).scrollTop;
 				}
 
 				function onMapChoice(event) {
@@ -16844,8 +19010,8 @@
 				function toggleAttackable(event) {
 					var n = toNum(event.target.getAttribute('ref'));
 					targets[n].A = (!targets[n].A);
-					setButtonStyle($(UID['tabAttackTarget_AttackNow_' + n]), targets[n].A, 'btn_green', 'btn_red');
-					setButtonStyle($(UID['tabAttackTarget_SpyNow_' + n]), targets[n].A, 'btn_green', 'btn_red');
+					setButtonStyle(document.getElementById(UID['tabAttackTarget_AttackNow_' + n]), targets[n].A, 'btn_green', 'btn_red');
+					setButtonStyle(document.getElementById(UID['tabAttackTarget_SpyNow_' + n]), targets[n].A, 'btn_green', 'btn_red');
 				}
 
 				function addBookmark(event) {
@@ -16869,9 +19035,9 @@
 					var now = serverTime();
 					var ts;
 					clearTimeout(t.targetTickTimer);
-					if (!$(UID['tabAttackTarget_Tab'])) return;
+					if (!document.getElementById(UID['tabAttackTarget_Tab'])) return;
 					for (var i = 0; i < targets.length; i++) {
-						var list = $(UID['tabAttackTarget_List_' + i]);
+						var list = document.getElementById(UID['tabAttackTarget_List_' + i]);
 						if (list == undefined) continue;
 
 						if (is_null(targets[i].la)) ts = '---';
@@ -16889,18 +19055,18 @@
 			/** * Attacks Tab - Stats Sub-tab ** */
 			tabAttackStats: function() {
 				var t = Tabs.Attacks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAttackStats']).className = 'selected';
-				$(UID['tabAttackStats']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAttackStats']).className = 'selected';
+				document.getElementById(UID['tabAttackStats']).style.zIndex = 1;
 				t.lastSubTab = 'tabAttackStats';
 
 				t.contentType = 3;
 
 				var m = '<div class=' + UID['title'] + '>' + translate('Attacks Stats') + '</div>' + '<div id=' + setUID('tabAttackStats_Statbox') + ' class=' + UID['status_ticker'] + '>' + '<div id=' + setUID('tabAttackStats_Status') + '></div>' + '<div id=' + setUID('tabAttackStats_Percent') + '></div>' + '<br/>' + '<center><input id=' + setUID('tabAttackStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '<br></div>';
 
-				$(UID['tabAttack_Content']).innerHTML = m;
-				$(UID['tabAttackStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabAttack_Content']).innerHTML = m;
+				document.getElementById(UID['tabAttackStats_Clear']).addEventListener('click', function() {
 					t.clearStats();
 					t.showStats();
 				}, false);
@@ -16971,7 +19137,7 @@
 			},
 
 			showStats: function() {
-				var div = $(UID['tabAttackStats_Status']);
+				var div = document.getElementById(UID['tabAttackStats_Status']);
 				var t = Tabs.Attacks;
 
 				if (div == null) return;
@@ -17036,10 +19202,10 @@
 			/** * Attacks Tab - Maps Sub-tab ** */
 			tabAttackMaps: function() {
 				var t = Tabs.Attacks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAttackMaps']).className = 'selected';
-				$(UID['tabAttackMaps']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAttackMaps']).className = 'selected';
+				document.getElementById(UID['tabAttackMaps']).style.zIndex = 1;
 				t.lastSubTab = 'tabAttackMaps';
 
 				t.contentType = 4;
@@ -17061,18 +19227,18 @@
 				}
 				m += '</table></div>';
 
-				$(UID['tabAttack_Content']).innerHTML = m;
-				$(UID['tabAttackMaps_Search']).addEventListener('click', function() {
+				document.getElementById(UID['tabAttack_Content']).innerHTML = m;
+				document.getElementById(UID['tabAttackMaps_Search']).addEventListener('click', function() {
 					butSearchNow(true);
 				}, false);
-				$(UID['tabAttackMaps_FastSearch']).addEventListener('click', function() {
+				document.getElementById(UID['tabAttackMaps_FastSearch']).addEventListener('click', function() {
 					butSearchNow(false);
 				}, false);
-				$(UID['tabAttackMaps_Radius']).addEventListener('change', function(ev) {
+				document.getElementById(UID['tabAttackMaps_Radius']).addEventListener('change', function(ev) {
 					var el = ev.target;
 					Data.options.map.radius = toNum(el.options[el.selectedIndex].value);
 				}, false);
-				$(UID['tabAttackMaps_RadiusFast']).addEventListener('change', function(ev) {
+				document.getElementById(UID['tabAttackMaps_RadiusFast']).addEventListener('change', function(ev) {
 					var el = ev.target;
 					Data.options.map.radius_fast = toNum(el.options[el.selectedIndex].value);
 				}, false);
@@ -17128,16 +19294,6 @@
 				}
 			}
 		};
-		/**
-		 * ****************************** Attacks Tab
-		 * *******************************
-		 */
-
-
-		/**
-		 * ****************************** Bookmarks Tab
-		 * *****************************
-		 */
 		Tabs.Bookmarks = {
 			tabOrder: BOOKMARK_TAB_ORDER,
 			tabLabel: 'Bookmarks',
@@ -17166,11 +19322,11 @@
 				var m = '' + '<div class=' + UID['title'] + '>' + translate('Bookmarks') + '</div>' + '<div id=' + setUID('tabBookmarks_Status') + ' class=' + UID['status_ticker'] + ' style="margin-bottom:5px !important">' + '	<center><input id=' + setUID('tabBookmarks_OnOff') + ' type=button value="OnOff" /></center>' + '	<div id=' + setUID('tabBookmarks_Report') + ' style="margin-top:5px;height:140px; max-height:140px; width:540px; max-width:540px; overflow:auto;">' + '		<table id=' + setUID('tabBookmarks_Marches') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div>' + '	<div id=' + setUID('tabBookmarks_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabBookmarksEdit') + '>' + translate('Edit') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabBookmarksTargets') + '>' + translate('Targets') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabBookmarksStats') + '>' + translate('Stats') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabBookmarksConfig') + '>' + translate('Config') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabBookmarks_Content') + ' style="padding-top:0px; height:430px; overflow-y:auto"></div>';
 				t.container.innerHTML = m;
 
-				$(UID['tabBookmarksEdit']).addEventListener('click', t.tabBookmarksEdit, false);
-				$(UID['tabBookmarksTargets']).addEventListener('click', t.tabBookmarksTargets, false);
-				$(UID['tabBookmarksStats']).addEventListener('click', t.tabBookmarksStats, false);
-				$(UID['tabBookmarksConfig']).addEventListener('click', t.tabBookmarksConfig, false);
-				$(UID['tabBookmarks_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabBookmarksEdit']).addEventListener('click', t.tabBookmarksEdit, false);
+				document.getElementById(UID['tabBookmarksTargets']).addEventListener('click', t.tabBookmarksTargets, false);
+				document.getElementById(UID['tabBookmarksStats']).addEventListener('click', t.tabBookmarksStats, false);
+				document.getElementById(UID['tabBookmarksConfig']).addEventListener('click', t.tabBookmarksConfig, false);
+				document.getElementById(UID['tabBookmarks_OnOff']).addEventListener('click', function() {
 					t.setBookmarksEnable(!Data.options.bookmarks.enabled);
 				}, false);
 				window.addEventListener('unload', t.onUnload, false);
@@ -17182,10 +19338,10 @@
 
 			tabBookmarksEdit: function() {
 				var t = Tabs.Bookmarks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabBookmarksEdit']).className = 'selected';
-				$(UID['tabBookmarksEdit']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabBookmarksEdit']).className = 'selected';
+				document.getElementById(UID['tabBookmarksEdit']).style.zIndex = 1;
 				t.lastSubTab = 'tabBookmarksEdit';
 
 				t.contentType = 0;
@@ -17205,19 +19361,19 @@
 					currentDragons.push(j);
 				}
 				m += '</tr>' + '	</table>' + '	</div>' + '</div>'
-				$(UID['tabBookmarks_Content']).innerHTML = m;
-				$(UID['tabBookmarks_CoordsX']).addEventListener('change', eventCoords, false);
-				$(UID['tabBookmarks_CoordsY']).addEventListener('change', eventCoords, false);
-				$(UID['tabBookmarks_Comment']).addEventListener('change', function() {
-					Data.options.bookmarks.new_bookmark.comment = $(UID['tabBookmarks_Comment']).value
+				document.getElementById(UID['tabBookmarks_Content']).innerHTML = m;
+				document.getElementById(UID['tabBookmarks_CoordsX']).addEventListener('change', eventCoords, false);
+				document.getElementById(UID['tabBookmarks_CoordsY']).addEventListener('change', eventCoords, false);
+				document.getElementById(UID['tabBookmarks_Comment']).addEventListener('change', function() {
+					Data.options.bookmarks.new_bookmark.comment = document.getElementById(UID['tabBookmarks_Comment']).value
 				}, false);
-				$(UID['tabBookmarks_Save']).addEventListener('click', saveCoords, false);
+				document.getElementById(UID['tabBookmarks_Save']).addEventListener('click', saveCoords, false);
 				if (Data.options.bookmarks.new_bookmark.id && Data.options.bookmarks.new_bookmark.id != '' && Data.options.bookmarks.new_bookmark.n && Data.options.bookmarks.new_bookmark.n != '')
-					$(UID['tabBookmarks_Msg']).addEventListener('click', onClickMsg, false);
-				setTroopTable($(UID['tabBookmarks_Troops']), 1, 'BW', wave_unit_types,
+					document.getElementById(UID['tabBookmarks_Msg']).addEventListener('click', onClickMsg, false);
+				setTroopTable(document.getElementById(UID['tabBookmarks_Troops']), 1, 'BW', wave_unit_types,
 					Data.options.bookmarks.new_bookmark.units, undefined, eventTroops, true);
 				for (var j = 0; j < currentDragons.length; ++j) {
-					$(UID['tabBookmarks_Dragons_' + currentDragons[j]]).addEventListener('change', function(event) {
+					document.getElementById(UID['tabBookmarks_Dragons_' + currentDragons[j]]).addEventListener('change', function(event) {
 						var args = event.target.getAttribute('ref');
 						Data.options.bookmarks.new_bookmark.dragons[Seed.dragonList[args[0]].type] = event.target.checked;
 						var include_great_dragon = false;
@@ -17230,7 +19386,7 @@
 					}, false);
 				}
 				eventCoords();
-				var butSpy = $(UID['tabBookmarks_Spy']);
+				var butSpy = document.getElementById(UID['tabBookmarks_Spy']);
 				butSpy.addEventListener('click', butSpyNow, false);
 				var tile = Data.options.bookmarks.new_bookmark;
 				if (!tile.ai || tile.ai == 0 || tile.ai == null || tile.ai != (Seed.player.alliance ? Seed.player.alliance.id : -1))
@@ -17253,7 +19409,7 @@
 						var tt = wave_unit_types[args[1]];
 						var tr = Data.options.bookmarks.new_bookmark.units;
 						tr[tt] = event.target.value;
-		}
+					}
 				}
 
 				function saveCoords() {
@@ -17275,17 +19431,17 @@
 
 			tabBookmarksTargets: function() {
 				var t = Tabs.Bookmarks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabBookmarksTargets']).className = 'selected';
-				$(UID['tabBookmarksTargets']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabBookmarksTargets']).className = 'selected';
+				document.getElementById(UID['tabBookmarksTargets']).style.zIndex = 1;
 				t.lastSubTab = 'tabBookmarksTargets';
 
 				t.contentType = 1;
 				var timer = null;
 
 				var m = '<div class="' + UID['title'] + '">' + translate('Targets') + '</div>' + '	<div id=' + setUID('tabBookmarksTargets_TargetsList') + ' class=' + UID['status_ticker'] + ' style="height:380px; max-height:380px; width:540px; max-width:540px; overflow:auto ; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabBookmarks_Content']).innerHTML = m;
+				document.getElementById(UID['tabBookmarks_Content']).innerHTML = m;
 
 				setUID('tabBookmarks_TypeChoice');
 				setUID('tabBookmarks_SortChoice');
@@ -17324,14 +19480,14 @@
 						si.push(i);
 					}
 				}
-				$(UID['tabBookmarksTargets_TargetsList']).innerHTML = m + '</table>';
-				$(UID['tabBookmarks_TypeChoice']).addEventListener('change', onTypeChoice, false);
-				$(UID['tabBookmarks_SortChoice']).addEventListener('change', onSortChoice, false);
+				document.getElementById(UID['tabBookmarksTargets_TargetsList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabBookmarks_TypeChoice']).addEventListener('change', onTypeChoice, false);
+				document.getElementById(UID['tabBookmarks_SortChoice']).addEventListener('change', onSortChoice, false);
 				for (var i = 0; i < el.length; i++) {
-					$(el[i]).addEventListener('click', onCheckEnabled, false);
-					var butRecall = $(UID['tabBookmarksTargets_Edit_' + i]);
-					var butDelete = $(UID['tabBookmarksTargets_Delete_' + i]);
-					var butSpy = $(UID['tabBookmarksTargets_Spy_' + i]);
+					document.getElementById(el[i]).addEventListener('click', onCheckEnabled, false);
+					var butRecall = document.getElementById(UID['tabBookmarksTargets_Edit_' + i]);
+					var butDelete = document.getElementById(UID['tabBookmarksTargets_Delete_' + i]);
+					var butSpy = document.getElementById(UID['tabBookmarksTargets_Spy_' + i]);
 					butRecall.addEventListener('click', editTarget, false);
 					butDelete.addEventListener('click', deleteTarget, false);
 					butSpy.addEventListener('click', butSpyNow, false);
@@ -17342,7 +19498,7 @@
 						setButtonStyle(butSpy, false, 'btn_green', 'btn_disabled');
 				}
 				for (var u = 0; u < ul.length; u++)
-					$(ul[u]).addEventListener('click', onClickMsg, false);
+					document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 				tick();
 
 				function butSpyNow(event) {
@@ -17442,10 +19598,10 @@
 					var now = serverTime();
 					var ts;
 					clearTimeout(timer);
-					if (!$(UID['tabBookmarksTargets_Tab']))
+					if (!document.getElementById(UID['tabBookmarksTargets_Tab']))
 						return;
 					for (var i = 0; i < Data.options.bookmarks.targets.length; i++) {
-						var last = $(UID['tabBookmarksTargets_Last_' + i]);
+						var last = document.getElementById(UID['tabBookmarksTargets_Last_' + i]);
 						if (last == undefined) continue;
 						if (is_null(Data.options.bookmarks.targets[i].last_attack)) ts = '---';
 						else {
@@ -17461,18 +19617,18 @@
 
 			tabBookmarksStats: function() {
 				var t = Tabs.Bookmarks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabBookmarksStats']).className = 'selected';
-				$(UID['tabBookmarksStats']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabBookmarksStats']).className = 'selected';
+				document.getElementById(UID['tabBookmarksStats']).style.zIndex = 1;
 				t.lastSubTab = 'tabBookmarksStats';
 
 				t.contentType = 2;
 
 				var m = '<div class=' + UID['title'] + '>' + translate('Attacks Stats') + '</div>' + '<div id=' + setUID('tabBookmarksStats_Statbox') + ' class=' + UID['status_ticker'] + '>' + '<div id=' + setUID('tabBookmarksStats_Status') + '></div>' + '<div id=' + setUID('tabBookmarksStats_Percent') + '></div>' + '<br/>' + '<center><input id=' + setUID('tabBookmarksStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '<br></div>';
 
-				$(UID['tabBookmarks_Content']).innerHTML = m;
-				$(UID['tabBookmarksStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabBookmarks_Content']).innerHTML = m;
+				document.getElementById(UID['tabBookmarksStats_Clear']).addEventListener('click', function() {
 					t.clearStats();
 					t.showStats();
 				}, false);
@@ -17481,29 +19637,29 @@
 
 			tabBookmarksConfig: function() {
 				var t = Tabs.Bookmarks;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabBookmarksConfig']).className = 'selected';
-				$(UID['tabBookmarksConfig']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabBookmarksConfig']).className = 'selected';
+				document.getElementById(UID['tabBookmarksConfig']).style.zIndex = 1;
 				t.lastSubTab = 'tabBookmarksConfig';
 
 				t.contentType = 3;
 
 				var m = '<div class=' + UID['title'] + '>' + translate('Bookmarks Configuration') + '</div>' + '<div id=' + setUID('tabBookmarksConfig_Status') + ' class=' + UID['status_ticker'] + ' style="overflow:auto">' + '	<table class=' + UID['table'] + ' width=100%>' + '	<tr>' + '		<td width=50% class=right>' + translate('Delay Between Attacks') + ':&nbsp;</td>' + '		<td width=50%>' + '		<input class=short id=' + setUID('tabBookmarksConfig_DelayMin') + ' maxlength=4 type=text value="' + Data.options.bookmarks.delay_min + '" />&nbsp;' + translate('to') + '		<input class=short id=' + setUID('tabBookmarksConfig_DelayMax') + ' maxlength=4 type=text value="' + Data.options.bookmarks.delay_max + '" />&nbsp;' + translate('seconds') + '		</td>' + '	</tr><tr>' + '		<td class=right>' + translate('Delete Battle Reports') + ':&nbsp;</td>' + '		<td><input id=' + setUID('tabBookmarksConfig_DelAttacks') + ' ' + (Data.options.bookmarks.delete_reports ? 'CHECKED ' : '') + ' type=checkbox /></td>' + '	</tr><tr>' + '		<td class=right>' + translate('Stop if any troops lost') + ':&nbsp;</td>' + '		<td><input id=' + setUID('tabBookmarksConfig_StopOnLoss') + ' ' + (Data.options.bookmarks.stop_on_loss ? 'CHECKED ' : '') + ' type=checkbox /></td>' + '	</tr><tr>' + '		<td class=right>' + translate('Maximum simultaneous marches') + ':&nbsp;</td>' + '		<td><input id=' + setUID('tabBookmarksConfig_MaxMarches') + ' class=short maxlength=2 type=text value="' + Data.options.bookmarks.max_marches + '" /></td>' + '	</tr></table>';
-				$(UID['tabBookmarks_Content']).innerHTML = m;
-				$(UID['tabBookmarksConfig_DelAttacks']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabBookmarks_Content']).innerHTML = m;
+				document.getElementById(UID['tabBookmarksConfig_DelAttacks']).addEventListener('change', function(event) {
 					Data.options.bookmarks.delete_reports = event.target.checked;
 				}, false);
-				$(UID['tabBookmarksConfig_StopOnLoss']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabBookmarksConfig_StopOnLoss']).addEventListener('change', function(event) {
 					Data.options.bookmarks.stop_on_loss = event.target.checked;
 				}, false);
-				$(UID['tabBookmarksConfig_DelayMin']).addEventListener('change', delayChanged, false);
-				$(UID['tabBookmarksConfig_DelayMax']).addEventListener('change', delayChanged, false);
-				$(UID['tabBookmarksConfig_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
+				document.getElementById(UID['tabBookmarksConfig_DelayMin']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabBookmarksConfig_DelayMax']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabBookmarksConfig_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
 
 				function delayChanged(event) {
-					var min = toNum($(UID['tabBookmarksConfig_DelayMin']).value);
-					var max = toNum($(UID['tabBookmarksConfig_DelayMax']).value);
+					var min = toNum(document.getElementById(UID['tabBookmarksConfig_DelayMin']).value);
+					var max = toNum(document.getElementById(UID['tabBookmarksConfig_DelayMax']).value);
 					if (min < MIN_DELAY || min > 3600 || (max - min) < 5) {
 						var dial = new ModalDialog(t.container, 300, 150, '', true);
 						dial.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + translate('Error') + '</b></center></div>';
@@ -17515,7 +19671,7 @@
 				}
 
 				function maxMarchesChanged(event) {
-					var val = toNum($(UID['tabBookmarksConfig_MaxMarches']).value);
+					var val = toNum(document.getElementById(UID['tabBookmarksConfig_MaxMarches']).value);
 					if (val < 0 || val > Seed.cities[CAPITAL.id].figures.marches.maximum) {
 						event.target.style.backgroundColor = 'red';
 						return;
@@ -17693,7 +19849,7 @@
 			marchTick: function() {
 				var t = Tabs.Bookmarks;
 				clearTimeout(t.marchTimer);
-				Marches.updateTable($(UID['tabBookmarks_Marches']), 'bookmark');
+				Marches.updateTable(document.getElementById(UID['tabBookmarks_Marches']), 'bookmark');
 				t.marchTimer = setTimeout(t.marchTick, 1000);
 			},
 			sendAttack: function(cityIdx, target, general, great_dragon, notify) {
@@ -17736,7 +19892,7 @@
 			},
 			setBookmarksEnable: function(onOff) {
 				var t = Tabs.Bookmarks;
-				var but = $(UID['tabBookmarks_OnOff']);
+				var but = document.getElementById(UID['tabBookmarks_OnOff']);
 				clearTimeout(t.attackTimer);
 				Data.options.bookmarks.enabled = onOff;
 				if (onOff) {
@@ -17757,7 +19913,7 @@
 				}
 			},
 			showStats: function() {
-				var div = $(UID['tabBookmarksStats_Status']);
+				var div = document.getElementById(UID['tabBookmarksStats_Status']);
 				var t = Tabs.Bookmarks;
 
 				if (div == null) return;
@@ -17868,16 +20024,6 @@
 				Data.options.bookmarks.current_tab = t.contentType;
 			}
 		};
-		/**
-		 * ****************************** Bookmarks Tab
-		 * *****************************
-		 */
-
-
-		/**
-		 * ****************************** Inbox Tab
-		 * *********************************
-		 */
 		Tabs.Inbox = {
 			tabOrder: INBOX_TAB_ORDER,
 			tabLabel: 'Inbox',
@@ -17923,29 +20069,29 @@
 				+ '</ul>' 
 				+ '<div id=' + setUID('tabInbox_Content') + ' style="padding-top:0px; height:655px; ; max-height:655px; overflow-y:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabInbox_Refresh']).addEventListener('click', t.getAllPages, false);
-				$(UID['tabInbox_SelectAll']).addEventListener('click', function() {
+				document.getElementById(UID['tabInbox_Refresh']).addEventListener('click', t.getAllPages, false);
+				document.getElementById(UID['tabInbox_SelectAll']).addEventListener('click', function() {
 					t.onSelectAll(true);
 				}, false);
-				$(UID['tabInbox_UnselectAll']).addEventListener('click', function() {
+				document.getElementById(UID['tabInbox_UnselectAll']).addEventListener('click', function() {
 					t.onSelectAll(false);
 				}, false);
-				$(UID['tabInbox_Delete']).addEventListener('click', t.deleteSelection, false);
-				$(UID['tabInboxAll']).addEventListener('click', function() {
+				document.getElementById(UID['tabInbox_Delete']).addEventListener('click', t.deleteSelection, false);
+				document.getElementById(UID['tabInboxAll']).addEventListener('click', function() {
 					t.tabInboxList(toNum(MESSAGES_ALL));
 				}, false);
-				$(UID['tabInboxMessages']).addEventListener('click', function() {
+				document.getElementById(UID['tabInboxMessages']).addEventListener('click', function() {
 					t.tabInboxList(toNum(MESSAGES_ONLY));
 				}, false);
-				$(UID['tabInboxReports']).addEventListener('click', function() {
+				document.getElementById(UID['tabInboxReports']).addEventListener('click', function() {
 					t.tabInboxList(toNum(REPORTS_ONLY));
 				}, false);
-				$(UID['tabInboxDeletion']).addEventListener('click', t.tabInboxDeletion, false);
-				$(UID['tabInboxTchatRealm']).addEventListener('click', t.tabInboxTchatRealm, false);
-				$(UID['tabInboxTchatAlliance']).addEventListener('click', t.tabInboxTchatAlliance, false);
-				setButtonStyle($(UID['tabInbox_SelectAll']), true, 'btn_green');
-				setButtonStyle($(UID['tabInbox_UnselectAll']), true, 'btn_green');
-				setButtonStyle($(UID['tabInbox_Delete']), true, 'btn_off');
+				document.getElementById(UID['tabInboxDeletion']).addEventListener('click', t.tabInboxDeletion, false);
+				document.getElementById(UID['tabInboxTchatRealm']).addEventListener('click', t.tabInboxTchatRealm, false);
+				document.getElementById(UID['tabInboxTchatAlliance']).addEventListener('click', t.tabInboxTchatAlliance, false);
+				setButtonStyle(document.getElementById(UID['tabInbox_SelectAll']), true, 'btn_green');
+				setButtonStyle(document.getElementById(UID['tabInbox_UnselectAll']), true, 'btn_green');
+				setButtonStyle(document.getElementById(UID['tabInbox_Delete']), true, 'btn_off');
 				window.addEventListener('unload', t.onUnload, false);
 				t.contentType = toNum(Data.options.inbox.current_tab, 0);
 				t.show();
@@ -17955,10 +20101,10 @@
 				var t = Tabs.Inbox;
 				t.tabTchatRealmActive = false;
 				t.tabTchatAllianceActive = false;
-				if ($(UID['tabInbox_Refresh'])) {
+				if (document.getElementById(UID['tabInbox_Refresh'])) {
 					if (toNum(Messages.total_count) > toNum(Messages.known_count))
-						setButtonStyle($(UID['tabInbox_Refresh']), true);
-					else setButtonStyle($(UID['tabInbox_Refresh']), false);
+						setButtonStyle(document.getElementById(UID['tabInbox_Refresh']), true);
+					else setButtonStyle(document.getElementById(UID['tabInbox_Refresh']), false);
 				}
 				if (!t.checkMessagesBusy) {
 					switch (toNum(t.contentType, 0)) {
@@ -17985,30 +20131,30 @@
 			tabInboxList: function(type) {
 				var t = Tabs.Inbox;
 				t.contentType = type;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInboxTchatAlliance']).className = '';
-				$(UID['tabInboxTchatAlliance']).style.zIndex = 0;
-				$(UID['tabInboxTchatRealm']).className = '';
-				$(UID['tabInboxTchatRealm']).style.zIndex = 0;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatAlliance']).className = '';
+				document.getElementById(UID['tabInboxTchatAlliance']).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatRealm']).className = '';
+				document.getElementById(UID['tabInboxTchatRealm']).style.zIndex = 0;
 				switch (type) {
 					case MESSAGES_ONLY:
-						$(UID['tabInboxMessages']).className = 'selected';
-						$(UID['tabInboxMessages']).style.zIndex = 1;
+						document.getElementById(UID['tabInboxMessages']).className = 'selected';
+						document.getElementById(UID['tabInboxMessages']).style.zIndex = 1;
 						t.lastSubTab = 'tabInboxMessages';
 						var head_text = translate('Messages');
 						t.message_list = t.getMessages('messages');
 						break;
 					case REPORTS_ONLY:
-						$(UID['tabInboxReports']).className = 'selected';
-						$(UID['tabInboxReports']).style.zIndex = 1;
+						document.getElementById(UID['tabInboxReports']).className = 'selected';
+						document.getElementById(UID['tabInboxReports']).style.zIndex = 1;
 						t.lastSubTab = 'tabInboxReports';
 						var head_text = translate('Reports');
 						t.message_list = t.getMessages('reports');
 						break;
 					default:
-						$(UID['tabInboxAll']).className = 'selected';
-						$(UID['tabInboxAll']).style.zIndex = 1;
+						document.getElementById(UID['tabInboxAll']).className = 'selected';
+						document.getElementById(UID['tabInboxAll']).style.zIndex = 1;
 						t.lastSubTab = 'tabInboxAll';
 						var head_text = translate('All');
 						t.message_list = t.getMessages('all');
@@ -18019,7 +20165,7 @@
 					t.refreshFirstPage();
 				}
 				var m = '<div id=' + setUID('tabInbox_ListContent') + ' style="height:640px">' + '	<div class=' + UID['title'] + '>' + head_text + '</div>' + '	<div id=' + setUID('tabInbox_List') + ' class=' + UID['status_ticker'] + ' style="height:620px; max-height:620px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabInbox_Content']).innerHTML = m;
+				document.getElementById(UID['tabInbox_Content']).innerHTML = m;
 
 				var m = '<table class=' + UID['row_style'] + ' width=100%>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td width=2%>&nbsp</td>' + '		<td width=98%><table width=100%><tr>' + '			<td width=30%>' + translate('Date') + '</td>' + '			<td width=26%>' + translate('From') + '</td>' + '			<td width=44%>' + translate('Subject') + '</td>' + '		</tr></table></td>' + '	</tr>';
 				var sel = [],
@@ -18033,9 +20179,9 @@
 					sel.push(UID['tabInbox_SelectMsg_' + i]);
 					vw1.push(UID['tabInbox_ViewMsg_' + i]);
 				}
-				$(UID['tabInbox_List']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabInbox_List']).innerHTML = m + '</table>';
 				for (var i = 0; i < sel.length; i++)
-					$(sel[i]).addEventListener('click', function(event) {
+					document.getElementById(sel[i]).addEventListener('click', function(event) {
 						var ids = event.target.getAttribute('ref').split('_');
 						Messages.details[ids[0]].checked = event.target.checked;
 						var parentElement = event.target.parentNode;
@@ -18047,7 +20193,7 @@
 						parentElement.style.backgroundColor = (event.target.checked ? 'grey' : bckgrd);
 					}, false);
 				for (var i = 0; i < vw1.length; i++) {
-					$(vw1[i]).addEventListener('click', showMessage, false);
+					document.getElementById(vw1[i]).addEventListener('click', showMessage, false);
 				}
 
 				function showMessageDelay() {
@@ -18141,18 +20287,18 @@
 					else
 						button2 = '&nbsp;';
 					m += '<center><div id=' + setUID('displayMsg_ReportContent') + ' style="height:565px; max-height:565px; width:100%; max-width:100%; overflow-y:auto;">' + rpt + '</div>' + '<br><table width=90%><tr>' + '	<td align=center width=33%><input type=button value="' + translate('Close') + '" id=' + setUID('MsgDisp_Close') + ' /></td>' + '	<td align=center width=33%>' + button2 + '</td>' + '	<td align=center width=33%><input type=button value="' + translate('Delete') + '" id=' + setUID('MsgDisp_Delete') + ' /></td>' + '</tr></table></center>';
-					$(UID['tabInbox_List']).innerHTML = m;
-					setButtonStyle($(UID['MsgDisp_Delete']), true, 'btn_off');
-					$(UID['MsgDisp_Close']).addEventListener('click', function() {
+					document.getElementById(UID['tabInbox_List']).innerHTML = m;
+					setButtonStyle(document.getElementById(UID['MsgDisp_Delete']), true, 'btn_off');
+					document.getElementById(UID['MsgDisp_Close']).addEventListener('click', function() {
 						t.current_message = null;
 						t.show();
 					}, false);
 
-					if ($(UID['MsgDisp_Answer']))
-						$(UID['MsgDisp_Answer']).addEventListener('click', function() {
+					if (document.getElementById(UID['MsgDisp_Answer']))
+						document.getElementById(UID['MsgDisp_Answer']).addEventListener('click', function() {
 							dialogSendMsg(report.from.name, report.from.id, true);
 						}, false);
-					$(UID['MsgDisp_Delete']).addEventListener('click', function() {
+					document.getElementById(UID['MsgDisp_Delete']).addEventListener('click', function() {
 						Messages.deleteSingleMsg(report.id, function() {
 							t.current_message = null;
 							t.show();
@@ -18163,14 +20309,14 @@
 			tabInboxDeletion: function() {
 				var t = Tabs.Inbox;
 				t.contentType = 3;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInboxTchatAlliance']).className = '';
-				$(UID['tabInboxTchatAlliance']).style.zIndex = 0;
-				$(UID['tabInboxTchatRealm']).className = '';
-				$(UID['tabInboxTchatRealm']).style.zIndex = 0;
-				$(UID['tabInboxDeletion']).className = 'selected';
-				$(UID['tabInboxDeletion']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatAlliance']).className = '';
+				document.getElementById(UID['tabInboxTchatAlliance']).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatRealm']).className = '';
+				document.getElementById(UID['tabInboxTchatRealm']).style.zIndex = 0;
+				document.getElementById(UID['tabInboxDeletion']).className = 'selected';
+				document.getElementById(UID['tabInboxDeletion']).style.zIndex = 1;
 				t.lastSubTab = 'tabInboxDeletion';
 
 				var now = new Date();
@@ -18200,112 +20346,112 @@
 					m += '</select></td>';
 				}
 				m += '</tr><tr valign=top>' + '		<td  style="font-size:2px">&nbsp</td>' + '	</tr><tr valign=top>' + '		<td colspan=2 align=center><br>' + '		<label><input id=' + setUID('tabOptions_ButDel') + ' type=button value="' + translate('Delete now') + '" /></label>' + '		</td>' + '	</tr>' + '</table>' + '</div>';
-				$(UID['tabInbox_Content']).innerHTML = m;
-				$(UID['tabOptions_msgType']).addEventListener('change', ctlChanged, false);
-				$(UID['tabOptions_MsgG']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabInbox_Content']).innerHTML = m;
+				document.getElementById(UID['tabOptions_msgType']).addEventListener('change', ctlChanged, false);
+				document.getElementById(UID['tabOptions_MsgG']).addEventListener('click', function(event) {
 					Data.options.messages_delete.msgGame = event.target.checked
 				}, false);
-				$(UID['tabOptions_MsgP']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_MsgP']).addEventListener('click', function(event) {
 					Data.options.messages_delete.msgPlayer = event.target.checked
 				}, false);
-				$(UID['tabOptions_MsgS']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_MsgS']).addEventListener('click', function(event) {
 					Data.options.messages_delete.msgSentinel = event.target.checked
 				}, false);
-				$(UID['tabOptions_MsgA']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_MsgA']).addEventListener('click', function(event) {
 					Data.options.messages_delete.msgAlliance = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepA']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepA']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptAnthropus = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepT']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepT']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptTransport = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepS']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepS']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptSpy = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepB']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepB']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptBattle = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepF']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepF']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptReinforcement = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepC']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepC']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptCurse = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepTr']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepTr']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptTrading = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepDr']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_RepDr']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptBreeding = event.target.checked
 				}, false);
-				$(UID['tabOptions_ExcM']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_ExcM']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptExceptMyAttacks = event.target.checked
 				}, false);
-				$(UID['tabOptions_ExcY']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_ExcY']).addEventListener('click', function(event) {
 					Data.options.messages_delete.rptExceptYourAttacks = event.target.checked
 				}, false);
-				$(UID['tabOptions_ChkD']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabOptions_ChkD']).addEventListener('click', function(event) {
 					Data.options.messages_delete.dateAll = event.target.checked;
 					disableDates();
 				}, false);
-				$(UID['tabOptions_MsgG']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_MsgG']).addEventListener('change', function(event) {
 					Data.options.messages_delete.msgGame = event.target.checked
 				}, false);
-				$(UID['tabOptions_MsgP']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_MsgP']).addEventListener('change', function(event) {
 					Data.options.messages_delete.msgPlayer = event.target.checked
 				}, false);
-				$(UID['tabOptions_MsgS']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_MsgS']).addEventListener('change', function(event) {
 					Data.options.messages_delete.msgSentinel = event.target.checked
 				}, false);
-				$(UID['tabOptions_MsgA']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_MsgA']).addEventListener('change', function(event) {
 					Data.options.messages_delete.msgAlliance = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepA']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepA']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptAnthropus = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepT']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepT']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptTransport = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepS']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepS']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptSpy = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepB']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepB']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptBattle = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepF']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepF']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptReinforcement = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepC']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepC']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptCurse = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepTr']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepTr']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptTrading = event.target.checked
 				}, false);
-				$(UID['tabOptions_RepDr']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_RepDr']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptBreeding = event.target.checked
 				}, false);
-				$(UID['tabOptions_ExcM']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_ExcM']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptExceptMyAttacks = event.target.checked
 				}, false);
-				$(UID['tabOptions_ExcY']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_ExcY']).addEventListener('change', function(event) {
 					Data.options.messages_delete.rptExceptYourAttacks = event.target.checked
 				}, false);
-				$(UID['tabOptions_ChkD']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabOptions_ChkD']).addEventListener('change', function(event) {
 					Data.options.messages_delete.dateAll = event.target.checked;
 					disableDates();
 				}, false);
 				for (var type = 0; type < 2; type++) {
-					$(UID['tabOptions_DD' + type]).addEventListener('change', ctlChanged, false);
-					$(UID['tabOptions_DM' + type]).addEventListener('change', ctlChanged, false);
-					$(UID['tabOptions_DY' + type]).addEventListener('change', ctlChanged, false);
+					document.getElementById(UID['tabOptions_DD' + type]).addEventListener('change', ctlChanged, false);
+					document.getElementById(UID['tabOptions_DM' + type]).addEventListener('change', ctlChanged, false);
+					document.getElementById(UID['tabOptions_DY' + type]).addEventListener('change', ctlChanged, false);
 					disableCheckMsgsRpts(false);
 					disableDates();
 				}
-				$(UID['tabOptions_ButDel']).addEventListener('click', beforeDeleteReport, false);
+				document.getElementById(UID['tabOptions_ButDel']).addEventListener('click', beforeDeleteReport, false);
 
 				function ctlChanged(event) {
 					var t = Tabs.Inbox;
-					var elem = $(event.target.id);
+					var elem = document.getElementById(event.target.id);
 					var value = toNum(elem.value);
 					elem.value = value;
 					if (event.target.id == UID['tabOptions_msgType']) {
@@ -18322,9 +20468,9 @@
 
 				function disableDates() {
 					for (var type = 0; type < 2; type++) {
-						$(UID['tabOptions_DD' + type]).disabled = Data.options.messages_delete.dateAll;
-						$(UID['tabOptions_DM' + type]).disabled = Data.options.messages_delete.dateAll;
-						$(UID['tabOptions_DY' + type]).disabled = Data.options.messages_delete.dateAll;
+						document.getElementById(UID['tabOptions_DD' + type]).disabled = Data.options.messages_delete.dateAll;
+						document.getElementById(UID['tabOptions_DM' + type]).disabled = Data.options.messages_delete.dateAll;
+						document.getElementById(UID['tabOptions_DY' + type]).disabled = Data.options.messages_delete.dateAll;
 					}
 				}
 
@@ -18340,17 +20486,17 @@
 				}
 
 				function disableCheckMessages(OnOff) {
-					$(UID['tabOptions_MsgG']).disabled = OnOff;
-					$(UID['tabOptions_MsgP']).disabled = OnOff;
-					$(UID['tabOptions_MsgS']).disabled = OnOff;
-					$(UID['tabOptions_MsgA']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_MsgG']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_MsgP']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_MsgS']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_MsgA']).disabled = OnOff;
 				}
 
 				function setCheckMessages(OnOff, byCtl) {
-					$(UID['tabOptions_MsgG']).checked = OnOff;
-					$(UID['tabOptions_MsgP']).checked = OnOff;
-					$(UID['tabOptions_MsgS']).checked = OnOff;
-					$(UID['tabOptions_MsgA']).checked = OnOff;
+					document.getElementById(UID['tabOptions_MsgG']).checked = OnOff;
+					document.getElementById(UID['tabOptions_MsgP']).checked = OnOff;
+					document.getElementById(UID['tabOptions_MsgS']).checked = OnOff;
+					document.getElementById(UID['tabOptions_MsgA']).checked = OnOff;
 					if (byCtl) {
 						Data.options.messages_delete.msgGame = OnOff;
 						Data.options.messages_delete.msgPlayer = OnOff;
@@ -18360,29 +20506,29 @@
 				}
 
 				function disableCheckReports(OnOff) {
-					$(UID['tabOptions_RepA']).disabled = OnOff;
-					$(UID['tabOptions_RepT']).disabled = OnOff;
-					$(UID['tabOptions_RepS']).disabled = OnOff;
-					$(UID['tabOptions_RepB']).disabled = OnOff;
-					$(UID['tabOptions_RepF']).disabled = OnOff;
-					$(UID['tabOptions_RepC']).disabled = OnOff;
-					$(UID['tabOptions_RepTr']).disabled = OnOff;
-					$(UID['tabOptions_RepDr']).disabled = OnOff;
-					$(UID['tabOptions_ExcM']).disabled = OnOff;
-					$(UID['tabOptions_ExcY']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepA']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepT']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepS']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepB']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepF']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepC']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepTr']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_RepDr']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_ExcM']).disabled = OnOff;
+					document.getElementById(UID['tabOptions_ExcY']).disabled = OnOff;
 				}
 
 				function setCheckReports(OnOff, byCtl) {
-					$(UID['tabOptions_RepA']).checked = OnOff;
-					$(UID['tabOptions_RepT']).checked = OnOff;
-					$(UID['tabOptions_RepS']).checked = OnOff;
-					$(UID['tabOptions_RepB']).checked = OnOff;
-					$(UID['tabOptions_RepF']).checked = OnOff;
-					$(UID['tabOptions_RepC']).checked = OnOff;
-					$(UID['tabOptions_RepTr']).checked = OnOff;
-					$(UID['tabOptions_RepDr']).checked = OnOff;
-					$(UID['tabOptions_ExcM']).checked = OnOff;
-					$(UID['tabOptions_ExcY']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepA']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepT']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepS']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepB']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepF']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepC']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepTr']).checked = OnOff;
+					document.getElementById(UID['tabOptions_RepDr']).checked = OnOff;
+					document.getElementById(UID['tabOptions_ExcM']).checked = OnOff;
+					document.getElementById(UID['tabOptions_ExcY']).checked = OnOff;
 					if (byCtl) {
 						Data.options.messages_delete.rptAnthropus = OnOff;
 						Data.options.messages_delete.rptTransport = OnOff;
@@ -18496,17 +20642,17 @@
 				t.tabTchatRealmActive = false;
 				t.tabTchatAllianceActive = true;
 				var bckgrd;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInboxTchatRealm']).className = '';
-				$(UID['tabInboxTchatRealm']).style.zIndex = 0;
-				$(UID['tabInboxTchatAlliance']).className = 'selected';
-				$(UID['tabInboxTchatAlliance']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatRealm']).className = '';
+				document.getElementById(UID['tabInboxTchatRealm']).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatAlliance']).className = 'selected';
+				document.getElementById(UID['tabInboxTchatAlliance']).style.zIndex = 1;
 				var m = '<div style="height:640px">' 
 				      + '	<div class=' + UID['title'] + '>' + translate('Tchat') + ' ' + Seed.player.alliance.name + '</div>' 
 					  + '	<div id=' + setUID('tabInbox_TchatAlliance') + ' class=' + UID['status_ticker'] + ' style="height:620px; max-height:620px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' 
 					  + '</div>';
-				$(UID['tabInbox_Content']).innerHTML = m;
+				document.getElementById(UID['tabInbox_Content']).innerHTML = m;
 				
 				var m = '<table class=' + UID['row_style'] + ' width=100%>' 
 					  + '	<tr class=' + UID['row_headers'] + '>' 
@@ -18533,10 +20679,10 @@
 					  + '</tr>';
 					bm.push(UIDMsg);
 				}
-				$(UID['tabInbox_TchatAlliance']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabInbox_TchatAlliance']).innerHTML = m + '</table>';
 				
 				for (var b = 0; b < bm.length; b++) {
-					$(bm[b]).addEventListener('click', function(event) {
+					document.getElementById(bm[b]).addEventListener('click', function(event) {
 						var ids = event.target.getAttribute('ref').split('_');
 						dialogSendMsg(ids[1], ids[0], true);
 					});
@@ -18547,7 +20693,7 @@
 					width = width || 75;
 					cut = cut || false;
 					if (!str) { return str; }
-					var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+					var regex = '.{1,' +width+ '}(\\s|document.getElementById)' + (cut ? '|.{' +width+ '}|.+document.getElementById' : '|\\S+?(\\s|document.getElementById)');
 					return str.match( RegExp(regex, 'g') ).join( brk );				 
 				}
 
@@ -18557,12 +20703,12 @@
 				var bckgrd;
 				t.tabTchatRealmActive = true;
 				t.tabTchatAllianceActive = false;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabInboxTchatAlliance']).className = '';
-				$(UID['tabInboxTchatAlliance']).style.zIndex = 0;
-				$(UID['tabInboxTchatRealm']).className = 'selected';
-				$(UID['tabInboxTchatRealm']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatAlliance']).className = '';
+				document.getElementById(UID['tabInboxTchatAlliance']).style.zIndex = 0;
+				document.getElementById(UID['tabInboxTchatRealm']).className = 'selected';
+				document.getElementById(UID['tabInboxTchatRealm']).style.zIndex = 1;
 				var m = '<div style="height:640px">' 
 				      + '	<div class=' + UID['title'] + '>' + translate('Tchat') + ' ' + REALM_NAME + '</div>' 
 					  // + ' <div class=' + UID['status_ticker'] + '><input
@@ -18570,7 +20716,7 @@
 						// setUID('tabInboxTchatAlliance_sendTB') + ' /> </div>'
 					  + '	<div id=' + setUID('tabInbox_TchatRealm') + ' class=' + UID['status_ticker'] + ' style="height:620px; max-height:620px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' 
 					  + '</div>';
-				$(UID['tabInbox_Content']).innerHTML = m;
+				document.getElementById(UID['tabInbox_Content']).innerHTML = m;
 				
 				m = '<table class=' + UID['row_style'] + ' width=100%>' 
 					  + '	<tr class=' + UID['row_headers'] + '>' 
@@ -18596,8 +20742,8 @@
 					  + '	</tr>';
 					bm.push(UIDMsg);
 				}
-				$(UID['tabInbox_TchatRealm']).innerHTML = m + '</table>';
-				// $(UID['tabInboxTchatAlliance_sendTB']).addEventListener("keypress",
+				document.getElementById(UID['tabInbox_TchatRealm']).innerHTML = m + '</table>';
+				// document.getElementById(UID['tabInboxTchatAlliance_sendTB']).addEventListener("keypress",
 				// function(event) {
 				// if(event.keyCode == 13) {
 				// alert('entrée');
@@ -18606,7 +20752,7 @@
 				// }
 				// });
 				for (var b = 0; b < bm.length; b++) {
-					$(bm[b]).addEventListener('click', function(event) {
+					document.getElementById(bm[b]).addEventListener('click', function(event) {
 						var ids = event.target.getAttribute('ref').split('_');
 						dialogSendMsg(ids[1], ids[0], true);
 					});
@@ -18617,7 +20763,7 @@
 					width = width || 75;
 					cut = cut || false;
 					if (!str) { return str; }
-					var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+					var regex = '.{1,' +width+ '}(\\s|document.getElementById)' + (cut ? '|.{' +width+ '}|.+document.getElementById' : '|\\S+?(\\s|document.getElementById)');
 					return str.match( RegExp(regex, 'g') ).join( brk );
 				}
 			},
@@ -18773,10 +20919,6 @@
 				t.show();
 			}
 		}
-		/********************************* Inbox Tab ***********************************/
-
-
-		/********************************* Jobs Tab ************************************/
 		Tabs.Jobs = {
 			tabOrder: JOBS_TAB_ORDER,
 			tabLabel: 'Tasks',
@@ -18809,8 +20951,10 @@
 				start_at: 0
 			},
 			forgeTimer: null,
+			forgrforgeTimer: null,
 			foErrorCount: 0,
 			foRetryTime: 20000,
+			typeToForge: 'equipment',
 			
 			researchTimer: null,
 			resErrorCount: 0,
@@ -18850,17 +20994,17 @@
 
 				div.innerHTML = m;
 				
-				$(UID['tabJobInfo']).observe('click', t.tabJobInfo);
-				$(UID['tabJobTrain']).observe('click', t.tabJobTrain);
-				$(UID['tabJobBuild']).observe('click', t.tabJobBuild);
-				$(UID['tabJobResearch']).observe('click', t.tabJobResearch);
-				$(UID['tabJobSanctuary']).observe('click', t.tabJobSanctuary);
+				document.getElementById(UID['tabJobInfo']).addEventListener('click', t.tabJobInfo);
+				document.getElementById(UID['tabJobTrain']).addEventListener('click', t.tabJobTrain);
+				document.getElementById(UID['tabJobBuild']).addEventListener('click', t.tabJobBuild);
+				document.getElementById(UID['tabJobResearch']).addEventListener('click', t.tabJobResearch);
+				document.getElementById(UID['tabJobSanctuary']).addEventListener('click', t.tabJobSanctuary);
 				if (canResurrect) {
-					$(UID['tabJobResurrect']).observe('click', t.tabJobResurrect);
+					document.getElementById(UID['tabJobResurrect']).addEventListener('click', t.tabJobResurrect);
 				}
-				$(UID['tabJobDragon']).observe('click', t.tabJobDragon);
-				$(UID['tabJobTrade']).observe('click', t.tabJobTrade);
-				$(UID['tabJobForge']).observe('click', t.tabJobForge);
+				document.getElementById(UID['tabJobDragon']).addEventListener('click', t.tabJobDragon);
+				document.getElementById(UID['tabJobTrade']).addEventListener('click', t.tabJobTrade);
+				document.getElementById(UID['tabJobForge']).addEventListener('click', t.tabJobForge);
 				
 				/* Restore the views */
 				t.contentType = Data.options.jobs.current_tab;
@@ -18934,27 +21078,28 @@
 			/** Tab: Jobs - SubTab: Info * */
 			tabJobInfo: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobInfo']).className = 'selected';
-				$(UID['tabJobInfo']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobInfo']).className = 'selected';
+				document.getElementById(UID['tabJobInfo']).style.zIndex = 1;
 				t.lastSubTab = 'tabJobInfo';
 
 				t.contentType = 0;
 				var city = Seed.cities[CAPITAL.id];
 
-				var n = '<div class=' + UID['title'] + '>' + translate('information') + '</div>' + '	<table width=100%><tr><td><input id=' + setUID('tabJobInfo_Refresh') + ' type=button value=' + translate('Refresh') + '></input></td></tr></table>';
+				var n = '<div class=' + UID['title'] + '>' + translate('information') + '</div>' 
+				+ '	<table width=100%><tr><td><input id=' + setUID('tabJobInfo_Refresh') + ' type=button value=' + translate('Refresh') + '></input></td></tr></table>';
 
-				$(UID['tabJob_Header']).style.height = "45px";
-				$(UID['tabJob_Header']).innerHTML = n;
-				$(UID['tabJobInfo_Refresh']).addEventListener('click', refresh, false);
-				$(UID['tabJob_Content']).style.height = "593px";
-				$(UID['tabJob_Content']).innerHTML = '<div id="' + setUID('tabJob_Container') + '"></div>';
-				var container = $(UID['tabJob_Container']);
+				document.getElementById(UID['tabJob_Header']).style.height = "45px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJobInfo_Refresh']).addEventListener('click', refresh, false);
+				document.getElementById(UID['tabJob_Content']).style.height = "593px";
+				document.getElementById(UID['tabJob_Content']).innerHTML = '<div id="' + setUID('tabJob_Container') + '"></div>';
+				var container = document.getElementById(UID['tabJob_Container']);
 
 				function jobsStatTick() {
 					/* Main City */
-					var m = '<div class=' + UID['status_ticker'] + '>' + cityTitle(CAPITAL.id) + '<table class=' + UID['table'] + ' width=100%>' + dispCurrRessources(CAPITAL.id) + dispOutpostJob('dragon', CAPITAL.id) + dispOutpostJob('outpost', CAPITAL.id) + dispBuildingJob(CAPITAL.id) + dispDefenseTowerJob(CAPITAL.id) + dispResearchJob(CAPITAL.id) + dispTrainingJobs(CAPITAL.id) + '	</table>' + '</div>';
+					var m = '<div class=' + UID['status_ticker'] + '>' + cityTitle(CAPITAL.id) + '<table class=' + UID['table'] + ' width=100%>' + dispCurrRessources(CAPITAL.id) + dispOutpostJob('dragon', CAPITAL.id) + dispOutpostJob('outpost', CAPITAL.id) + dispBuildingJob(CAPITAL.id) + dispDefenseTowerJob(CAPITAL.id) + dispDefenseTowerHealing(CAPITAL.id) + dispResearchJob(CAPITAL.id) + dispTrainingJobs(CAPITAL.id) + '	</table>' + '</div>';
 
 					/* Outposts ... */
 					for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
@@ -19032,15 +21177,27 @@
 					return m;
 				}
 				
+				function dispDefenseTowerHealing(cityIdx) {
+					var m = '<tr><td width=20% class=right>' + translate('Repairing') + ': </td>',
+						job = Jobs.getDefenseTowerHealing(cityIdx);
+
+					if (job && job.job.run_at > serverTime()) {
+						m += '<td width=50% align=left><span class=' + UID['bold_red'] + '>' + translate('DefensiveTower') + '</span> &nbsp;</td>' + '<td width=30%><font color=' + TIMER_COLOR + '>' + timestr(job.job.run_at - serverTime(), true) + '</font></td>' + '</tr>';
+					} else {
+						m += '<td align=left width=80% colspan=3><span class=' + UID['bold_red'] + '>' + translate('DefensiveTower') + ' ' + translate('None').toUpperCase() + '</span></td></tr>';
+					}
+
+					return m;
+				}
+				
 				function dispDefenseTowerJob(cityIdx) {
 					var m = '<tr><td width=20% class=right>' + translate('Building') + ': </td>',
 						job = Jobs.getDefenseTowerJob(cityIdx);
 
 					if (job && job.job.run_at > serverTime()) {
-
-						m += '<td width=50% align=left colspan=2>' + translate(job.building.type) + ' (' + job.job.level + ') &nbsp;</td>' + '<td width=30%><font color=' + TIMER_COLOR + '>' + timestr(job.job.run_at - serverTime(), true) + '</font></td>' + '</tr>';
+						m += '<td width=50% align=left>' + translate(job.building.type) + ' (' + job.job.level + ') &nbsp;</td>' + '<td width=30%><font color=' + TIMER_COLOR + '>' + timestr(job.job.run_at - serverTime(), true) + '</font></td>' + '</tr>';
 					} else {
-						m += '<td align=left width=80% colspan=3><span class=' + UID['bold_red'] + '>' + translate('DefensiveTower') + ' ' + translate('None').toUpperCase() + '</span></td></tr>';
+						m += '<td align=left width=80% colspan=2><span class=' + UID['bold_red'] + '>' + translate('DefensiveTower') + ' ' + translate('None').toUpperCase() + '</span></td></tr>';
 					}
 
 					return m;
@@ -19079,7 +21236,7 @@
 					}
 					return m;
 				}
-
+	
 				function dispResearchJob(cityIdx) {
 					var m = '<tr><td class=right width=20%>' + translate('Researching') + ': </td>';
 					var job = Jobs.getJobs('research', true, cityIdx)[0];
@@ -19226,28 +21383,28 @@
 			/** * Jobs Tab - Train Sub-tab ** */
 			tabJobTrain: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobTrain']).className = 'selected';
-				$(UID['tabJobTrain']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobTrain']).className = 'selected';
+				document.getElementById(UID['tabJobTrain']).style.zIndex = 1;
 				t.lastSubTab = 'tabJobTrain';
 
 				t.contentType = 1;
 
 				var n = '<div class=' + UID['title'] + '>' + translate('Train') + ' ' + translate('Automatically') + '</div>' + '<div class=' + UID['status_ticker'] + ' style="margin-bottom: 5px !important">' + '	<center><input id=' + setUID('tabJobTrain_OnOff') + ' type=button /></center>' + '	<div id=' + setUID('tabJobTrain_Report') + ' class=' + UID['status_report'] + '>' + '		<table id=' + setUID('tabJobTrain_Table') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div>' + '	<br>' + '	<div id=' + setUID('tabJobTrain_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabJobTrain_tabTrain') + '>' + translate('Train') + '</a></li>' + '	<li class="tab"><a id=' + setUID('tabJobTrain_tabConfig') + '>' + translate('Config') + '</a></li>' + '</ul>';
-				$(UID['tabJob_Header']).style.height = "225px";
-				$(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJob_Header']).style.height = "225px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
 
 				var m = '<div id=' + setUID('tabJobTrain_Content') + ' style="height:430px; ; max-height:430px; overflow-y:auto">';
-				$(UID['tabJob_Content']).style.height = "430px";
-				$(UID['tabJob_Content']).innerHTML = m;
+				document.getElementById(UID['tabJob_Content']).style.height = "430px";
+				document.getElementById(UID['tabJob_Content']).innerHTML = m;
 
-				$(UID['tabJobTrain_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabJobTrain_OnOff']).addEventListener('click', function() {
 					var t = Tabs.Jobs;
 					t.setTrainEnable(!Data.options.training.enabled);
 				}, false);
-				$(UID['tabJobTrain_tabTrain']).addEventListener('click', t.tabJobTrainSets, false);
-				$(UID['tabJobTrain_tabConfig']).addEventListener('click', t.tabJobTrainConfig, false);
+				document.getElementById(UID['tabJobTrain_tabTrain']).addEventListener('click', t.tabJobTrainSets, false);
+				document.getElementById(UID['tabJobTrain_tabConfig']).addEventListener('click', t.tabJobTrainConfig, false);
 				t.refreshTrainButton(Data.options.training.enabled);
 
 				switch (t.trainContentType) {
@@ -19267,10 +21424,10 @@
 			tabJobTrainSets: function() {
 				var t = Tabs.Jobs;
 
-				$(UID['tabJobTrain_tabConfig']).className = '';
-				$(UID['tabJobTrain_tabConfig']).style.zIndex = 0;
-				$(UID['tabJobTrain_tabTrain']).className = 'selected';
-				$(UID['tabJobTrain_tabTrain']).style.zIndex = 1;
+				document.getElementById(UID['tabJobTrain_tabConfig']).className = '';
+				document.getElementById(UID['tabJobTrain_tabConfig']).style.zIndex = 0;
+				document.getElementById(UID['tabJobTrain_tabTrain']).className = 'selected';
+				document.getElementById(UID['tabJobTrain_tabTrain']).style.zIndex = 1;
 
 				/* Create troop table for each city */
 				var el = [],
@@ -19334,45 +21491,45 @@
 
 				m += '</div>';
 
-				$(UID['tabJobTrain_Content']).innerHTML = m;
+				document.getElementById(UID['tabJobTrain_Content']).innerHTML = m;
 
 				t.trainContentType = 0;
 
 				for (var c = 0; c < cl.length; c++) {
-					var cityIdx = $(cl[c]).getAttribute('ref');
+					var cityIdx = document.getElementById(cl[c]).getAttribute('ref');
 					var div_id = 'tabJobTrain_cityList_' + cityIdx;
 					var acc_id = 'tabJobTrain_accordion_' + cityIdx;
-					var div_el = $(UID[div_id]);
+					var div_el = document.getElementById(UID[div_id]);
 
-					$(cl[c]).observe('click', toggleHideShow);
+					document.getElementById(cl[c]).addEventListener('click', toggleHideShow);
 
 					if (Data.options.collapsed.train[cityIdx]) {
 						div_el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 					} else {
 						div_el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 					}
 				}
 				for (var i = 0; i < el.length; i++) {
-					$(el[i]).addEventListener('change', troopsChanged, false);
-					$(el[i]).addEventListener('click', troopsChanged, false);
+					document.getElementById(el[i]).addEventListener('change', troopsChanged, false);
+					document.getElementById(el[i]).addEventListener('click', troopsChanged, false);
 				}
 				for (var i = 0; i < tn.length; i++) {
-					$(tn[i]).addEventListener('click', onTrainNow, false);
+					document.getElementById(tn[i]).addEventListener('click', onTrainNow, false);
 				}
 				for (var i = 0; i < en.length; i++) {
-					$(en[i]).addEventListener('change', onEnableCityNow, false);
-					$(en[i]).addEventListener('click', onEnableCityNow, false);
+					document.getElementById(en[i]).addEventListener('change', onEnableCityNow, false);
+					document.getElementById(en[i]).addEventListener('click', onEnableCityNow, false);
 				}
 				for (var i = 0; i < bc.length; i++) {
-					$(bc[i]).observe('click', clearAll);
+					document.getElementById(bc[i]).addEventListener('click', clearAll);
 				}
 				for (var i = 0; i < max.length; i++) {
-					$(max[i]).observe('click', setMaxTroop);
+					document.getElementById(max[i]).addEventListener('click', setMaxTroop);
 				}
 				for (var i = 0; i < clearOne.length; i++) {
-					$(clearOne[i]).observe('click', clearOneInput);
+					document.getElementById(clearOne[i]).addEventListener('click', clearOneInput);
 				}
 
 				function clearAll(event) {
@@ -19387,8 +21544,8 @@
 							for (i = 0; i < troopTypes.length; i++) {
 								var trainable = isTrainable(cityIdx, troopTypes[i]);
 								if (trainable) {
-									$(UID['tabTrain_Troop_' + cityIdx + '_' + i]).value = 0;
-									$(UID['tabTrain_Troop_' + cityIdx + '_' + i]).click();
+									document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + i]).value = 0;
+									document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + i]).click();
 								}
 							}
 						}
@@ -19407,14 +21564,14 @@
 						unit_quantity: 1
 					});
 
-					$(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).value = reqs.max_units;
-					$(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).click();
+					document.getElementById(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).value = reqs.max_units;
+					document.getElementById(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).click();
 				}
 
 				function clearOneInput(event) {
 					var args = event.target.getAttribute('ref').split('_');
-					$(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).value = 0;
-					$(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).click();
+					document.getElementById(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).value = 0;
+					document.getElementById(UID['tabTrain_Troop_' + args[0] + '_' + args[1]]).click();
 				}
 
 				function troopsChanged(event) {
@@ -19449,10 +21606,10 @@
 							if (cap) {
 								unitQty = 0;
 								if (t.contentType == 1) t.jobFeedback(translate('Troops Capped'));
-								$(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "red";
+								document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "red";
 							} else if (t.contentType == 1) {
-								if ($(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor == "red")
-									$(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "white";
+								if (document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor == "red")
+									document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "white";
 							}
 						} catch (e) {}
 					}
@@ -19479,14 +21636,14 @@
 					var cityIdx = element.getAttribute('ref');
 					var div_id = 'tabJobTrain_cityList_' + cityIdx;
 					var acc_id = 'tabJobTrain_accordion_' + cityIdx;
-					var div_el = $(UID[div_id]);
+					var div_el = document.getElementById(UID[div_id]);
 					if (div_el.style.display == 'none') {
 						div_el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 						Data.options.collapsed.train[cityIdx] = false;
 					} else {
 						div_el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 						Data.options.collapsed.train[cityIdx] = true;
 					}
 				}
@@ -19496,10 +21653,10 @@
 			tabJobTrainConfig: function() {
 				var t = Tabs.Jobs;
 
-				$(UID['tabJobTrain_tabTrain']).className = '';
-				$(UID['tabJobTrain_tabTrain']).style.zIndex = 0;
-				$(UID['tabJobTrain_tabConfig']).className = 'selected';
-				$(UID['tabJobTrain_tabConfig']).style.zIndex = 1;
+				document.getElementById(UID['tabJobTrain_tabTrain']).className = '';
+				document.getElementById(UID['tabJobTrain_tabTrain']).style.zIndex = 0;
+				document.getElementById(UID['tabJobTrain_tabConfig']).className = 'selected';
+				document.getElementById(UID['tabJobTrain_tabConfig']).style.zIndex = 1;
 
 				t.trainContentType = 1;
 
@@ -19529,9 +21686,9 @@
 				}
 				m += '			</table>' + '			</td>' + '		</tr>' + '	</table>' + '</div>' + '</div>';
 
-				$(UID['tabJobTrain_Content']).innerHTML = m;
-				$(UID['TabJobTrainChangeTaxRate']).observe('click', changeTaxRate);
-				$(UID['TabJobTrainTaxRate']).observe('change', onChangeTaxRate);
+				document.getElementById(UID['tabJobTrain_Content']).innerHTML = m;
+				document.getElementById(UID['TabJobTrainChangeTaxRate']).addEventListener('click', changeTaxRate);
+				document.getElementById(UID['TabJobTrainTaxRate']).addEventListener('change', onChangeTaxRate);
 
 				var r = document.getElementsByName(UID['tabTrainConfig_QRadio']);
 				for (var i = 0; i < r.length; i++) {
@@ -19539,7 +21696,7 @@
 					r[i].checked = (r[i].value == Data.options.training.mode);
 				}
 				for (var i = 0; i < el.length; i++) {
-					$(el[i]).addEventListener('change', troopsChanged, false);
+					document.getElementById(el[i]).addEventListener('change', troopsChanged, false);
 				}
 
 				function onChangeTaxRate(event) {
@@ -19553,14 +21710,14 @@
 				}
 
 				function changeTaxRate(event) {
-					var newRate = $(UID['TabJobTrainTaxRate']).value;
-					var dial = new ModalDialog($(UID['tabJobTrain_Content']), 300, 165, '', false, null);
+					var newRate = document.getElementById(UID['TabJobTrainTaxRate']).value;
+					var dial = new ModalDialog(document.getElementById(UID['tabJobTrain_Content']), 300, 165, '', false, null);
 					dial.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + translate('Message') + '</b></center></div>';
 					dial.getContentDiv().innerHTML = translate('Refreshing Tax Rate');
 
 					if (isNaN(newRate) || newRate < 0 || newRate > 100) {
-						$(UID['TabJobTrainTaxRate']).style.backgroundColor = 'red';
-						$(UID['TabJobTrainTaxRate']).value = Seed.cities[CAPITAL.id].figures.tax_rate;
+						document.getElementById(UID['TabJobTrainTaxRate']).style.backgroundColor = 'red';
+						document.getElementById(UID['TabJobTrainTaxRate']).value = Seed.cities[CAPITAL.id].figures.tax_rate;
 					} else {
 						new MyAjax.switchTaxRate(Seed.cities[CAPITAL.id].id, newRate, function(rslt) {
 							if (rslt.ok) {
@@ -19607,20 +21764,20 @@
 			/** * Jobs Tab - Build Sub-tab ** */
 			tabJobBuild: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobBuild']).className = 'selected';
-				$(UID['tabJobBuild']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobBuild']).className = 'selected';
+				document.getElementById(UID['tabJobBuild']).style.zIndex = 1;
 				var divClass = 'subtitle';
 				
 				t.lastSubTab = 'tabJobBuild';
 				t.contentType = 2;
 
 				var n = '<div class=' + UID['title'] + '>' + translate('Build') + ' ' + translate('Automatically') + '</div>' + '<div class=' + UID['status_ticker'] + '>' + '	<center><input id=' + setUID('tabJobBuild_OnOff') + ' type=button /></center>' + '	<div id=' + setUID('tabJobBuild_Report') + ' class=' + UID['status_report'] + '>' + '		<table id=' + setUID('tabJobBuild_Table') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div><br>' + '	<div id=' + setUID('tabJobBuild_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>';
-				$(UID['tabJob_Header']).style.height = "205px";
-				$(UID['tabJob_Header']).innerHTML = n;
-				$(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobBuild_Content') + '>';
-				$(UID['tabJob_Content']).style.height = "455px";
+				document.getElementById(UID['tabJob_Header']).style.height = "205px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobBuild_Content') + '>';
+				document.getElementById(UID['tabJob_Content']).style.height = "455px";
 
 				m = '<div style="margin-bottom:5px;">' + '	<table class=' + UID['table'] + ' width=100%>' + '		<tr valign=top>' + '			<td width=5% align=center><input id=' + setUID('tabJobBuild_HideFields') + ' ' + (Data.options.building.hide_fields ? 'CHECKED ' : '') + ' type=checkbox /></td>' + '			<td align=left>' + translate('Hide resource fields') + '</td>' + '		</tr>' + '	</table>' + '</div>';
 				var el = [],
@@ -19707,26 +21864,26 @@
 					}
 				}
 				m += '</div>';
-				var container = $(UID['tabJobBuild_Content']);
+				var container = document.getElementById(UID['tabJobBuild_Content']);
 				container.style.height = container.offsetHeight + 'px';
 				container.innerHTML = m;
 
 				for (var c = 0; c < cl.length; c++) {
-					$(cl[c]).addEventListener('click', toggleHideShow, false);
-					var cityIdx = $(cl[c]).getAttribute('ref');
+					document.getElementById(cl[c]).addEventListener('click', toggleHideShow, false);
+					var cityIdx = document.getElementById(cl[c]).getAttribute('ref');
 					var div_id = 'tabJobBuild_cityList_' + cityIdx;
 					var acc_id = 'tabJobBuild_accordion_' + cityIdx;
-					var div_el = $(UID[div_id]);
+					var div_el = document.getElementById(UID[div_id]);
 					if (Data.options.collapsed.build[cityIdx]) {
 						div_el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 					} else {
 						div_el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 					}
 				}
 				for (var i = 0; i < el.length; i++) {
-					$(el[i]).addEventListener('click', checkedBuild, false);
+					document.getElementById(el[i]).addEventListener('click', checkedBuild, false);
 				}
 				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 					if (Seed.cities[cityIdx]) {
@@ -19784,7 +21941,7 @@
 							var max_level = Seed.stats.building[buildList[i]].level.length - 1;
 							var min_level = (Buildings.getLevel(cityIdx, buildList[i])).min;
 							if (min_level >= max_level) continue;
-							var selectMenu = $(UID['tabJobBuild_Cap_' + cityIdx + '_' + buildList[i]]);
+							var selectMenu = document.getElementById(UID['tabJobBuild_Cap_' + cityIdx + '_' + buildList[i]]);
 							try {
 								if (!Data.options.building.level_cap[cityIdx][i]) {
 									var min_lev = (Buildings.getLevel(cityIdx, buildList[i])).min;
@@ -19802,8 +21959,8 @@
 						}
 					}
 				}
-				$(UID['tabJobBuild_HideFields']).addEventListener('click', onCheckHide, false);
-				$(UID['tabJobBuild_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabJobBuild_HideFields']).addEventListener('click', onCheckHide, false);
+				document.getElementById(UID['tabJobBuild_OnOff']).addEventListener('click', function() {
 					var t = Tabs.Jobs;
 					t.setBuildEnable(!Data.options.building.enabled);
 				}, false);
@@ -19871,7 +22028,7 @@
 				}
 
 				function onScroll(event) {
-					if (t.contentType == 2) t.buildScrollPos = $(UID['tabJob_Content']).scrollTop;
+					if (t.contentType == 2) t.buildScrollPos = document.getElementById(UID['tabJob_Content']).scrollTop;
 				}
 
 				function toggleHideShow(event) {
@@ -19887,14 +22044,14 @@
 					var cityIdx = element.getAttribute('ref');
 					var div_id = 'tabJobBuild_cityList_' + cityIdx
 					var acc_id = 'tabJobBuild_accordion_' + cityIdx;
-					var div_el = $(UID[div_id]);
+					var div_el = document.getElementById(UID[div_id]);
 					if (div_el.style.display == 'none') {
 						div_el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 						Data.options.collapsed.build[cityIdx] = false;
 					} else {
 						div_el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 						Data.options.collapsed.build[cityIdx] = true;
 					}
 				}
@@ -19906,10 +22063,10 @@
 			/** * Jobs Tab - Dragon Sub-tab ** */
 			tabJobDragon: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobDragon']).className = 'selected';
-				$(UID['tabJobDragon']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobDragon']).className = 'selected';
+				document.getElementById(UID['tabJobDragon']).style.zIndex = 1;
 				
 				t.lastSubTab = 'tabJobDragon';
 				t.contentType = 6;
@@ -19922,10 +22079,10 @@
 						+ '	<div id=' + setUID('tabJobDragon_Feedback') + ' class=' + UID['status_feedback'] + '></div>' 
 						+ '</div>';
 
-				$(UID['tabJob_Header']).style.height = "205px";
-				$(UID['tabJob_Header']).innerHTML = n;
-				$(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobDragon_Content') + '>';
-				$(UID['tabJob_Content']).style.height = "455px";
+				document.getElementById(UID['tabJob_Header']).style.height = "205px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobDragon_Content') + '>';
+				document.getElementById(UID['tabJob_Content']).style.height = "455px";
 
 				var m = '';
 				var el = [],
@@ -20108,22 +22265,22 @@
 					}
 				}
 				m += '</div>';
-				var container = $(UID['tabJobDragon_Content']);
+				var container = document.getElementById(UID['tabJobDragon_Content']);
 				container.style.height = container.offsetHeight + 'px';
 				container.innerHTML = m;
 
 				for (var c = 0; c < cl.length; c++) {
-					$(cl[c]).addEventListener('click', toggleHideShow, false);
-					var cityIdx = $(cl[c]).getAttribute('ref');
+					document.getElementById(cl[c]).addEventListener('click', toggleHideShow, false);
+					var cityIdx = document.getElementById(cl[c]).getAttribute('ref');
 					var div_id = 'tabJobDragon_cityList_' + cityIdx;
 					var acc_id = 'tabJobDragon_accordion_' + cityIdx;
-					var div_el = $(UID[div_id]);
+					var div_el = document.getElementById(UID[div_id]);
 					if (Data.options.collapsed.dragon[cityIdx]) {
 						div_el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 					} else {
 						div_el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 					}
 				}
 				
@@ -20144,14 +22301,14 @@
 					var cityIdx = element.getAttribute('ref');
 					var div_id = 'tabJobDragon_cityList_' + cityIdx
 					var acc_id = 'tabJobDragon_accordion_' + cityIdx;
-					var div_el = $(UID[div_id]);
+					var div_el = document.getElementById(UID[div_id]);
 					if (div_el.style.display == 'none') {
 						div_el.style.display = 'block';
-						$(UID[acc_id]).innerHTML = '-&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '-&nbsp';
 						Data.options.collapsed.dragon[cityIdx] = false;
 					} else {
 						div_el.style.display = 'none';
-						$(UID[acc_id]).innerHTML = '+&nbsp';
+						document.getElementById(UID[acc_id]).innerHTML = '+&nbsp';
 						Data.options.collapsed.dragon[cityIdx] = true;
 					}
 				}
@@ -20172,10 +22329,10 @@
 			/** * Jobs Tab - Trade Sub-tab ** */
 			tabJobTrade: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobTrade']).className = 'selected';
-				$(UID['tabJobTrade']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobTrade']).className = 'selected';
+				document.getElementById(UID['tabJobTrade']).style.zIndex = 1;
 				
 				t.lastSubTab = 'tabJobTrade';
 				t.contentType = 7;
@@ -20192,12 +22349,12 @@
 						+ '	<li class="tab"><a id=' + setUID('tabJobTrade_tabSell') + '>' + translate('sell') + '</a></li>' 
 						+ '</ul>';
 
-				$(UID['tabJob_Header']).style.height = "205px";
-				$(UID['tabJob_Header']).innerHTML = n;
-				$(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobTrade_Content') + '></div>';
-				$(UID['tabJob_Content']).style.height = "455px";
-				$(UID['tabJobTrade_tabBuy']).addEventListener('click', t.tabJobTradeBuy, false);
-				$(UID['tabJobTrade_tabSell']).addEventListener('click', t.tabJobTradeSell, false);
+				document.getElementById(UID['tabJob_Header']).style.height = "205px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobTrade_Content') + '></div>';
+				document.getElementById(UID['tabJob_Content']).style.height = "455px";
+				document.getElementById(UID['tabJobTrade_tabBuy']).addEventListener('click', t.tabJobTradeBuy, false);
+				document.getElementById(UID['tabJobTrade_tabSell']).addEventListener('click', t.tabJobTradeSell, false);
 				
 				switch (t.tradeContentType) {
 					case 0:
@@ -20217,10 +22374,10 @@
 			tabJobTradeBuy: function() {
 				var t = Tabs.Jobs;
 
-				$(UID['tabJobTrade_tabSell']).className = '';
-				$(UID['tabJobTrade_tabSell']).style.zIndex = 0;
-				$(UID['tabJobTrade_tabBuy']).className = 'selected';
-				$(UID['tabJobTrade_tabBuy']).style.zIndex = 1;
+				document.getElementById(UID['tabJobTrade_tabSell']).className = '';
+				document.getElementById(UID['tabJobTrade_tabSell']).style.zIndex = 0;
+				document.getElementById(UID['tabJobTrade_tabBuy']).className = 'selected';
+				document.getElementById(UID['tabJobTrade_tabBuy']).style.zIndex = 1;
 
 				t.tradeContentType = 0;
 				
@@ -20241,12 +22398,12 @@
 					+ '		</div>'
 					+ '</div>';
 					
-				$(UID['tabJobTrade_Content']).innerHTML = m;
-				$(UID['tabTrade_RefresTableBuy']).observe('click', searchForBuy);
+				document.getElementById(UID['tabJobTrade_Content']).innerHTML = m;
+				document.getElementById(UID['tabTrade_RefresTableBuy']).addEventListener('click', searchForBuy);
 				
-				$(UID['tabTrade_BuyResource']).observe('change', changeResource);
-				$(UID['tabTrade_QtyMin']).observe('keyup', changeQty);
-				$(UID['tabTrade_PriceMax']).observe('keyup', changePrice);
+				document.getElementById(UID['tabTrade_BuyResource']).addEventListener('change', changeResource);
+				document.getElementById(UID['tabTrade_QtyMin']).addEventListener('keyup', changeQty);
+				document.getElementById(UID['tabTrade_PriceMax']).addEventListener('keyup', changePrice);
 				
 				function changeQty(event) {
 					var x = toNum(event.target.value);
@@ -20261,13 +22418,13 @@
 				}
 				
 				function changeResource() {
-					Data.options.trade.buy.resource = $(UID['tabTrade_BuyResource']).value;
+					Data.options.trade.buy.resource = document.getElementById(UID['tabTrade_BuyResource']).value;
 				}
 				
 				function searchForBuy() {
-					var product = $(UID['tabTrade_BuyResource']).value;
-					var nbProduct = $(UID['tabTrade_QtyMin']).value;
-					var upperPrice = $(UID['tabTrade_PriceMax']).value;
+					var product = document.getElementById(UID['tabTrade_BuyResource']).value;
+					var nbProduct = document.getElementById(UID['tabTrade_QtyMin']).value;
+					var upperPrice = document.getElementById(UID['tabTrade_PriceMax']).value;
 					new MyAjax.tradeSearch(product, nbProduct, upperPrice, updateTableBuy);
 				}
 				
@@ -20275,7 +22432,7 @@
 					var idTrade = event.target.getAttribute('ref');
 					new MyAjax.tradeBuy(idTrade, function(result) {
 						if (!result.ok) {
-							$(UID['tabJobTrade_Feedback']).update(result.errmsg);
+							document.getElementById(UID['tabJobTrade_Feedback']).innerHTML = result.errmsg;
 						}
 						else {
 							searchForBuy()
@@ -20308,23 +22465,22 @@
 					}
 					m += '</table>';
 					
-					$(UID['tabTrade_BuyTable']).innerHTML = m;
+					document.getElementById(UID['tabTrade_BuyTable']).innerHTML = m;
 					
 					for(var i=0; i<bT.length ; i++) {
-						$(bT[i]).observe('click', buyResource);
+						document.getElementById(bT[i]).addEventListener('click', buyResource);
 					}
-				}
-				
+				}	
 			},
 
 			/** * sell sub tab */
 			tabJobTradeSell: function() {
 				var t = Tabs.Jobs;
 
-				$(UID['tabJobTrade_tabBuy']).className = '';
-				$(UID['tabJobTrade_tabBuy']).style.zIndex = 0;
-				$(UID['tabJobTrade_tabSell']).className = 'selected';
-				$(UID['tabJobTrade_tabSell']).style.zIndex = 1;
+				document.getElementById(UID['tabJobTrade_tabBuy']).className = '';
+				document.getElementById(UID['tabJobTrade_tabBuy']).style.zIndex = 0;
+				document.getElementById(UID['tabJobTrade_tabSell']).className = 'selected';
+				document.getElementById(UID['tabJobTrade_tabSell']).style.zIndex = 1;
 
 				t.tradeContentType = 1;
 				
@@ -20347,13 +22503,13 @@
 					+ '		</div>'
 					+ '</div>';
 
-				$(UID['tabJobTrade_Content']).update(m);
-				$(UID['tabTrade_SellInTrade']).observe('click', sellInTrade);
+				document.getElementById(UID['tabJobTrade_Content']).innerHTML = m;
+				document.getElementById(UID['tabTrade_SellInTrade']).addEventListener('click', sellInTrade);
 				
-				$(UID['tabTrade_SellResource']).observe('change', changeResource);
-				$(UID['tabTrade_Quantity']).observe('change', changeQty);
-				$(UID['tabTrade_Price']).observe('change', changePrice);
-				$(UID['tabTrade_RefreshSellInTrade']).observe('click', getSellInTrade);
+				document.getElementById(UID['tabTrade_SellResource']).addEventListener('change', changeResource);
+				document.getElementById(UID['tabTrade_Quantity']).addEventListener('change', changeQty);
+				document.getElementById(UID['tabTrade_Price']).addEventListener('change', changePrice);
+				document.getElementById(UID['tabTrade_RefreshSellInTrade']).addEventListener('click', getSellInTrade);
 				
 				function changeQty(event) {
 					var x = toNum(event.target.value);
@@ -20365,11 +22521,11 @@
 					var x = toNum(event.target.value);
 					event.target.value = x;
 					Data.options.trade.sell.price = x;
-					$(UID['tabTrade_SellPriceForSell']).update(translate('sellers-fee') + ' : ' + numf(Math.round(x*5/1000)));
+					document.getElementById(UID['tabTrade_SellPriceForSell']).innerHTML = translate('sellers-fee') + ' : ' + numf(Math.round(x*5/1000));
 				}
 				
 				function changeResource() {
-					Data.options.trade.sell.resource = $(UID['tabTrade_SellResource']).value;
+					Data.options.trade.sell.resource = document.getElementById(UID['tabTrade_SellResource']).value;
 				}
 				
 				function getSellInTrade() {
@@ -20377,16 +22533,16 @@
 				}
 				
 				function sellInTrade() {
-					var product = $(UID['tabTrade_SellResource']).value;
-					var nbProduct = $(UID['tabTrade_Quantity']).value;
-					var price = $(UID['tabTrade_Price']).value;
+					var product = document.getElementById(UID['tabTrade_SellResource']).value;
+					var nbProduct = document.getElementById(UID['tabTrade_Quantity']).value;
+					var price = document.getElementById(UID['tabTrade_Price']).value;
 					new MyAjax.tradeSell(product, nbProduct, price, function(result) {
 						if(result.success) {
-							$(UID['tabJobTrade_Feedback']).update(translate('OK'));
+							document.getElementById(UID['tabJobTrade_Feedback']).innerHTML = translate('OK');
 							getSellInTrade();
 						}
 						else 
-							$(UID['tabJobTrade_Feedback']).update(result.reason);
+							document.getElementById(UID['tabJobTrade_Feedback']).innerHTML = (result.reason);
 					});
 				}
 				
@@ -20410,24 +22566,23 @@
                         bct.push(result.player_sells[offer].id);
 					}
 					m += '</table>';
-					$(UID['tabTrade_SellTable']).update(m);
+					document.getElementById(UID['tabTrade_SellTable']).innerHTML = (m);
                     for(var i=0; i<bct.length; i++) {
-                        $(UID[bct[i]]).observe('click', function(event) {
+                        document.getElementById(UID[bct[i]]).addEventListener('click', function(event) {
                             var idTrade = event.target.getAttribute('ref');
                             MyAjax.tradeCancel(idTrade, getSellInTrade)
                         });
                     }
 				}
-				
 			},
 			
 			/** * Jobs Tab - Forge Sub-tab ** */
 			tabJobForge: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobForge']).className = 'selected';
-				$(UID['tabJobForge']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge']).className = 'selected';
+				document.getElementById(UID['tabJobForge']).style.zIndex = 1;
 				
 				t.lastSubTab = 'tabJobForge';
 				t.contentType = 8;
@@ -20447,15 +22602,15 @@
 						+ '	<li class="tab"><a id=' + setUID('tabJobForge_tabStats') + '>' + translate('Stats') + '</a></li>'						
 						+ '</ul>';
 
-				$(UID['tabJob_Header']).style.height = "205px";
-				$(UID['tabJob_Header']).update(n);
-				$(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobForge_Content') + '></div>';
-				$(UID['tabJob_Content']).style.height = "455px";
-				$(UID['tabJobForge_tabAdventurers']).addEventListener('click', t.tabJobForgeAdventurers, false);
-				$(UID['tabJobForge_tabForge']).addEventListener('click', t.tabJobForgeForge, false);
-				$(UID['tabJobForge_tabInventory']).addEventListener('click', t.tabJobForge_tabInventory, false);
-				$(UID['tabJobForge_tabStats']).addEventListener('click', t.tabJobForge_tabStats, false);
-				$(UID['tabJobForge_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabJob_Header']).style.height = "205px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = (n);
+				document.getElementById(UID['tabJob_Content']).innerHTML = '<div id=' + setUID('tabJobForge_Content') + '></div>';
+				document.getElementById(UID['tabJob_Content']).style.height = "455px";
+				document.getElementById(UID['tabJobForge_tabAdventurers']).addEventListener('click', t.tabJobForgeAdventurers, false);
+				document.getElementById(UID['tabJobForge_tabForge']).addEventListener('click', t.tabJobForgeForge, false);
+				document.getElementById(UID['tabJobForge_tabInventory']).addEventListener('click', t.tabJobForge_tabInventory, false);
+				document.getElementById(UID['tabJobForge_tabStats']).addEventListener('click', t.tabJobForge_tabStats, false);
+				document.getElementById(UID['tabJobForge_OnOff']).addEventListener('click', function() {
 					var t = Tabs.Jobs;
 					t.setForgeMissionEnable(!Data.options.forge.enableAutoMission);
 				}, false);
@@ -20486,14 +22641,14 @@
 			tabJobForgeAdventurers: function() {
 				var t = Tabs.Jobs;
 
-				$(UID['tabJobForge_tabForge']).className = '';
-				$(UID['tabJobForge_tabForge']).style.zIndex = 0;
-				$(UID['tabJobForge_tabInventory']).className = '';
-				$(UID['tabJobForge_tabInventory']).style.zIndex = 0;
-				$(UID['tabJobForge_tabStats']).className = '';
-				$(UID['tabJobForge_tabStats']).style.zIndex = 0;
-				$(UID['tabJobForge_tabAdventurers']).className = 'selected';
-				$(UID['tabJobForge_tabAdventurers']).style.zIndex = 1;
+				document.getElementById(UID['tabJobForge_tabForge']).className = '';
+				document.getElementById(UID['tabJobForge_tabForge']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabInventory']).className = '';
+				document.getElementById(UID['tabJobForge_tabInventory']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabStats']).className = '';
+				document.getElementById(UID['tabJobForge_tabStats']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabAdventurers']).className = 'selected';
+				document.getElementById(UID['tabJobForge_tabAdventurers']).style.zIndex = 1;
 
 				t.forgeContentType = 0;
 				var advs = Seed.player.forge.adventurers;
@@ -20501,16 +22656,17 @@
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">';
 				
 				for(var i=0;i<advs.length;i++) {
-					var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+					var inMission=(Jobs.getJobs(Seed.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
 					var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
 					var adventurer = translate('adventurer-'+advs[i].type.toLowerCase());
 					
 					m += '<div class=' + UID['subtitle'] + '><b>' + adventurer + getXPNextLevel(advs[i].experience, advs[i].type)+ '</b></div>';
 					m += '<table><tr><td><INPUT type="checkbox" id="'+setUID('ckAdv_' + advs[i].type)+'" ref="'+advs[i].type+'" '+(Data.options.forge[advs[i].type].cbAuto ? 'checked' : '')+'> ';
 					m += translate('missions') + ' : <SELECT ref="'+advs[i].type+'_'+advs[i].adventurer_id+'" id='+setUID('selMission_' + advs[i].type)+'>';
-					for(var missionN in Forge.data.missions){
-						var mission = Forge.data.missions[missionN];
-						m += '<option value="'+mission.type+'" '+(Data.options.forge[advs[i].type].mission==mission.type ?  'selected' : '')+'>'+translate('mission-'+mission.type.replace(/_/g, '-'))+'</option>';
+					for(var missionN in Seed.forge.missions){
+						var mission = Seed.forge.missions[missionN];
+						if(serverTime()<mission.ends_at || mission.ends_at==0)
+							m += '<option value="'+mission.type+'" '+(Data.options.forge[advs[i].type].mission==mission.type ?  'selected' : '')+'>'+translate('mission-'+mission.type.replace(/_/g, '-'))+'</option>';
 					}
 					m += '</SELECT> </td>';
 					m += '<td align=right> <input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnMissionAdvGo_'+advs[i].adventurer_id)+'" ref="'+advs[i].type+'_'+advs[i].adventurer_id+'" type="button" style="width:auto !important;" value="'+translate('missions-begin')+'"></td>';
@@ -20527,20 +22683,20 @@
 					
 				m += '</div>';
 				
-				$(UID['tabJobForge_Content']).innerHTML = m;
+				document.getElementById(UID['tabJobForge_Content']).innerHTML = m;
 				
 				for(var i=0; i<lS.length ; i++) {
-					$(UID[lS[i]]).observe('change', onChangeMission);
-					if($(UID[lBG[i]]))
-						$(UID[lBG[i]]).observe('click', doMission);
-					if($(UID[lBC[i]]))
-						$(UID[lBC[i]]).observe('click', claimMission);
-					$(UID[lCB[i]]).observe('click', checkedAdventurer);
-					$(UID[lCB[i]]).observe('change', checkedAdventurer);
+					document.getElementById(UID[lS[i]]).addEventListener('change', onChangeMission);
+					if(document.getElementById(UID[lBG[i]]))
+						document.getElementById(UID[lBG[i]]).addEventListener('click', doMission);
+					if(document.getElementById(UID[lBC[i]]))
+						document.getElementById(UID[lBC[i]]).addEventListener('click', claimMission);
+					document.getElementById(UID[lCB[i]]).addEventListener('click', checkedAdventurer);
+					document.getElementById(UID[lCB[i]]).addEventListener('change', checkedAdventurer);
 					
 					var evt = document.createEvent('HTMLEvents');
 					evt.initEvent('change', true, true);
-					$(UID[lS[i]]).dispatchEvent(evt);
+					document.getElementById(UID[lS[i]]).dispatchEvent(evt);
 				}
 				
 				function checkedAdventurer(event) {
@@ -20549,10 +22705,10 @@
 				}
 				
 				function onChangeMission(event) {
-					var ref = $(event.target.id).readAttribute('ref').split('_');
+					var ref = document.getElementById(event.target.id).readAttribute('ref').split('_');
 					var idSel = UID['selMission_'+ref[0]+'_'+ref[1]];
 					var missionType = event.target.options[event.target.selectedIndex].value;
-					var mission = Forge.data.missions[missionType];
+					var mission = Seed.forge.missions[missionType];
 					
 					Data.options.forge[ref[0]].mission = missionType;
 					
@@ -20590,7 +22746,7 @@
 					pr += '</table>';
 					ret += '<tr><td align=right><b>'+translate('requirements')+'</b>&nbsp;:&nbsp;</td><td>'+pr+'</td></tr>';
 					ret += '</table>';
-					$(UID[ref[0]+'_descMission']).update(ret);
+					document.getElementById(UID[ref[0]+'_descMission']).innerHTML = (ret);
 				}
 								
 				function getXPNextLevel(nbXp, type) {
@@ -20603,12 +22759,12 @@
 						var first = true;
 						var lvlXpBefore = 0;
 						var nextLvlXp = 0
-						for(var i in Forge.data.adventurers[type].level_exp){
+						for(var i in Seed.forge.adventurers[type].level_exp){
 							if(!first) {
 								lvlXpBefore = nextLvlXp;
 							}
 							first = false;
-							nextLvlXp = Forge.data.adventurers[type].level_exp[i];
+							nextLvlXp = Seed.forge.adventurers[type].level_exp[i];
 							if(nbXp<nextLvlXp) {
 								if(j != 0)
 									j = j-1;
@@ -20622,7 +22778,7 @@
 				}
 			
 				function doMission(event) {
-					var ref = $(event.target.id).readAttribute('ref').split('_');
+					var ref = document.getElementById(event.target.id).readAttribute('ref').split('_');
 					var idSel = UID['selMission_'+ref[0]];
 					var missionType = Data.options.forge[ref[0]].mission;
 					
@@ -20630,7 +22786,7 @@
 				}
 				
 				function claimMission(event) {
-					var ref = $(event.target.id).readAttribute('ref').split('_');
+					var ref = document.getElementById(event.target.id).readAttribute('ref').split('_');
 					var missionType = '';
 					
 					for(var i=0;i<Seed.player.forge.adventurers.length;i++) {
@@ -20648,170 +22804,220 @@
 			tabJobForgeForge: function() {
 				var t = Tabs.Jobs;
 
-				$(UID['tabJobForge_tabAdventurers']).className = '';
-				$(UID['tabJobForge_tabAdventurers']).style.zIndex = 0;
-				$(UID['tabJobForge_tabInventory']).className = '';
-				$(UID['tabJobForge_tabInventory']).style.zIndex = 0;
-				$(UID['tabJobForge_tabStats']).className = '';
-				$(UID['tabJobForge_tabStats']).style.zIndex = 0;
-				$(UID['tabJobForge_tabForge']).className = 'selected';
-				$(UID['tabJobForge_tabForge']).style.zIndex = 1;
+				document.getElementById(UID['tabJobForge_tabAdventurers']).className = '';
+				document.getElementById(UID['tabJobForge_tabAdventurers']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabInventory']).className = '';
+				document.getElementById(UID['tabJobForge_tabInventory']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabStats']).className = '';
+				document.getElementById(UID['tabJobForge_tabStats']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabForge']).className = 'selected';
+				document.getElementById(UID['tabJobForge_tabForge']).style.zIndex = 1;
 
 				t.forgeContentType = 1;
 				
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' 
-					+ '		<div class=' + UID['subtitle'] + '>' + translateByKey('forge', null, 'dialogs') + '</div>';
-				var n = '<table>'
+					+ '<table width=100%>'
 					+ '	<tr>'
-					+ '		<td><INPUT type="checkbox" ref="ingredient" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
-					+ '		<td>' + getSelect("ingredient") + '</td>'
-					+ '		<td>&nbsp;<input ref="ingredient" id="'+setUID('txtForge_MaxIngredients')+'" class="short" type="textbox" value="'+(Data.options.forge.ingredient.max)+'">'
-					+ '		<td>&nbsp;<input ref="ingredient" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '		<td colspan=3 align=center><div class=' + UID['subtitle'] + '>' + translateByKey('forge', null, 'dialogs') + '</div></td>'
 					+ '	</tr>'
-					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td width=5%><INPUT type="checkbox" ref="ingredient" id="'+setUID('ckForge_Ingredients')+'" '+(Data.options.forge.ingredient.cbAuto ? 'checked' : '')+'></td>'
+					+ '		<td width=50%>' + getSelect("ingredient") + '</td>'
+					+ '		<td><input ref="ingredient" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_ingredient')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '	</tr>'
 					+ '	<tr>'
 					+ '		<td>'+translate('requirements')+'&nbsp;:&nbsp;</td>'
-					+ '		<td colspan=3><span id="'+setUID('tabForgeForge_Req_ingredient')+'"></span></td>'
+					+ '		<td colspan=2><span id="'+setUID('tabForgeForge_Req_ingredient')+'"></span></td>'
 					+ '	</tr>'
-					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr><td colspan=4><hr></td></tr>'
 					+ '	<tr>'
 					+ '		<td><INPUT type="checkbox" ref="equipment" id="'+setUID('ckForge_Equipements')+'" '+(Data.options.forge.equipment.cbAuto ? 'checked' : '')+'></td>'
-					+ '		<td>' + getSelect("equipment") + '</td>'
-					+ '		<td>&nbsp;<input  ref="equipment" id="'+setUID('txtForge_MaxEquipments')+'" class="short" type="textbox" value="'+(Data.options.forge.equipment.max)+'">'
-					+ '		<td>&nbsp;<input  ref="equipment" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForge_Equipement')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
+					+ '		<td>' + getSelect("equipment", Data.options.forge.equipment.filter) + '</td>'
+					+ '		<td><input  ref="equipment" class="Xtrasmall '+(Data.options.forge.equipment.cbAuto ? UID['btn_disabled'] : UID['btn_blue'])+'" id="'+setUID('btnForge_equipment')+'" type="button" style="width:auto !important;" value="'+translateByKey('forge', null, 'dialogs')+' !"></td>'
 					+ '	</tr>'
-					+ '<tr><td colspan=4>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td>&nbsp;</td>'
+					+ '		<td colspan=2>'+ translate('for') + '&nbsp;:&nbsp;' + Troop.getSelectAll(setUID('tabForgeSubtabForge_selectUnitEquipment'), true, false, Data.options.forge.equipment.filter) +'</td>'
+					+ '	</tr>'
+					+ '	<tr><td colspan=3>&nbsp;</td></tr>'
 					+ '	<tr>'
 					+ '		<td>'+translate('requirements')+'&nbsp;:&nbsp;</td>'
-					+ '		<td colspan=3><span id="'+setUID('tabForgeForge_Req_equipment')+'"></span></td>'
+					+ '		<td colspan=2><span id="'+setUID('tabForgeForge_Req_equipment')+'"></span></td>'
 					+ '	</tr>'
-					+ '</table>'
-					+ '		<div class=' + UID['subtitle'] + '>' + translate('forge-crush') + '</div>'
-					+ '<table>'
+					+ '	<tr>'
+					+ '		<td colspan=3 align=center><div class=' + UID['subtitle'] + '>' + translate('forge-crush') + '</div></td>'
+					+ '	</tr>'
 					+ '	<tr>'
 					+ '		<td><INPUT ref="crush" type="checkbox" id="'+setUID('ckForge_Crush')+'" '+(Data.options.forge.crush.cbAuto ? 'checked' : '')+'></td>'
-					+ '		<td>' + getCrushSelect() + '</td>'
-					+ '		<td>&nbsp;<input ref="crush" id="'+setUID('txtForgeCrush_Max')+'" class="short" type="textbox" value="'+(Data.options.forge.crush.max)+'">'
-					+ '		<td>&nbsp;<input ref="crush" class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnForgeCrush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
+					+ '		<td>' + getCrushSelect(Data.options.forge.crush.filter) + '</td>'
+					+ '		<td><input ref="crush" class="Xtrasmall '+(Data.options.forge.crush.cbAuto ? UID['btn_disabled'] : UID['btn_blue'])+'" id="'+setUID('btnForge_crush')+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+' !"></td>'
 					+ '	</tr>'
-					+ '</table>';
-				//m += n;
-				m += '		<div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '<span id=' + setUID('blacksmith_lvl') + '></span></div>'
-					+ '		<table>'
-					+ '		<tr><td>&nbsp;</td><td>&nbsp;</td></tr>'
-					+ '			<tr>'
-					+ '				<td>'+translate('forge-repair-hammer')+' : <span id='+setUID('blacksmith_durability')+'></span></td>'
-					+ '				<td>&nbsp;&nbsp;&nbsp;<input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnHammerRepair')+'" type="button" style="width:auto !important;" value="'+translate('blacksmith-repair')+'"></td></tr>'
-					+ '		</table>'
+					+ '	<tr>'
+					+ '		<td>&nbsp;</td>'
+					+ '		<td colspan=2>'+ translate('for') + '&nbsp;:&nbsp;' + Troop.getSelectAll(setUID('tabForgeSubtabForgeCrush_selectUnitEquipment'), true, false, Data.options.forge.crush.filter) +'</td>'
+					+ '	</tr>'
+					+ '	<tr>'
+					+ '		<td><INPUT ref="crush" type="checkbox" id="'+setUID('ckForge_CrushKeep')+'" '+(Data.options.forge.crush.cbAutoKeep ? 'checked' : '')+'></td>'
+					+ '		<td colspan=2>'+translate('Keep item with at least ')+' '+getSelectNbStatToKeep()+' '+translate('statistics')+'</td>'
+					+ '	</tr>'
+					+ '	<tr>'
+					+ '		<td colspan=3><span id="'+setUID("tabForgeForge_detailCrushItem")+'"></span></td>'
+					+ '	</tr>'
+					+ '	<tr>'
+				    + '		<td colspan=3 align=center><div class=' + UID['subtitle'] + '>' + translate('forge-blacksmith') + '<span id=' + setUID('blacksmith_lvl') + '>'+getSpanBlackSmithLevel()+'</span></div></td>'
+					+ '	</tr>'
+					+ '	<tr><td colspan=3>&nbsp;</td></tr>'
+					+ '	<tr>'
+					+ '		<td>&nbsp;</td>'
+					+ '		<td>'+translate('forge-repair-hammer')+'&nbsp;:&nbsp;<span id='+setUID('blacksmith_durability')+'></span></td>'
+					+ '		<td><input class="Xtrasmall '+UID['btn_blue']+'" id="'+setUID('btnHammerRepair')+'" type="button" style="width:auto !important;" value="'+translate('blacksmith-repair')+'"></td>'
+					+ '	</tr>'
+					+ '</table>'
 					+ '</div>';
 
-				$(UID['tabJobForge_Content']).update(m);
-				$(UID['btnHammerRepair']).observe('click', lunchRepairHammer);
+				document.getElementById(UID['tabJobForge_Content']).innerHTML = (m);
+				document.getElementById(UID['btnHammerRepair']).addEventListener('click', lunchRepairHammer);
 				
-				$(UID['txtForge_MaxIngredients']).addEventListener('change', onChangeQty, false);
-				$(UID['txtForge_MaxIngredients']).addEventListener('click', onChangeQty, false);
-				$(UID['txtForge_MaxEquipments']).addEventListener('change', onChangeQty, false);
-				$(UID['txtForge_MaxEquipments']).addEventListener('click', onChangeQty, false);
-				$(UID['txtForgeCrush_Max']).addEventListener('change', onChangeQty, false);
-				$(UID['txtForgeCrush_Max']).addEventListener('click', onChangeQty, false);
+				document.getElementById(UID['ckForge_Equipements']).addEventListener('change', checkedCb);
+				document.getElementById(UID['ckForge_Equipements']).addEventListener('click', checkedCb);
+				document.getElementById(UID['ckForge_Ingredients']).addEventListener('change', checkedCb);
+				document.getElementById(UID['ckForge_Ingredients']).addEventListener('click', checkedCb);
+				document.getElementById(UID['ckForge_Crush']).addEventListener('change', checkedCb);
+				document.getElementById(UID['ckForge_Crush']).addEventListener('click', checkedCb);
+				document.getElementById(UID['ckForge_CrushKeep']).addEventListener('click', checkedCbKeep);
 				
-				$(UID['ckForge_Ingredients']).addEventListener('change', checkedCb, false);
-				$(UID['ckForge_Ingredients']).addEventListener('click', checkedCb, false);
-				$(UID['ckForge_Equipements']).addEventListener('change', checkedCb, false);
-				$(UID['ckForge_Equipements']).addEventListener('click', checkedCb, false);
-				$(UID['ckForge_Crush']).addEventListener('change', checkedCb, false);
-				$(UID['ckForge_Crush']).addEventListener('click', checkedCb, false);
-				
-				$(UID['selForgeCrush_equipment']).observe('change', onChangeSelectCrush);
-				
-				$(UID['btnForge_Ingredient']).observe('click', onClickForge);
-				$(UID['btnForge_Equipement']).observe('click', onClickForge);
-				$(UID['btnForgeCrush']).observe('click', onClickCrush);
+				document.getElementById(UID['btnForge_ingredient']).addEventListener('click', onClickForge);
+				document.getElementById(UID['btnForge_equipment']).addEventListener('click', onClickForge);
+				document.getElementById(UID['btnForge_crush']).addEventListener('click', onClickCrush);
 
 				var evt = document.createEvent('HTMLEvents');
 				evt.initEvent('change', true, true);
 				
-				if($(UID['selForge_equipment'])) {
-					$(UID['selForge_equipment']).observe('change', onChangeSelect);
-					$(UID['selForge_equipment']).dispatchEvent(evt);
+				document.getElementById(UID['tabForgeSubtabForge_selectUnitEquipment']).addEventListener('change', filtreCbEqp);
+				document.getElementById(UID['tabForgeSubtabForgeCrush_selectUnitEquipment']).addEventListener('change', filtreCrushCbEqp);
+				
+				if(document.getElementById(UID['selForge_equipment'])) {
+					document.getElementById(UID['selForge_equipment']).addEventListener('change', onChangeSelect);
+					document.getElementById(UID['selForge_equipment']).dispatchEvent(evt);
 				}
-				if($(UID['selForge_equipment'])) {
-					$(UID['selForge_ingredient']).observe('change', onChangeSelect);
-					$(UID['selForge_ingredient']).dispatchEvent(evt);
+				if(document.getElementById(UID['selForge_ingredient'])) {
+					document.getElementById(UID['selForge_ingredient']).addEventListener('change', onChangeSelect);
+					document.getElementById(UID['selForge_ingredient']).dispatchEvent(evt);
+				}
+				if(document.getElementById(UID['selForgeCrush_equipment'])) {
+					document.getElementById(UID['selForgeCrush_equipment']).addEventListener('change', onChangeSelectCrush);
+					document.getElementById(UID['selForgeCrush_equipment']).dispatchEvent(evt);
 				}
 				
-				MyAjax.forgeInfo(function(rslt) {
-					var j=0;
-					var ret = '';
-					var bs = Seed.blacksmith;
-					if(bs.experience >= 20000) {
-						ret = ' ( Lvl : 10, Xp : ' + bs.experience + ')';
-					} else {
-						for(var i in Forge.data.blacksmith_experience){
-							var nextLvlXp = Forge.data.blacksmith_experience[i];
-							if(bs.experience<nextLvlXp) {
-								if(j != 0)
-									j = j-1;
-								ret = ' ( Lvl : ' + j + ', Xp : ' + bs.experience + ' / ' + nextLvlXp + ')';
-								break;
-							}
-							j++;
-						}
+				document.getElementById(UID['selForge_NbStatToKeep']).addEventListener('change', onChangeSelectStatToKeep);
+				
+				var ret = '';
+				for(var i in Seed.forge.hammer_durability){
+					if(i == Seed.blacksmith.level) {
+						var maxDura = Seed.forge.hammer_durability[i];
+						ret = Seed.blacksmith.durability+' / ' +maxDura;
+						if(Seed.blacksmith.durability==maxDura)
+							Seed.blacksmith.available = false;
+						setButtonStyle(document.getElementById(UID['btnHammerRepair']), (Seed.blacksmith.available), 'btn_blue', 'btn_disabled');
+						break;
 					}
-					$(UID['blacksmith_lvl']).update(ret);
-					
-					for(var i in Forge.data.hammer_durability){
-						if(i == bs.level) {
-							var maxDura = Forge.data.hammer_durability[i];
-							ret = bs.durability+' / ' +maxDura;
-							if(bs.durability==maxDura)
-								bs.available = false;
-							setButtonStyle($(UID['btnHammerRepair']), (bs.available), 'btn_blue', 'btn_disabled');
-							break;
-						}
-					}
-					$(UID['blacksmith_durability']).update(ret);
-					
-					
-				});
+				}
+				document.getElementById(UID['blacksmith_durability']).innerHTML = (ret);
 			
 				function lunchRepairHammer() {
 					MyAjax.repairHammer(cb);
 					
 					function cb(rslt) {
 						if(rslt.dat.result.success) {
-							setButtonStyle($(UID['btnHammerRepair']), (rslt.dat.result.blacksmith.available), 'btn_blue', 'btn_disabled');
+							setButtonStyle(document.getElementById(UID['btnHammerRepair']), (rslt.dat.result.blacksmith.available), 'btn_blue', 'btn_disabled');
 						}
 					}
 				}
-				function getSelect(type) {
+				function filtreCbEqp() {
+					Data.options.forge.equipment.filter = event.target.options[event.target.selectedIndex].value;
+					Tabs.Jobs.tabJobForgeForge();
+				}
+				function filtreCrushCbEqp() {
+					Data.options.forge.crush.filter = event.target.options[event.target.selectedIndex].value;
+					Tabs.Jobs.tabJobForgeForge();
+				}
+				function getSelectNbStatToKeep() {
+					var ret = '<SELECT id='+setUID('selForge_NbStatToKeep')+'>';
+					ret += '	<OPTION value="1" '+(Data.options.forge.crush.levelToKeep==1 ?  'selected' : '')+'>1</OPTION>';
+					ret += '	<OPTION value="2" '+(Data.options.forge.crush.levelToKeep==2 ?  'selected' : '')+'>2</OPTION>';
+					ret += '	<OPTION value="3" '+(Data.options.forge.crush.levelToKeep==3 ?  'selected' : '')+'>3</OPTION>';
+					ret += '</SELECT>';
+					return ret;
+				}
+				function getSelect(type, filter) {
 					var ret = translate('filter-'+type) + '&nbsp;:&nbsp;<SELECT id='+setUID('selForge_'+type)+' ref="'+type+'">';
-					for(var item in Forge.data.items){
-						if(Forge.data.items[item].type == type)
-							ret += '<option value="'+item+'" '+(Data.options.forge[type].select==item ?  'selected' : '')+'>'+translate(item.toLowerCase())+'</option>';
+					var items = sortObjectByKey(Seed.forge.items, true);
+					var recipes = Seed.forge.recipes;
+					
+					for(var item in items) {
+						if(items[item].type == type && recipes[item]) {
+							if(serverTime()<recipes[item].ends_at || recipes[item].ends_at==0) {
+								if(filter) {
+									if((filter=='all') || items[item].troop_type && items[item].troop_type == filter) {
+										ret += '<option value="'+item+'" '+(Data.options.forge[type].select==item ?  'selected' : '')+'>'+ translate(item.toLowerCase()) + '</option>';
+									}
+								}
+								else {
+										ret += '<option value="'+item+'" '+(Data.options.forge[type].select==item ?  'selected' : '')+'>'+ translate(item.toLowerCase()) + '</option>';
+								}
+							}
+						}
 					}
 					ret += '</SELECT>';
 					return ret;
 				}
-				function getCrushSelect() {
-				    var eq = Seed.player.forge.items.equipments;
+				function getSpanBlackSmithLevel() {
+					var j=0;
+					var ret = '';
+					var lvlBS = Forge.getBlackSmithLevel();
+					if(lvlBS === 10) {
+						ret = ' ( Lvl : 10, Xp : ' + Seed.blacksmith.experience + ')';
+					} else {
+						ret = ' ( Lvl : ' + lvlBS + ', Xp : ' + Seed.blacksmith.experience + ' / ' + Seed.forge.blacksmith_experience[lvlBS+1] + ')';
+					}
+					return ret;
+				}
+				function getCrushSelect(filter) {
+					var items = sortObjectByKey(Seed.forge.items, true);
+					var recipes = Seed.forge.recipes;
 					var ret = translate('filter-equipment') + '&nbsp;:&nbsp;<SELECT id='+setUID('selForgeCrush_equipment')+'>';
-					for(var i=0;i<eq.length;i++){
-						ret += '<option value="'+eq[i].name+'" '+(Data.options.forge.crush.select==eq[i].name ?  'selected' : '')+'>'+translate(eq[i].name.toLowerCase())+'</option>';
+					
+					for(var item in items) {
+						if(items[item].type == 'equipment' && recipes[item]) {
+							if(serverTime()<recipes[item].ends_at || recipes[item].ends_at==0) {
+								if(filter) {
+									if((filter=='all') || items[item].troop_type && items[item].troop_type == filter) {
+										ret += '<option value="'+item+'" '+(Data.options.forge.crush.select==item ?  'selected' : '')+'>'+ translate(item.toLowerCase()) + '</option>';
+									}
+								}
+								else {
+										ret += '<option value="'+item+'" '+(Data.options.forge.crush.select==item ?  'selected' : '')+'>'+ translate(item.toLowerCase()) + '</option>';
+								}
+							}
+						}
 					}
 					ret += '</SELECT>';
 					return ret;
+				}
+				function onChangeSelectStatToKeep(event) {
+					Data.options.forge.crush.levelToKeep=event.target.options[event.target.selectedIndex].value;
 				}
 				function onChangeSelect(event) {
-					var type = $(event.target.id).readAttribute('ref');
+					var type = document.getElementById(event.target.id).readAttribute('ref');
 					var nameItem = event.target.options[event.target.selectedIndex].value;
-					var reqItem = Forge.data.recipes[nameItem].requirements;
+					var reqItem = Seed.forge.recipes[nameItem].requirements;
 					
 					Data.options.forge[type].select = nameItem;
 					
 					var ret = '<table>';
-					if(reqItem.blacksmith_level)
+					if(reqItem.blacksmith_level) {
 						ret += '<tr><td align=right><b>'+translate('forge-blacksmith')+'</b>&nbsp;:&nbsp;</td><td> '+(reqItem.blacksmith_level)+'</td></tr>';
+					}
 					var reqI = '<table>';
 					for(var it in reqItem.items) {
 						var ing = Seed.player.forge.items.ingredients;
@@ -20828,30 +23034,25 @@
 					ret += '<tr><td align=right><b>'+translate('Items')+'</b>&nbsp;:&nbsp;</td><td>'+reqI+'</td></tr>';
 					
 					ret += '</table>';
-					$(UID['tabForgeForge_Req_'+type]).update(ret);
+					document.getElementById(UID['tabForgeForge_Req_'+type]).innerHTML = (ret);
 				}
 				function onChangeSelectCrush(event) {
 					Data.options.forge.crush.select = event.target.options[event.target.selectedIndex].value;
 				}
+				function checkedCbKeep(event) {
+					Data.options.forge.crush.cbAutoKeep = event.target.checked;
+				}
 				function checkedCb(event) {
 					var type = event.target.getAttribute('ref');
 					Data.options.forge[type].cbAuto = event.target.checked;
-				}
-				function onChangeQty(event) {
-					var type = event.target.getAttribute('ref');
-					var qty = toNum(event.target.value);
-					
-					if (isNaN(qty) || qty < 0) {
-						event.target.style.backgroundColor = 'red';
-						dispError(translate('Invalid number of '+type, t.container));
-					} else {
-						event.target.value = qty;
-						Data.options.forge[type].max = qty;
-						event.target.style.backgroundColor = '';
-					}
+					setButtonStyle(document.getElementById(UID['btnForge_'+type]), !event.target.checked);
 				}
 				function onClickForge(event) {
-					var t=Tabs.Jobs;
+					function cbForgeItemManuel() {
+						Tabs.Jobs.tabJobForgeForge();
+					}
+					
+					var t = Tabs.Jobs;
 					var type = event.target.getAttribute('ref');
 					var nameItem = Data.options.forge[type].select;
 					var req = Forge.checkForgeRequirements(nameItem, type+'s');
@@ -20860,13 +23061,15 @@
 						t.jobFeedback(translate('forge-blacksmith') + ' : ' + message);
 					}
 					else {
-						t.forgeItem(nameItem, false);
+						t.forgeItem(nameItem, false, cbForgeItemManuel);
 					}
 				}
 				function onClickCrush(event) {
-					var t=Tabs.Jobs;
-					var nameItem = Data.options.forge.crush.select;
-					t.crushItem(nameItem, false);
+					function cbCrushItemManuel() {
+						Tabs.Jobs.tabJobForgeForge();
+					}
+					
+					Tabs.Jobs.crushItem(Data.options.forge.crush.select, false, cbCrushItemManuel);
 				}
 			},
 			
@@ -20874,79 +23077,258 @@
 			tabJobForge_tabInventory: function() {
 				var t = Tabs.Jobs;
 
-				$(UID['tabJobForge_tabAdventurers']).className = '';
-				$(UID['tabJobForge_tabAdventurers']).style.zIndex = 0;
-				$(UID['tabJobForge_tabForge']).className = '';
-				$(UID['tabJobForge_tabForge']).style.zIndex = 0;
-				$(UID['tabJobForge_tabStats']).className = '';
-				$(UID['tabJobForge_tabStats']).style.zIndex = 0;
-				$(UID['tabJobForge_tabInventory']).className = 'selected';
-				$(UID['tabJobForge_tabInventory']).style.zIndex = 1;
+				document.getElementById(UID['tabJobForge_tabAdventurers']).className = '';
+				document.getElementById(UID['tabJobForge_tabAdventurers']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabForge']).className = '';
+				document.getElementById(UID['tabJobForge_tabForge']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabStats']).className = '';
+				document.getElementById(UID['tabJobForge_tabStats']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabInventory']).className = 'selected';
+				document.getElementById(UID['tabJobForge_tabInventory']).style.zIndex = 1;
+				
 				t.forgeContentType = 2;
+				var bCrush = [], bRepair = [], bUnequip = [], bEquip = [], bUpgrade = [], cbToKeep = [];
+				var items = Seed.player.forge.items.equipments;
+				items.sort(function(a, b) {
+					a = a.troop_type.toLowerCase();
+					b = b.troop_type.toLowerCase();
+					if (a > b) return 1;
+					if (a < b) return -1;
+					return 0;
+				}); 
 				
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' 
-					+ '		<div class=' + UID['subtitle'] + '>' + translate('filter-equipment') + '</b></div><div id='+setUID('tabJobForge_tabInventory_equipment')+'></div>'
-					+ '		<div class=' + UID['subtitle'] + '>' + translate('filter-ingredient') + '</b></div><div id='+setUID('tabJobForge_tabInventory_ingredient')+'></div>'
-					+ '</div>';
-
-				$(UID['tabJobForge_Content']).update(m);
-				
-				$(UID['tabJobForge_tabInventory_equipment']).update(getEquipment());
-				$(UID['tabJobForge_tabInventory_ingredient']).update(getIngredient());
-				
-				
-				function getEquipment() {
-					var items = Seed.player.forge.items.equipments;
-					items.sort(function(a, b) {
-							a = a.troop_type.toLowerCase();
-							b = b.troop_type.toLowerCase();
-							if (a > b) return 1;
-							if (a < b) return -1;
-							return 0;
-						}); 
-					var ret = '' 
+					+ '		<div class=' + UID['subtitle'] + '>' + translate('filter-equipment') + '</b></div>' 
+					+ '<div id='+setUID('tabJobForge_tabInventory_equipment')+'>'
 					+ '<table class=' + UID['row_style'] + '>'
+					+ '	<tr><td colspan=5>'+translate('keep') 
+					+' 		<input ref="checked" class="Xtrasmall '+UID['btn_green']+' thin" id="'+setUID('btnForgeInventory_All')+'" type="button" style="width:auto !important;" value="'+translate('all')+'">'
+					+' 		<input ref="" class="Xtrasmall '+UID['btn_red']+' thin" id="'+setUID('btnForgeInventory_None')+'" type="button" style="width:auto !important;" value="'+translate('none')+'">'
+					+ '</td>'
 					+ '	<tr class=' + UID['row_headers'] + ' align=center>' 
+					+ '		<td>&nbsp;'+translate('keep')+'&nbsp;</td>'
 					+ '		<td>&nbsp;'+translate('name')+'&nbsp;</td>' 
 					+ '		<td>&nbsp;'+translate('level')+'&nbsp;</td>'
-					+ '		<td>&nbsp;'+translate('troops')+'&nbsp;</td>'
 					+ '		<td>&nbsp;'+translate('status')+'&nbsp;</td>'
 					+ '		<td>&nbsp;'+translate('action')+'&nbsp;</td>'					
 					+ '	</tr>';
-					for(var i=0; i<items.length; i++){
-						ret += '<tr>' 
-						+ '	<td>&nbsp;'+translate(items[i].name)+'&nbsp;'+getInfoEquipment(items[i])+'&nbsp;</td>' 
-						+ '	<td align=center>&nbsp;'+items[i].level+'&nbsp;</td>' 
-						+ '	<td>&nbsp;'+translate(items[i].troop_type.toLowerCase())+'&nbsp;</td>' 
-						+ '	<td>&nbsp;'+( items[i].state=='equipped' ? translate('filter-equipped') : '' )+'&nbsp;</td>' 
-						+ '	<td align=center>&nbsp;'+'&nbsp;</td>'
-						+ '</tr>';
+				for(var i=0; i<items.length; i++){
+					var actionPossible = '';
+					var itemStatus = '';
+					var powderItem = Seed.forge.equipment_upgrade.powder_for_tier[Seed.forge.items[items[i].name].tier_value];
+					var powderNeeded = Seed.forge.equipment_upgrade.required_powder_for_level[items[i].level];
+					var nbPowderGotten = Forge.getNbPlayerItem(powderItem);
+					var display = '';
+					if(powderNeeded>nbPowderGotten) {
+						display = '<span class="'+UID['warningred']+'" title="'+ nbPowderGotten + ' ' + translate(powderItem.toLowerCase()) + ' / ' + powderNeeded +'" />';
+					} else {
+						display = '<span class="'+UID['warninggreen']+'" title="'+ nbPowderGotten + ' ' + translate(powderItem.toLowerCase()) + ' / ' + powderNeeded +'" />';
 					}
-					ret += '</table>';
-					return ret;
+					switch(items[i].state) {
+						case 'broken':
+							var jobsF = Jobs.getForgeJob(CAPITAL.id);
+							var found = false;
+							
+							for(var ij=0;ij<jobsF.length;ij++) {
+								if(jobsF[ij].queue == 'repair_equipment') {
+									if(jobsF[ij].equipment_id == items[i].id) {
+										actionPossible = translate('forge-repair-state');
+										found=true;
+										break;
+									}
+								}
+							}
+							if(!found) {
+								actionPossible = '<input ref="'+items[i].id+'" class="'+UID['btn_black']+' thin" id="'+setUID('btnForgeCrush_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+'">&nbsp;';
+								actionPossible += '<input ref="'+items[i].id+'" class="Xtrasmall '+UID['btn_yellow']+' thin" id="'+setUID('btnForgeRepair_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('repair')+'">';
+								bCrush.push('btnForgeCrush_'+items[i].id);
+								bRepair.push('btnForgeRepair_'+items[i].id);
+							}
+							itemStatus=translate('broken');
+							break;
+						case 'equipped':
+							actionPossible = '<input ref="'+items[i].id+'" class="Xtrasmall '+UID['btn_black']+' thin" id="'+setUID('btnForgeCrush_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+'">&nbsp;';
+							actionPossible += '<input ref="'+items[i].id+'" class="Xtrasmall '+UID['btn_red']+' thin" id="'+setUID('btnForgeUnequip_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('unequip')+'">&nbsp;';
+							actionPossible += '<input '+(powderNeeded>nbPowderGotten ? 'disabled' : '')+' ref="'+items[i].id+'" class="Xtrasmall '+(powderNeeded>nbPowderGotten ? UID['btn_disabled'] : UID['btn_blue'])+' thin" id="'+setUID('btnForgeUpgrade_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('upgrade')+'">&nbsp;';
+							actionPossible += display;
+							bCrush.push('btnForgeCrush_'+items[i].id);
+							bUnequip.push('btnForgeUnequip_'+items[i].id);
+							bUpgrade.push('btnForgeUpgrade_'+items[i].id);
+							itemStatus=translate('filter-equipped');
+							break;
+						case 'unequipped':
+							actionPossible = '<input ref="'+items[i].id+'" class="Xtrasmall '+UID['btn_black']+' thin" id="'+setUID('btnForgeCrush_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('forge-crush')+'">&nbsp;';
+							actionPossible += '<input ref="'+items[i].id+'" class="Xtrasmall '+UID['btn_green']+' thin" id="'+setUID('btnForgeEquip_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('equip')+'">&nbsp;';
+							actionPossible += '<input '+(powderNeeded>nbPowderGotten ? 'disabled' : '')+' ref="'+items[i].id+'" class="Xtrasmall '+(powderNeeded>nbPowderGotten ? UID['btn_disabled'] : UID['btn_blue'])+' thin" id="'+setUID('btnForgeUpgrade_'+items[i].id)+'" type="button" style="width:auto !important;" value="'+translate('upgrade')+'">&nbsp;';
+							actionPossible += display;
+							bCrush.push('btnForgeCrush_'+items[i].id);
+							bEquip.push('btnForgeEquip_'+items[i].id);
+							bUpgrade.push('btnForgeUpgrade_'+items[i].id);
+							break;
+					}
+					
+					
+					m += '<tr>' 
+					+ '	<td align="center"><INPUT type="checkbox" ref="'+items[i].id+'" id="'+setUID('ckForge_Inventory_'+items[i].id)+'" '+(Data.options.forge.crush.itemToKeep[items[i].id] ? 'checked' : '')+'></td>' 
+					+ '	<td>&nbsp;'+translate(items[i].name)+'&nbsp;'+getInfoEquipment(items[i])+'&nbsp;</td>' 
+					+ '	<td align=center>&nbsp;'+items[i].level+'&nbsp;</td>' 
+					+ '	<td>&nbsp;'+itemStatus+'&nbsp;</td>' 
+					+ '	<td align=left>'+actionPossible+'</td>'
+					+ '</tr>';
+					cbToKeep.push('ckForge_Inventory_'+items[i].id);
+				}
+				m += '</table>'
+				+ '</div>'
+				+ '		<div class=' + UID['subtitle'] + '>' + translate('filter-ingredient') + '</b></div>' 
+				+ '<div id='+setUID('tabJobForge_tabInventory_ingredient')+'>'
+				+ '<table class=' + UID['row_style'] + '><tr>';
+				
+				items = Seed.player.forge.items.ingredients;
+				items.sort(function(a, b) {
+					if(translate(b.name.toLowerCase()) < translate(a.name.toLowerCase())) {
+						return 1;
+					}
+					if(translate(b.name.toLowerCase()) > translate(a.name.toLowerCase())) {
+						return -1;
+					}
+					return 0;
+				});
+				for(var i=0; i<items.length; i++){
+					m += '<td>'+translate(items[i].name)+'</td> ' 
+					+ '<td> x '+  items[i].quantity + '<td>' 
+					+ '</td>'+(((i+1)%3!==0) ? '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>' : '' );
+					if((i+1)%3===0) {
+						m += '</tr><tr>';
+					}
+				}
+				m += '</tr></table>'
+				+ '</div>'
+				+ '</div>';
+
+				document.getElementById(UID['tabJobForge_Content']).innerHTML = (m);
+				
+				for(i=0;i<bCrush.length;i++) {
+					document.getElementById(UID[bCrush[i]]).addEventListener('click', onClickCrush);
+				}
+				for(i=0;i<bRepair.length;i++) {
+					document.getElementById(UID[bRepair[i]]).addEventListener('click', onClickRepair);
+				}
+				for(i=0;i<bUnequip.length;i++) {
+					document.getElementById(UID[bUnequip[i]]).addEventListener('click', onClickUnequip);
+				}
+				for(i=0;i<bEquip.length;i++) {
+					document.getElementById(UID[bEquip[i]]).addEventListener('click', onClickEquip);
+				}
+				for(i=0;i<bUpgrade.length;i++) {
+					document.getElementById(UID[bUpgrade[i]]).addEventListener('click', onClickUpgrade);
+				}
+				for(i=0;i<cbToKeep.length;i++) {
+					document.getElementById(UID[cbToKeep[i]]).addEventListener('click', onClickCbToKeep);
 				}
 				
-				function getIngredient() {
-					var items = Seed.player.forge.items.ingredients;
-					var ret = '<table class=' + UID['row_style'] + '><tr>';
+				document.getElementById(UID['btnForgeInventory_All']).addEventListener('click', onClickCheckUncheck);
+				document.getElementById(UID['btnForgeInventory_None']).addEventListener('click', onClickCheckUncheck);
+				
+				function onClickCheckUncheck(event) {
+					var isChecked = event.target.getAttribute('ref');
+					var items = Seed.player.forge.items.equipments;
+					
+					var evt = document.createEvent('HTMLEvents');
+					evt.initEvent('click', true, true);
+					
 					for(var i=0; i<items.length; i++){
-						ret += '<td>'+translate(items[i].name)+'</td> ' 
-						+ '<td> x '+  items[i].quantity + '<td>' 
-						+ '</td>'+(((i+1)%3!==0) ? '<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>' : '' );
-						if((i+1)%3===0) {
-							ret+='</tr><tr>';
+						if(isChecked=="checked") {
+							document.getElementById(UID['ckForge_Inventory_'+items[i].id]).checked = true;
+						} else {
+							document.getElementById(UID['ckForge_Inventory_'+items[i].id]).checked = false;
 						}
+						document.getElementById(UID['ckForge_Inventory_'+items[i].id]).dispatchEvent(evt);
 					}
-					ret += '</tr></table>';
-					return ret;
+					
+					
 				}
-				
 				function getInfoEquipment(item) {
 					var display = '';
+					var nbStat = 0;
+					var classStat = '';
 					for(var s in item.stats) {
-						display += translate(s) + ' : ' + item.stats[s] + '\n';
+						if(parseInt(item.stats[i]) != 0) {
+							display += translate(s) + ' : ' + item.stats[s] + '\n';
+							nbStat++;
+						}
 					}
-					return '<span class="'+UID['information']+'" title="'+display+'" />';
+					classStat = 'number'+nbStat;
+					return '<span class="'+UID[classStat]+'" title="'+display+'" />';
+				}
+				function onClickCrush(event) {
+					function cb(rslt) {
+						if(rslt.ok) {
+							for(var i=0;i<rslt.dat.result.disenchanted_ingredients.length;i++) {
+								rslt.dat.result.disenchanted_ingredients[i] = translate(rslt.dat.result.disenchanted_ingredients[i].toLowerCase());
+							}
+							Tabs.Jobs.jobFeedback(translate('forge-salvage-materials') + ' ' + rslt.dat.result.disenchanted_ingredients.join(', '));
+							Tabs.Jobs.tabJobForge_tabInventory();
+						}
+						else {
+							Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+						}
+					}
+					MyAjax.forgeCrush(event.target.getAttribute('ref'), cb);
+				}
+				function onClickRepair(event) {
+					function callBackRepair(rslt) {
+						if(rslt.ok) {
+							Tabs.Jobs.tabJobForge_tabInventory();
+						}
+					}
+					Tabs.Jobs.repairItem(event.target.getAttribute('ref'), callBackRepair);
+				}
+				function onClickUnequip(event) {
+					function callBackUnequip(rslt) {
+						if(rslt.ok) {
+							Tabs.Jobs.tabJobForge_tabInventory();
+						}
+					}
+					MyAjax.unequipEquipment(event.target.getAttribute('ref'), callBackUnequip);
+				}
+				function onClickEquip(event) {
+					function callBackEquip(rslt) {
+						if(rslt.ok) {
+							Tabs.Jobs.tabJobForge_tabInventory();
+						}
+					}
+					MyAjax.equipEquipment(event.target.getAttribute('ref'), callBackEquip);
+				}
+				function onClickUpgrade(event) {
+					var itemId = event.target.getAttribute('ref');
+					
+					function callBackUpgrade(rslt) {
+						if(rslt.ok) {
+							var item = Forge.getItemById(itemId);
+							if(rslt.dat.result.upgrade_result == 'failure') {
+								Tabs.Jobs.jobFeedback(translate('forge-upgrade-fail-title') + ' ' + translate(item.name.toLowerCase()) + ' lvl' + item.level);
+							} else {
+								Tabs.Jobs.jobFeedback(translate('forge-upgrade-success-title') + ' ' + translate(item.name.toLowerCase()) + ' lvl' + item.level);
+							}						
+							Tabs.Jobs.tabJobForge_tabInventory();
+						}
+					}
+					
+					MyAjax.upgradeEquipment(itemId, callBackUpgrade);
+				}
+				function onClickCbToKeep(event) {
+					var itemId = event.target.getAttribute('ref');
+					var toKeep = event.target.checked
+					
+					if(Data.options.forge.crush.itemToKeep[itemId]) {
+						if(!toKeep) {
+							delete Data.options.forge.crush.itemToKeep[itemId];
+						}
+					} else {
+						if(toKeep) {
+							Data.options.forge.crush.itemToKeep[itemId] = itemId;
+						}
+					}
 				}
 			},
 
@@ -20954,14 +23336,14 @@
 			tabJobForge_tabStats: function() {
 				var t = Tabs.Jobs;
 				
-				$(UID['tabJobForge_tabAdventurers']).className = '';
-				$(UID['tabJobForge_tabAdventurers']).style.zIndex = 0;
-				$(UID['tabJobForge_tabForge']).className = '';
-				$(UID['tabJobForge_tabForge']).style.zIndex = 0;
-				$(UID['tabJobForge_tabInventory']).className = '';
-				$(UID['tabJobForge_tabInventory']).style.zIndex = 0;
-				$(UID['tabJobForge_tabStats']).className = 'selected';
-				$(UID['tabJobForge_tabStats']).style.zIndex = 1;
+				document.getElementById(UID['tabJobForge_tabAdventurers']).className = '';
+				document.getElementById(UID['tabJobForge_tabAdventurers']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabForge']).className = '';
+				document.getElementById(UID['tabJobForge_tabForge']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabInventory']).className = '';
+				document.getElementById(UID['tabJobForge_tabInventory']).style.zIndex = 0;
+				document.getElementById(UID['tabJobForge_tabStats']).className = 'selected';
+				document.getElementById(UID['tabJobForge_tabStats']).style.zIndex = 1;
 
 				t.forgeContentType = 3;
 
@@ -20973,8 +23355,8 @@
 				+ '	<center><input id=' + setUID('tabJobForge_tabStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' 
 				+ '	<br>'
 				+ '</div>';
-				$(UID['tabJobForge_Content']).update(m);
-				$(UID['tabJobForge_tabStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabJobForge_Content']).innerHTML = (m);
+				document.getElementById(UID['tabJobForge_tabStats_Clear']).addEventListener('click', function() {
 					clearStats();
 					t.showStats();
 				}, false);
@@ -20989,6 +23371,24 @@
 						total_missions: {},
 						items: {}
 					};
+					
+					Data.stats.forge = {
+						missions: [],
+						hammer: [],
+						crush: {
+							nb: {},
+							items: {}
+						},
+						forge: {
+							nb:0,
+							nbFailure:0,
+							items: []
+						},
+						upgrade: {
+							items: {}
+						}
+					};
+					
 					t.showStats();
 				}
 			},
@@ -20996,17 +23396,17 @@
 			/** * Jobs Tab - Research Sub-tab ** */
 			tabJobResearch: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobResearch']).className = 'selected';
-				$(UID['tabJobResearch']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobResearch']).className = 'selected';
+				document.getElementById(UID['tabJobResearch']).style.zIndex = 1;
 				t.lastSubTab = 'tabJobResearch';
 
 				t.contentType = 3;
 
 				var n = '<div class=' + UID['title'] + '>' + translate('Research') + ' ' + translate('Automatically') + '</div>' + '<div class=' + UID['status_ticker'] + '>' + '	<center><input id=' + setUID('tabJobResearch_OnOff') + ' type=button /></center>' + '	<div id=' + setUID('tabJobResearch_Report') + ' class=' + UID['status_report'] + '>' + '		<table id=' + setUID('tabJobResearch_Table') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div><br>' + '	<div id=' + setUID('tabJobResearch_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>';
-				$(UID['tabJob_Header']).style.height = "205px";
-				$(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJob_Header']).style.height = "205px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
 
 				var m = '<div id=' + setUID('tabJobResearch_Config') + ' class=' + UID['content'] + '>';
 				var checkBoxs = [];
@@ -21033,14 +23433,14 @@
 					++i;
 				}
 				m += '</table></div>';
-				$(UID['tabJob_Content']).style.height = "480px";
-				$(UID['tabJob_Content']).innerHTML = m;
+				document.getElementById(UID['tabJob_Content']).style.height = "480px";
+				document.getElementById(UID['tabJob_Content']).innerHTML = m;
 				for (var i = 0; i < checkBoxs.length; ++i) {
-					$(checkBoxs[i]).addEventListener('click', checkedResearch, false);
+					document.getElementById(checkBoxs[i]).addEventListener('click', checkedResearch, false);
 				}
 				for (var id = 0; id < Seed.research.length ; id++) {
 					var resName = Seed.research[id];
-					var selectMenu = $(UID['tabJobResearch_Sel_' + resName]);
+					var selectMenu = document.getElementById(UID['tabJobResearch_Sel_' + resName]);
 					if (selectMenu) {
 						try {
 							if (!Data.options.research.res_cap[0][resName]) {
@@ -21058,7 +23458,7 @@
 						selectMenu.addEventListener('change', changeResearchCap, false);
 					}
 				}
-				$(UID['tabJobResearch_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabJobResearch_OnOff']).addEventListener('click', function() {
 					var t = Tabs.Jobs;
 					t.setResearchEnable(!Data.options.research.enabled);
 				}, false);
@@ -21090,17 +23490,17 @@
 			/** * Jobs Tab - Resurrect Sub-tab ** */
 			tabJobResurrect: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobResurrect']).className = 'selected';
-				$(UID['tabJobResurrect']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobResurrect']).className = 'selected';
+				document.getElementById(UID['tabJobResurrect']).style.zIndex = 1;
 				t.lastSubTab = 'tabJobResurrect';
 
 				t.contentType = 4;
 
 				var n = '<div class=' + UID['title_sr'] + '>' + translate('revive-troops') + '</div>' + '<div class=' + UID['status_ticker'] + '>' + '	<center><input id=' + setUID('tabJobResurrect_OnOff') + ' type=button /></center>' + '	<div id=' + setUID('tabJobResurrect_Report') + ' class=' + UID['status_report'] + '>' + '		<table id=' + setUID('tabJobResurrect_Table') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div>' + '	<br>' + '	<div id=' + setUID('tabJobResurrect_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>';
-				$(UID['tabJob_Header']).style.height = "205px";
-				$(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJob_Header']).style.height = "205px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
 
 				var m = '<div id=' + setUID('tabJobResurrect_Config') + ' class=' + UID['content'] + '>';
 				var sl = [],
@@ -21130,20 +23530,20 @@
 					}
 				}
 				m += '</table></div>';
-				$(UID['tabJob_Content']).style.height = "450px";
-				$(UID['tabJob_Content']).innerHTML = m;
+				document.getElementById(UID['tabJob_Content']).style.height = "450px";
+				document.getElementById(UID['tabJob_Content']).innerHTML = m;
 
 				for (var i = 0; i < sl.length; ++i) {
-					$(sl[i]).addEventListener('click', checkedResurrect, false);
+					document.getElementById(sl[i]).addEventListener('click', checkedResurrect, false);
 				}
 				for (var i = 0; i < bm.length; ++i) {
-					$(bm[i]).addEventListener('click', setMaxSoul, false);
+					document.getElementById(bm[i]).addEventListener('click', setMaxSoul, false);
 				}
 				for (var i = 0; i < cm.length; ++i) {
-					$(cm[i]).addEventListener('click', clearTroop, false);
+					document.getElementById(cm[i]).addEventListener('click', clearTroop, false);
 				}
 				for (var id = 0; id < all_unit_types.length; id++) {
-					var maxSouls = $(UID['tabJobResurrect_Troop_' + id]);
+					var maxSouls = document.getElementById(UID['tabJobResurrect_Troop_' + id]);
 					try {
 						var currentSouls = city.souls[all_unit_types[id]];
 						if (!currentSouls || isNaN(currentSouls)) currentSouls = 0;
@@ -21161,7 +23561,7 @@
 					} catch (e) {}
 					maxSouls.addEventListener('change', changeResurrectMax, false);
 				}
-				$(UID['tabJobResurrect_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabJobResurrect_OnOff']).addEventListener('click', function() {
 					var t = Tabs.Jobs;
 					t.setResurrectEnable(!Data.options.resurrect.enabled);
 				}, false);
@@ -21169,12 +23569,12 @@
 
 				function setMaxSoul(event) {
 					var n = toNum(event.target.getAttribute('ref'));
-					$(UID['tabJobResurrect_Troop_' + n]).value = Seed.cities[CAPITAL.id].souls[all_unit_types[n]];
+					document.getElementById(UID['tabJobResurrect_Troop_' + n]).value = Seed.cities[CAPITAL.id].souls[all_unit_types[n]];
 				}
 
 				function clearTroop(event) {
 					var n = toNum(event.target.getAttribute('ref'));
-					$(UID['tabJobResurrect_Troop_' + n]).value = 0;
+					document.getElementById(UID['tabJobResurrect_Troop_' + n]).value = 0;
 				}
 
 				function checkedResurrect(event) {
@@ -21190,8 +23590,8 @@
 						t.checkResurrectReqs(all_unit_types[n], checkQty);
 					} else {
 						try {
-							$(UID['tabJobResurrect_FB_' + n]).innerHTML = '';
-							$(UID['tabJobResurrect_Troop_' + n]).style.backgroundColor = "none";
+							document.getElementById(UID['tabJobResurrect_FB_' + n]).innerHTML = '';
+							document.getElementById(UID['tabJobResurrect_Troop_' + n]).style.backgroundColor = "none";
 						} catch (e) {}
 					}
 					if (Data.options.resurrect.enabled) t.resurrectTick();
@@ -21220,25 +23620,25 @@
 			/** * Jobs Tab - Train Sub-tab ** */
 			tabJobSanctuary: function() {
 				var t = Tabs.Jobs;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabJobSanctuary']).className = 'selected';
-				$(UID['tabJobSanctuary']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabJobSanctuary']).className = 'selected';
+				document.getElementById(UID['tabJobSanctuary']).style.zIndex = 1;
 				t.lastSubTab = 'tabJobSanctuary';
 
 				t.contentType = 5;
 
 				var n = '<div class=' + UID['title'] + '>' + translate('dragon-sanctuary') + '</div>' + '<div class=' + UID['status_ticker'] + ' style="margin-bottom: 5px !important">' + '	<center><input id=' + setUID('tabJobSanctFeeding_OnOff') + ' type=button /></center>' + '	<div id=' + setUID('tabJobSanct_Report') + ' class=' + UID['status_report'] + '>' + '		<table id=' + setUID('tabJobSanct_TableJobs') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div>' + '	<br>' + '	<div id=' + setUID('tabJobSanct_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabJobSanct_tabDragons') + '>' + translate('Dragons') + '</a></li>' + '	<li class="tab"><a id=' + setUID('tabJobSanct_tabBreeding') + '>' + translate('breeding-dragon') + '</a></li>' + '	<li class="tab"><a id=' + setUID('tabJobSanct_tabFeeding') + '>' + translate('upgrading-dragon') + '</a></li>' + '</ul>';
-				$(UID['tabJob_Header']).style.height = "225px";
-				$(UID['tabJob_Header']).innerHTML = n;
+				document.getElementById(UID['tabJob_Header']).style.height = "225px";
+				document.getElementById(UID['tabJob_Header']).innerHTML = n;
 
 				var m = '<div id=' + setUID('tabJobSanct_Content') + ' style="height:430px; ; max-height:430px; overflow-y:auto">';
-				$(UID['tabJob_Content']).style.height = "430px";
-				$(UID['tabJob_Content']).innerHTML = m;
-				$(UID['tabJobSanct_tabDragons']).addEventListener('click', t.tabJobSanctDragons, false);
-				$(UID['tabJobSanct_tabBreeding']).addEventListener('click', t.tabJobSanctBreeding, false);
-				$(UID['tabJobSanct_tabFeeding']).addEventListener('click', t.tabJobSanctFeeding, false);
-				$(UID['tabJobSanctFeeding_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabJob_Content']).style.height = "430px";
+				document.getElementById(UID['tabJob_Content']).innerHTML = m;
+				document.getElementById(UID['tabJobSanct_tabDragons']).addEventListener('click', t.tabJobSanctDragons, false);
+				document.getElementById(UID['tabJobSanct_tabBreeding']).addEventListener('click', t.tabJobSanctBreeding, false);
+				document.getElementById(UID['tabJobSanct_tabFeeding']).addEventListener('click', t.tabJobSanctFeeding, false);
+				document.getElementById(UID['tabJobSanctFeeding_OnOff']).addEventListener('click', function() {
 					var t = Tabs.Jobs;
 					t.setFeedingEnable(!Data.options.sanctuary.enabled);
 				}, false);
@@ -21262,12 +23662,12 @@
 			/** * Jobs Tab - Sanctuary Sub-tab - Dragons overview Sub-Sub-tab ** */
 			tabJobSanctDragons: function() {
 				var t = Tabs.Jobs;
-				$(UID['tabJobSanct_tabBreeding']).className = '';
-				$(UID['tabJobSanct_tabBreeding']).style.zIndex = 0;
-				$(UID['tabJobSanct_tabFeeding']).className = '';
-				$(UID['tabJobSanct_tabFeeding']).style.zIndex = 0;
-				$(UID['tabJobSanct_tabDragons']).className = 'selected';
-				$(UID['tabJobSanct_tabDragons']).style.zIndex = 1;
+				document.getElementById(UID['tabJobSanct_tabBreeding']).className = '';
+				document.getElementById(UID['tabJobSanct_tabBreeding']).style.zIndex = 0;
+				document.getElementById(UID['tabJobSanct_tabFeeding']).className = '';
+				document.getElementById(UID['tabJobSanct_tabFeeding']).style.zIndex = 0;
+				document.getElementById(UID['tabJobSanct_tabDragons']).className = 'selected';
+				document.getElementById(UID['tabJobSanct_tabDragons']).style.zIndex = 1;
 
 				t.sanctContentType = 0;
 				var dragons = new Array(),
@@ -21304,16 +23704,16 @@
 					m += '	<tr valign=top>' + '			<td class=left width=40%>' + translateByKey(nests[d].subtype, 'rank-' + nests[d].type, 'dragons') + '</td>' + '			<td width=10%><label>' + translate(nests[d].gender) + '</label></td>' + '			<td width=5%><label>' + nests[d].level + '</label></td>' + '			<td width=45%>' + dispAbility(nests[d].abilities) + '</td>' + '	</tr>';
 				}
 				m += '</table>' + '</div>';
-				$(UID['tabJobSanct_Content']).innerHTML = m;
+				document.getElementById(UID['tabJobSanct_Content']).innerHTML = m;
 				for (var d = 0; d < roosts.length; d++) {
-					$(UID['tabJobSanct_Remove_' + roosts[d].id]).addEventListener('click', removeDragon, false);
-					$(UID['tabJobSanct_Delete_' + roosts[d].id]).addEventListener('click', dismissDragon, false);
+					document.getElementById(UID['tabJobSanct_Remove_' + roosts[d].id]).addEventListener('click', removeDragon, false);
+					document.getElementById(UID['tabJobSanct_Delete_' + roosts[d].id]).addEventListener('click', dismissDragon, false);
 				}
 				for (var d = 0; d < rookery.length; d++) {
-					$(UID['tabJobSanct_Delete_' + rookery[d].id]).addEventListener('click', dismissDragon, false);
-					$(UID['tabJobSanct_Equip_' + rookery[d].id]).addEventListener('click', equipDragon, false);
-					if (avail_roost <= used_roost) setButtonStyle($(UID['tabJobSanct_Equip_' + rookery[d].id]), false);
-					else setButtonStyle($(UID['tabJobSanct_Equip_' + rookery[d].id]), true);
+					document.getElementById(UID['tabJobSanct_Delete_' + rookery[d].id]).addEventListener('click', dismissDragon, false);
+					document.getElementById(UID['tabJobSanct_Equip_' + rookery[d].id]).addEventListener('click', equipDragon, false);
+					if (avail_roost <= used_roost) setButtonStyle(document.getElementById(UID['tabJobSanct_Equip_' + rookery[d].id]), false);
+					else setButtonStyle(document.getElementById(UID['tabJobSanct_Equip_' + rookery[d].id]), true);
 				}
 
 				function dismissDragon(event) {
@@ -21416,25 +23816,25 @@
 			/** * Jobs Tab - Sanctuary Sub-tab - Dragons breeding Sub-Sub-tab ** */
 			tabJobSanctBreeding: function() {
 				var t = Tabs.Jobs;
-				$(UID['tabJobSanct_tabDragons']).className = '';
-				$(UID['tabJobSanct_tabDragons']).style.zIndex = 0;
-				$(UID['tabJobSanct_tabBreeding']).className = 'selected';
-				$(UID['tabJobSanct_tabBreeding']).style.zIndex = 1;
-				$(UID['tabJobSanct_tabFeeding']).className = '';
-				$(UID['tabJobSanct_tabFeeding']).style.zIndex = 0;
+				document.getElementById(UID['tabJobSanct_tabDragons']).className = '';
+				document.getElementById(UID['tabJobSanct_tabDragons']).style.zIndex = 0;
+				document.getElementById(UID['tabJobSanct_tabBreeding']).className = 'selected';
+				document.getElementById(UID['tabJobSanct_tabBreeding']).style.zIndex = 1;
+				document.getElementById(UID['tabJobSanct_tabFeeding']).className = '';
+				document.getElementById(UID['tabJobSanct_tabFeeding']).style.zIndex = 0;
 
 				t.sanctContentType = 1;
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' + '<div class=' + UID['subtitle'] + '>' + translate('breeding-dragon') + '</div>' + '	<table class=' + UID['table'] + ' width=100%>' + '		<tr class=' + UID['row_headers'] + '>' + '			<td valign=middle width=50%><b>' + translate('Male') + '</b></td>' + '			<td valign=middle width=50%><b>' + translate('Female') + '</b></td>' + '		</tr>' + '		<tr>' + '			<td align=center>' + dragonSelect(Data.options.sanctuary.male_id, 'M') + '</td>' + '			<td align=center>' + dragonSelect(Data.options.sanctuary.female_id, 'F') + '</td>' + '		</tr>' + '		<tr valign=top>' + '			<td align=center><div id=' + setUID('tabJobSanct_maleInfos') + '></div></td>' + '			<td align=center><div id=' + setUID('tabJobSanct_femaleInfos') + '></div></td>' + '		</tr>' + '	</table>' + '	<br><center><input type=button value="' + translate('dragonden-breed-dragon') + '" id=' + setUID('tabJobSanct_breed') + ' /></center><br>' + '</div>';
-				$(UID['tabJobSanct_Content']).innerHTML = m;
-				$(UID['tabJobSanct_dragonid_M']).addEventListener('change', dragonChanged, false);
-				$(UID['tabJobSanct_dragonid_F']).addEventListener('change', dragonChanged, false);
-				$(UID['tabJobSanct_breed']).addEventListener('click', onClickBreed, false);
+				document.getElementById(UID['tabJobSanct_Content']).innerHTML = m;
+				document.getElementById(UID['tabJobSanct_dragonid_M']).addEventListener('change', dragonChanged, false);
+				document.getElementById(UID['tabJobSanct_dragonid_F']).addEventListener('change', dragonChanged, false);
+				document.getElementById(UID['tabJobSanct_breed']).addEventListener('click', onClickBreed, false);
 				if (Data.options.sanctuary.male_id && Data.options.sanctuary.male_id != '0')
-					$(UID['tabJobSanct_maleInfos']).innerHTML = dispStats(Seed.sanctuary_dragons[Data.options.sanctuary.male_id]);
-				else $(UID['tabJobSanct_maleInfos']).innerHTML = '&nbsp;';
+					document.getElementById(UID['tabJobSanct_maleInfos']).innerHTML = dispStats(Seed.sanctuary_dragons[Data.options.sanctuary.male_id]);
+				else document.getElementById(UID['tabJobSanct_maleInfos']).innerHTML = '&nbsp;';
 				if (Data.options.sanctuary.female_id && Data.options.sanctuary.female_id != '0')
-					$(UID['tabJobSanct_femaleInfos']).innerHTML = dispStats(Seed.sanctuary_dragons[Data.options.sanctuary.female_id]);
-				else $(UID['tabJobSanct_femaleInfos']).innerHTML = '&nbsp;';
+					document.getElementById(UID['tabJobSanct_femaleInfos']).innerHTML = dispStats(Seed.sanctuary_dragons[Data.options.sanctuary.female_id]);
+				else document.getElementById(UID['tabJobSanct_femaleInfos']).innerHTML = '&nbsp;';
 				setBreedButton();
 
 				function checkBreedPossible() {
@@ -21527,19 +23927,19 @@
 				function dragonChanged(event) {
 					var id = event.target.id;
 					var gender = event.target.getAttribute('ref');
-					var sel = $(id);
+					var sel = document.getElementById(id);
 					var value = nvl(sel.value, '0');
 					sel.value = value;
 					if (gender == 'M') {
-						var stats = $(UID['tabJobSanct_maleInfos']);
+						var stats = document.getElementById(UID['tabJobSanct_maleInfos']);
 						Data.options.sanctuary.male_id = value;
 					} else {
-						var stats = $(UID['tabJobSanct_femaleInfos']);
+						var stats = document.getElementById(UID['tabJobSanct_femaleInfos']);
 						Data.options.sanctuary.female_id = value;
 					}
 					if (value == '0') {
 						stats.innerHTML = '&nbsp;';
-						setButtonStyle($(UID['tabJobSanct_breed']), false);
+						setButtonStyle(document.getElementById(UID['tabJobSanct_breed']), false);
 					} else {
 						stats.innerHTML = dispStats(Seed.sanctuary_dragons[value]);
 						setBreedButton();
@@ -21550,11 +23950,11 @@
 					var can_breed = checkBreedPossible();
 					if (can_breed) {
 						if (Data.options.sanctuary.male_id && Data.options.sanctuary.male_id != '0' && Data.options.sanctuary.female_id && Data.options.sanctuary.female_id != '0') {
-							setButtonStyle($(UID['tabJobSanct_breed']), true);
+							setButtonStyle(document.getElementById(UID['tabJobSanct_breed']), true);
 						} else {
-							setButtonStyle($(UID['tabJobSanct_breed']), false);
+							setButtonStyle(document.getElementById(UID['tabJobSanct_breed']), false);
 						}
-					} else setButtonStyle($(UID['tabJobSanct_breed']), false);
+					} else setButtonStyle(document.getElementById(UID['tabJobSanct_breed']), false);
 				}
 
 				function onClickBreed() {
@@ -21568,7 +23968,7 @@
 						MyAjax.dragonBreeding(Data.options.sanctuary.male_id, Data.options.sanctuary.female_id, function(rslt) {
 							if (rslt.ok) {
 								actionLog(msg);
-								setButtonStyle($(UID['tabJobSanct_breed']), false);
+								setButtonStyle(document.getElementById(UID['tabJobSanct_breed']), false);
 							} else {
 								verboseLog(translate('Error') + ' ' + translate('dragonden-breed-dragon') + ': ' + rslt.errmsg);
 								actionLog('<B>' + translate('Error') + ' ' + translate('dragonden-breed-dragon') + '</B>: ' + rslt.errmsg);
@@ -21576,7 +23976,7 @@
 							}
 						});
 					} else {
-						setButtonStyle($(UID['tabJobSanct_breed']), false);
+						setButtonStyle(document.getElementById(UID['tabJobSanct_breed']), false);
 						if (!can_breed)
 							if (t.contentType == 5) t.jobFeedback(translate('No nest available for new egg'));
 							else
@@ -21588,12 +23988,12 @@
 			/** * Jobs Tab - Sanctuary Sub-tab - Dragons feeding Sub-Sub-tab ** */
 			tabJobSanctFeeding: function() {
 				var t = Tabs.Jobs;
-				$(UID['tabJobSanct_tabDragons']).className = '';
-				$(UID['tabJobSanct_tabDragons']).style.zIndex = 0;
-				$(UID['tabJobSanct_tabBreeding']).className = '';
-				$(UID['tabJobSanct_tabBreeding']).style.zIndex = 0;
-				$(UID['tabJobSanct_tabFeeding']).className = 'selected';
-				$(UID['tabJobSanct_tabFeeding']).style.zIndex = 1;
+				document.getElementById(UID['tabJobSanct_tabDragons']).className = '';
+				document.getElementById(UID['tabJobSanct_tabDragons']).style.zIndex = 0;
+				document.getElementById(UID['tabJobSanct_tabBreeding']).className = '';
+				document.getElementById(UID['tabJobSanct_tabBreeding']).style.zIndex = 0;
+				document.getElementById(UID['tabJobSanct_tabFeeding']).className = 'selected';
+				document.getElementById(UID['tabJobSanct_tabFeeding']).style.zIndex = 1;
 
 				t.sanctContentType = 2;
 				var m = '<div class=' + UID['status_ticker'] + ' style="margin-top:6px !important">' + '<div class=' + UID['subtitle'] + '>' + translate('upgrading-dragon') + '</div>' + '	<table class=' + UID['row_style'] + ' width=100%>';
@@ -21628,12 +24028,12 @@
 				}
 				m += '</table></div></div>';
 
-				$(UID['tabJobSanct_Content']).innerHTML = m;
+				document.getElementById(UID['tabJobSanct_Content']).innerHTML = m;
 				for (var i = 0; i < checkBoxs.length; ++i) {
-					$(checkBoxs[i]).addEventListener('click', checkedDragon, false);
-					$(checkBoxs[i]).addEventListener('change', checkedDragon, false);
-					var id = toNum($(checkBoxs[i]).getAttribute('ref'));
-					var selectMenu = $(UID['tabJobFeeding_Sel_' + id]);
+					document.getElementById(checkBoxs[i]).addEventListener('click', checkedDragon, false);
+					document.getElementById(checkBoxs[i]).addEventListener('change', checkedDragon, false);
+					var id = toNum(document.getElementById(checkBoxs[i]).getAttribute('ref'));
+					var selectMenu = document.getElementById(UID['tabJobFeeding_Sel_' + id]);
 					if (selectMenu) {
 						try {
 							if (!Data.options.sanctuary.feeding[id]) {
@@ -21685,7 +24085,6 @@
 				}
 			},
 
-
 			setTrainEnable: function(onOff) {
 				var t = Tabs.Jobs;
 				t.refreshTrainButton(onOff);
@@ -21699,8 +24098,10 @@
 				t.refreshForgeButton(onOff);
 				Data.options.forge.enableAutoMission = onOff;
 				clearTimeout(t.forgeTimer);
+				clearTimeout(t.forgeforgeTimer);
 				if (onOff) {
 					t.forgeTimer = setInterval(t.missionForgeTick, 3000);
+					t.forgeforgeTimer = setInterval(t.forgeForgeTick, 5000);
 					t.runningForge.start_at = serverTime();
 					Data.stats.forgeAdv.start_at = serverTime();
 					
@@ -21765,7 +24166,7 @@
 			},
 			refreshForgeButton: function(onOff) {
 				var t = Tabs.Jobs;
-				var but = $(UID['tabJobForge_OnOff']);
+				var but = document.getElementById(UID['tabJobForge_OnOff']);
 				if (!but) return;
 				if (onOff) {
 					but.value = translate('filter-adventuring').toUpperCase();
@@ -21777,7 +24178,7 @@
 			},
 			refreshBuildButton: function(onOff) {
 				var t = Tabs.Jobs;
-				var but = $(UID['tabJobBuild_OnOff']);
+				var but = document.getElementById(UID['tabJobBuild_OnOff']);
 				if (!but) return;
 				if (onOff) {
 					but.value = translate('Building').toUpperCase();
@@ -21789,7 +24190,7 @@
 			},
 			refreshResearchButton: function(onOff) {
 				var t = Tabs.Jobs;
-				var but = $(UID['tabJobResearch_OnOff']);
+				var but = document.getElementById(UID['tabJobResearch_OnOff']);
 				if (!but) return;
 				if (onOff) {
 					but.value = translate('Researching').toUpperCase();
@@ -21801,7 +24202,7 @@
 			},
 			refreshResurrectButton: function(onOff) {
 				var t = Tabs.Jobs;
-				var but = $(UID['tabJobResurrect_OnOff']);
+				var but = document.getElementById(UID['tabJobResurrect_OnOff']);
 				if (!but) return;
 				if (onOff) {
 					but.value = translate('Reviving').toUpperCase();
@@ -21813,7 +24214,7 @@
 			},
 			refreshFeedingButton: function(onOff) {
 				var t = Tabs.Jobs;
-				var but = $(UID['tabJobSanctFeeding_OnOff']);
+				var but = document.getElementById(UID['tabJobSanctFeeding_OnOff']);
 				if (!but) return;
 				if (onOff) {
 					but.value = translate('Upgrade').toUpperCase();
@@ -21827,7 +24228,7 @@
 			trainStatTick: function() {
 				var t = Tabs.Jobs,
 					unitType = all_unit_types;
-				var statElement = $(UID['tabJobTrain_Table']);
+				var statElement = document.getElementById(UID['tabJobTrain_Table']);
 				if (statElement != null) Jobs.updateTrainTable(statElement, 'units');
 				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
 					if (Seed.cities[cityIdx] && cityIdx >= 0 && cityIdx < Seed.cities.length && cityIdx != SPECTRAL_OUTPOST.id && cityIdx != SKY_OUTPOST.id && cityIdx != LUNA_OUTPOST.id) {
@@ -21835,7 +24236,7 @@
 							for (var uid = 0; uid < unitType.length; uid++) {
 								if (!isTrainable(cityIdx, unitType[uid])) continue;
 								var unitQty = Data.options.training.city[cityIdx].units[uid];
-								var butTrainNow = $(UID['tabTrain_Now_' + cityIdx + '_' + uid]);
+								var butTrainNow = document.getElementById(UID['tabTrain_Now_' + cityIdx + '_' + uid]);
 								if (toNum(unitQty) > 0) {
 									var reqs = t.checkTrainReqs(unitType[uid], unitQty, cityIdx);
 									if (!reqs.msg) setButtonStyle(butTrainNow, true, 'btn_green');
@@ -21848,12 +24249,12 @@
 			},
 			resurrectStatTick: function() {
 				var t = Tabs.Jobs;
-				var statElement = $(UID['tabJobResurrect_Table']);
+				var statElement = document.getElementById(UID['tabJobResurrect_Table']);
 				if (statElement != null) Jobs.updateTrainTable(statElement, 'resurrection', true);
 			},
 			sanctStatTick: function() {
 				var t = Tabs.Jobs;
-				var statElement = $(UID['tabJobSanct_TableJobs']);
+				var statElement = document.getElementById(UID['tabJobSanct_TableJobs']);
 				if (statElement != null) Jobs.updateSanctuaryTable(statElement);
 
 				if (t.contentType == 5 && t.sanctContentType == 2) {
@@ -21861,7 +24262,7 @@
 						if (Data.options.sanctuary.feeding[id].enable) t.checkFeedingReqs(id);
 						else
 							try {
-								$(UID['tabJobFeeding_FB_' + id]).innerHTML = '';
+								document.getElementById(UID['tabJobFeeding_FB_' + id]).innerHTML = '';
 							} catch (e) {}
 					}
 				}
@@ -21870,7 +24271,7 @@
 			buildStatTick: function() {
 				var t = Tabs.Jobs;
 				if (t.buildRefreshLvl) return;
-				var statElement = $(UID['tabJobBuild_Table']);
+				var statElement = document.getElementById(UID['tabJobBuild_Table']);
 				if (statElement != null) Jobs.updateBuildTable(statElement);
 
 				for (var cityIdx = 0; cityIdx < Seed.cities.length; ++cityIdx) {
@@ -21918,27 +24319,27 @@
 			},
 			dragonStatTick: function() {
 				var t = Tabs.Jobs;
-				var statElement = $(UID['tabJobDragon_Table']);
+				var statElement = document.getElementById(UID['tabJobDragon_Table']);
 				if (statElement != null) {
 					Jobs.updateDragonTable(statElement);
 				}				
 			},
 			tradeStatTick: function() {
 				var t = Tabs.Jobs;
-				var statElement = $(UID['tabJobTrade_Table']);
+				var statElement = document.getElementById(UID['tabJobTrade_Table']);
 				if (statElement != null) {
 					Jobs.updateTradeTable(statElement);
 				}				
 			},
 			forgeStatTick: function() {
 				var t = Tabs.Jobs;
-				var statElement = $(UID['tabJobForge_Table']);
+				var statElement = document.getElementById(UID['tabJobForge_Table']);
 				if (statElement != null) {
 					Jobs.updateForgeTable(statElement);
 					if(t.forgeContentType == 0) {
 						var advs = Seed.player.forge.adventurers;
 						for(var i=0;i<advs.length;i++) {
-							var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+							var inMission=(Jobs.getJobs(Seed.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
 							var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));
 							
 							setButtonStyle(UID['btnMissionAdvGo_'+advs[i].adventurer_id], (!inMission && !isClaimable));
@@ -21957,17 +24358,17 @@
 						if (Data.options.research.res_enable[0][resName]) t.checkResearchReqs(resName);
 						else
 							try {
-								$(UID['tabJobResearch_FB_' + resName]).innerHTML = '';
+								document.getElementById(UID['tabJobResearch_FB_' + resName]).innerHTML = '';
 							} catch (e) {}
 					}
 					var jobs = Jobs.getJobs('research', true, CAPITAL.id);
 					if (jobs.length > 0) {
 						try {
-							$(UID['tabJobResearch_FB_' + jobs[0].research_type]).innerHTML = '<font color=#000>' + translate('Researching') + '&nbsp;' + translate('Level').toLowerCase() + '&nbsp;' + jobs[0].level + '</font>';
+							document.getElementById(UID['tabJobResearch_FB_' + jobs[0].research_type]).innerHTML = '<font color=#000>' + translate('Researching') + '&nbsp;' + translate('Level').toLowerCase() + '&nbsp;' + jobs[0].level + '</font>';
 						} catch (e) {}
 					}
 				}
-				var statElement = $(UID['tabJobResearch_Table']);
+				var statElement = document.getElementById(UID['tabJobResearch_Table']);
 				if (statElement != null) Jobs.updateResearchTable(statElement);
 			},
 
@@ -22210,7 +24611,7 @@
 				 */
 				if(options.reqs_type == 'unit') {
 					/* take the default one */
-					requirements = Seed.requirements[options.reqs_type][element_type].default;
+					requirements = Seed.requirements[options.reqs_type][element_type]['default'];
 					if(Seed.requirements[options.reqs_type][element_type][typeCity]) {
 						/* take the specific one for the capital/outpost if exist */
 						requirements = Seed.requirements[options.reqs_type][element_type][typeCity];
@@ -22446,15 +24847,15 @@
 				if (t.contentType == 1) {
 					if (reqs.msg) {
 						try {
-							$(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).innerHTML = '<font color="#C33">' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*$/, '') + '</font>';
-							$(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).title = translate(troopType) + ' ' + reqs.msg.replace(/\+/g, ' \n');
-							$(UID['tabJobBuild_Cap_' + cityIdx + '_' + troopType]).style.color = "#C33";
+							document.getElementById(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).innerHTML = '<font color="#C33">' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*document.getElementById/, '') + '</font>';
+							document.getElementById(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).title = translate(troopType) + ' ' + reqs.msg.replace(/\+/g, ' \n');
+							document.getElementById(UID['tabJobBuild_Cap_' + cityIdx + '_' + troopType]).style.color = "#C33";
 						} catch (e) {}
 					} else {
 						try {
 							var fb_text = translate('Max') + ' : ' + numf(reqs.max_units, ' ') + ' (' + timestrShort(reqs.time) + ')';
-							$(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).innerHTML = fb_text;
-							$(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).title = translate(troopType) + ' \n' + fb_text;
+							document.getElementById(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).innerHTML = fb_text;
+							document.getElementById(UID['tabJobTrain_FB_' + cityIdx + '_' + troopType]).title = translate(troopType) + ' \n' + fb_text;
 						} catch (e) {}
 					}
 				}
@@ -22475,17 +24876,17 @@
 					if (reqs.msg) {
 						if (t.contentType == 2) {
 							try {
-								$(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).innerHTML = '<font color="#C33">' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*$/, '') + '</font>';
-								$(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).title = translate(buildingType) + ' ' + reqs.msg.replace(/\+/g, ' \n');
-								$(UID['tabJobBuild_Cap_' + cityIdx + '_' + buildingType]).style.color = "#C33";
+								document.getElementById(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).innerHTML = '<font color="#C33">' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*document.getElementById/, '') + '</font>';
+								document.getElementById(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).title = translate(buildingType) + ' ' + reqs.msg.replace(/\+/g, ' \n');
+								document.getElementById(UID['tabJobBuild_Cap_' + cityIdx + '_' + buildingType]).style.color = "#C33";
 							} catch (e) {}
 						}
 					} else {
 						if (t.contentType == 2) {
 							try {
 								var fb_text = translate('Next level') + ' ' + translate('OK');
-								$(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).innerHTML = fb_text;
-								$(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).title = translate(buildingType) + ' \n' + fb_text;
+								document.getElementById(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).innerHTML = fb_text;
+								document.getElementById(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).title = translate(buildingType) + ' \n' + fb_text;
 							} catch (e) {}
 						}
 					}
@@ -22494,9 +24895,9 @@
 					if (t.contentType == 2) {
 						try {
 							var fb_text = translate('Task Completed');
-							$(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).innerHTML = '<font color=#0B0>' + fb_text + '</font>';
-							$(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).title = translate(buildingType) + ' \n' + fb_text;
-							$(UID['tabJobBuild_Cap_' + cityIdx + '_' + buildingType]).style.color = "#5B5";
+							document.getElementById(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).innerHTML = '<font color=#0B0>' + fb_text + '</font>';
+							document.getElementById(UID['tabJobBuild_FB_' + cityIdx + '_' + buildingType]).title = translate(buildingType) + ' \n' + fb_text;
+							document.getElementById(UID['tabJobBuild_Cap_' + cityIdx + '_' + buildingType]).style.color = "#5B5";
 						} catch (e) {}
 					}
 				}
@@ -22520,17 +24921,17 @@
 					if (reqs.msg) {
 						if (t.contentType == 3) {
 							try {
-								$(UID['tabJobResearch_FB_' + researchType]).innerHTML = '<font color=#C33>' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*$/, '') + '</font>';
-								$(UID['tabJobResearch_FB_' + researchType]).title = translate(researchType) + ' ' + reqs.msg.replace(/\+/g, ' \n');
-								$(UID['tabJobResearch_Sel_' + researchType]).style.color = "#C33";
+								document.getElementById(UID['tabJobResearch_FB_' + researchType]).innerHTML = '<font color=#C33>' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*document.getElementById/, '') + '</font>';
+								document.getElementById(UID['tabJobResearch_FB_' + researchType]).title = translate(researchType) + ' ' + reqs.msg.replace(/\+/g, ' \n');
+								document.getElementById(UID['tabJobResearch_Sel_' + researchType]).style.color = "#C33";
 							} catch (e) {}
 						}
 					} else {
 						if (t.contentType == 3) {
 							try {
 								var fb_text = translate('Next level') + ' ' + translate('OK');
-								$(UID['tabJobResearch_FB_' + researchType]).innerHTML = fb_text;
-								$(UID['tabJobResearch_FB_' + researchType]).title = translate(researchType) + ' \n' + fb_text;
+								document.getElementById(UID['tabJobResearch_FB_' + researchType]).innerHTML = fb_text;
+								document.getElementById(UID['tabJobResearch_FB_' + researchType]).title = translate(researchType) + ' \n' + fb_text;
 							} catch (e) {}
 						}
 					}
@@ -22539,9 +24940,9 @@
 					if (t.contentType == 3) {
 						try {
 							var fb_text = translate('Task Completed');
-							$(UID['tabJobResearch_FB_' + researchType]).innerHTML = '<font color=#0B0>' + fb_text + '</font>';
-							$(UID['tabJobResearch_FB_' + researchType]).title = translate(researchType) + ' \n' + fb_text;
-							$(UID['tabJobResearch_Sel_' + researchType]).style.color = "#5B5";
+							document.getElementById(UID['tabJobResearch_FB_' + researchType]).innerHTML = '<font color=#0B0>' + fb_text + '</font>';
+							document.getElementById(UID['tabJobResearch_FB_' + researchType]).title = translate(researchType) + ' \n' + fb_text;
+							document.getElementById(UID['tabJobResearch_Sel_' + researchType]).style.color = "#5B5";
 						} catch (e) {}
 					}
 				}
@@ -22566,17 +24967,17 @@
 					if (reqs.msg) {
 						if (t.contentType == 5 && t.sanctContentType == 2) {
 							try {
-								$(UID['tabJobFeeding_FB_' + dragon_id]).innerHTML = '<font color=#C33>' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*$/, '') + '</font>';
-								$(UID['tabJobFeeding_FB_' + dragon_id]).title = translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + ' ' + reqs.msg.replace(/\+/g, ' \n');
-								$(UID['tabJobFeeding_Sel_' + dragon_id]).style.color = "#C33";
+								document.getElementById(UID['tabJobFeeding_FB_' + dragon_id]).innerHTML = '<font color=#C33>' + reqs.msg.replace(/:\+/, ':').replace(/\+\s*document.getElementById/, '') + '</font>';
+								document.getElementById(UID['tabJobFeeding_FB_' + dragon_id]).title = translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + ' ' + reqs.msg.replace(/\+/g, ' \n');
+								document.getElementById(UID['tabJobFeeding_Sel_' + dragon_id]).style.color = "#C33";
 							} catch (e) {}
 						}
 					} else {
 						if (t.contentType == 5 && t.sanctContentType == 2) {
 							try {
 								var fb_text = translate('Next level') + ' ' + translate('OK');
-								$(UID['tabJobFeeding_FB_' + dragon_id]).innerHTML = fb_text;
-								$(UID['tabJobFeeding_FB_' + dragon_id]).title = translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + ' \n' + fb_text;
+								document.getElementById(UID['tabJobFeeding_FB_' + dragon_id]).innerHTML = fb_text;
+								document.getElementById(UID['tabJobFeeding_FB_' + dragon_id]).title = translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + ' \n' + fb_text;
 							} catch (e) {}
 						}
 					}
@@ -22585,9 +24986,9 @@
 					if (t.contentType == 5 && t.sanctContentType == 2) {
 						try {
 							var fb_text = translate('Task Completed');
-							$(UID['tabJobFeeding_FB_' + dragon_id]).innerHTML = '<font color=#0B0>' + fb_text + '</font>';
-							$(UID['tabJobFeeding_FB_' + dragon_id]).title = translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + ' \n' + fb_text;
-							$(UID['tabJobFeeding_Sel_' + dragon_id]).style.color = "#5B5";
+							document.getElementById(UID['tabJobFeeding_FB_' + dragon_id]).innerHTML = '<font color=#0B0>' + fb_text + '</font>';
+							document.getElementById(UID['tabJobFeeding_FB_' + dragon_id]).title = translate(translateByKey(dragon.subtype, 'rank-' + dragon.type, 'dragons')) + ' \n' + fb_text;
+							document.getElementById(UID['tabJobFeeding_Sel_' + dragon_id]).style.color = "#5B5";
 						} catch (e) {}
 					}
 				}
@@ -22600,8 +25001,8 @@
 				var t = Tabs.Jobs;
 				if (t.contentType == 3) {
 					try {
-						$(UID['tabJobResurrect_FB_' + id_found]).innerHTML = '';
-						$(UID['tabJobResurrect_Troop_' + id_found]).style.backgroundColor = "none";
+						document.getElementById(UID['tabJobResurrect_FB_' + id_found]).innerHTML = '';
+						document.getElementById(UID['tabJobResurrect_Troop_' + id_found]).style.backgroundColor = "none";
 					} catch (e) {}
 				}
 
@@ -22649,9 +25050,9 @@
 				if (ret.trainable == false) {
 					if (t.contentType == 4) {
 						try {
-							$(UID['tabJobResurrect_FB_' + id_found]).innerHTML = '<font color=#C33>' + ret.msg.replace(/:\+/, ':').replace(/\+\s*$/, '') + '</font>';
-							$(UID['tabJobResurrect_FB_' + id_found]).title = translate(all_unit_types[id_found]) + ' ' + ret.msg.replace(/\+/g, ' \n');
-							$(UID['tabJobResurrect_Troop_' + id_found]).style.backgroundColor = "#C33";
+							document.getElementById(UID['tabJobResurrect_FB_' + id_found]).innerHTML = '<font color=#C33>' + ret.msg.replace(/:\+/, ':').replace(/\+\s*document.getElementById/, '') + '</font>';
+							document.getElementById(UID['tabJobResurrect_FB_' + id_found]).title = translate(all_unit_types[id_found]) + ' ' + ret.msg.replace(/\+/g, ' \n');
+							document.getElementById(UID['tabJobResurrect_Troop_' + id_found]).style.backgroundColor = "#C33";
 						} catch (e) {}
 					}
 				} else {
@@ -22670,8 +25071,8 @@
 					if (t.contentType == 4) {
 						try {
 							var fb_text = translate('Revival allowed') + ' : ' + translate('OK') + ' (' + timestrShort(time) + ')';
-							$(UID['tabJobResurrect_FB_' + id_found]).innerHTML = fb_text;
-							$(UID['tabJobResurrect_FB_' + id_found]).title = translate(all_unit_types[id_found]) + ' \n' + fb_text;
+							document.getElementById(UID['tabJobResurrect_FB_' + id_found]).innerHTML = fb_text;
+							document.getElementById(UID['tabJobResurrect_FB_' + id_found]).title = translate(all_unit_types[id_found]) + ' \n' + fb_text;
 						} catch (e) {}
 					}
 				}
@@ -22842,18 +25243,66 @@
 					t.sanctuaryTimer = setTimeout(t.feedingTick, t.feedRetryTime);
 					if (t.contentType == 5) t.jobFeedback(translate('Completion errors') + ': ' + translate('Retry in') + ' ' + timestr(t.feedRetryTime / 1000) + ' ' + translate('seconds'));
 					t.feedRetryTime *= 1.5;
-					return;
+					return;	
 				}
 				t.sanctuaryTimer = setTimeout(t.feedingTick, 5000);
+			},
+			forgeForgeTick: function() {
+				var t = Tabs.Jobs;
+				var canCrush=false;
+				var fdb='';
+				if(Data.options.forge.crush.cbAuto) {
+					var it = Forge.getItemByName(Data.options.forge.crush.select, false);
+					if(it.length>0) {
+						for(var i=0;i<it.length;i++) {
+							if(Data.options.forge.crush.itemToKeep[it[i].id]) {
+							}
+							else {
+								var nbStat=0;
+								if(Data.options.forge.crush.cbAutoKeep) {
+									for(var stat in it[i].stats){
+										if(it[i].stats[stat] != 0) {
+											nbStat++;
+										}
+									}
+								}
+								if(!Data.options.forge.crush.cbAutoKeep || nbStat < parseInt(Data.options.forge.crush.levelToKeep)) {
+									canCrush=true;
+									t.crushItem(Data.options.forge.crush.select, true);
+									break;
+								}
+							}
+						}
+						if(!canCrush) {
+							fdb = translate('forge-blacksmith') + ' : No Item ' + translate(Data.options.forge.crush.select.toLowerCase())+ 'with less than '+Data.options.forge.crush.levelToKeep+' ' + translate('statistics');
+						}
+					}
+				}
+				
+				if(t.typeToForge=='equipment') {				
+					if(!canCrush && Data.options.forge.equipment.cbAuto) {
+						var req = Forge.checkForgeRequirements(Data.options.forge.equipment.select, 'equipments');
+						if(!req.result) {
+							var message=req.reason.join(', ');
+							fdb +=  ' - ' + translate('forge-blacksmith') + ' : ' + message;
+						}
+						else {
+							t.forgeItem(Data.options.forge.equipment.select, true);
+						}
+					}
+				}
+				if(t.typeToForge=='ingredient' && Data.options.forge.equipment.cbAuto) {
+				}
+				t.jobFeedback(fdb);	
 			},
 			missionForgeTick: function() {
 				var t = Tabs.Jobs;
 				if(!Data.options.forge.enableAutoMission) return;
-				var advs = Seed.player.forge.adventurers;
 				
+				var advs = Seed.player.forge.adventurers;
 				for(var i=0;i<advs.length;i++) {
 					if(Data.options.forge[advs[i].type].cbAuto) {
-						var inMission=(Jobs.getJobs(Forge.data.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
+						var inMission=(Jobs.getJobs(Seed.forge.adventurers[advs[i].type].queue, false, -1).length > 0 ? true : false); 
 						var isClaimable=(inMission ? false : (advs[i].current_mission == null ? false : true));	
 						
 						if(isClaimable) {
@@ -22973,8 +25422,8 @@
 							}
 						} else {
 							try {
-								$(UID['tabJobResurrect_FB_' + unit]).innerHTML = '';
-								$(UID['tabJobResurrect_Troop_' + unit]).style.backgroundColor = "none";
+								document.getElementById(UID['tabJobResurrect_FB_' + unit]).innerHTML = '';
+								document.getElementById(UID['tabJobResurrect_Troop_' + unit]).style.backgroundColor = "none";
 							} catch (e) {}
 						}
 					}
@@ -22992,7 +25441,7 @@
 					t.resurrectTimer = setTimeout(t.resurrectTick, Math.randRange(15000, 20000));
 				}
 			},
-
+			
 			attemptTrainQ: function(cityIdx, count, troopsLength, shortQ) {
 				var t = Tabs.Jobs;
 				var troopQueued = false;
@@ -23032,10 +25481,10 @@
 								if (cap) {
 									troopQty = 0;
 									if (t.contentType == 1) t.jobFeedback(translate('Troops Capped'));
-									$(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "red";
+									document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "red";
 								} else if (t.contentType == 1) {
-									if ($(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor == "red")
-										$(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "white";
+									if (document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor == "red")
+										document.getElementById(UID['tabTrain_Troop_' + cityIdx + '_' + j]).style.backgroundColor = "white";
 								}
 							} catch (e) {}
 						}
@@ -23113,16 +25562,7 @@
 						Seed.addToRefresh(Seed.cities[CAPITAL.id].id, false);
 						/* Seed.fetchCity (Seed.cities[CAPITAL.id].id); */
 					}
-					if (t.contentType == 1 && t.trainContentType == 0) t.tabJobTrainSets(); /*
-																							 * to
-																							 * refresh
-																							 * total
-																							 * time
-																							 * in
-																							 * city
-																							 * title
-																							 * bar
-																							 */
+					if (t.contentType == 1 && t.trainContentType == 0) t.tabJobTrainSets();
 				});
 			},
 			doBuild: function(building, city) {
@@ -23286,45 +25726,122 @@
 				}
 				MyAjax.claimMission(mission, adventurerId, cb);
 			},
-			crushItem: function(nameItem, isAuto) {
+			repairItem: function(itemId, callback) {
 				function cb(rslt) {
 					if(rslt.ok) {
-						for(var i=0;i<rslt.dat.result.disenchant_ingrendients.length;i++) {
-							rslt.dat.result.disenchant_ingrendients[i] = translate(rslt.dat.result.disenchant_ingrendients[i].toLowerCase());
-						}
-						Tabs.Jobs.jobFeedback(translate('forge-salvage-materials') + ' ' + rslt.dat.result.disenchant_ingrendients.joint(', '));
-						if(isAuto)
-							Data.options.forge[type].nbAuto++;
+						Tabs.Jobs.jobFeedback(translate('forge-repaire-state'));
 					}
 					else {
 						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					if(callback)
+						callback(rslt);
+				}
+				
+				MyAjax.repairEquipment(itemId, cb);
+			},
+			crushItem: function(nameItem, isAuto, callback) {
+				function cb(rslt) {
+					if(rslt.ok) {
+						if(Data.stats.forge.crush.nb[rslt.dat.result.equipment]) {
+							Data.stats.forge.crush.nb[rslt.dat.result.equipment]++;
+						} else {
+							Data.stats.forge.crush.nb[rslt.dat.result.equipment]=1;
+						}
+						for(var i=0;i<rslt.dat.result.disenchanted_ingredients.length;i++) {
+							rslt.dat.result.disenchanted_ingredients[i] = translate(rslt.dat.result.disenchanted_ingredients[i].toLowerCase());
+							if(Data.stats.forge.crush.items[rslt.dat.result.disenchanted_ingredients[i]]) {
+								Data.stats.forge.crush.items[rslt.dat.result.disenchanted_ingredients[i]]++;
+							}
+							else {
+								Data.stats.forge.crush.items[rslt.dat.result.disenchanted_ingredients[i]] = 1;
+							}
+						}
+						Tabs.Jobs.jobFeedback(translate('forge-salvage-materials') + ' ' + rslt.dat.result.disenchanted_ingredients.join(', '));
+					}
+					else {
+						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
+					}
+					
+					if(Tabs.Jobs.forgeContentType==1 && Tabs.Jobs.contentType==8) {
+						Tabs.Jobs.tabJobForgeForge()
+					}
+					
+					if(callback)
+						callback(rslt);
+				}
+				
+				var it = Forge.getItemByName(nameItem, false);
+				if(it.length>0) {
+					var isCrush=false;
+					for(var i=0;i<it.length;i++) {
+						if(Data.options.forge.crush.itemToKeep[it[i].id]) {
+						}
+						else {
+							var nbStat=0;
+							if(Data.options.forge.crush.cbAutoKeep) {
+								for(var stat in it[i].stats){
+									if(it[i].stats[stat] != 0) {
+										nbStat++;
+									}
+								}
+							}
+							if(!Data.options.forge.crush.cbAutoKeep || nbStat < parseInt(Data.options.forge.crush.levelToKeep)) {
+								isCrush=true;
+								MyAjax.forgeCrush(it[i].id, cb);
+								break;
+							}
+						}
+					}
+					if(!isCrush) {
+						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : No Item ' + translate(nameItem.toLowerCase()));
+						logit(translate('forge-blacksmith') + ' : No Item ' + translate(nameItem.toLowerCase()));
+					}
+				} else {
+					Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : No Item ' + translate(nameItem.toLowerCase()));
+					logit(translate('forge-blacksmith') + ' : No Item ' + translate(nameItem.toLowerCase()));
+				}
+			},
+			upgradeItem: function(itemId, isAuto, callback) {
+				function cb(rslt) {
+					if(rslt.dat.result.upgrade_result=='failure') {
+						
+					} else {
+					
 					}
 				}
 				
-				MyAjax.forgeCrush(nameItem, cb);
+				MyAjax.upgradeEquipment(itemId, cb);
 			},
-			forgeItem: function (nameItem, isAuto) {
+			forgeItem: function (nameItem, isAuto, callback) {
 				function cb(rslt) {
+					Data.stats.forge.forge.nb++;
 					if(rslt.ok) {
-						if(rslt.dat.result.forge_result) {
-							Tabs.Jobs.jobFeedback(translate('forge-success-title') + ' ' + translate(nameItem.toLowerCase()));
-							if(isAuto)
-								Data.options.forge[type].nbAuto++;
+						if(rslt.dat.result.forge_result=='failure') {
+							Data.stats.forge.forge.nbFailure++;
+							Tabs.Jobs.jobFeedback(translate('forge-fail-title') + ' ' + translate(nameItem.toLowerCase()));
 						}
 						else {
-							Tabs.Jobs.jobFeedback(translate('forge-fail-title') + ' ' + translate(nameItem.toLowerCase()));
+							Data.stats.forge.forge.items.push(rslt.dat.result.forge_result);
+							var str = translate('forge-success-title') + ' ' + translate(nameItem.toLowerCase()) + ' : ';
+							for (var it in rslt.dat.result.forge_result.stats) {
+								str += translate(it) + ' => +' + rslt.dat.result.forge_result.stats[it] + ', ';
+							}
+							Tabs.Jobs.jobFeedback(str);
 						}
 					}
 					else {
 						Tabs.Jobs.jobFeedback(translate('forge-blacksmith') + ' : ' + translate('was returned with a status of') + ' ' + rslt.ok + ' - ' + rslt.errmsg);
 					}
+					if(callback)
+						callback(rslt);
 				}
 				
 				MyAjax.forgeItem(nameItem, cb);
 			},
 			showStats: function() {
 				var t = Tabs.Jobs;
-				var div = $(UID['tabJobForge_tabStats_Status']);
+				var div = document.getElementById(UID['tabJobForge_tabStats_Status']);
 				if (div == null)
 					return;
 
@@ -23369,20 +25886,49 @@
 					+ '			<td>(' + numf(perHour, ' ') + ' /' + translate('h') + ')</td>' 
 					+ '		</tr>';
 				}
-				m += '</table>'
+				
+			  m += '</table>'
 				+ '<div class=' + UID['subtitle'] + '><b>' + translate('forge-blacksmith') + '</b></div>'
 				+ '<table class=' + UID['table'] + '>'
 				+ '	<tr valign=top align=right>' 
-				+ '		<td class=right>' + translate('forge-equipment') + ': </td>'
-				+ '		<td>' + Data.options.forge.equipment.nbAuto + ' / ' + Data.options.forge.equipment.max + '</td>'
-				+ ' </tr>'
-				+ '	<tr valign=top align=right>' 
-				+ '		<td class=right>' + translate('forge-ingredient') + ': </td>'
-				+ '		<td>' + Data.options.forge.ingredient.nbAuto + ' / ' + Data.options.forge.ingredient.max + '</td>'
-				+ ' </tr>'
-				+ '	<tr valign=top align=right>' 
-				+ '		<td class=right>' + translate('forge-crush') + ': </td>'
-				+ '		<td>' + Data.options.forge.crush.nbAuto + ' / ' + Data.options.forge.crush.max + '</td>'
+				+ '		<td class=right><b>' + translate('forge-crush') + '</b> : </td>'
+				+ '		<td style="border-right: 1px solid;">'
+				+ '			<table>';
+				for(var item in Data.stats.forge.crush.nb) {
+					m += '<tr><td>'+Data.stats.forge.crush.nb[item]+'x </td><td>'+translate(item.toLowerCase())+'</td></tr>';
+				}
+				m += '<tr><td colspan=2>&nbsp;</td></tr>';
+				for(var item in Data.stats.forge.crush.items) {
+					m += '<tr><td>'+Data.stats.forge.crush.items[item]+'x </td><td>'+translate(item.toLowerCase())+'</td></tr>';
+				}
+			 m += '			</table>' 
+				+ '		</td>'
+				+ '		<td class=right><b>'+translateByKey('forge', null, 'dialogs')+'</b> : </td>'
+				+ '		<td><table>'
+				+ '			<tr><td>'+translate('total')+' : </td><td>'+Data.stats.forge.forge.nb+'</td></tr>'
+				+ '			<tr><td>'+translate('dragonenchant-failure') + ' :  </td><td>' +Data.stats.forge.forge.nbFailure+'</td></tr>'
+				+ '			<tr><td colspan=2>&nbsp;</td></tr>';
+				var item = {};
+				for(var i=0;i<Data.stats.forge.forge.items.length;i++) {
+					if(Data.stats.forge.forge.items[i].type) {
+						if(item[Data.stats.forge.forge.items[i].description]) {
+							item[Data.stats.forge.forge.items[i].description]++;
+						} else {
+							item[Data.stats.forge.forge.items[i].description]=1;
+						}
+					} else {
+						if(item[Data.stats.forge.forge.items[i].name]) {
+							item[Data.stats.forge.forge.items[i].name]++;
+						} else {
+							item[Data.stats.forge.forge.items[i].name]=1;
+						}
+					}
+				}
+				for(var it in item) {
+					m += '<tr><td>'+item[it]+'x </td><td>'+translate(it.toLowerCase())+'</td></tr>';
+				}
+				
+			 m += '		</table></td>'
 				+ ' </tr>'
 				+ '</table>';
 				
@@ -23409,11 +25955,8 @@
 					}
 				}
 				t.showStats();
-			},
+			}
 		}
-		/******************************* Jobs Tab ***********************************/
-
-		/******************************** Multi Tab **********************************/
 		Tabs.Multiple = {
 			tabOrder: MULTI_TAB_ORDER,
 			tabLabel: 'Multi',
@@ -23438,9 +25981,9 @@
 				t.container = div;
 				var m = '' + '<div class=' + UID['title'] + '>' + translate('Attack One Target in Multiple waves') + '</div>' + '<div id=' + setUID('tabMulti_Status') + ' class=' + UID['status_ticker'] + ' style="margin-bottom:5px !important">' + '	<center><input id=' + setUID('tabMulti_OnOff') + ' type=button value="OnOff" /></center>' + '	<div id=' + setUID('tabMulti_Report') + ' style="margin-top:5px;height:140px; max-height:140px; width:540px; max-width:540px; overflow:auto;">' + '		<table id=' + setUID('tabMulti_Marches') + ' class=' + UID['table'] + '></table>' + '	</div>' + '	<div id=' + setUID('tabMulti_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabMultiConfig') + '>' + translate('Config') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabMultiStats') + '>' + translate('Stats') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabMulti_Content') + ' style="padding-top:0px; height:440px; overflow-y:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabMultiConfig']).addEventListener('click', t.tabMultiConfig, false);
-				$(UID['tabMultiStats']).addEventListener('click', t.tabMultiStats, false);
-				$(UID['tabMulti_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabMultiConfig']).addEventListener('click', t.tabMultiConfig, false);
+				document.getElementById(UID['tabMultiStats']).addEventListener('click', t.tabMultiStats, false);
+				document.getElementById(UID['tabMulti_OnOff']).addEventListener('click', function() {
 					t.setMultiEnable(!Data.options.multiple.enabled);
 				}, false);
 				window.addEventListener('unload', t.onUnload, false);
@@ -23451,10 +25994,10 @@
 
 			tabMultiConfig: function() {
 				var t = Tabs.Multiple;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabMultiConfig']).className = 'selected';
-				$(UID['tabMultiConfig']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabMultiConfig']).className = 'selected';
+				document.getElementById(UID['tabMultiConfig']).style.zIndex = 1;
 				t.lastSubTab = 'tabMultiConfig';
 
 				t.contentType = 0;
@@ -23478,26 +26021,26 @@
 					currentDragons_2.push(j);
 				}
 				m += '</tr>' + '	</table>' + '	</div><br>' + '	<table class=' + UID['table'] + '>' + '		<tr>' + '			<td class=right> ' + translate('Delete Battle Reports') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabMulti_DelReports') + ' type=checkbox ' + (Data.options.multiple.delete_reports ? 'CHECKED' : '') + ' /></td>' + '		</tr><tr>' + '			<td class=right>' + translate('Stop if any troops lost') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabMulti_StopOnLoss') + ' type=checkbox ' + (Data.options.multiple.stop_on_loss ? 'CHECKED' : '') + ' /></td>' + '		</tr><tr>' + '			<td class=right>' + translate('Delay before sending Primary attack') + ':&nbsp;</td>' + '			<td>' + '				<input id=' + setUID('tabMulti_DelayMin') + ' type=text size=1 maxlength=4 value="' + Data.options.multiple.delay_min + '" />' + '				 to <span id=' + setUID('tabMulti_DelayMax') + '>' + Data.options.multiple.delay_max + '</span>&nbsp;' + translate('seconds') + '			</td>' + '		</tr><tr>' + '			<td class=right> ' + translate('Delay before first secondary attack') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabMulti_DelayB4Secondary') + ' type=text size=1 maxlength=4 value="' + Data.options.multiple.delay_b4_secondary + '" /></td>' + '		</tr><tr>' + '			<td class=right>' + translate('Delay Between Secondary Attacks') + ':&nbsp;</td>' + '			<td>' + '				<input id=' + setUID('tabMulti_DelayMin2') + ' type=text size=1 maxlength=4 value="' + Data.options.multiple.delay_min2 + '" />' + '				 to <span id=' + setUID('tabMulti_DelayMax2') + '>' + Data.options.multiple.delay_max2 + '</span>&nbsp;' + translate('seconds') + '			</td>' + '		</tr><tr>' + '			<td class=right> ' + translate('Maximum simultaneous marches') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabMulti_MaxMarches') + ' type=text size=1 maxlength=2 value="' + Data.options.multiple.max_marches + '" /></td>' + '		</tr><tr>' + '			<td class=right> ' + translate('Maximum secondary marches before sending another primary attack') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabMulti_MaxSecondary') + ' type=text size=1 maxlength=2 value="' + Data.options.multiple.max_secondary + '" /></td>' + '		</tr>' + '	</table>' + '</div>';
-				$(UID['tabMulti_Content']).innerHTML = m;
-				$(UID['tabMulti_CoordsX']).addEventListener('change', eventCoords, false);
-				$(UID['tabMulti_CoordsY']).addEventListener('change', eventCoords, false);
-				$(UID['tabMulti_DelReports']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabMulti_Content']).innerHTML = m;
+				document.getElementById(UID['tabMulti_CoordsX']).addEventListener('change', eventCoords, false);
+				document.getElementById(UID['tabMulti_CoordsY']).addEventListener('change', eventCoords, false);
+				document.getElementById(UID['tabMulti_DelReports']).addEventListener('click', function(event) {
 					Data.options.multiple.delete_reports = event.target.checked;
 				}, false);
-				$(UID['tabMulti_StopOnLoss']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabMulti_StopOnLoss']).addEventListener('click', function(event) {
 					Data.options.multiple.stop_on_loss = event.target.checked;
 				}, false);
-				$(UID['tabMulti_DelayMin']).addEventListener('change', delayChanged, false);
-				$(UID['tabMulti_DelayMin2']).addEventListener('change', delayChanged2, false);
-				$(UID['tabMulti_DelayB4Secondary']).addEventListener('change', delaySecondaryChanged, false);
-				$(UID['tabMulti_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
-				$(UID['tabMulti_MaxSecondary']).addEventListener('change', maxSecondaryChanged, false);
-				setTroopTable($(UID['tabMulti_Troops']), 1, 'PW', wave_unit_types,
+				document.getElementById(UID['tabMulti_DelayMin']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabMulti_DelayMin2']).addEventListener('change', delayChanged2, false);
+				document.getElementById(UID['tabMulti_DelayB4Secondary']).addEventListener('change', delaySecondaryChanged, false);
+				document.getElementById(UID['tabMulti_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
+				document.getElementById(UID['tabMulti_MaxSecondary']).addEventListener('change', maxSecondaryChanged, false);
+				setTroopTable(document.getElementById(UID['tabMulti_Troops']), 1, 'PW', wave_unit_types,
 					Data.options.multiple.target.primary_units, Data.options.multiple.target.saved_units_1, eventTroops, true);
-				setTroopTable($(UID['tabMulti_Troops2']), 1, 'SW', wave_unit_types,
+				setTroopTable(document.getElementById(UID['tabMulti_Troops2']), 1, 'SW', wave_unit_types,
 					Data.options.multiple.target.secondary_units, Data.options.multiple.target.saved_units_2, eventTroops2, true);
 				for (var j = 0; j < currentDragons_1.length; ++j) {
-					$(UID['tabMulti_Dragons_' + currentDragons_1[j]]).addEventListener('change', function(event) {
+					document.getElementById(UID['tabMulti_Dragons_' + currentDragons_1[j]]).addEventListener('change', function(event) {
 						var args = event.target.getAttribute('ref');
 						Data.options.multiple.target.dragons_1[Seed.dragonList[args].type] = event.target.checked;
 						var include_great_dragon = false;
@@ -23510,7 +26053,7 @@
 					}, false);
 				}
 				for (var j = 0; j < currentDragons_2.length; ++j) {
-					$(UID['tabMulti_Dragons2_' + currentDragons_2[j]]).addEventListener('change', function(event) {
+					document.getElementById(UID['tabMulti_Dragons2_' + currentDragons_2[j]]).addEventListener('change', function(event) {
 						var args = event.target.getAttribute('ref');
 						Data.options.multiple.target.dragons_2[Seed.dragonList[args].type] = event.target.checked;
 						var include_great_dragon = false;
@@ -23527,11 +26070,11 @@
 				function delayChanged(event) {
 					var min = toNum(event.target.value);
 					var max = toNum(min * 1.5);
-					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 10) || min > 3600) {
+					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 3) || min > 3600) {
 						event.target.style.backgroundColor = 'red';
 						return;
 					}
-					$(UID['tabMulti_DelayMax']).innerHTML = max;
+					document.getElementById(UID['tabMulti_DelayMax']).innerHTML = max;
 					event.target.style.backgroundColor = '';
 					Data.options.multiple.delay_min = min;
 					Data.options.multiple.delay_max = max;
@@ -23544,7 +26087,7 @@
 						event.target.style.backgroundColor = 'red';
 						return;
 					}
-					$(UID['tabMulti_DelayMax2']).innerHTML = max;
+					document.getElementById(UID['tabMulti_DelayMax2']).innerHTML = max;
 					event.target.style.backgroundColor = '';
 					Data.options.multiple.delay_min2 = min;
 					Data.options.multiple.delay_max2 = max;
@@ -23573,7 +26116,7 @@
 						var tr = Data.options.multiple.target.saved_units_1;
 						tr[tt] = event.target.value;
 						var time = getMarchTime(Data.options.multiple.target.x, Data.options.multiple.target.y, Data.options.multiple.target.primary_units);
-						$(UID['tabMulti_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.multiple.target.x, Data.options.multiple.target.y) + ' (' + timestrShort(time) + ')';
+						document.getElementById(UID['tabMulti_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.multiple.target.x, Data.options.multiple.target.y) + ' (' + timestrShort(time) + ')';
 					}
 				}
 
@@ -23589,7 +26132,7 @@
 				}
 
 				function maxMarchesChanged(event) {
-					var val = toNum($(UID['tabMulti_MaxMarches']).value);
+					var val = toNum(document.getElementById(UID['tabMulti_MaxMarches']).value);
 					if (val < 0 || val > Seed.cities[CAPITAL.id].figures.marches.maximum) {
 						event.target.style.backgroundColor = 'red';
 						return;
@@ -23599,7 +26142,7 @@
 				}
 
 				function maxSecondaryChanged(event) {
-					var val = toNum($(UID['tabMulti_MaxSecondary']).value);
+					var val = toNum(document.getElementById(UID['tabMulti_MaxSecondary']).value);
 					if (val < 0 || val > Seed.cities[CAPITAL.id].figures.marches.maximum) {
 						event.target.style.backgroundColor = 'red';
 						return;
@@ -23611,17 +26154,17 @@
 
 			tabMultiStats: function() {
 				var t = Tabs.Multiple;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabMultiStats']).className = 'selected';
-				$(UID['tabMultiStats']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabMultiStats']).className = 'selected';
+				document.getElementById(UID['tabMultiStats']).style.zIndex = 1;
 				t.lastSubTab = 'tabMultiStats';
 
 				t.contentType = 1;
 
 				var m = '<div class=' + UID['title'] + '>' + translate('Attacks Stats') + '</div>' + '<div id=' + setUID('tabMultiStats_Statbox') + ' class=' + UID['status_ticker'] + '>' + '<div id=' + setUID('tabMultiStats_Status') + '></div>' + '<div id=' + setUID('tabMultiStats_Percent') + '></div>' + '<br/>' + '<center><input id=' + setUID('tabMultiStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '<br></div>';
-				$(UID['tabMulti_Content']).innerHTML = m;
-				$(UID['tabMultiStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabMulti_Content']).innerHTML = m;
+				document.getElementById(UID['tabMultiStats_Clear']).addEventListener('click', function() {
 					clearStats();
 					t.showStats();
 				}, false);
@@ -23698,12 +26241,12 @@
 			marchTick: function() {
 				var t = Tabs.Multiple;
 				clearTimeout(t.marchTimer);
-				Marches.updateTable($(UID['tabMulti_Marches']), 'multiple');
+				Marches.updateTable(document.getElementById(UID['tabMulti_Marches']), 'multiple');
 				t.marchTimer = setTimeout(t.marchTick, 1000);
 			},
 			setMultiEnable: function(onOff) {
 				var t = Tabs.Multiple;
-				var but = $(UID['tabMulti_OnOff']);
+				var but = document.getElementById(UID['tabMulti_OnOff']);
 				clearTimeout(t.attackTimer);
 				Data.options.multiple.enabled = onOff;
 				if (onOff) {
@@ -23724,7 +26267,7 @@
 			},
 			showStats: function() {
 				var t = Tabs.Multiple;
-				var div = $(UID['tabMultiStats_Status']);
+				var div = document.getElementById(UID['tabMultiStats_Status']);
 				if (div == null) return;
 
 				var run_time = Data.stats.multiple.run_time;
@@ -23939,7 +26482,7 @@
 						dispFeedback(feedback_element, actionMsg);
 						t.secondarySent++;
 						if (t.secondarySent >= Data.options.multiple.max_secondary) {
-							var delay_min = toNum(Data.options.multiple.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 10));
+							var delay_min = toNum(Data.options.multiple.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 3));
 							var delay_max = toNum(Data.options.multiple.delay_max, toNum(delay_min * 1.5));
 							multiDelay = Math.floor(Math.random() * (delay_max - delay_min + 1) + delay_min);
 							t.attackTimer = setTimeout(t.multiAttackTick, multiDelay * 1000);
@@ -23951,7 +26494,7 @@
 						}
 					} else {
 						t.attackErrors++
-						var delay_min = toNum(Data.options.multiple.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 10));
+						var delay_min = toNum(Data.options.multiple.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 3));
 						var delay_max = toNum(Data.options.multiple.delay_max, toNum(delay_min * 1.5));
 						retryDelay = Math.floor(Math.random() * (delay_max - delay_min + 1) + delay_min);
 						/* retryDelay = 30 * (t.attackErrors * t.attackErrors); */
@@ -23992,9 +26535,6 @@
 				Data.options.multiple.current_tab = t.contentType;
 			}
 		}
-		/******************************** Multi Tab **********************************/
-
-		/******************************** Map search Tab *****************************/
 		Tabs.Search = {
 			tabOrder: SEARCH_TAB_ORDER,
 			tabLabel: 'Map',
@@ -24017,26 +26557,26 @@
 				}
 				m += '	</select><br>' + '		<table class=' + UID['table'] + ' style="margin-top:3px" width=100%>' + '			<tr valign=top align=center>' + '				<td width=33%><label><input id=' + setUID('tabSearch_Refresh') + ' type=button value="' + translate('Refresh map data') + '" /></label></td>' + '				<td width=33%><label><input id=' + setUID('tabSearch_RefreshCities') + ' type=button class="' + UID['btn_green'] + '" value="' + translate('Scan cities') + '" /></label></td>' + '				<td width=33%><label><input id=' + setUID('tabSearch_RefreshWilds') + ' type=button class="' + UID['btn_green'] + '" value="' + translate('Scan wilds') + '" /></label></td>' + '			</tr>' + '		</table><br>' + '		<div class=' + UID['status_ticker'] + ' style="height:auto !important;margin:1px 10px 5px !important;">' + '			<center><span id=' + setUID('tabSearch_Tile') + '></span></center>' + '		</div>' + '	</div>' + '	<table class=' + UID['table'] + ' width=100%>' + '		<tr><td class=left width=50%><div id=' + setUID('tabSearch_Alliance') + '></div></td>' + '			<td class=left width=50%><div id=' + setUID('tabSearch_Players') + '></div></td>' + '		</tr>' + '	</table>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabSearchC') + '>' + translate('Player cities') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabSearchW') + '>' + translate('Wildernesses') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabSearch_Content') + ' style="padding-top:none; height:525px; ; max-height:525px; overflow-x:auto; overflow-y:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabSearch_CoordsX']).addEventListener('change', t.eventCoords, false);
-				$(UID['tabSearch_CoordsY']).addEventListener('change', t.eventCoords, false);
-				$(UID['tabSearch_MaxRadius']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabSearch_CoordsX']).addEventListener('change', t.eventCoords, false);
+				document.getElementById(UID['tabSearch_CoordsY']).addEventListener('change', t.eventCoords, false);
+				document.getElementById(UID['tabSearch_MaxRadius']).addEventListener('change', function(event) {
 					var el = event.target;
 					Data.options.search.target.distance = toNum(el.options[el.selectedIndex].value);
 					t.show();
 				}, false);
-				$(UID['tabSearch_Refresh']).addEventListener('click', function() {
+				document.getElementById(UID['tabSearch_Refresh']).addEventListener('click', function() {
 					t.refreshMapData(0);
 				}, false);
-				$(UID['tabSearch_RefreshCities']).addEventListener('click', function() {
+				document.getElementById(UID['tabSearch_RefreshCities']).addEventListener('click', function() {
 					t.refreshMapData(1);
 				}, false);
-				$(UID['tabSearch_RefreshWilds']).addEventListener('click', function() {
+				document.getElementById(UID['tabSearch_RefreshWilds']).addEventListener('click', function() {
 					t.refreshMapData(2);
 				}, false);
-				$(UID['tabSearch_Alliance']).addEventListener('change', t.eventAlliance, false);
-				$(UID['tabSearch_Players']).addEventListener('change', t.eventPlayer, false);
-				$(UID['tabSearchC']).addEventListener('click', t.tabSearchC, false);
-				$(UID['tabSearchW']).addEventListener('click', t.tabSearchW, false);
+				document.getElementById(UID['tabSearch_Alliance']).addEventListener('change', t.eventAlliance, false);
+				document.getElementById(UID['tabSearch_Players']).addEventListener('change', t.eventPlayer, false);
+				document.getElementById(UID['tabSearchC']).addEventListener('click', t.tabSearchC, false);
+				document.getElementById(UID['tabSearchW']).addEventListener('click', t.tabSearchW, false);
 				t.eventCoords();
 				t.contentType = toNum(Data.options.search.current_tab);
 				t.show();
@@ -24066,7 +26606,7 @@
 			},
 			eventAlliance: function(event) {
 				var t = Tabs.Search;
-				var ea = $(UID['tabSearch_SelAlliance']);
+				var ea = document.getElementById(UID['tabSearch_SelAlliance']);
 				var alli = ea.value;
 				Data.options.search.target.alliance = alli;
 				if (alli == null) {
@@ -24079,7 +26619,7 @@
 			},
 			eventPlayer: function(event) {
 				var t = Tabs.Search;
-				var ea = $(UID['tabSearch_SelPlayer']);
+				var ea = document.getElementById(UID['tabSearch_SelPlayer']);
 				var plyr = ea.value;
 				Data.options.search.target.player = plyr;
 				if (plyr == null) {
@@ -24107,7 +26647,7 @@
 					m += '<option value="' + list[i].id + '" ' + selected + '>' + list[i].name + '</option>';
 				}
 				m += '</select>';
-				$(UID['tabSearch_Alliance']).innerHTML = m;
+				document.getElementById(UID['tabSearch_Alliance']).innerHTML = m;
 				t.displayPlayersList();
 			},
 			displayPlayersList: function() {
@@ -24128,7 +26668,7 @@
 					m += '<option value="' + list[i].id + '" ' + selected + '>' + list[i].name + '</option>';
 				}
 				m += '</select>';
-				$(UID['tabSearch_Players']).innerHTML = m;
+				document.getElementById(UID['tabSearch_Players']).innerHTML = m;
 			},
 
 			/* return array of different alliances found */
@@ -24277,16 +26817,16 @@
 			/** CITY PLAYER SUB-TAB ** */
 			tabSearchC: function() {
 				var t = Tabs.Search;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSearchC']).className = 'selected';
-				$(UID['tabSearchC']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSearchC']).className = 'selected';
+				document.getElementById(UID['tabSearchC']).style.zIndex = 1;
 				t.lastSubTab = 'tabSearchC';
 				t.contentType = 0;
 				if (!is_null(Data.options.search.last_update)) kLastupdate = ' (' + Data.options.search.last_update + ')';
 				else kLastupdate = '';
 				var m = '<div id=' + setUID('tabSearch_Results') + ' style="height:500px">' + '	<div class=' + UID['title'] + '>' + translate('Player cities list') + kLastupdate + '</div>' + '	<div id=' + setUID('tabSearch_ResultList') + ' class=' + UID['status_ticker'] + '	 style="height:475px; max-height:475px; width:540px; max-width:540px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabSearch_Content']).innerHTML = m;
+				document.getElementById(UID['tabSearch_Content']).innerHTML = m;
 
 				var m = '<table class=' + UID['row_style'] + ' width=100%>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td id=' + setUID('tabSearch_tsc_0') + ' width="20px"><A><span>' + translate('Dist') + '</span></A></td>' + '		<td id=' + setUID('tabSearch_tsc_1') + ' width="40px"><A><span>' + translate('Coords') + '</span></A></td>';
 				if (Data.options.search.target.alliance == '*' || Data.options.search.target.alliance == '-1' || Data.options.search.target.alliance == '1')
@@ -24323,15 +26863,15 @@
 					}
 					m += '</tr>';
 				}
-				$(UID['tabSearch_ResultList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabSearch_ResultList']).innerHTML = m + '</table>';
 
 				for (var h = 0; h < 6; h++)
 					if ((h != 2) || ((Data.options.search.target.alliance == '*' || Data.options.search.target.alliance == '-1' || Data.options.search.target.alliance == '1') && h == 2))
-						$(UID['tabSearch_tsc_' + h]).addEventListener('click', onChangeSort, false);
+						document.getElementById(UID['tabSearch_tsc_' + h]).addEventListener('click', onChangeSort, false);
 
 				var own_alliance = Seed.player.alliance ? Seed.player.alliance.id : -1;
 				for (var i = 0; i < cities.length; i++) {
-					var butSpy = $(UID['tabSearch_Spy_' + i]);
+					var butSpy = document.getElementById(UID['tabSearch_Spy_' + i]);
 					butSpy.addEventListener('click', butSpyNow, false);
 					if ((((cities[i].t > 9) && (cities[i].t != 20)) || (cities[i].t < 9)) &&
 						((!cities[i].ai || cities[i].ai == 0 || cities[i].ai == null) || (cities[i].ai != own_alliance))) {
@@ -24345,7 +26885,7 @@
 					}
 				}
 				for (var u = 0; u < ul.length; u++)
-					$(ul[u]).addEventListener('click', onClickMsg, false);
+					document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 
 				function butSpyNow(event) {
 					var n = toNum(event.target.getAttribute('ref'));
@@ -24474,24 +27014,24 @@
 			/** WILDERNESSES SUB-TAB ** */
 			tabSearchW: function() {
 				var t = Tabs.Search;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSearchW']).className = 'selected';
-				$(UID['tabSearchW']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSearchW']).className = 'selected';
+				document.getElementById(UID['tabSearchW']).style.zIndex = 1;
 				t.lastSubTab = 'tabSearchW';
 				t.contentType = 1;
 
 				var m = '<div class=' + UID['content'] + '>' + '<table class=' + UID['table'] + ' width=100%>' + '	<tr>' + '		<td width=3%><input id=' + setUID('tabSearch_WildG') + ' type=checkbox ' + (Data.options.search.grassland ? 'CHECKED' : '') + ' /></td>' + '		<td width=20%> ' + translate('Grassland') + '</td>' + '		<td width=3%><input id=' + setUID('tabSearch_WildL') + ' type=checkbox ' + (Data.options.search.lake ? 'CHECKED' : '') + ' /></td>' + '		<td width=20%> ' + translate('Lake') + '</td>' + '		<td width=3%><input id=' + setUID('tabSearch_WildP') + ' type=checkbox ' + (Data.options.search.plain ? 'CHECKED' : '') + ' /></td>' + '		<td width=20%> ' + translate('Plain') + '</td>' + '		<td width=31%>' + translate('Min level') + ': ' + levelSelect('Min', nvl(Data.options.search.min_level, '1')) + '</td>' + '	</tr><tr>' + '		<td><input id=' + setUID('tabSearch_WildH') + ' type=checkbox ' + (Data.options.search.hill ? 'CHECKED' : '') + ' /></td>' + '		<td> ' + translate('Hill') + '</td>' + '		<td><input id=' + setUID('tabSearch_WildM') + ' type=checkbox ' + (Data.options.search.mountain ? 'CHECKED' : '') + ' /></td>' + '		<td> ' + translate('Mountain') + '</td>' + '		<td><input id=' + setUID('tabSearch_WildF') + ' type=checkbox ' + (Data.options.search.forest ? 'CHECKED' : '') + ' /></td>' + '		<td> ' + translate('Forest') + '</td>' + '		<td width=31%>' + translate('Max level') + ': ' + levelSelect('Max', nvl(Data.options.search.max_level, '10')) + '</td>' + '	</tr>' + '</table>' + '<table class=' + UID['table'] + ' width=100%>' + '	<tr>' + '		<td width=3%><input id=' + setUID('tabSearch_Unowned') + ' type=checkbox ' + (Data.options.search.unowned ? 'CHECKED' : '') + ' /></td>' + '		<td width=20%> ' + translate('Unowned only') + '</td>' + '		<td width=77% align=center>&nbsp</td>' + '	</tr>' + '</table>' + '</div>' + '<div id=' + setUID('tabSearch_Wilds') + ' style="height:430px">' + '	<div class=' + UID['title'] + '>' + translate('Wildernesses list') + '</div>' + '	<div id=' + setUID('tabSearch_WildList') + ' class=' + UID['status_ticker'] + '	 style="height:400px; max-height:400px; width:540px; max-height:540px; overflow:auto; white-space:nowrap; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabSearch_Content']).innerHTML = m;
-				$(UID['tabSearch_WildG']).addEventListener('click', eventWildFlag, false);
-				$(UID['tabSearch_WildL']).addEventListener('click', eventWildFlag, false);
-				$(UID['tabSearch_WildP']).addEventListener('click', eventWildFlag, false);
-				$(UID['tabSearch_WildH']).addEventListener('click', eventWildFlag, false);
-				$(UID['tabSearch_WildM']).addEventListener('click', eventWildFlag, false);
-				$(UID['tabSearch_WildF']).addEventListener('click', eventWildFlag, false);
-				$(UID['tabSearch_LvMin']).addEventListener('change', levelChanged, false);
-				$(UID['tabSearch_LvMax']).addEventListener('change', levelChanged, false);
-				$(UID['tabSearch_Unowned']).addEventListener('click', eventWildFlag, false);
+				document.getElementById(UID['tabSearch_Content']).innerHTML = m;
+				document.getElementById(UID['tabSearch_WildG']).addEventListener('click', eventWildFlag, false);
+				document.getElementById(UID['tabSearch_WildL']).addEventListener('click', eventWildFlag, false);
+				document.getElementById(UID['tabSearch_WildP']).addEventListener('click', eventWildFlag, false);
+				document.getElementById(UID['tabSearch_WildH']).addEventListener('click', eventWildFlag, false);
+				document.getElementById(UID['tabSearch_WildM']).addEventListener('click', eventWildFlag, false);
+				document.getElementById(UID['tabSearch_WildF']).addEventListener('click', eventWildFlag, false);
+				document.getElementById(UID['tabSearch_LvMin']).addEventListener('change', levelChanged, false);
+				document.getElementById(UID['tabSearch_LvMax']).addEventListener('change', levelChanged, false);
+				document.getElementById(UID['tabSearch_Unowned']).addEventListener('click', eventWildFlag, false);
 				displayWildResults();
 
 				function levelChanged(event) {
@@ -24526,13 +27066,13 @@
 
 				function eventWildFlag() {
 					var t = Tabs.Search;
-					var cG = $(UID['tabSearch_WildG']);
-					var cL = $(UID['tabSearch_WildL']);
-					var cP = $(UID['tabSearch_WildP']);
-					var cH = $(UID['tabSearch_WildH']);
-					var cM = $(UID['tabSearch_WildM']);
-					var cF = $(UID['tabSearch_WildF']);
-					var cU = $(UID['tabSearch_Unowned']);
+					var cG = document.getElementById(UID['tabSearch_WildG']);
+					var cL = document.getElementById(UID['tabSearch_WildL']);
+					var cP = document.getElementById(UID['tabSearch_WildP']);
+					var cH = document.getElementById(UID['tabSearch_WildH']);
+					var cM = document.getElementById(UID['tabSearch_WildM']);
+					var cF = document.getElementById(UID['tabSearch_WildF']);
+					var cU = document.getElementById(UID['tabSearch_Unowned']);
 					Data.options.search.grassland = cG.checked;
 					Data.options.search.lake = cL.checked;
 					Data.options.search.plain = cP.checked;
@@ -24568,15 +27108,15 @@
 						}
 						m += '	</td>' + '</tr>';
 					}
-					$(UID['tabSearch_WildList']).innerHTML = m + '</table>';
+					document.getElementById(UID['tabSearch_WildList']).innerHTML = m + '</table>';
 					for (var h = 0; h < 7; h++)
-						$(UID['tabSearch_tsw_' + h]).addEventListener('click', onChangeSort, false);
+						document.getElementById(UID['tabSearch_tsw_' + h]).addEventListener('click', onChangeSort, false);
 					for (var u = 0; u < ul.length; u++)
-						$(ul[u]).addEventListener('click', onClickMsg, false);
+						document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 
 					var own_alliance = Seed.player.alliance ? Seed.player.alliance.id : -1;
 					for (var i = 0; i < wilds.length; i++) {
-						var butAttack = $(UID['tabSearch_Att_' + i]);
+						var butAttack = document.getElementById(UID['tabSearch_Att_' + i]);
 						butAttack.addEventListener('click', butAttackNow, false);
 						if ((!wilds[i].ai || wilds[i].ai == 0 || wilds[i].ai == null) || (wilds[i].ai != own_alliance)) {
 							butAttack.disabled = false;
@@ -24883,9 +27423,6 @@
 				}
 			}
 		};
-		/******************************** Map search Tab *****************************/
-
-		/******************************** Single attack Tab **************************/
 		Tabs.Single = {
 			tabOrder: SINGLE_TAB_ORDER,
 			tabLabel: 'Single',
@@ -24900,9 +27437,9 @@
 				/* Data.setDefaultValues ('single'); */
 				var m = '<div class=' + UID['title'] + '>' + translate('Single attack') + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabSingleAttack') + '>' + translate('Attack') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabSinglePresets') + '>' + translate('Presets') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabSingleTargets') + '>' + translate('Targets') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabSingle_Content') + ' style="padding-top:0px; height:655px; max-height:655px; overflow-y:auto; width:540px; max-width:540px; overflow-x:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabSingleAttack']).addEventListener('click', t.tabSingleAttack, false);
-				$(UID['tabSinglePresets']).addEventListener('click', t.tabSinglePresets, false);
-				$(UID['tabSingleTargets']).addEventListener('click', t.tabSingleTargets, false);
+				document.getElementById(UID['tabSingleAttack']).addEventListener('click', t.tabSingleAttack, false);
+				document.getElementById(UID['tabSinglePresets']).addEventListener('click', t.tabSinglePresets, false);
+				document.getElementById(UID['tabSingleTargets']).addEventListener('click', t.tabSingleTargets, false);
 				window.addEventListener('unload', t.onUnload, false);
 				t.contentType = toNum(Data.options.single.current_tab);
 				t.show();
@@ -24930,10 +27467,10 @@
 			/** SINGLE ATTACK SUB-TAB ** */
 			tabSingleAttack: function() {
 				var t = Tabs.Single;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSingleAttack']).className = 'selected';
-				$(UID['tabSingleAttack']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSingleAttack']).className = 'selected';
+				document.getElementById(UID['tabSingleAttack']).style.zIndex = 1;
 				t.lastSubTab = 'tabSingleAttack';
 				t.contentType = 0;
 				var m = '<div class="' + UID['title'] + '">' + translate('Single attack') + ' ( ' + translate('Max') + '. ' + translate('Troops') + ' ' + numf(toNum((getMusterPoint(CAPITAL.id)).max_troops), ' ') + ' )</div>' + '<div class=' + UID['content'] + '>' + '	<div>' + '		<b>' + translate('Coords') + ':&nbsp;</b>&nbsp;' + '		X: <input id=' + setUID('tabSingle_CoordsX') + ' size=1 maxlength=3 type=text value="' + Data.options.single.target.x + '" /> ' + '		Y: <input id=' + setUID('tabSingle_CoordsY') + ' size=2 maxlength=3 type=text value="' + Data.options.single.target.y + '" /> ' + '		&nbsp <b>' + translate('Distance') + ':</b> <span id=' + setUID('tabSingle_Distance') + '></span>' + '		&nbsp <input id=' + setUID('tabSingle_Save') + ' class="' + UID['btn_green'] + ' small" style="width:auto !important;" type=submit value=" ' + translate('Save') + ' " />' + '		&nbsp <input id=' + setUID('tabSingle_Spy') + ' class="' + UID['btn_green'] + ' small" style="width:auto !important;" type=submit value=" ' + translate('Spy') + ' " />' + '		&nbsp <input id=' + setUID('tabSingle_Bookmark') + ' class="' + UID['btn_blue'] + ' small" style="width:auto !important;" type=submit value=" ' + translate('Bookmark') + ' " />';
@@ -24958,22 +27495,22 @@
 					m += '<tr valign=middle style="border-bottom: 1px solid #898989; background-color:' + row_style + '"><td width=15%>' + Data.options.single.presets[i].name + '</td>' + '	<td align=left width=55%>' + getTroops(Data.options.single.presets[i].units, ' ') + '</td>' + '	<td align=center width=30%><input id=' + setUID('tabSingle_SetTroops_' + i) + ' ref=' + i + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('Choose') + '" />&nbsp' + '		<input id=' + setUID('tabSingle_Edit_' + i) + ' ref=' + i + ' class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value="' + translate('Edit') + '" />&nbsp' + '		<input id=' + setUID('tabSingle_Delete_' + i) + ' ref=' + i + ' class="Xtrasmall ' + UID['btn_red'] + '" style="width:auto !important;" type=submit value=" X " /></td>' + '</tr>';
 					el.push(UID['tabSingle_SetTroops_' + i]);
 				} + '</div>';
-				$(UID['tabSingle_Content']).innerHTML = m;
-				$(UID['tabSingle_CoordsX']).addEventListener('change', eventCoords, false);
-				$(UID['tabSingle_CoordsY']).addEventListener('change', eventCoords, false);
-				$(UID['tabSingle_Save']).addEventListener('click', saveCoords, false);
-				$(UID['tabSingle_Bookmark']).addEventListener('click', addBookmark, false);
-				$(UID['tabSingle_Comment']).addEventListener('change', function() {
-					Data.options.single.target.comment = $(UID['tabSingle_Comment']).value
+				document.getElementById(UID['tabSingle_Content']).innerHTML = m;
+				document.getElementById(UID['tabSingle_CoordsX']).addEventListener('change', eventCoords, false);
+				document.getElementById(UID['tabSingle_CoordsY']).addEventListener('change', eventCoords, false);
+				document.getElementById(UID['tabSingle_Save']).addEventListener('click', saveCoords, false);
+				document.getElementById(UID['tabSingle_Bookmark']).addEventListener('click', addBookmark, false);
+				document.getElementById(UID['tabSingle_Comment']).addEventListener('change', function() {
+					Data.options.single.target.comment = document.getElementById(UID['tabSingle_Comment']).value
 				}, false);
-				$(UID['tabSingle_Attack']).addEventListener('click', butAttackNow, false);
+				document.getElementById(UID['tabSingle_Attack']).addEventListener('click', butAttackNow, false);
 				if (Data.options.single.target.id && Data.options.single.target.id != '' && Data.options.single.target.n && Data.options.single.target.n != '')
-					$(UID['tabSingle_Msg']).addEventListener('click', onClickMsg, false);
-				setTroopTable($(UID['tabSingle_Troops']), 1, 'SA', all_unit_types,
+					document.getElementById(UID['tabSingle_Msg']).addEventListener('click', onClickMsg, false);
+				setTroopTable(document.getElementById(UID['tabSingle_Troops']), 1, 'SA', all_unit_types,
 					Data.options.single.target.units, Data.options.single.target.saved_units, eventTroops, true);
 
 				for (var j = 0; j < currentDragons.length; ++j) {
-					$(UID['tabSingle_Dragons_' + currentDragons[j]]).addEventListener('change', function(event) {
+					document.getElementById(UID['tabSingle_Dragons_' + currentDragons[j]]).addEventListener('change', function(event) {
 						var args = event.target.getAttribute('ref');
 						Data.options.single.target.dragons[Seed.dragonList[args].type] = event.target.checked;
 						var include_great_dragon = false;
@@ -24986,15 +27523,15 @@
 					}, false);
 				}
 				for (var i = 0; i < el.length; i++) {
-					var butSetTrp = $(UID['tabSingle_SetTroops_' + i]);
-					var butEdit = $(UID['tabSingle_Edit_' + i]);
-					var butDelete = $(UID['tabSingle_Delete_' + i]);
+					var butSetTrp = document.getElementById(UID['tabSingle_SetTroops_' + i]);
+					var butEdit = document.getElementById(UID['tabSingle_Edit_' + i]);
+					var butDelete = document.getElementById(UID['tabSingle_Delete_' + i]);
 					butSetTrp.addEventListener('click', onClickSetTroops, false);
 					butEdit.addEventListener('click', onClickEdit, false);
 					butDelete.addEventListener('click', onClickDelete, false);
 				}
 				eventCoords();
-				var butSpy = $(UID['tabSingle_Spy']);
+				var butSpy = document.getElementById(UID['tabSingle_Spy']);
 				butSpy.addEventListener('click', butSpyNow, false);
 				var tile = Data.options.single.target;
 				if (!tile.ai || tile.ai == 0 || tile.ai == null || tile.ai != (Seed.player.alliance ? Seed.player.alliance.id : -1))
@@ -25084,7 +27621,7 @@
 						var tr = Data.options.single.target.saved_units;
 						tr[tt] = event.target.value;
 						var time = getMarchTime(Data.options.single.target.x, Data.options.single.target.y, Data.options.single.target.units);
-						$(UID['tabSingle_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.single.target.x, Data.options.single.target.y) + ' (' + timestrShort(time) + ')';
+						document.getElementById(UID['tabSingle_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.single.target.x, Data.options.single.target.y) + ' (' + timestrShort(time) + ')';
 					}
 				}
 
@@ -25108,8 +27645,8 @@
 						Data.options.single.target.units[pu] = units[pu];
 						Data.options.single.target.saved_units[pu] = units[pu];
 					}
-					$(UID['tabSingle_Troops']).innerHTML = '<tr align=center class=' + UID['row_headers'] + '>' + '	<td colspan=10>' + translate('Troops') + ':&nbsp;</td></tr>';
-					setTroopTable($(UID['tabSingle_Troops']), 1, 'SA', all_unit_types,
+					document.getElementById(UID['tabSingle_Troops']).innerHTML = '<tr align=center class=' + UID['row_headers'] + '>' + '	<td colspan=10>' + translate('Troops') + ':&nbsp;</td></tr>';
+					setTroopTable(document.getElementById(UID['tabSingle_Troops']), 1, 'SA', all_unit_types,
 						Data.options.single.target.units, Data.options.single.target.saved_units, eventTroops, true);
 				}
 
@@ -25173,10 +27710,10 @@
 			/** PRESETS SUB-TAB ** */
 			tabSinglePresets: function() {
 				var t = Tabs.Single;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSinglePresets']).className = 'selected';
-				$(UID['tabSinglePresets']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSinglePresets']).className = 'selected';
+				document.getElementById(UID['tabSinglePresets']).style.zIndex = 1;
 				t.lastSubTab = 'tabSinglePresets';
 				t.contentType = 1;
 				var m = '<div class=' + UID['title'] + '>' + translate('Army presets') + '</div>' + '	<div id=' + setUID('tabSingle_Presets') + ' class=' + UID['status_ticker'] + ' style="margin-bottom:5px !important">' + '	<label><b>' + translate('Preset name') + ' :</b></label>' + '	&nbsp &nbsp<input id=' + setUID('tabSingle_Name') + ' size=30 maxlength=50 type=text value="' + Data.options.single.preset.name + '" /><br><br>' + '	<table id=' + setUID('tabSingle_Troops') + ' class=' + UID['table'] + '>' + '		<tr align=left class=' + UID['row_headers_left'] + '>' + '			<td colspan=3 width=50%>' + translate('Troops') + ':&nbsp;</td>' + '			<td width=15%>' + translate('Total') + '</td>' + '		</tr>';
@@ -25189,15 +27726,15 @@
 					m += '<tr><td class=right width=25%>' + translate(Names.troops.byName[all_unit_types[i]][1]) + ':</td>' + '	<td width=15%><input type=text id=' + UIDTrp + '_' + i + ' maxlength=9 style="width:55px" size=2 value="' + num + '"\></td>' + '	<td width=10%><input class=small id=' + UIDMax + '_' + i + ' ref=' + i + ' type=button  style="width:auto !important;" value=" Max " \></td>' + '	<td align=right width=15%>' + numf(numTroops.total, ' ') + '</td>' + '	<td width=35%>&nbsp</td>' + '</tr>';
 				}
 				m += '</table><br>' + '<table class=' + UID['table'] + ' style="margin-top:3px" width=60%>' + '	<tr valign=top align=center>' + '		<td width=40%><label><input id=' + setUID('tabSingle_clearAll') + ' type=button class="' + UID['btn_green'] + '" value="' + translate('Clear all') + '" /></label></td>' + '		<td width=40%><label><input id=' + setUID('tabSingle_savePreset') + ' type=button value="' + translate('Save preset') + '" /></label></td>' + '	</tr>' + '</table><br>' + '<br></div>';
-				$(UID['tabSingle_Content']).innerHTML = m;
-				$(UID['tabSingle_Name']).addEventListener('change', function() {
-					Data.options.single.preset.name = $(UID['tabSingle_Name']).value
+				document.getElementById(UID['tabSingle_Content']).innerHTML = m;
+				document.getElementById(UID['tabSingle_Name']).addEventListener('change', function() {
+					Data.options.single.preset.name = document.getElementById(UID['tabSingle_Name']).value
 				}, false);
-				$(UID['tabSingle_clearAll']).addEventListener('click', onClickClearAll, false);
-				$(UID['tabSingle_savePreset']).addEventListener('click', onClickSavePreset, false);
+				document.getElementById(UID['tabSingle_clearAll']).addEventListener('click', onClickClearAll, false);
+				document.getElementById(UID['tabSingle_savePreset']).addEventListener('click', onClickSavePreset, false);
 				for (i = 0; i < all_unit_types.length; i++) {
-					$(UIDTrp + '_' + i).addEventListener('change', eventTroops, false);
-					butMax = $(UIDMax + '_' + i);
+					document.getElementById(UIDTrp + '_' + i).addEventListener('change', eventTroops, false);
+					butMax = document.getElementById(UIDMax + '_' + i);
 					butMax.addEventListener('click', setTroupsMax, false);
 					setButtonStyle(butMax, true, 'btn_green');
 				}
@@ -25206,7 +27743,7 @@
 					var args = event.target.id.split('_');
 					var x = toNum(event.target.value);
 					for (i = 0; i < all_unit_types.length; i++)
-						$(UID['tabSingle_Trp'] + '_' + i).style.backgroundColor = '';
+						document.getElementById(UID['tabSingle_Trp'] + '_' + i).style.backgroundColor = '';
 					if (isNaN(x) || x < -1)
 						event.target.style.backgroundColor = 'red';
 					else event.target.style.backgroundColor = '';
@@ -25255,14 +27792,14 @@
 			/** TARGETS SUB-TAB ** */
 			tabSingleTargets: function() {
 				var t = Tabs.Single;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSingleTargets']).className = 'selected';
-				$(UID['tabSingleTargets']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSingleTargets']).className = 'selected';
+				document.getElementById(UID['tabSingleTargets']).style.zIndex = 1;
 				t.lastSubTab = 'tabSingleTargets';
 				t.contentType = 2;
 				var m = '<div class="' + UID['title'] + '">' + translate('Targets') + '</div>' + '	<div id=' + setUID('tabSingle_Targets') + ' class=' + UID['status_ticker'] + ' style="height:390px; max-height:390px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabSingle_Content']).innerHTML = m;
+				document.getElementById(UID['tabSingle_Content']).innerHTML = m;
 				var m = '<table class=' + UID['row_style'] + '>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td width="15px">&nbsp</td>' + '		<td width="35px"><A><span>' + translate('Dist') + '</span></A></td>' + '		<td width="50px"><A><span>' + translate('Coords') + '</span></A></td>' + '		<td width="160px"><A><span>' + translate('Target') + '</span></A></td>' + '		<td width="175px"><A><span>' + translate('Troops') + '</span></A></td>' + '	</tr>';
 				var ul = [];
 				for (var i = 0; i < Data.options.single.history.length; i++) {
@@ -25286,12 +27823,12 @@
 					if (Data.options.single.history[i].comment && Data.options.single.history[i].comment != null && Data.options.single.history[i].comment != '')
 						m += '<tr valign=top style="background-color:' + row_style + '"><td colspan=4 style="border-bottom: 1px solid #898989;">' + Data.options.single.history[i].comment + '</td><td colspan=2>&nbsp</td></tr>';
 				}
-				$(UID['tabSingle_Targets']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabSingle_Targets']).innerHTML = m + '</table>';
 				for (var i = 0; i < Data.options.single.history.length; i++) {
-					var butRecall = $(UID['tabSingle_Recall_' + i]);
-					var butDelete = $(UID['tabSingle_Delete_' + i]);
-					var butBookmark = $(UID['tabSingle_Bookmark_' + i]);
-					var butSpy = $(UID['tabSingle_Spy_' + i]);
+					var butRecall = document.getElementById(UID['tabSingle_Recall_' + i]);
+					var butDelete = document.getElementById(UID['tabSingle_Delete_' + i]);
+					var butBookmark = document.getElementById(UID['tabSingle_Bookmark_' + i]);
+					var butSpy = document.getElementById(UID['tabSingle_Spy_' + i]);
 					butRecall.addEventListener('click', recallTarget, false);
 					butDelete.addEventListener('click', deleteTarget, false);
 					butBookmark.addEventListener('click', addBookmark, false);
@@ -25303,7 +27840,7 @@
 						setButtonStyle(butSpy, false, 'btn_green', 'btn_disabled');
 				}
 				for (var u = 0; u < ul.length; u++)
-					$(ul[u]).addEventListener('click', onClickMsg, false);
+					document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 
 				function butSpyNow(event) {
 					var n = toNum(event.target.getAttribute('ref'));
@@ -25355,9 +27892,6 @@
 				Data.options.single.current_tab = t.contentType;
 			}
 		}
-		/******************************** Single attack Tab **************************/
-
-		/******************************** Spy Tab ************************************/
 		Tabs.Spies = {
 			tabOrder: SPY_TAB_ORDER,
 			tabLabel: 'Spy',
@@ -25381,11 +27915,11 @@
 				t.container = div;
 				var m = '<div class=' + UID['title'] + '>' + translate('Spy One Target') + '</div>' + '<div id=' + setUID('tabSpy_Status') + ' class=' + UID['status_ticker'] + ' style="margin-bottom:5px !important">' + '	<center><input id=' + setUID('tabSpy_OnOff') + ' type=button value="OnOff" /></center>' + '	<div id=' + setUID('tabSpy_Report') + ' style="margin-top:5px;height:140px; max-height:140px; width:540px; max-width:540px; overflow:auto;">' + '		<table id=' + setUID('tabSpy_Marches') + ' class=' + UID['table'] + '></table>' + '	</div>' + '	<div id=' + setUID('tabSpy_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabSpyAttack') + '>' + translate('Spy') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabSpyHistory') + '>' + translate('History') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabSpyStats') + '>' + translate('Stats') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabSpyLastReport') + '>' + translate('Last report') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabSpy_Content') + ' style="padding-top:0px; height:440px; overflow-y:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabSpyAttack']).addEventListener('click', t.tabSpyAttack, false);
-				$(UID['tabSpyHistory']).addEventListener('click', t.tabSpyHistory, false);
-				$(UID['tabSpyStats']).addEventListener('click', t.tabSpyStats, false);
-				$(UID['tabSpyLastReport']).addEventListener('click', t.tabSpyLastReport, false);
-				$(UID['tabSpy_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabSpyAttack']).addEventListener('click', t.tabSpyAttack, false);
+				document.getElementById(UID['tabSpyHistory']).addEventListener('click', t.tabSpyHistory, false);
+				document.getElementById(UID['tabSpyStats']).addEventListener('click', t.tabSpyStats, false);
+				document.getElementById(UID['tabSpyLastReport']).addEventListener('click', t.tabSpyLastReport, false);
+				document.getElementById(UID['tabSpy_OnOff']).addEventListener('click', function() {
 					t.setSpyEnable(!Data.options.spies.enabled);
 				}, false);
 				t.contentType = toNum(Data.options.spies.current_tab, 0);
@@ -25426,10 +27960,10 @@
 
 			tabSpyAttack: function() {
 				var t = Tabs.Spies;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSpyAttack']).className = 'selected';
-				$(UID['tabSpyAttack']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSpyAttack']).className = 'selected';
+				document.getElementById(UID['tabSpyAttack']).style.zIndex = 1;
 				t.lastSubTab = 'tabSpyAttack';
 				t.contentType = 0;
 
@@ -25439,42 +27973,42 @@
 					m += '	&nbsp <input id=' + setUID('tabSpy_Msg') + ' ref=' + user_ids + ' class="' + UID['btn_blue'] + ' small" style="width:auto !important;" type=submit value=" ' + translate('Msg') + ' " />';
 				}
 				m += '		<br><br><label>' + translate('description') + ' :</label>&nbsp' + '		<textarea id=' + setUID('tabSpy_Comment') + ' cols="80" rows="2" wrap="PHYSICAL">' + Data.options.spies.target.comment + '</textarea><br>' + '		<div class=' + UID['status_ticker'] + ' style="height:auto !important;margin:5px 10px !important;">' + '			<center><span id=' + setUID('tabSpy_Tile') + '></span></center>' + '		</div>' + '	</div>' + '  <div>' + '	<table id=' + setUID('tabSpy_Troops') + ' class=' + UID['table'] + '>' + '		<tr align=center class=' + UID['row_headers'] + '>' + '			<td colspan=8>' + translate('Spies number') + ':&nbsp;</td>' + '		</tr>' + '	</table>' + '	</div><br>' + '	<table class=' + UID['table'] + '>' + '		<tr>' + '			<td class=right> ' + translate('Delete spy Reports') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabSpy_DelReports') + ' type=checkbox ' + (Data.options.spies.delete_reports ? 'CHECKED' : '') + ' /></td>' + '		</tr><tr>' + '			<td class=right>' + translate('Stop if any troops lost') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabSpy_StopOnLoss') + ' type=checkbox ' + (Data.options.spies.stop_on_loss ? 'CHECKED' : '') + ' /></td>' + '		</tr><tr>' + '			<td class=right>' + translate('Delay Between Attacks') + ':&nbsp;</td>' + '			<td>' + '				<input id=' + setUID('tabSpy_DelayMin') + ' type=text size=1 maxlength=4 value="' + Data.options.spies.delay_min + '" />' + '				 to <span id=' + setUID('tabSpy_DelayMax') + '>' + Data.options.spies.delay_max + '</span>&nbsp;' + translate('seconds') + '			</td>' + '		</tr><tr>' + '			<td class=right> ' + translate('Maximum simultaneous marches') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabSpy_MaxMarches') + ' type=text size=1 maxlength=2 value="' + Data.options.spies.max_marches + '" /></td>' + '		</tr>' + '	</table>' + '</div>';
-				$(UID['tabSpy_Content']).innerHTML = m;
-				$(UID['tabSpy_CoordsX']).addEventListener('change', t.eventCoords, false);
-				$(UID['tabSpy_CoordsY']).addEventListener('change', t.eventCoords, false);
-				$(UID['tabSpy_Save']).addEventListener('click', saveCoords, false);
-				$(UID['tabSpy_Comment']).addEventListener('change', function() {
-					Data.options.spies.target.comment = $(UID['tabSpy_Comment']).value
+				document.getElementById(UID['tabSpy_Content']).innerHTML = m;
+				document.getElementById(UID['tabSpy_CoordsX']).addEventListener('change', t.eventCoords, false);
+				document.getElementById(UID['tabSpy_CoordsY']).addEventListener('change', t.eventCoords, false);
+				document.getElementById(UID['tabSpy_Save']).addEventListener('click', saveCoords, false);
+				document.getElementById(UID['tabSpy_Comment']).addEventListener('change', function() {
+					Data.options.spies.target.comment = document.getElementById(UID['tabSpy_Comment']).value
 				}, false);
-				$(UID['tabSpy_DelReports']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabSpy_DelReports']).addEventListener('click', function(event) {
 					Data.options.spies.delete_reports = event.target.checked;
 				}, false);
-				$(UID['tabSpy_StopOnLoss']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabSpy_StopOnLoss']).addEventListener('click', function(event) {
 					Data.options.spies.stop_on_loss = event.target.checked;
 				}, false);
-				$(UID['tabSpy_DelayMin']).addEventListener('change', delayChanged, false);
-				$(UID['tabSpy_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
+				document.getElementById(UID['tabSpy_DelayMin']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabSpy_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
 				if (Data.options.spies.target.id && Data.options.spies.target.id != '' && Data.options.spies.target.n && Data.options.spies.target.n != '')
-					$(UID['tabSpy_Msg']).addEventListener('click', onClickMsg, false);
-				setTroopTable($(UID['tabSpy_Troops']), 1, 'SP', spy_unit_types,
+					document.getElementById(UID['tabSpy_Msg']).addEventListener('click', onClickMsg, false);
+				setTroopTable(document.getElementById(UID['tabSpy_Troops']), 1, 'SP', spy_unit_types,
 					Data.options.spies.target.units, undefined, t.eventTroops, false);
 				t.eventCoords();
 
 				function delayChanged(event) {
 					var min = toNum(event.target.value);
 					var max = toNum(min * 1.5);
-					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 10) || min > 3600) {
+					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 3) || min > 3600) {
 						event.target.style.backgroundColor = 'red';
 						return;
 					}
-					$(UID['tabSpy_DelayMax']).innerHTML = max;
+					document.getElementById(UID['tabSpy_DelayMax']).innerHTML = max;
 					event.target.style.backgroundColor = '';
 					Data.options.spies.delay_min = min;
 					Data.options.spies.delay_max = max;
 				}
 
 				function maxMarchesChanged(event) {
-					var val = toNum($(UID['tabSpy_MaxMarches']).value);
+					var val = toNum(document.getElementById(UID['tabSpy_MaxMarches']).value);
 					if (val < 0 || val > Seed.cities[CAPITAL.id].figures.marches.maximum) {
 						event.target.style.backgroundColor = 'red';
 						return;
@@ -25508,15 +28042,15 @@
 			},
 			tabSpyHistory: function() {
 				var t = Tabs.Spies;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSpyHistory']).className = 'selected';
-				$(UID['tabSpyHistory']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSpyHistory']).className = 'selected';
+				document.getElementById(UID['tabSpyHistory']).style.zIndex = 1;
 				t.lastSubTab = 'tabSpyHistory';
 				t.contentType = 1;
 
 				var m = '<div class="' + UID['title'] + '">' + translate('History') + '</div>' + '	<div id=' + setUID('tabSpy_HistoryList') + ' class=' + UID['status_ticker'] + ' style="height:400px; max-height:400px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabSpy_Content']).innerHTML = m;
+				document.getElementById(UID['tabSpy_Content']).innerHTML = m;
 				var m = '<table class=' + UID['row_style'] + '>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td width="10px">&nbsp</td>' + '		<td width="35px"><A><span>' + translate('Dist') + '</span></A></td>' + '		<td width="50px"><A><span>' + translate('Coords') + '</span></A></td>' + '		<td width="160px"><A><span>' + translate('Target') + '</span></A></td>' + '		<td width="175px"><A><span>' + translate('Troops') + '</span></A></td>' + '	</tr>';
 				var ul = [];
 				for (var i = 0; i < Data.options.spies.history.length; i++) {
@@ -25538,15 +28072,15 @@
 					if (Data.options.spies.history[i].comment && Data.options.spies.history[i].comment != null && Data.options.spies.history[i].comment != '')
 						m += '<tr valign=top style="background-color:' + row_style + '"><td colspan=5 style="border-bottom: 1px solid #898989;">' + Data.options.spies.history[i].comment + '</td><td colspan=2>&nbsp</td></tr>';
 				}
-				$(UID['tabSpy_HistoryList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabSpy_HistoryList']).innerHTML = m + '</table>';
 				for (var i = 0; i < Data.options.spies.history.length; i++) {
-					var butRecall = $(UID['tabSpy_Recall_' + i]);
-					var butDelete = $(UID['tabSpy_Delete_' + i]);
+					var butRecall = document.getElementById(UID['tabSpy_Recall_' + i]);
+					var butDelete = document.getElementById(UID['tabSpy_Delete_' + i]);
 					butRecall.addEventListener('click', recallTarget, false);
 					butDelete.addEventListener('click', deleteTarget, false);
 				}
 				for (var u = 0; u < ul.length; u++)
-					$(ul[u]).addEventListener('click', onClickMsg, false);
+					document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 
 				function recallTarget(event) {
 					var n = toNum(event.target.getAttribute('ref'));
@@ -25570,16 +28104,16 @@
 			},
 			tabSpyStats: function() {
 				var t = Tabs.Spies;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSpyStats']).className = 'selected';
-				$(UID['tabSpyStats']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSpyStats']).className = 'selected';
+				document.getElementById(UID['tabSpyStats']).style.zIndex = 1;
 				t.lastSubTab = 'tabSpyStats';
 				t.contentType = 2;
 
 				var m = '<div class=' + UID['title'] + '>' + translate('Attacks Stats') + '</div>' + '<div id=' + setUID('tabSpyStats_Statbox') + ' class=' + UID['status_ticker'] + '>' + '<div id=' + setUID('tabSpyStats_Status') + '></div>' + '<br/>' + '<center><input id=' + setUID('tabSpyStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '<br></div>';
-				$(UID['tabSpy_Content']).innerHTML = m;
-				$(UID['tabSpyStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabSpy_Content']).innerHTML = m;
+				document.getElementById(UID['tabSpyStats_Clear']).addEventListener('click', function() {
 					t.clearStats();
 					t.showStats();
 				}, false);
@@ -25587,18 +28121,18 @@
 			},
 			tabSpyLastReport: function() {
 				var t = Tabs.Spies;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabSpyLastReport']).className = 'selected';
-				$(UID['tabSpyLastReport']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabSpyLastReport']).className = 'selected';
+				document.getElementById(UID['tabSpyLastReport']).style.zIndex = 1;
 				t.lastSubTab = 'tabSpyLastReport';
 				t.contentType = 3;
 				var m = '<div id=' + setUID('tabSpy_ShowReport') + ' class=' + UID['status_ticker'] + ' style="height:395px; max-height:395px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important"></div>';
-				$(UID['tabSpy_Content']).innerHTML = m;
+				document.getElementById(UID['tabSpy_Content']).innerHTML = m;
 				var m = '<div class=' + UID['title'] + '>' + translate('Last report') + '</div>';
 				if (t.last_report)
 					m += '<center>' + Messages.displaySpyReport(t.last_report) + '</center>';
-				$(UID['tabSpy_ShowReport']).innerHTML = m;
+				document.getElementById(UID['tabSpy_ShowReport']).innerHTML = m;
 			},
 
 			gotSpyReport: function(rpt_s) {
@@ -25675,7 +28209,7 @@
 			},
 			showStats: function() {
 				var t = Tabs.Spies;
-				var div = $(UID['tabSpyStats_Status']);
+				var div = document.getElementById(UID['tabSpyStats_Status']);
 				if (div == null) return;
 
 				var run_time = Data.stats.spies.run_time;
@@ -25706,13 +28240,13 @@
 					var tr = Data.options.spies.target.units;
 					tr[tt] = event.target.value;
 					var time = getMarchTime(Data.options.spies.target.x, Data.options.spies.target.y, Data.options.spies.target.units);
-					$(UID['tabSpy_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.spies.target.x, Data.options.spies.target.y) + ' (' + timestrShort(time) + ')';
+					document.getElementById(UID['tabSpy_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.spies.target.x, Data.options.spies.target.y) + ' (' + timestrShort(time) + ')';
 				}
 			},
 
 			setSpyEnable: function(onOff) {
 				var t = Tabs.Spies;
-				var but = $(UID['tabSpy_OnOff']);
+				var but = document.getElementById(UID['tabSpy_OnOff']);
 				clearTimeout(t.attackTimer);
 				Data.options.spies.enabled = onOff;
 				if (onOff) {
@@ -25770,7 +28304,7 @@
 						spyDelay, retryDelay;
 					if (rslt.ok && rslt.dat.result.success) {
 						t.attackErrors = 0;
-						var delay_min = toNum(Data.options.spies.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 10));
+						var delay_min = toNum(Data.options.spies.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 3));
 						var delay_max = toNum(Data.options.spies.delay_max, toNum(delay_min * 1.5));
 						spyDelay = Math.floor(Math.random() * (delay_max - delay_min + 1) + delay_min);
 						verboseLog(actionMsg + ' ' + translate('Successfully'));
@@ -25797,13 +28331,10 @@
 			marchTick: function() {
 				var t = Tabs.Spies;
 				clearTimeout(t.marchTimer);
-				Marches.updateTable($(UID['tabSpy_Marches']), 'spies');
+				Marches.updateTable(document.getElementById(UID['tabSpy_Marches']), 'spies');
 				t.marchTimer = setTimeout(t.marchTick, 1000);
 			}
 		}
-		/******************************** Spy Tab ************************************/
-
-		/******************************** Tower Tab **********************************/
 		Tabs.Tower = {
 			tabOrder: TOWER_TAB_ORDER,
 			tabLabel: 'Tower',
@@ -25829,10 +28360,10 @@
 				t.container = div;
 				var m = '<div class=' + UID['title'] + '>' + translate('Sentinel tower') + '</div>' + '<div class=' + UID['status_ticker'] + ' style="height:250px; max-height:250px; overflow-y:auto ; margin-bottom:5px ; margin-top:1px !important">' + '	<div id=' + setUID('tabTower_LogList') + ' style="height:227px; max-height:227px; overflow-y:auto ; overflow-x:auto; margin-bottom:1px">' + '		<table id=' + setUID('tabTower_Log') + ' class=' + UID['table_console'] + ' cellpadding=0 cellspacing=1 width=100%>' + '		</table>' + '	</div>' + '	<div id=' + setUID('tabTower_Warning') + ' valign=bottom></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabTowerWall') + '>' + translate('Wall management') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabTowerConfig') + '>' + translate('Config') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabTowerMessage') + '>' + translate('Message') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabTower_Content') + ' style="padding-top:0px; height:405px; overflow-y:auto"></div>' + '<div id=' + setUID('tabTower_SwfPlayer') + '></div>';
 				t.container.innerHTML = m;
-				$(UID['tabTowerWall']).addEventListener('click', t.tabTowerWall, false);
-				$(UID['tabTowerConfig']).addEventListener('click', t.tabTowerConfig, false);
-				$(UID['tabTowerMessage']).addEventListener('click', t.tabTowerMessage, false);
-				t.logTab = $(UID['tabTower_Log']);
+				document.getElementById(UID['tabTowerWall']).addEventListener('click', t.tabTowerWall, false);
+				document.getElementById(UID['tabTowerConfig']).addEventListener('click', t.tabTowerConfig, false);
+				document.getElementById(UID['tabTowerMessage']).addEventListener('click', t.tabTowerMessage, false);
+				t.logTab = document.getElementById(UID['tabTower_Log']);
 				Data.options.messages_tower = [];
 				t.printTab();
 				t.deleteTick();
@@ -25845,20 +28376,20 @@
 
 			tabTowerWall: function() {
 				var t = Tabs.Tower;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabTowerWall']).className = 'selected';
-				$(UID['tabTowerWall']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabTowerWall']).className = 'selected';
+				document.getElementById(UID['tabTowerWall']).style.zIndex = 1;
 				t.lastSubTab = 'tabTowerWall';
 
 				var wallStatus = translate((Seed.cities[CAPITAL.id].defended) ? 'Defend' : 'Hiding').toUpperCase();
 				t.contentType = 0;
 				var m = '<div class="' + UID['title'] + '">' + translate('Wall management') + '</div>' + '<div id=' + setUID('tabTower_HistoryList') + ' class=' + UID['status_ticker'] + ' style="height:355px; max-height:355px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important">' + '	<table class=' + UID['table_targets'] + ' style="margin-top:3px" width=100%>' + '		<tr valign=top>' + '			<td width=25%><label><input id=' + setUID('tabTower_AllDef') + ' type=button value="' + translate('Troops max') + '" /></label></td>' + '			<td width=25%><label><input id=' + setUID('tabTower_NoDef') + ' type=button value="' + translate('remove-all') + '" /></label></td>' + '			<td width=50% align=right><b>' + translate('wall-defense-strategy') + ':</b>' + '			&nbsp <input id=' + setUID('tabTower_setWallStat') + ' type=button value=' + wallStatus + ' class=' + UID[(Seed.cities[CAPITAL.id].defended ? 'btn_off' : 'btn_on')] + '></input></td>' + '		</tr>' + '	</table>' + '	<table class=' + UID['table_targets'] + ' style="margin-top:3px" width=100%>' + '		<tr valign=top>' + '			<td width=25%><div id=' + setUID('tabTower_SelPreset') + '></div></td>' + '			<td align=left width=65%><div id=' + setUID('tabTower_PresetTroops') + '></div></td>' + '			<td align=left width=10%><div id=' + setUID('tabTower_PresetButton') + '></div></td>' + '		</tr>' + '	</table>' + '	<div id=' + setUID('tabTower_DefForce') + '></div>' + '</div>';
-				$(UID['tabTower_Content']).innerHTML = m;
-				$(UID['tabTower_AllDef']).addEventListener('click', onClickAllDef, false);
-				$(UID['tabTower_NoDef']).addEventListener('click', onClickNoDef, false);
-				$(UID['tabTower_setWallStat']).addEventListener('click', switchDefense, false);
-				$(UID['tabTower_SelPreset']).addEventListener('change', onChangePreset, false);
+				document.getElementById(UID['tabTower_Content']).innerHTML = m;
+				document.getElementById(UID['tabTower_AllDef']).addEventListener('click', onClickAllDef, false);
+				document.getElementById(UID['tabTower_NoDef']).addEventListener('click', onClickNoDef, false);
+				document.getElementById(UID['tabTower_setWallStat']).addEventListener('click', switchDefense, false);
+				document.getElementById(UID['tabTower_SelPreset']).addEventListener('change', onChangePreset, false);
 				dispDefenseForce();
 				displayPresetList();
 				dispPresetForce();
@@ -25871,7 +28402,7 @@
 						m += '	<tr valign=top>' + '		<td class=right width=40%>' + translate(all_unit_types[i]) + ':</td>' + '		<td align=right width=15%>' + numf(numTroops.total, ' ') + '</td>' + '		<td align=right width=15%>' + ((numTroops.indefense > 0) ? '<b>' + numf(numTroops.indefense, ' ') + '</b>' : numf(numTroops.indefense, ' ')) + '</td>' + '		<td align=right width=15%>' + numf(numTroops.incity, ' ') + '</td>' + '		<td align=right width=15%>' + (numTroops.marches ? '&nbsp;+&nbsp;<b>' + numf(numTroops.marches, ' ') + '</b>' : '') + '</td>' + '	</tr>';
 					}
 					m += '</table>';
-					$(UID['tabTower_DefForce']).innerHTML = m;
+					document.getElementById(UID['tabTower_DefForce']).innerHTML = m;
 				}
 
 				function displayPresetList() {
@@ -25885,7 +28416,7 @@
 						m += '<option value="-" ' + (Data.options.tower.preset == "-" ? 'selected' : '') + '>' + translate('None') + '</option>';
 					}
 					m += '</select>';
-					$(UID['tabTower_SelPreset']).innerHTML = m;
+					document.getElementById(UID['tabTower_SelPreset']).innerHTML = m;
 				}
 
 				function dispPresetForce() {
@@ -25910,16 +28441,16 @@
 						if (tRes.length > 0) result = tRes.join(', ');
 						else result = '---';
 					} else result = '---';
-					$(UID['tabTower_PresetTroops']).innerHTML = '<font color="#000000">' + result + '</font>';
+					document.getElementById(UID['tabTower_PresetTroops']).innerHTML = '<font color="#000000">' + result + '</font>';
 					if (Data.options.tower.preset && Data.options.tower.preset != '-') {
-						$(UID['tabTower_PresetButton']).innerHTML = '<input id=' + setUID('tabTower_SetDef') + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('Set Def') + '" />';
-						$(UID['tabTower_SetDef']).addEventListener('click', onClickSetDef, false);
+						document.getElementById(UID['tabTower_PresetButton']).innerHTML = '<input id=' + setUID('tabTower_SetDef') + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('Set Def') + '" />';
+						document.getElementById(UID['tabTower_SetDef']).addEventListener('click', onClickSetDef, false);
 					}
 				}
 
 				function onChangePreset(event) {
 					var t = Tabs.Tower;
-					var element = $(UID['tabTower_SelBoxPreset']);
+					var element = document.getElementById(UID['tabTower_SelBoxPreset']);
 					var preset = element.value;
 					element.value = preset;
 					Data.options.tower.preset = preset;
@@ -26023,79 +28554,79 @@
 
 			tabTowerConfig: function() {
 				var t = Tabs.Tower;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabTowerConfig']).className = 'selected';
-				$(UID['tabTowerConfig']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabTowerConfig']).className = 'selected';
+				document.getElementById(UID['tabTowerConfig']).style.zIndex = 1;
 				t.lastSubTab = 'tabTowerConfig';
 
 				t.contentType = 1;
 				var m = '<div class="' + UID['title'] + '">' + translate('Tower configuration') + '</div>' + '<div id=' + setUID('tabTower_ConfigBox') + ' class=' + UID['status_ticker'] + ' style="height:355px; max-height:355px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important">' + '<table class=' + UID['table'] + ' width=100% style="color:#000;">' + '	<tr valign=top>' + '		<td><label><input id=' + setUID('tabTower_Alert') + ' type=checkbox /></label></td>' + '		<td colspan=2><label>' + translate('Enable the sentinel tower') + '</label></td>' + '	</tr><tr valign=top>' + '		<td></td><td colspan=2><label>' + translate('Check sentinel reports every ') + '</label>' + '		<input id=' + setUID('tabTower_chkTime') + ' size=1 maxlength=2 type=text value="' + Data.options.tower.delay + '" />&nbsp' + '		<select id=' + setUID('tabTower_chkUnit') + ' size=1>' + '			<option value=1 ' + (Data.options.tower.unit == 1 ? 'selected' : '') + '>' + translate('Seconds') + '</option>' + '			<option value=60 ' + (Data.options.tower.unit == 60 ? 'selected' : '') + '>' + translate('minutes') + '</option>' + '			<option value=3600 ' + (Data.options.tower.unit == 3600 ? 'selected' : '') + '>' + translate('hours') + '</option>' + '		</select>' + '		</td>' + '	</tr><tr valign=top>' + '		<td  style="font-size:2px">&nbsp</td>' + '	</tr><tr valign=top>' + '		<td><label><input id=' + setUID('tabTower_NoSpy') + ' type=checkbox /></label></td>' + '		<td colspan=2><label>' + translate('Hide spy alerts') + '</label></td>' + '	</tr><tr valign=top>' + '		<td><label><input id=' + setUID('tabTower_Del') + ' type=checkbox /></label></td>' + '		<td colspan=2><label>' + translate('Do not show alerts obsolete since') + ' :</label>' + '		<input id=' + setUID('tabTower_DelTime') + ' size=1 maxlength=2 type=text value="' + Data.options.tower.delete_delay + '" />&nbsp' + '		<select id=' + setUID('tabTower_DelUnit') + ' size=1>' + '			<option value=60 ' + (Data.options.tower.delete_unit == 60 ? 'selected' : '') + '>' + translate('minutes') + '</option>' + '			<option value=3600 ' + (Data.options.tower.delete_unit == 3600 ? 'selected' : '') + '>' + translate('hours') + '</option>' + '			<option value=86400 ' + (Data.options.tower.delete_unit == 86400 ? 'selected' : '') + '>' + translate('days') + '</option>' + '		</select>' + '		</td>' + '	</tr><tr valign=top>' + '		<td><label><input id=' + setUID('tabTower_SendMsg') + ' type=checkbox /></label></td>' + '		<td colspan=2><label>' + translate('Send a message to alliance members in case of attack') + '</label></td>' + '	</tr>' + '</table>' + '<br>' + '<table class=' + UID['table'] + ' style="color:#000;">' + '	<tr valign=top>' + '		<td colspan=2><b>' + translate('Sound configuration') + ': </b></td>' + '	</tr><tr valign=top>' + '		<td><label><input id=' + setUID('tabTower_Sound') + ' type=checkbox ' + (Data.options.sound.enable_sentinel ? 'CHECKED ' : '') + '/></label></td>' + '		<td><label>' + translate('Play sound on incoming sentinel report') + '</label></td>' + '	</tr><tr valign=top>' + '		<td></td>' + '		<td><table cellpadding=0 cellspacing=0>' + '				<tr valign=top>' + '					<td><label>' + translate('Attack sound file') + '</label></td>' + '					<td><input id=' + setUID('tabTower_File') + ' size=50 maxlength=160 type=text value="' + Data.options.sound.URL_attack + '" />&nbsp</td>' + '					<td><input id=' + setUID('tabTower_Play') + ' type=submit value=Play>' + '						<input id=' + setUID('tabTower_Stop') + ' type=submit value=Stop>' + '						<input id=' + setUID('tabTower_Default') + ' type=submit value=Default>' + '						<input id=' + setUID('tabTower_Test') + ' type=submit value=Test></td>' + '				</tr><tr valign=top>' + '					<td><label>' + translate('Spy sound file') + '</label></td>' + '					<td><input id=' + setUID('tabTower_SFile') + ' size=50 maxlength=160 type=text value="' + Data.options.sound.URL_spy + '" />&nbsp</td>' + '					<td><input id=' + setUID('tabTower_SPlay') + ' type=submit value=Play>' + '						<input id=' + setUID('tabTower_SStop') + ' type=submit value=Stop>' + '						<input id=' + setUID('tabTower_SDefault') + ' type=submit value=Default>' + '						<input id=' + setUID('tabTower_STest') + ' type=submit value=Test></td>' + '				</tr>' + '			</table>' + '		</td>' + '	</tr><tr valign=top>' + '		<td><label><input id=' + setUID('tabTower_Repeat') + ' type=checkbox ' + (Data.options.sound.repeat_attack ? 'CHECKED ' : '') + '/></label></td>' + '		<td><label>' + translate('Repeat attack alarm every') + ' </label>' + '			<input id=' + setUID('tabTower_Every') + ' size=2 maxlength=5 type=text value="' + Data.options.sound.attack_rdelay + '" />' + translate('minutes').toLowerCase() + '</td>' + '	</tr><tr valign=top>' + '		<td><label><input id=' + setUID('tabTower_SRepeat') + ' type=checkbox ' + (Data.options.sound.repeat_spy ? 'CHECKED ' : '') + '/></label></td>' + '		<td><label>' + translate('Repeat spy alarm every') + ' </label>' + '			<input id=' + setUID('tabTower_SEvery') + ' size=2 maxlength=5 type=text value="' + Data.options.sound.spy_rdelay + '" />' + translate('minutes').toLowerCase() + '</td>' + '	</tr>' + '</table>' + '</div>';
-				$(UID['tabTower_Content']).innerHTML = m;
+				document.getElementById(UID['tabTower_Content']).innerHTML = m;
 				togOpt(UID['tabTower_Alert'], Data.options.tower.enabled, setEnable);
 				togOpt(UID['tabTower_NoSpy'], Data.options.tower.nospy, setEnableNoSpy);
 				togOpt(UID['tabTower_Del'], Data.options.tower.delete_report, setDeleteReport);
 				togOpt(UID['tabTower_SendMsg'], Data.options.tower.send_message, setEnableMsg);
-				$(UID['tabTower_chkTime']).addEventListener('change', timeChanged, false);
-				$(UID['tabTower_chkUnit']).addEventListener('change', unitChanged, false);
-				$(UID['tabTower_DelTime']).addEventListener('change', timeDeleteChanged, false);
-				$(UID['tabTower_DelUnit']).addEventListener('change', unitDeleteChanged, false);
-				$(UID['tabTower_Sound']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabTower_chkTime']).addEventListener('change', timeChanged, false);
+				document.getElementById(UID['tabTower_chkUnit']).addEventListener('change', unitChanged, false);
+				document.getElementById(UID['tabTower_DelTime']).addEventListener('change', timeDeleteChanged, false);
+				document.getElementById(UID['tabTower_DelUnit']).addEventListener('change', unitDeleteChanged, false);
+				document.getElementById(UID['tabTower_Sound']).addEventListener('change', function(event) {
 					Data.options.sound.enable_sentinel = event.target.checked
 				}, false);
-				$(UID['tabTower_Repeat']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabTower_Repeat']).addEventListener('change', function(event) {
 					Data.options.sound.repeat_attack = event.target.checked
 				}, false);
-				$(UID['tabTower_SRepeat']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabTower_SRepeat']).addEventListener('change', function(event) {
 					Data.options.sound.repeat_spy = event.target.checked
 				}, false);
-				$(UID['tabTower_Every']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabTower_Every']).addEventListener('change', function(event) {
 					Data.options.sound.attack_rdelay = event.target.value
 				}, false);
-				$(UID['tabTower_SEvery']).addEventListener('change', function(event) {
+				document.getElementById(UID['tabTower_SEvery']).addEventListener('change', function(event) {
 					Data.options.sound.spy_rdelay = event.target.value
 				}, false);
 
-				$(UID['tabTower_File']).addEventListener('change', function() {
-					Data.options.sound.URL_attack = $(UID['tabTower_File']).value;
+				document.getElementById(UID['tabTower_File']).addEventListener('change', function() {
+					Data.options.sound.URL_attack = document.getElementById(UID['tabTower_File']).value;
 				}, false);
-				$(UID['tabTower_Play']).addEventListener('click', function() {
+				document.getElementById(UID['tabTower_Play']).addEventListener('click', function() {
 					playSound('attack')
 				}, false);
-				$(UID['tabTower_Stop']).addEventListener('click', function() {
+				document.getElementById(UID['tabTower_Stop']).addEventListener('click', function() {
 					stopSound('attack')
 				}, false);
-				$(UID['tabTower_Default']).addEventListener('click', function() {
-					$(UID['tabTower_File']).value = SoundPlayer.DEFAULT_SOUND_URL.attack;
+				document.getElementById(UID['tabTower_Default']).addEventListener('click', function() {
+					document.getElementById(UID['tabTower_File']).value = SoundPlayer.DEFAULT_SOUND_URL.attack;
 					Data.options.sound.URL_attack = SoundPlayer.DEFAULT_SOUND_URL.attack;
 					playSound('attack');
 				}, false);
-				$(UID['tabTower_Test']).addEventListener('click', testAlarmReport, false);
-				$(UID['tabTower_Stop']).disabled = true;
+				document.getElementById(UID['tabTower_Test']).addEventListener('click', testAlarmReport, false);
+				document.getElementById(UID['tabTower_Stop']).disabled = true;
 
-				$(UID['tabTower_SFile']).addEventListener('change', function() {
-					Data.options.sound.URL_spy = $(UID['tabTower_SFile']).value;
+				document.getElementById(UID['tabTower_SFile']).addEventListener('change', function() {
+					Data.options.sound.URL_spy = document.getElementById(UID['tabTower_SFile']).value;
 				}, false);
-				$(UID['tabTower_SPlay']).addEventListener('click', function() {
+				document.getElementById(UID['tabTower_SPlay']).addEventListener('click', function() {
 					playSound('spy')
 				}, false);
-				$(UID['tabTower_SStop']).addEventListener('click', function() {
+				document.getElementById(UID['tabTower_SStop']).addEventListener('click', function() {
 					stopSound('spy')
 				}, false);
-				$(UID['tabTower_SDefault']).addEventListener('click', function() {
-					$(UID['tabTower_SFile']).value = SoundPlayer.DEFAULT_SOUND_URL.spy;
+				document.getElementById(UID['tabTower_SDefault']).addEventListener('click', function() {
+					document.getElementById(UID['tabTower_SFile']).value = SoundPlayer.DEFAULT_SOUND_URL.spy;
 					Data.options.sound.URL_spy = SoundPlayer.DEFAULT_SOUND_URL.spy;
 					playSound('spy');
 				}, false);
-				$(UID['tabTower_STest']).addEventListener('click', testSpyReport, false);
-				$(UID['tabTower_SStop']).disabled = true;
+				document.getElementById(UID['tabTower_STest']).addEventListener('click', testSpyReport, false);
+				document.getElementById(UID['tabTower_SStop']).disabled = true;
 
 				function playSound(type) {
 					var t = Tabs.Tower;
 					try {
 						if (type == 'attack')
-							$(UID['tabTower_Stop']).disabled = false;
-						else $(UID['tabTower_SStop']).disabled = false;
+							document.getElementById(UID['tabTower_Stop']).disabled = false;
+						else document.getElementById(UID['tabTower_SStop']).disabled = false;
 					} catch (e) {}
 					SoundPlayer.PlaySound(type, true);
 				}
@@ -26126,8 +28657,8 @@
 					var t = Tabs.Tower;
 					SoundPlayer.StopSound(type);
 					if (type == 'attack')
-						$(UID['tabTower_Stop']).disabled = true;
-					else $(UID['tabTower_SStop']).disabled = true;
+						document.getElementById(UID['tabTower_Stop']).disabled = true;
+					else document.getElementById(UID['tabTower_SStop']).disabled = true;
 				}
 
 				function testAlarmReport() {
@@ -26186,7 +28717,7 @@
 
 				function timeChanged(event) {
 					var t = Tabs.Tower;
-					var etime = $(UID['tabTower_chkTime']);
+					var etime = document.getElementById(UID['tabTower_chkTime']);
 					var time = toNum(etime.value);
 					etime.value = time;
 					Data.options.tower.delay = time;
@@ -26194,7 +28725,7 @@
 
 				function timeDeleteChanged(event) {
 					var t = Tabs.Tower;
-					var etime = $(UID['tabTower_DelTime']);
+					var etime = document.getElementById(UID['tabTower_DelTime']);
 					var time = toNum(etime.value);
 					etime.value = time;
 					Data.options.tower.delete_delay = time;
@@ -26203,7 +28734,7 @@
 
 				function togOpt(checkboxId, optionVar, callEnable, callIsAvailable) {
 					var t = Tabs.Tower;
-					var checkbox = $(checkboxId);
+					var checkbox = document.getElementById(checkboxId);
 					if (callIsAvailable && callIsAvailable() == false) {
 						checkbox.disabled = true;
 						return;
@@ -26226,7 +28757,7 @@
 
 				function unitChanged(event) {
 					var t = Tabs.Tower;
-					var eunit = $(UID['tabTower_chkUnit']);
+					var eunit = document.getElementById(UID['tabTower_chkUnit']);
 					var unit = toNum(eunit.value);
 					eunit.value = unit;
 					Data.options.tower.unit = unit;
@@ -26234,7 +28765,7 @@
 
 				function unitDeleteChanged(event) {
 					var t = Tabs.Tower;
-					var eunit = $(UID['tabTower_DelUnit']);
+					var eunit = document.getElementById(UID['tabTower_DelUnit']);
 					var unit = toNum(eunit.value);
 					eunit.value = unit;
 					Data.options.tower.delete_unit = unit;
@@ -26244,20 +28775,20 @@
 
 			tabTowerMessage: function() {
 				var t = Tabs.Tower;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabTowerMessage']).className = 'selected';
-				$(UID['tabTowerMessage']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabTowerMessage']).className = 'selected';
+				document.getElementById(UID['tabTowerMessage']).style.zIndex = 1;
 				t.lastSubTab = 'tabTowerMessage';
 
 				t.contentType = 2;
 				var m = '<div class="' + UID['title'] + '">' + translate('Message configuration') + '</div>' + '<div id=' + setUID('tabTower_MsgBox') + ' class=' + UID['status_ticker'] + ' style="height:355px; max-height:355px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important">' + '<table class=' + UID['table'] + ' width=100% style="color:#000;">' + '	<tr valign=top>' + '		<td><label>' + translate('Subject') + ' :</label></td>' + '		<td><input id=' + setUID('tabTower_subject') + ' size=50 maxlength=160 type=text value="' + Data.options.tower.msg_subject + '" /></td>' + '	</tr><tr valign=top>' + '		<td><label>' + translate('Message') + ' :</label></td>' + '		<td><textarea id=' + setUID('tabTower_body') + ' cols="60" rows="10" wrap="PHYSICAL">' + Data.options.tower.msg_body + '</textarea></td>' + '	</tr>' + '</table>' + '<br>' + '<table class=' + UID['table'] + ' style="color:#000;">' + '	<tr valign=top>' + '		<td><b>' + translate('Parameters') + ' :</b></td>' + '	</tr><tr valign=top>' + '		<td><label>%1 = ' + translate('Ennemy name and alliance') + '</label></td>' + '	</tr><tr valign=top>' + '		<td><label>%2 = ' + translate('Ennemy coordinates') + '</label></td>' + '	</tr><tr valign=top>' + '		<td><label>%3 = ' + translate('Attack forces') + '</label></td>' + '	</tr><tr valign=top>' + '		<td><label>%4 = ' + translate('Attack arrival time') + '</label></td>' + '	</tr><tr valign=top>' + '		<td><label>%5 = ' + translate('My name') + '</label></td>' + '	</tr><tr valign=top>' + '		<td><label>%6 = ' + translate('My city/OP name where the attack is coming') + '</label></td>' + '	</tr><tr valign=top>' + '		<td><label>%7 = ' + translate('My city/OP coordinates') + '</label></td>' + '	</tr>' + '</table>' + '</div>';
-				$(UID['tabTower_Content']).innerHTML = m;
-				$(UID['tabTower_subject']).addEventListener('change', function() {
-					Data.options.tower.msg_subject = $(UID['tabTower_subject']).value
+				document.getElementById(UID['tabTower_Content']).innerHTML = m;
+				document.getElementById(UID['tabTower_subject']).addEventListener('change', function() {
+					Data.options.tower.msg_subject = document.getElementById(UID['tabTower_subject']).value
 				}, false);
-				$(UID['tabTower_body']).addEventListener('change', function() {
-					Data.options.tower.msg_body = $(UID['tabTower_body']).value
+				document.getElementById(UID['tabTower_body']).addEventListener('change', function() {
+					Data.options.tower.msg_body = document.getElementById(UID['tabTower_body']).value
 				}, false);
 			},
 
@@ -26288,7 +28819,7 @@
 			displayWarning: function() {
 				var t = Tabs.Tower;
 				var m = SoundPlayer.alertString.replace('&incoming_spy&', (SoundPlayer.getFirstAlert()).spy).replace('&incoming_attack&', (SoundPlayer.getFirstAlert()).attack);
-				$(UID['tabTower_Warning']).innerHTML = m;
+				document.getElementById(UID['tabTower_Warning']).innerHTML = m;
 			},
 			printTab: function() {
 				var t = Tabs.Tower;
@@ -26369,9 +28900,9 @@
 					}
 				}
 				if (!head && msg.type == 0 && msg.op != 0) {
-					if ($(UID['goto_reinforcement'])) {
-						$(UID['goto_reinforcement']).addEventListener('click', function(event) {
-							var cityId = $(UID['goto_reinforcement']).getAttribute('ref');
+					if (document.getElementById(UID['goto_reinforcement'])) {
+						document.getElementById(UID['goto_reinforcement']).addEventListener('click', function(event) {
+							var cityId = document.getElementById(UID['goto_reinforcement']).getAttribute('ref');
 							if (toNum(cityId) != 0) Data.options.alliance.reinforce_id = cityId;
 							var t = tabManager;
 							for (k in t.tabList)
@@ -26380,8 +28911,8 @@
 									break;
 								}
 							if (t.currentTab.name != newTab.name) {
-								t.setTabStyle($(newTab.uid), true);
-								t.setTabStyle($(t.currentTab.uid), false);
+								t.setTabStyle(document.getElementById(newTab.uid), true);
+								t.setTabStyle(document.getElementById(t.currentTab.uid), false);
 								t.currentTab.obj.hide();
 								t.currentTab.div.style.display = 'none';
 								t.currentTab = newTab;
@@ -26500,9 +29031,6 @@
 				return result;
 			}
 		}
-		/******************************** Tower Tab **********************************/
-
-		/******************************** Wall features Tab **************************/
 		Tabs.Wall = {
 			tabOrder: WALL_TAB_ORDER,
 			tabLabel: 'Wall',
@@ -26523,10 +29051,10 @@
 				t.container = div;
 				var m = '<div class=' + UID['title'] + '>' + translate('wall-choose-defenders') + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabWallManagement') + '>' + translate('Wall management') + '</a></li>' + '	<li class="tab first"><a id=' + setUID('tabAutoWallManagement') + '>' + translate('Auto') + ' ' + translate('Wall') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabWallSetDefense') + '>' + translate('wall-manage-defense') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabDragonManagement') + '>' + translate('Dragons management') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabWall_Content') + ' style="padding-top:0px; height:655px; max-height:655px; overflow-y:auto; width:540px; max-width:540px; overflow-x:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabWallManagement']).addEventListener('click', t.tabWallManagement, false);
-				$(UID['tabWallSetDefense']).addEventListener('click', t.tabWallSetDefense, false);
-				$(UID['tabDragonManagement']).addEventListener('click', t.tabDragonManagement, false);
-				$(UID['tabAutoWallManagement']).addEventListener('click', t.tabAutoWallManagement, false);
+				document.getElementById(UID['tabWallManagement']).addEventListener('click', t.tabWallManagement, false);
+				document.getElementById(UID['tabWallSetDefense']).addEventListener('click', t.tabWallSetDefense, false);
+				document.getElementById(UID['tabDragonManagement']).addEventListener('click', t.tabDragonManagement, false);
+				document.getElementById(UID['tabAutoWallManagement']).addEventListener('click', t.tabAutoWallManagement, false);
 				
 				window.addEventListener('unload', t.onUnload, false);
 				t.contentType = toNum(Data.options.wall.current_tab);
@@ -26560,16 +29088,16 @@
 			/** WALL MANAGEMENT SUB-TAB ** */
 			tabWallManagement: function() {
 				var t = Tabs.Wall;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWallManagement']).className = 'selected';
-				$(UID['tabWallManagement']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWallManagement']).className = 'selected';
+				document.getElementById(UID['tabWallManagement']).style.zIndex = 1;
 				t.lastSubTab = 'tabWallManagement';
 
 				t.contentType = 0;
 
 				var m = '<div id=' + setUID('tabWall_Results') + ' style="height:640px">' + '	<div class=' + UID['title'] + '>' + translate('Wall management') + '</div>' + '	<div id=' + setUID('tabWall_ResultList') + ' class=' + UID['status_ticker'] + ' style="height:600px; max-height:600px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabWall_Content']).innerHTML = m;
+				document.getElementById(UID['tabWall_Content']).innerHTML = m;
 
 				var el = [];
 				var wallStatus = translate((Seed.cities[CAPITAL.id].defended) ? 'Defend' : 'Hiding').toUpperCase();
@@ -26581,14 +29109,14 @@
 					m += '<tr valign=middle style="border-bottom: 1px solid #898989; background-color:' + row_style + '"><td width=15%>' + Data.options.wall.presets[i].name + '</td>' + '	<td align=left width=55%>' + getTroops(Data.options.wall.presets[i].units, ' ') + ', ' + translate(Data.options.wall.presets[i].scales) + ',' + translate(Data.options.wall.presets[i].armor) + '</td>' + '	<td align=center width=30%>' + '      <input id=' + setUID('tabWall_SetDefense_' + i) + ' ref=' + i + ' class="Xtrasmall ' + UID['btn_blue'] + '" style="width:auto !important;" type=submit value="' + translate('Set Def') + '" />&nbsp' + '		<input id=' + setUID('tabWall_Edit_' + i) + ' ref=' + i + ' class="Xtrasmall ' + UID['btn_green'] + '" style="width:auto !important;" type=submit value="' + translate('Edit') + '" />&nbsp' + '		<input id=' + setUID('tabWall_Delete_' + i) + ' ref=' + i + ' class="Xtrasmall ' + UID['btn_red'] + '" style="width:auto !important;" type=submit value=" X " /></td>' + '</tr>';
 					el.push(UID['tabWall_SetDefense_' + i]);
 				}
-				$(UID['tabWall_ResultList']).innerHTML = m + '</table>';
-				$(UID['tabWall_AllDef']).addEventListener('click', onClickAllDef, false);
-				$(UID['tabWall_NoDef']).addEventListener('click', onClickNoDef, false);
-				$(UID['tabWall_setWallStat']).addEventListener('click', switchDefense, false);
+				document.getElementById(UID['tabWall_ResultList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabWall_AllDef']).addEventListener('click', onClickAllDef, false);
+				document.getElementById(UID['tabWall_NoDef']).addEventListener('click', onClickNoDef, false);
+				document.getElementById(UID['tabWall_setWallStat']).addEventListener('click', switchDefense, false);
 				for (var i = 0; i < el.length; i++) {
-					var butSetDef = $(UID['tabWall_SetDefense_' + i]);
-					var butEdit = $(UID['tabWall_Edit_' + i]);
-					var butDelete = $(UID['tabWall_Delete_' + i]);
+					var butSetDef = document.getElementById(UID['tabWall_SetDefense_' + i]);
+					var butEdit = document.getElementById(UID['tabWall_Edit_' + i]);
+					var butDelete = document.getElementById(UID['tabWall_Delete_' + i]);
 					butSetDef.addEventListener('click', onClickSetDef, false);
 					butEdit.addEventListener('click', onClickEdit, false);
 					butDelete.addEventListener('click', onClickDelete, false);
@@ -26714,10 +29242,10 @@
 			/** AUTO WALL SUB-TAB ** */
 			tabAutoWallManagement: function() {
 				var t = Tabs.Wall;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabAutoWallManagement']).className = 'selected';
-				$(UID['tabAutoWallManagement']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabAutoWallManagement']).className = 'selected';
+				document.getElementById(UID['tabAutoWallManagement']).style.zIndex = 1;
 				t.lastSubTab = 'tabAutoWallManagement';
 				t.contentType = 3;
 
@@ -26783,46 +29311,46 @@
 						+ ' </table>'
 						+ '</div>';
 
-				$(UID['tabWall_Content']).innerHTML = m;
+				document.getElementById(UID['tabWall_Content']).innerHTML = m;
 				
-				$(UID['tabAutoWallEnable']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAutoWallEnable']).addEventListener('click', function(event) {
 					Data.options.wall.auto.enable = event.target.checked;
 				}, false);
-				$(UID['tabAutoWallHideTroopEndAlert']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAutoWallHideTroopEndAlert']).addEventListener('click', function(event) {
 					Data.options.wall.auto.hide_troop_after_last = event.target.checked;
 				}, false);
-				$(UID['tabAutoWallAttackUseTruce']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAutoWallAttackUseTruce']).addEventListener('click', function(event) {
 					Data.options.wall.auto.attack.use_truce = event.target.checked;
 				}, false);
-				$(UID['tabAutoWallSpyUseTruce']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAutoWallSpyUseTruce']).addEventListener('click', function(event) {
 					Data.options.wall.auto.spy.use_truce = event.target.checked;
 				}, false);
-				$(UID['tabAutoWallAttackHideMulti']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabAutoWallAttackHideMulti']).addEventListener('click', function(event) {
 					Data.options.wall.auto.attack.hide_troop_on_multi_attack = event.target.checked;
 				}, false);
-				$(UID['tabAutoWall_SelBoxPreset_attack_0']).addEventListener('change', function(event) {
-					Data.options.wall.auto.attack.preset_default = $(UID['tabAutoWall_SelBoxPreset_attack_0']).options[$(UID['tabAutoWall_SelBoxPreset_attack_0']).selectedIndex].value;
-					$(UID['tabAutoWall_SelBoxPreset_Troop_attack_0']).innerHTML = getTroops(Data.options.wall.presets[Data.options.wall.auto.attack.preset_default].units, ' ');
+				document.getElementById(UID['tabAutoWall_SelBoxPreset_attack_0']).addEventListener('change', function(event) {
+					Data.options.wall.auto.attack.preset_default = document.getElementById(UID['tabAutoWall_SelBoxPreset_attack_0']).options[document.getElementById(UID['tabAutoWall_SelBoxPreset_attack_0']).selectedIndex].value;
+					document.getElementById(UID['tabAutoWall_SelBoxPreset_Troop_attack_0']).innerHTML = getTroops(Data.options.wall.presets[Data.options.wall.auto.attack.preset_default].units, ' ');
 				}, false);
-				$(UID['tabAutoWall_SelBoxPreset_spy_0']).addEventListener('change', function(event) {
-					Data.options.wall.auto.spy.preset[0] = $(UID['tabAutoWall_SelBoxPreset_spy_0']).options[$(UID['tabAutoWall_SelBoxPreset_spy_0']).selectedIndex].value;
-					$(UID['tabAutoWall_SelBoxPreset_Troop_spy_0']).update(getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[0]].units, ' '));
+				document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_0']).addEventListener('change', function(event) {
+					Data.options.wall.auto.spy.preset[0] = document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_0']).options[document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_0']).selectedIndex].value;
+					document.getElementById(UID['tabAutoWall_SelBoxPreset_Troop_spy_0']).innerHTML = (getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[0]].units, ' '));
 				}, false);
-				$(UID['tabAutoWall_SelBoxPreset_spy_1']).addEventListener('change', function(event) {
-					Data.options.wall.auto.spy.preset[1] = $(UID['tabAutoWall_SelBoxPreset_spy_1']).options[$(UID['tabAutoWall_SelBoxPreset_spy_1']).selectedIndex].value;
-					$(UID['tabAutoWall_SelBoxPreset_Troop_spy_1']).update(getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[1]].units, ' '));
+				document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_1']).addEventListener('change', function(event) {
+					Data.options.wall.auto.spy.preset[1] = document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_1']).options[document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_1']).selectedIndex].value;
+					document.getElementById(UID['tabAutoWall_SelBoxPreset_Troop_spy_1']).innerHTML = (getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[1]].units, ' '));
 				}, false);
-				$(UID['tabAutoWall_SelBoxPreset_spy_2']).addEventListener('change', function(event) {
-					Data.options.wall.auto.spy.preset[2] = $(UID['tabAutoWall_SelBoxPreset_spy_2']).options[$(UID['tabAutoWall_SelBoxPreset_spy_2']).selectedIndex].value;
-					$(UID['tabAutoWall_SelBoxPreset_Troop_spy_2']).update(getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[2]].units, ' '));
+				document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_2']).addEventListener('change', function(event) {
+					Data.options.wall.auto.spy.preset[2] = document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_2']).options[document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_2']).selectedIndex].value;
+					document.getElementById(UID['tabAutoWall_SelBoxPreset_Troop_spy_2']).innerHTML = (getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[2]].units, ' '));
 				}, false);
-				$(UID['tabAutoWall_SelBoxPreset_spy_3']).addEventListener('change', function(event) {
-					Data.options.wall.auto.spy.preset[3] = $(UID['tabAutoWall_SelBoxPreset_spy_3']).options[$(UID['tabAutoWall_SelBoxPreset_spy_3']).selectedIndex].value;
-					$(UID['tabAutoWall_SelBoxPreset_Troop_spy_3']).update(getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[3]].units, ' '));
+				document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_3']).addEventListener('change', function(event) {
+					Data.options.wall.auto.spy.preset[3] = document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_3']).options[document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_3']).selectedIndex].value;
+					document.getElementById(UID['tabAutoWall_SelBoxPreset_Troop_spy_3']).innerHTML = (getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[3]].units, ' '));
 				}, false);
-				$(UID['tabAutoWall_SelBoxPreset_spy_4']).addEventListener('change', function(event) {
-					Data.options.wall.auto.spy.preset[4] = $(UID['tabAutoWall_SelBoxPreset_spy_4']).options[$(UID['tabAutoWall_SelBoxPreset_spy_4']).selectedIndex].value;
-					$(UID['tabAutoWall_SelBoxPreset_Troop_spy_4']).update(getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[4]].units, ' '));
+				document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_4']).addEventListener('change', function(event) {
+					Data.options.wall.auto.spy.preset[4] = document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_4']).options[document.getElementById(UID['tabAutoWall_SelBoxPreset_spy_4']).selectedIndex].value;
+					document.getElementById(UID['tabAutoWall_SelBoxPreset_Troop_spy_4']).innerHTML = (getTroops(Data.options.wall.presets[Data.options.wall.auto.spy.preset[4]].units, ' '));
 				}, false);
 				
 				function getPresetList(type, nb, def) {
@@ -26851,10 +29379,10 @@
 			/** WALL DEFENSE PRESET EDIT SUB-TAB ** */
 			tabWallSetDefense: function() {
 				var t = Tabs.Wall;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWallSetDefense']).className = 'selected';
-				$(UID['tabWallSetDefense']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWallSetDefense']).className = 'selected';
+				document.getElementById(UID['tabWallSetDefense']).style.zIndex = 1;
 				t.lastSubTab = 'tabWallSetDefense';
 				t.contentType = 1;
 
@@ -26885,35 +29413,35 @@
 
 				m += '</table><br>' + '<table class=' + UID['table'] + ' style="margin-top:3px" width=60%>' + '	<tr valign=top align=center>' + '		<td width=25%><label><input id=' + setUID('tabWall_savePreset') + ' type=button value="' + translate('Save preset') + '" /></label></td>' + '		<td width=25%><label><input id=' + setUID('tabWall_setDefense') + ' type=button value="' + translate('wall-update-defenders') + '" /></label></td>' + '	</tr>' + '</table><br>' + '<br>' + '<br><div id=' + setUID('tabDragonManagement_Feedback') + ' class=' + UID['status_feedback'] + '></div></div></div>'; + '<br></div></div>';
 
-				$(UID['tabWall_Content']).innerHTML = m;
-				$(UID['tabWall_Name']).addEventListener('change', function() {
-					Data.options.wall.preset.name = $(UID['tabWall_Name']).value
+				document.getElementById(UID['tabWall_Content']).innerHTML = m;
+				document.getElementById(UID['tabWall_Name']).addEventListener('change', function() {
+					Data.options.wall.preset.name = document.getElementById(UID['tabWall_Name']).value
 				}, false);
-				$(UID['tabWall_setAll']).addEventListener('click', onClickSetAll, false);
-				$(UID['tabWall_clearAll']).addEventListener('click', onClickClearAll, false);
-				$(UID['tabWall_savePreset']).addEventListener('click', onClickSavePreset, false);
-				$(UID['tabWall_setDefense']).addEventListener('click', onClickSetDefense, false);
+				document.getElementById(UID['tabWall_setAll']).addEventListener('click', onClickSetAll, false);
+				document.getElementById(UID['tabWall_clearAll']).addEventListener('click', onClickClearAll, false);
+				document.getElementById(UID['tabWall_savePreset']).addEventListener('click', onClickSavePreset, false);
+				document.getElementById(UID['tabWall_setDefense']).addEventListener('click', onClickSetDefense, false);
 
 				for (var gd = 0; gd < Seed.dragonList.length; gd++) {
 					if (Seed.dragons[Seed.dragonList[gd].type].name == 'GreatDragon') {
-						if ($(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id])) {
-							$(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id]).addEventListener('change', eventScales, false);
-							if($(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id]).value == Data.options.wall.preset.scales) {
-								$(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id]).value = Data.options.wall.preset.scales;
+						if (document.getElementById(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id])) {
+							document.getElementById(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id]).addEventListener('change', eventScales, false);
+							if(document.getElementById(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id]).value == Data.options.wall.preset.scales) {
+								document.getElementById(UID['preset_scales_' + Seed.dragons[Seed.dragonList[gd].type].id]).value = Data.options.wall.preset.scales;
 							}
 						}
-						if ($(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id])) {
-							$(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id]).addEventListener('change', eventArmor, false);
-							if($(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id]).value == Data.options.wall.preset.armor) {
-								$(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id]).value = Data.options.wall.preset.armor;
+						if (document.getElementById(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id])) {
+							document.getElementById(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id]).addEventListener('change', eventArmor, false);
+							if(document.getElementById(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id]).value == Data.options.wall.preset.armor) {
+								document.getElementById(UID['preset_armor_' + Seed.dragons[Seed.dragonList[gd].type].id]).value = Data.options.wall.preset.armor;
 							}
 						}
 					}
 				}
 
 				for (i = 0; i < all_unit_types.length; i++) {
-					$(UIDTrp + '_' + i).addEventListener('change', eventTroops, false);
-					butMax = $(UIDMax + '_' + i);
+					document.getElementById(UIDTrp + '_' + i).addEventListener('change', eventTroops, false);
+					butMax = document.getElementById(UIDMax + '_' + i);
 					butMax.addEventListener('click', setTroupsMax, false);
 					setButtonStyle(butMax, true, 'btn_green');
 				}
@@ -26926,8 +29454,8 @@
 							greatDragon = Seed.dragons[Seed.dragonList[gd].type];
 						}
 					}
-					if ($(UID['preset_scales_' + greatDragon.id]))
-						Data.options.wall.preset.scales = $(UID['preset_scales_' + greatDragon.id]).value;
+					if (document.getElementById(UID['preset_scales_' + greatDragon.id]))
+						Data.options.wall.preset.scales = document.getElementById(UID['preset_scales_' + greatDragon.id]).value;
 					else
 						Data.options.wall.preset.scales = '';
 				}
@@ -26940,8 +29468,8 @@
 							greatDragon = Seed.dragons[Seed.dragonList[gd].type];
 						}
 					}
-					if ($(UID['preset_armor_' + greatDragon.id]))
-						Data.options.wall.preset.armor = $(UID['preset_armor_' + greatDragon.id]).value;
+					if (document.getElementById(UID['preset_armor_' + greatDragon.id]))
+						Data.options.wall.preset.armor = document.getElementById(UID['preset_armor_' + greatDragon.id]).value;
 					else
 						Data.options.wall.preset.armor = '';
 				}
@@ -26950,7 +29478,7 @@
 					var args = event.target.id.split('_');
 					var x = toNum(event.target.value);
 					for (i = 0; i < all_unit_types.length; i++)
-						$(UID['tabWall_Trp'] + '_' + i).style.backgroundColor = '';
+						document.getElementById(UID['tabWall_Trp'] + '_' + i).style.backgroundColor = '';
 					if (isNaN(x) || x < -1)
 						event.target.style.backgroundColor = 'red';
 					else event.target.style.backgroundColor = '';
@@ -27073,10 +29601,10 @@
 			/** WALL DRAGON DEFENSE SUB-TAB ** */
 			tabDragonManagement: function() {
 				var t = Tabs.Wall;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabDragonManagement']).className = 'selected';
-				$(UID['tabDragonManagement']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabDragonManagement']).className = 'selected';
+				document.getElementById(UID['tabDragonManagement']).style.zIndex = 1;
 				t.lastSubTab = 'tabDragonManagement';
 				t.contentType = 2;
 
@@ -27101,11 +29629,11 @@
 
 				m += '</table><br>' + '<br>' + '<br><div id=' + setUID('tabDragonManagement_Feedback') + ' class=' + UID['status_feedback'] + '></div></div></div>';
 
-				$(UID['tabWall_Content']).innerHTML = m;
+				document.getElementById(UID['tabWall_Content']).innerHTML = m;
 
 				for (var gd = 0; gd < Seed.dragonList.length; gd++) {
 					var dragon = Seed.dragons[Seed.dragonList[gd].type];
-					$(UID['eq' + '_' + dragon.id]).addEventListener('click', onClickSetCustomization, false);
+					document.getElementById(UID['eq' + '_' + dragon.id]).addEventListener('click', onClickSetCustomization, false);
 				}
 
 				function onClickSetCustomization(event) {
@@ -27114,11 +29642,11 @@
 					var dragonId = args[2];
 					var armorDrg, scalesDrg;
 
-					if ($(UID['armor_' + dragonId]))
-						armorDrg = $(UID['armor_' + dragonId]).value;
+					if (document.getElementById(UID['armor_' + dragonId]))
+						armorDrg = document.getElementById(UID['armor_' + dragonId]).value;
 
-					if ($(UID['scales_' + dragonId]))
-						scalesDrg = $(UID['scales_' + dragonId]).value;
+					if (document.getElementById(UID['scales_' + dragonId]))
+						scalesDrg = document.getElementById(UID['scales_' + dragonId]).value;
 
 					new MyAjax.setCustomization(dragonName, armorDrg, scalesDrg,
 						function(rslt) {
@@ -27169,11 +29697,7 @@
 				}
 
 			}
-
 		}
-		/******************************** Wall features Tab **************************/
-
-		/******************************** Wave Tab ***********************************/
 		Tabs.Waves = {
 			tabOrder: WAVE_TAB_ORDER,
 			tabLabel: 'Wave',
@@ -27197,11 +29721,11 @@
 				t.container = div;
 				var m = '' + '<div class=' + UID['title'] + '>' + translate('Wave') + '</div>' + '<div id=' + setUID('tabWave_Status') + ' class=' + UID['status_ticker'] + ' style="margin-bottom:5px !important">' + '	<center><input id=' + setUID('tabWave_OnOff') + ' type=button value="OnOff" /></center>' + '	<div id=' + setUID('tabWave_Report') + ' style="margin-top:5px;height:140px; max-height:140px; width:540px; max-width:540px; overflow:auto;">' + '		<table id=' + setUID('tabWave_Marches') + ' class=' + UID['table'] + '>' + '		</table>' + '	</div>' + '	<div id=' + setUID('tabWave_Feedback') + ' class=' + UID['status_feedback'] + '></div>' + '</div>' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabWaveAttack') + '>' + translate('Attack') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabWaveHistory') + '>' + translate('History') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabWaveStats') + '>' + translate('Stats') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabWaveLastReport') + '>' + translate('Last report') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabWave_Content') + ' style="padding-top:0px; height:440px; overflow-y:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabWaveAttack']).addEventListener('click', t.tabWaveAttack, false);
-				$(UID['tabWaveHistory']).addEventListener('click', t.tabWaveHistory, false);
-				$(UID['tabWaveStats']).addEventListener('click', t.tabWaveStats, false);
-				$(UID['tabWaveLastReport']).addEventListener('click', t.tabWaveLastReport, false);
-				$(UID['tabWave_OnOff']).addEventListener('click', function() {
+				document.getElementById(UID['tabWaveAttack']).addEventListener('click', t.tabWaveAttack, false);
+				document.getElementById(UID['tabWaveHistory']).addEventListener('click', t.tabWaveHistory, false);
+				document.getElementById(UID['tabWaveStats']).addEventListener('click', t.tabWaveStats, false);
+				document.getElementById(UID['tabWaveLastReport']).addEventListener('click', t.tabWaveLastReport, false);
+				document.getElementById(UID['tabWave_OnOff']).addEventListener('click', function() {
 					t.setWaveEnable(!Data.options.waves.enabled);
 				}, false);
 				window.addEventListener('unload', t.onUnload, false);
@@ -27212,10 +29736,10 @@
 
 			tabWaveAttack: function() {
 				var t = Tabs.Waves;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWaveAttack']).className = 'selected';
-				$(UID['tabWaveAttack']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWaveAttack']).className = 'selected';
+				document.getElementById(UID['tabWaveAttack']).style.zIndex = 1;
 				t.lastSubTab = 'tabWaveAttack';
 				t.contentType = 0;
 				var m = '<div class="' + UID['title'] + '">' + translate('Attacks') + ' ( ' + translate('Max') + '. ' + translate('Troops') + ' ' + numf(toNum((getMusterPoint(CAPITAL.id)).max_troops), ' ') + ' )</div>' + '<div class=' + UID['content'] + '>' + '	<div>' + '		<b>' + translate('Coords') + ':&nbsp;</b>&nbsp;' + '		X: <input id=' + setUID('tabWave_CoordsX') + ' size=1 maxlength=3 type=text value="' + Data.options.waves.target.x + '" /> ' + '		Y: <input id=' + setUID('tabWave_CoordsY') + ' size=2 maxlength=3 type=text value="' + Data.options.waves.target.y + '" /> ' + '		&nbsp <b>' + translate('Distance') + ':</b> <span id=' + setUID('tabWave_Distance') + '></span>' + '		&nbsp <input id=' + setUID('tabWave_Save') + ' class="' + UID['btn_green'] + ' small" style="width:auto !important;" type=submit value=" ' + translate('Save') + ' " />' + '		&nbsp <input id=' + setUID('tabWave_Spy') + ' class="' + UID['btn_green'] + ' small" style="width:auto !important;" type=submit value=" ' + translate('Spy') + ' " />' + '		&nbsp <input id=' + setUID('tabWave_Bookmark') + ' class="' + UID['btn_blue'] + ' small" style="width:auto !important;" type=submit value=" ' + translate('Bookmark') + ' " />';
@@ -27233,33 +29757,33 @@
 					currentDragons.push(j);
 				}
 				m += '</tr>' + '	</table>' + '	</div><br>' + '	<table class=' + UID['table'] + '>' + '		<tr>' + '			<td class=right> ' + translate('Delete Battle Reports') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabWave_DelReports') + ' type=checkbox ' + (Data.options.waves.delete_reports ? 'CHECKED' : '') + ' /></td>' + '		</tr><tr>' + '			<td class=right>' + translate('Stop if any troops lost') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabWave_StopOnLoss') + ' type=checkbox ' + (Data.options.waves.stop_on_loss ? 'CHECKED' : '') + ' /></td>' + '		</tr><tr>' + '			<td class=right>' + translate('Delay Between Attacks') + ':&nbsp;</td>' + '			<td>' + '				<input id=' + setUID('tabWave_DelayMin') + ' type=text size=1 maxlength=4 value="' + Data.options.waves.delay_min + '" />' + '				 to <span id=' + setUID('tabWave_DelayMax') + '>' + Data.options.waves.delay_max + '</span>&nbsp;' + translate('seconds') + '			</td>' + '		</tr><tr>' + '			<td class=right> ' + translate('Maximum simultaneous marches') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabWave_MaxMarches') + ' type=text size=1 maxlength=2 value="' + Data.options.waves.max_marches + '" /></td>' + '		</tr><tr>' + '			<td class=right> ' + translate('Send even without Dragon') + ':&nbsp;</td>' + '			<td><input id=' + setUID('tabWave_SendWithoutDragon') + ' type=checkbox ' + (Data.options.waves.send_without_dragon ? 'CHECKED' : '') + ' /></td>' + '		</tr>' + '	</table>' + '</div>';
-				$(UID['tabWave_Content']).innerHTML = m;
-				$(UID['tabWave_CoordsX']).addEventListener('change', t.eventCoords, false);
-				$(UID['tabWave_CoordsY']).addEventListener('change', t.eventCoords, false);
-				$(UID['tabWave_Save']).addEventListener('click', saveCoords, false);
-				$(UID['tabWave_Bookmark']).addEventListener('click', addBookmark, false);
-				$(UID['tabWave_Comment']).addEventListener('change', function() {
-					Data.options.waves.target.comment = $(UID['tabWave_Comment']).value
+				document.getElementById(UID['tabWave_Content']).innerHTML = m;
+				document.getElementById(UID['tabWave_CoordsX']).addEventListener('change', t.eventCoords, false);
+				document.getElementById(UID['tabWave_CoordsY']).addEventListener('change', t.eventCoords, false);
+				document.getElementById(UID['tabWave_Save']).addEventListener('click', saveCoords, false);
+				document.getElementById(UID['tabWave_Bookmark']).addEventListener('click', addBookmark, false);
+				document.getElementById(UID['tabWave_Comment']).addEventListener('change', function() {
+					Data.options.waves.target.comment = document.getElementById(UID['tabWave_Comment']).value
 				}, false);
-				$(UID['tabWave_DelReports']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabWave_DelReports']).addEventListener('click', function(event) {
 					Data.options.waves.delete_reports = event.target.checked;
 				}, false);
-				$(UID['tabWave_StopOnLoss']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabWave_StopOnLoss']).addEventListener('click', function(event) {
 					Data.options.waves.stop_on_loss = event.target.checked;
 				}, false);
-				$(UID['tabWave_SendWithoutDragon']).addEventListener('click', function(event) {
+				document.getElementById(UID['tabWave_SendWithoutDragon']).addEventListener('click', function(event) {
 					Data.options.waves.send_without_dragon = event.target.checked;
 				}, false);
-				$(UID['tabWave_DelayMin']).addEventListener('change', delayChanged, false);
-				$(UID['tabWave_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
+				document.getElementById(UID['tabWave_DelayMin']).addEventListener('change', delayChanged, false);
+				document.getElementById(UID['tabWave_MaxMarches']).addEventListener('change', maxMarchesChanged, false);
 				if (Data.options.waves.target.id && Data.options.waves.target.id != '' && Data.options.waves.target.n && Data.options.waves.target.n != '')
-					$(UID['tabWave_Msg']).addEventListener('click', onClickMsg, false);
+					document.getElementById(UID['tabWave_Msg']).addEventListener('click', onClickMsg, false);
 
-				setTroopTable($(UID['tabWave_Troops']), 1, 'AW', wave_unit_types,
+				setTroopTable(document.getElementById(UID['tabWave_Troops']), 1, 'AW', wave_unit_types,
 					Data.options.waves.target.units, Data.options.waves.target.saved_units, t.eventTroops, true);
 
 				for (var j = 0; j < currentDragons.length; ++j) {
-					$(UID['tabWave_Dragons_' + currentDragons[j]]).addEventListener('change', function(event) {
+					document.getElementById(UID['tabWave_Dragons_' + currentDragons[j]]).addEventListener('change', function(event) {
 						var args = event.target.getAttribute('ref');
 						Data.options.waves.target.dragons[Seed.dragonList[args].type] = event.target.checked;
 						var include_great_dragon = false;
@@ -27272,7 +29796,7 @@
 					}, false);
 				}
 				t.eventCoords();
-				var butSpy = $(UID['tabWave_Spy']);
+				var butSpy = document.getElementById(UID['tabWave_Spy']);
 				butSpy.addEventListener('click', butSpyNow, false);
 				var tile = Data.options.waves.target;
 				if (!tile.ai || tile.ai == 0 || tile.ai == null || tile.ai != (Seed.player.alliance ? Seed.player.alliance.id : -1))
@@ -27287,18 +29811,18 @@
 				function delayChanged(event) {
 					var min = toNum(event.target.value);
 					var max = toNum(min * 1.5);
-					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 10) || min > 3600) {
+					if (min < nvl(MIN_DELAY_BETWEEN_WAVE, 3) || min > 3600) {
 						event.target.style.backgroundColor = 'red';
 						return;
 					}
-					$(UID['tabWave_DelayMax']).innerHTML = max;
+					document.getElementById(UID['tabWave_DelayMax']).innerHTML = max;
 					event.target.style.backgroundColor = '';
 					Data.options.waves.delay_min = min;
 					Data.options.waves.delay_max = max;
 				}
 
 				function maxMarchesChanged(event) {
-					var val = toNum($(UID['tabWave_MaxMarches']).value);
+					var val = toNum(document.getElementById(UID['tabWave_MaxMarches']).value);
 					if (val < 0 || val > Seed.cities[CAPITAL.id].figures.marches.maximum) {
 						event.target.style.backgroundColor = 'red';
 						return;
@@ -27350,14 +29874,14 @@
 			},
 			tabWaveHistory: function() {
 				var t = Tabs.Waves;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWaveHistory']).className = 'selected';
-				$(UID['tabWaveHistory']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWaveHistory']).className = 'selected';
+				document.getElementById(UID['tabWaveHistory']).style.zIndex = 1;
 				t.lastSubTab = 'tabWaveHistory';
 				t.contentType = 1;
 				var m = '<div class="' + UID['title'] + '">' + translate('History') + '</div>' + '	<div id=' + setUID('tabWave_HistoryList') + ' class=' + UID['status_ticker'] + ' style="height:390px; max-height:390px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important"></div>' + '	</div>';
-				$(UID['tabWave_Content']).innerHTML = m;
+				document.getElementById(UID['tabWave_Content']).innerHTML = m;
 				var m = '<table class=' + UID['row_style'] + '>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td width="10px">&nbsp</td>' + '		<td width="35px"><A><span>' + translate('Dist') + '</span></A></td>' + '		<td width="50px"><A><span>' + translate('Coords') + '</span></A></td>' + '		<td width="160px"><A><span>' + translate('Target') + '</span></A></td>' + '		<td width="175px"><A><span>' + translate('Troops') + '</span></A></td>' + '	</tr>';
 				var ul = [];
 				for (var i = 0; i < Data.options.waves.history.length; i++) {
@@ -27381,12 +29905,12 @@
 					if (Data.options.waves.history[i].comment && Data.options.waves.history[i].comment != null && Data.options.waves.history[i].comment != '')
 						m += '<tr valign=top style="background-color:' + row_style + '"><td colspan=5 style="border-bottom: 1px solid #898989;">' + Data.options.waves.history[i].comment + '</td><td colspan=2>&nbsp</td></tr>';
 				}
-				$(UID['tabWave_HistoryList']).innerHTML = m + '</table>';
+				document.getElementById(UID['tabWave_HistoryList']).innerHTML = m + '</table>';
 				for (var i = 0; i < Data.options.waves.history.length; i++) {
-					var butRecall = $(UID['tabWave_Recall_' + i]);
-					var butDelete = $(UID['tabWave_Delete_' + i]);
-					var butBookmark = $(UID['tabWave_Bookmark_' + i]);
-					var butSpy = $(UID['tabWave_Spy_' + i]);
+					var butRecall = document.getElementById(UID['tabWave_Recall_' + i]);
+					var butDelete = document.getElementById(UID['tabWave_Delete_' + i]);
+					var butBookmark = document.getElementById(UID['tabWave_Bookmark_' + i]);
+					var butSpy = document.getElementById(UID['tabWave_Spy_' + i]);
 					butRecall.addEventListener('click', recallTarget, false);
 					butDelete.addEventListener('click', deleteTarget, false);
 					butBookmark.addEventListener('click', addBookmark, false);
@@ -27398,7 +29922,7 @@
 						setButtonStyle(butSpy, false, 'btn_green', 'btn_disabled');
 				}
 				for (var u = 0; u < ul.length; u++)
-					$(ul[u]).addEventListener('click', onClickMsg, false);
+					document.getElementById(ul[u]).addEventListener('click', onClickMsg, false);
 
 				function butSpyNow(event) {
 					var n = toNum(event.target.getAttribute('ref'));
@@ -27446,15 +29970,15 @@
 			},
 			tabWaveStats: function() {
 				var t = Tabs.Waves;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWaveStats']).className = 'selected';
-				$(UID['tabWaveStats']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWaveStats']).className = 'selected';
+				document.getElementById(UID['tabWaveStats']).style.zIndex = 1;
 				t.lastSubTab = 'tabWaveStats';
 				t.contentType = 2;
 				var m = '<div class=' + UID['title'] + '>' + translate('Attacks Stats') + '</div>' + '<div id=' + setUID('tabWaveStats_Statbox') + ' class=' + UID['status_ticker'] + '>' + '<div id=' + setUID('tabWaveStats_Status') + '></div>' + '<div id=' + setUID('tabWaveStats_Percent') + '></div>' + '<br/>' + '<center><input id=' + setUID('tabWaveStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '<br></div>';
-				$(UID['tabWave_Content']).innerHTML = m;
-				$(UID['tabWaveStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabWave_Content']).innerHTML = m;
+				document.getElementById(UID['tabWaveStats_Clear']).addEventListener('click', function() {
 					t.clearStats();
 					t.showStats();
 				}, false);
@@ -27462,18 +29986,18 @@
 			},
 			tabWaveLastReport: function() {
 				var t = Tabs.Waves;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWaveLastReport']).className = 'selected';
-				$(UID['tabWaveLastReport']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWaveLastReport']).className = 'selected';
+				document.getElementById(UID['tabWaveLastReport']).style.zIndex = 1;
 				t.lastSubTab = 'tabWaveLastReport';
 				t.contentType = 3;
 				var m = '<div id=' + setUID('tabWave_ShowReport') + ' class=' + UID['status_ticker'] + ' style="height:395px; max-height:395px; width:540px; max-width:540px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important"></div>';
-				$(UID['tabWave_Content']).innerHTML = m;
+				document.getElementById(UID['tabWave_Content']).innerHTML = m;
 				var m = '<div class=' + UID['title'] + '>' + translate('Last report') + '</div>';
 				if (t.last_report)
 					m += '<center>' + Messages.displayBattleReport(t.last_report) + '</center>';
-				$(UID['tabWave_ShowReport']).innerHTML = m;
+				document.getElementById(UID['tabWave_ShowReport']).innerHTML = m;
 			},
 
 			gotBattleReport: function(rpt_w) {
@@ -27547,7 +30071,7 @@
 			},
 			showStats: function() {
 				var t = Tabs.Waves;
-				var div = $(UID['tabWaveStats_Status']);
+				var div = document.getElementById(UID['tabWaveStats_Status']);
 				if (div == null) return;
 
 				var run_time = Data.stats.waves.run_time;
@@ -27642,13 +30166,13 @@
 					var tr = Data.options.waves.target.saved_units;
 					tr[tt] = event.target.value;
 					var time = getMarchTime(Data.options.waves.target.x, Data.options.waves.target.y, Data.options.waves.target.units);
-					$(UID['tabWave_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.waves.target.x, Data.options.waves.target.y) + ' (' + timestrShort(time) + ')';
+					document.getElementById(UID['tabWave_Distance']).innerHTML = getDistance(Seed.cities[CAPITAL.id].x, Seed.cities[CAPITAL.id].y, Data.options.waves.target.x, Data.options.waves.target.y) + ' (' + timestrShort(time) + ')';
 				}
 			},
 
 			setWaveEnable: function(onOff) {
 				var t = Tabs.Waves;
-				var but = $(UID['tabWave_OnOff']);
+				var but = document.getElementById(UID['tabWave_OnOff']);
 				clearTimeout(t.attackTimer);
 				Data.options.waves.enabled = onOff;
 				if (onOff) {
@@ -27729,7 +30253,7 @@
 						waveDelay, retryDelay;
 					if (rslt.ok && rslt.dat.result.success) {
 						t.attackErrors = 0;
-						var delay_min = toNum(Data.options.waves.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 10));
+						var delay_min = toNum(Data.options.waves.delay_min, nvl(MIN_DELAY_BETWEEN_WAVE, 3));
 						var delay_max = toNum(Data.options.waves.delay_max, toNum(delay_min * 1.5));
 						waveDelay = Math.floor(Math.random() * (delay_max - delay_min + 1) + delay_min);
 						verboseLog(actionMsg + ' ' + translate('Successfully'));
@@ -27756,7 +30280,7 @@
 			marchTick: function() {
 				var t = Tabs.Waves;
 				clearTimeout(t.marchTimer);
-				Marches.updateTable($(UID['tabWave_Marches']), 'waves');
+				Marches.updateTable(document.getElementById(UID['tabWave_Marches']), 'waves');
 				t.marchTimer = setTimeout(t.marchTick, 1000);
 			},
 			show: function() {
@@ -27783,9 +30307,6 @@
 				Data.options.waves.current_tab = t.contentType;
 			}
 		};
-		/******************************** Wave Tab ***********************************/
-
-		/******************************** Fortuna's Wheel Tab ************************/
 		Tabs.Wheel = {
 			tabOrder: WHEEL_TAB_ORDER,
 			tabLabel: 'Fortuna',
@@ -27814,12 +30335,12 @@
                 + '</ul>' 
                 + '<div id=' + setUID('tabWheel_Content') + ' style="padding-top:0px; height:655px; max-height:655px; overflow-y:auto; width:540px; max-width:540px; overflow-x:auto"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabWheelPlay']).addEventListener('click', t.tabWheelPlay, false);
-				$(UID['tabWheelStats']).addEventListener('click', t.tabWheelStats, false);
+				document.getElementById(UID['tabWheelPlay']).addEventListener('click', t.tabWheelPlay, false);
+				document.getElementById(UID['tabWheelStats']).addEventListener('click', t.tabWheelStats, false);
 				window.addEventListener('unload', t.onUnload, false);
 				t.contentType = toNum(Data.options.wheel.current_tab);
 				t.played = 0;
-				t.show();
+				//setTimeout(Tabs.Wheel.show, 5000);
 			},
 			show: function() {
 				var t = Tabs.Wheel;
@@ -27841,41 +30362,41 @@
 			/** PLAY SUB-TAB ** */
 			tabWheelPlay: function() {
 				var t = Tabs.Wheel;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWheelPlay']).className = 'selected';
-				$(UID['tabWheelPlay']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWheelPlay']).className = 'selected';
+				document.getElementById(UID['tabWheelPlay']).style.zIndex = 1;
 				t.lastSubTab = 'tabWheelPlay';
 				t.contentType = 0;
 				setUID('tabWheel_Type');
 				var m = '<div id=' + setUID('tabWheel_grid') + ' style="height:640px">' + '<div class=' + UID['title'] + '>' + translate('Play') + ' ' + translate('Fortuna\'s chance') + '</div>' + '<div class=' + UID['content'] + '>' + '	<table class=' + UID['table'] + ' style="margin-top:3px" width=100%>' + '		<tr valign=top align=left>' + '			<td width=5%><input type=radio name=' + UID['tabWheel_Type'] + ' value="regular" /></td>' + '			<td width=35% align=left><label>' + translate('FortunasTicket') + '<span id=' + setUID('tabWheel_nbTickets') + '></span></label></td>' + '			<td width=60% align=center><label><input id=' + setUID('tabWheel_Play') + ' type=button value="' + translate('Play') + '" /></label></td>' + '		</tr>' + '		<tr valign=top align=left>' + '			<td width=5%><input type=radio name=' + UID['tabWheel_Type'] + ' value="golden" /></td>' + '			<td align=left width=35%><label>' + translate('FortunasGoldenTicket') + '<span id=' + setUID('tabWheel_nbGold') + '></span></label></td>' + '			<td width=60% align=center><label><input id=' + setUID('tabWheel_Choose') + ' type=button value="' + translate('Choose') + '" /></label></td>' + '		</tr>' + '	</table><br>' + '	<center><div id=' + setUID('tabWheel_Grid') + ' style="padding-top:0px; height:311px; max-height:311px; overflow-y:auto; width:479px; max-width:479px"></div></center>' + '	<br>' + '	<table class=' + UID['table'] + ' style="margin-top:3px" width=100%>' + '		<tr valign=top align=center>' + '			<td width=30%><label><input id=' + setUID('tabWheel_Refresh') + ' type=button value="' + translate('Refresh') + '" /></label></td>' + '			<td width=40% class=jewel><div id=' + setUID('tabWheel_wait') + '></div></td>' + '			<td width=30%><label><input id=' + setUID('tabWheel_Stop') + ' type=button value="' + translate('Stop') + '" /></label></td>' + '		</tr>' + '	</table><br>' + '	<div class=' + UID['title'] + ' style="margin-bottom:10px">' + translate('Config') + '</div>' + '	<table class=' + UID['table'] + ' width=100% style="color:#000;">' + '		<tr valign=top>' + '			<td><label><input id=' + setUID('tabWheel_AutoRefresh') + ' ' + (Data.options.wheel.auto_refresh ? 'CHECKED ' : '') + ' type=checkbox /></label></td>' + '			<td><label>' + translate('Auto-refresh wheel prize list every') + '&nbsp</label>' + '				<input id=' + setUID('tabWheel_chkTime') + ' size=1 maxlength=2 type=text value="' + Data.options.wheel.delay + '" />&nbsp' + '				<select id=' + setUID('tabWheel_chkUnit') + ' size=1>' + '					<option value=1 ' + (Data.options.wheel.unit == 1 ? 'selected' : '') + '>' + translate('Seconds') + '</option>' + '					<option value=60 ' + (Data.options.wheel.unit == 60 ? 'selected' : '') + '>' + translate('minutes') + '</option>' + '					<option value=3600 ' + (Data.options.wheel.unit == 3600 ? 'selected' : '') + '>' + translate('hours') + '</option>' + '				</select>' + '			</td>' + '		</tr><tr valign=top>' + '			<td  style="font-size:2px">&nbsp</td>' + '		</tr><tr valign=top>' + '			<td></td><td><label>' + translate('Stop the wheel when found the following items') + '&nbsp' + '		</tr><tr valign=top>' + '			<td colspan=2>' + '				<table class=' + UID['table'] + ' width=100% style="color:#000;"><tr valign=top>' + '					<td width=50%><table width=100%><tr valign=top><td><div id=' + setUID('tabWheel_item1') + '></div></td></tr></table></td>' + '					<td width=50%><table width=100%><tr valign=top><td><div id=' + setUID('tabWheel_item2') + '></div></td></tr></table></td>' + '				</tr></table>' + '			</td>' + '		</tr><tr valign=top>' + '			<td width=5%></td><td><label>' + translate('And at least') + '&nbsp' + '				<select id=' + setUID('tabWheel_number') + ' size=1>' + '					<option value=1 ' + (Data.options.wheel.number == 1 ? 'selected' : '') + '>1</option>' + '					<option value=2 ' + (Data.options.wheel.number == 2 ? 'selected' : '') + '>2</option>' + '					<option value=3 ' + (Data.options.wheel.number == 3 ? 'selected' : '') + '>3</option>' + '					<option value=4 ' + (Data.options.wheel.number == 4 ? 'selected' : '') + '>4</option>' + '					<option value=5 ' + (Data.options.wheel.number == 5 ? 'selected' : '') + '>5</option>' + '					<option value=6 ' + (Data.options.wheel.number == 6 ? 'selected' : '') + '>6</option>' + '				</select>&nbsp' + translate('of the following items') + '</label></td>' + '		</tr><tr valign=top>' + '		</tr>' + '	</table>' + '	<table class=' + UID['table'] + ' width=100% style="color:#000;">' + '		<tr valign=top>' + '			<td width=50%><table width=100%>' + '				<tr valign=top><td><div id=' + setUID('tabWheel_item3') + '></div></td></tr>' + '				<tr valign=top><td><div id=' + setUID('tabWheel_item4') + '></div></td></tr>' + '				<tr valign=top><td><div id=' + setUID('tabWheel_item5') + '></div></td></tr>' + '			</table></td>' + '			<td width=50%><table width=100%>' + '				<tr valign=top><td><div id=' + setUID('tabWheel_item6') + '></div></td></tr>' + '				<tr valign=top><td><div id=' + setUID('tabWheel_item7') + '></div></td></tr>' + '				<tr valign=top><td><div id=' + setUID('tabWheel_item8') + '></div></td></tr>' + '			</table>' + '			</td>' + '		</tr>' + '	</table>' + '	<table class=' + UID['table'] + ' width=100% style="color:#000;">' + '		<tr valign=top>' + '			<td><label><input id=' + setUID('tabWheel_AutoPlay') + ' ' + (Data.options.wheel.auto_play ? 'CHECKED ' : '') + ' type=checkbox /></label></td>' + '			<td><label>' + translate('Auto-play : Maximum tickets to play ') + '&nbsp</label>' + '				<input id=' + setUID('tabWheel_AutoMax') + ' size=1 maxlength=4 type=text value="' + Data.options.wheel.max_auto + '" />&nbsp (0 = ' + translate('no max') + ')' + '			</td>' + '			<td width=20% align=right class=jewel><div id=' + setUID('tabWheel_played') + '></div></td>' + '		</tr>' + '	</table>' + '</div>';
 
-				$(UID['tabWheel_Content']).update(m);
+				document.getElementById(UID['tabWheel_Content']).innerHTML = (m);
 
-				$(UID['tabWheel_Play']).observe('click', onPlay);
-				$(UID['tabWheel_Refresh']).observe('click', getPrizeList);
-				$(UID['tabWheel_chkTime']).observe('change', delayChanged);
-				$(UID['tabWheel_chkUnit']).observe('change', delayChanged);
-				$(UID['tabWheel_number']).observe('change', numberChanged);
-				$(UID['tabWheel_AutoMax']).observe('change', maxChanged);
-				$(UID['tabWheel_Choose']).observe('click', onChoose);
-				$(UID['tabWheel_Stop']).observe('click', onStop);
-				$(UID['tabWheel_item1']).observe('change', onChangeMandatory);
-				$(UID['tabWheel_item2']).observe('change', onChangeMandatory);
-				$(UID['tabWheel_item3']).observe('change', onChangeOptional);
-				$(UID['tabWheel_item4']).observe('change', onChangeOptional);
-				$(UID['tabWheel_item5']).observe('change', onChangeOptional);
-				$(UID['tabWheel_item6']).observe('change', onChangeOptional);
-				$(UID['tabWheel_item7']).observe('change', onChangeOptional);
-				$(UID['tabWheel_item8']).observe('change', onChangeOptional);
-				$(UID['tabWheel_AutoRefresh']).observe('change', function(event) {
+				document.getElementById(UID['tabWheel_Play']).addEventListener('click', onPlay);
+				document.getElementById(UID['tabWheel_Refresh']).addEventListener('click', getPrizeList);
+				document.getElementById(UID['tabWheel_chkTime']).addEventListener('change', delayChanged);
+				document.getElementById(UID['tabWheel_chkUnit']).addEventListener('change', delayChanged);
+				document.getElementById(UID['tabWheel_number']).addEventListener('change', numberChanged);
+				document.getElementById(UID['tabWheel_AutoMax']).addEventListener('change', maxChanged);
+				document.getElementById(UID['tabWheel_Choose']).addEventListener('click', onChoose);
+				document.getElementById(UID['tabWheel_Stop']).addEventListener('click', onStop);
+				document.getElementById(UID['tabWheel_item1']).addEventListener('change', onChangeMandatory);
+				document.getElementById(UID['tabWheel_item2']).addEventListener('change', onChangeMandatory);
+				document.getElementById(UID['tabWheel_item3']).addEventListener('change', onChangeOptional);
+				document.getElementById(UID['tabWheel_item4']).addEventListener('change', onChangeOptional);
+				document.getElementById(UID['tabWheel_item5']).addEventListener('change', onChangeOptional);
+				document.getElementById(UID['tabWheel_item6']).addEventListener('change', onChangeOptional);
+				document.getElementById(UID['tabWheel_item7']).addEventListener('change', onChangeOptional);
+				document.getElementById(UID['tabWheel_item8']).addEventListener('change', onChangeOptional);
+				document.getElementById(UID['tabWheel_AutoRefresh']).addEventListener('change', function(event) {
 					Data.options.wheel.auto_refresh = event.target.checked;
 					if (t.timer) {
 						clearTimeout(t.timer);
 					}
 					checkRefreshTimer();
 				});
-				$(UID['tabWheel_AutoPlay']).observe('change', function(event) {
+				document.getElementById(UID['tabWheel_AutoPlay']).addEventListener('change', function(event) {
 					Data.options.wheel.auto_play = event.target.checked;
 					if (t.timer) {
 						clearTimeout(t.timer);
@@ -27900,8 +30421,8 @@
 
 				function delayChanged(event) {
 					var t = Tabs.Wheel;
-					var etime = $(UID['tabWheel_chkTime']);
-					var eunit = $(UID['tabWheel_chkUnit']);
+					var etime = document.getElementById(UID['tabWheel_chkTime']);
+					var eunit = document.getElementById(UID['tabWheel_chkUnit']);
 					var time = toNum(etime.value);
 					var unit = toNum(eunit.value);
 					etime.value = time;
@@ -27924,12 +30445,12 @@
 					var t = Tabs.Wheel,
 						i = 0,
 						regular = ((Data.options.wheel.type == 'regular') ? 0 : 1);
-					if ($(UID['tabWheel_nbTickets'])) $(UID['tabWheel_nbTickets']).innerHTML = ' (' + translate('You have') + ' <b>' + getTicketNb() + '</b>)'
-					if ($(UID['tabWheel_nbGold'])) $(UID['tabWheel_nbGold']).innerHTML = ' (' + translate('You have') + ' <b>' + getGoldenNb() + '</b>)'
-					setButtonStyle($(UID['tabWheel_Play']), false);
-					setButtonStyle($(UID['tabWheel_Choose']), false);
-					setButtonStyle($(UID['tabWheel_Refresh']), false);
-					setButtonStyle($(UID['tabWheel_Stop']), false, 'btn_off');
+					if (document.getElementById(UID['tabWheel_nbTickets'])) document.getElementById(UID['tabWheel_nbTickets']).innerHTML = ' (' + translate('You have') + ' <b>' + getTicketNb() + '</b>)'
+					if (document.getElementById(UID['tabWheel_nbGold'])) document.getElementById(UID['tabWheel_nbGold']).innerHTML = ' (' + translate('You have') + ' <b>' + getGoldenNb() + '</b>)'
+					setButtonStyle(document.getElementById(UID['tabWheel_Play']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Choose']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Stop']), false, 'btn_off');
 					var m = '<table class=' + UID['table_wrap'] + ' style="border:1px solid #898989; background:none" width="479px" height=100% style="white-space:wrap">';
 					if ((getTicketNb() == 0 && regular == 0) || (getGoldenNb() == 0 && regular == 1)) {
 						m += '	<tr valign=center align=center style="height:308px">' + '	<td width=100%><span class=' + UID['red'] + '><b>' + translate('You have') + ' 0 ' + translate((regular == 0) ? 'FortunasTicket' : 'FortunasGoldenTicket') + '</b></span></td>' + '</tr>';
@@ -27944,45 +30465,45 @@
 						}
 					}
 					m += '</table>';
-					if ($(UID['tabWheel_Grid'])) $(UID['tabWheel_Grid']).innerHTML = m;
-					if ($(UID['tabWheel_played'])) $(UID['tabWheel_played']).innerHTML = '(' + translate('played this session') + ' <b>' + t.played + '</b>)';
+					if (document.getElementById(UID['tabWheel_Grid'])) document.getElementById(UID['tabWheel_Grid']).innerHTML = m;
+					if (document.getElementById(UID['tabWheel_played'])) document.getElementById(UID['tabWheel_played']).innerHTML = '(' + translate('played this session') + ' <b>' + t.played + '</b>)';
 					if ((getTicketNb() > 0 && regular == 0) || (getGoldenNb() > 0 && regular == 1)) {
 						if (t.minigame_id && t.minigame_id != 0 && t.last_type == Data.options.wheel.type) {
 							for (var r = 0; r < t.last_results.length; r++) {
-								if ($(UID['tabWheel_square_' + r]))
-									$(UID['tabWheel_square_' + r]).innerHTML = translate(t.last_results[r].type);
-								if ($(UID['tabWheel_box_' + r]))
-									$(UID['tabWheel_box_' + r]).style.backgroundColor = 'rgb(245,245,228)';
+								if (document.getElementById(UID['tabWheel_square_' + r]))
+									document.getElementById(UID['tabWheel_square_' + r]).innerHTML = translate(t.last_results[r].type);
+								if (document.getElementById(UID['tabWheel_box_' + r]))
+									document.getElementById(UID['tabWheel_box_' + r]).style.backgroundColor = 'rgb(245,245,228)';
 								var found = false;
 								for (var s = 0; s < Data.options.wheel.mandatory[regular].length && !found; s++) {
 									if (Data.options.wheel.mandatory[regular][s] == t.last_results[r].type) {
 										found = true;
-										if ($(UID['tabWheel_box_' + r]))
-											$(UID['tabWheel_box_' + r]).style.backgroundColor = 'rgb(255,190,165)';
+										if (document.getElementById(UID['tabWheel_box_' + r]))
+											document.getElementById(UID['tabWheel_box_' + r]).style.backgroundColor = 'rgb(255,190,165)';
 									}
 								}
 								var found = false;
 								for (var s = 0; s < Data.options.wheel.optional[regular].length && !found; s++) {
 									if (Data.options.wheel.optional[regular][s] == t.last_results[r].type) {
 										found = true;
-										if ($(UID['tabWheel_box_' + r]))
-											$(UID['tabWheel_box_' + r]).style.backgroundColor = 'rgb(255,220,205)';
+										if (document.getElementById(UID['tabWheel_box_' + r]))
+											document.getElementById(UID['tabWheel_box_' + r]).style.backgroundColor = 'rgb(255,220,205)';
 									}
 								}
 							}
-							setButtonStyle($(UID['tabWheel_Choose']), true, 'btn_green');
+							setButtonStyle(document.getElementById(UID['tabWheel_Choose']), true, 'btn_green');
 							if ((Data.options.wheel.auto_play || (t.played >= Data.options.wheel.max_auto && Data.options.wheel.max_auto > 0)) && !t.is_running) {
-								setButtonStyle($(UID['tabWheel_Play']), true);
+								setButtonStyle(document.getElementById(UID['tabWheel_Play']), true);
 							} else if (Data.options.wheel.auto_refresh) {
-								setButtonStyle($(UID['tabWheel_Refresh']), true);
+								setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), true);
 								if (t.is_running) {
-									setButtonStyle($(UID['tabWheel_Stop']), true, 'btn_off');
-									setButtonStyle($(UID['tabWheel_Refresh']), false);
+									setButtonStyle(document.getElementById(UID['tabWheel_Stop']), true, 'btn_off');
+									setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), false);
 								}
 							}
 						} else if (!Data.options.wheel.auto_play || (t.played >= Data.options.wheel.max_auto && Data.options.wheel.max_auto > 0) || !t.minigame_id || t.minigame_id == 0)
-							setButtonStyle($(UID['tabWheel_Play']), true);
-					} else setButtonStyle($(UID['tabWheel_Play']), false);
+							setButtonStyle(document.getElementById(UID['tabWheel_Play']), true);
+					} else setButtonStyle(document.getElementById(UID['tabWheel_Play']), false);
 				}
 
 				function displayItemList(num) {
@@ -28003,7 +30524,7 @@
 					}
 					m += '</select>';
 					var id = 'tabWheel_item' + (num + 1);
-					if ($(UID[id])) $(UID[id]).innerHTML = m;
+					if (document.getElementById(UID[id])) document.getElementById(UID[id]).innerHTML = m;
 				}
 
 				function gatherObjstat(item, played, earned) {
@@ -28064,9 +30585,9 @@
 					if (t.timer) clearTimeout(t.timer);
 					if (t.autoTimer) clearTimeout(t.autoTimer);
 					t.is_running = true;
-					setButtonStyle($(UID['tabWheel_Choose']), false);
-					setButtonStyle($(UID['tabWheel_Refresh']), false);
-					setButtonStyle($(UID['tabWheel_Stop']), false, 'btn_off');
+					setButtonStyle(document.getElementById(UID['tabWheel_Choose']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Stop']), false, 'btn_off');
 					MyAjax.getMinigame((Data.options.wheel.type || 'regular'), function(results) {
 						var t = Tabs.Wheel,
 							regular = ((Data.options.wheel.type == 'regular') ? 0 : 1);
@@ -28082,17 +30603,17 @@
 							}
 							for (var x = 0; x < results.list.length; x++) {
 								gatherObjstat(results.list[x].type);
-								if ($(UID['tabWheel_square_' + x]))
-									$(UID['tabWheel_square_' + x]).innerHTML = translate(results.list[x].type);
-								if ($(UID['tabWheel_box_' + x]))
-									$(UID['tabWheel_box_' + x]).style.backgroundColor = 'rgb(245,245,228)';
+								if (document.getElementById(UID['tabWheel_square_' + x]))
+									document.getElementById(UID['tabWheel_square_' + x]).innerHTML = translate(results.list[x].type);
+								if (document.getElementById(UID['tabWheel_box_' + x]))
+									document.getElementById(UID['tabWheel_box_' + x]).style.backgroundColor = 'rgb(245,245,228)';
 								var found = false;
 								for (var i = 0; i < Data.options.wheel.mandatory[regular].length && !found; i++) {
 									if (Data.options.wheel.mandatory[regular][i] == results.list[x].type) {
 										have++;
 										found = true;
-										if ($(UID['tabWheel_box_' + x]))
-											$(UID['tabWheel_box_' + x]).style.backgroundColor = 'rgb(255,190,165)';
+										if (document.getElementById(UID['tabWheel_box_' + x]))
+											document.getElementById(UID['tabWheel_box_' + x]).style.backgroundColor = 'rgb(255,190,165)';
 									}
 								}
 								var found = false;
@@ -28100,26 +30621,26 @@
 									if (Data.options.wheel.optional[regular][i] == results.list[x].type) {
 										count++;
 										found = true;
-										if ($(UID['tabWheel_box_' + x]))
-											$(UID['tabWheel_box_' + x]).style.backgroundColor = 'rgb(255,220,205)';
+										if (document.getElementById(UID['tabWheel_box_' + x]))
+											document.getElementById(UID['tabWheel_box_' + x]).style.backgroundColor = 'rgb(255,220,205)';
 									}
 								}
 							}
 							t.minigame_id = results.id;
 							Seed.player.tickets.fortunas_chance = results.ticket;
 							Seed.player.tickets.gold_club = results.golden;
-							if (toNum(t.minigame_id) > 0) setButtonStyle($(UID['tabWheel_Choose']), true, 'btn_green');
+							if (toNum(t.minigame_id) > 0) setButtonStyle(document.getElementById(UID['tabWheel_Choose']), true, 'btn_green');
 							if (Data.options.wheel.auto_refresh && (have < searched || count < Data.options.wheel.number)) {
-								setButtonStyle($(UID['tabWheel_Stop']), true, 'btn_off');
+								setButtonStyle(document.getElementById(UID['tabWheel_Stop']), true, 'btn_off');
 								t.delay = Data.options.wheel.delay * Data.options.wheel.unit;
 								t.timer = setTimeout(getPrizeList, (Data.options.wheel.delay * Data.options.wheel.unit) * 1000 + Math.randRange(10, 500));
 							} else {
 								if (Data.options.wheel.auto_play && (t.played < Data.options.wheel.max_auto || Data.options.wheel.max_auto == 0)) {
-									setButtonStyle($(UID['tabWheel_Stop']), true, 'btn_off');
+									setButtonStyle(document.getElementById(UID['tabWheel_Stop']), true, 'btn_off');
 									t.autoTimer = setTimeout(onAutoChoose, (Data.options.wheel.delay * Data.options.wheel.unit) * 1000 + Math.randRange(10, 500));
 								} else
 									SoundPlayer.PlaySound('fortuna');
-								setButtonStyle($(UID['tabWheel_Refresh']), true);
+								setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), true);
 							}
 						}
 					});
@@ -28127,7 +30648,7 @@
 
 				function maxChanged(event) {
 					var t = Tabs.Wheel;
-					var emax = $(UID['tabWheel_AutoMax']);
+					var emax = document.getElementById(UID['tabWheel_AutoMax']);
 					var max = toNum(emax.value);
 					emax.value = max;
 					if (max < 0) {
@@ -28140,7 +30661,7 @@
 
 				function numberChanged(event) {
 					var t = Tabs.Wheel;
-					var el = $(UID['tabWheel_number']);
+					var el = document.getElementById(UID['tabWheel_number']);
 					var num = toNum(el.value);
 					el.value = num;
 					Data.options.wheel.number = num;
@@ -28177,9 +30698,9 @@
 					var t = Tabs.Wheel;
 					if (t.timer) clearTimeout(t.timer);
 					if (t.autoTimer) clearTimeout(t.autoTimer);
-					setButtonStyle($(UID['tabWheel_Choose']), false);
-					setButtonStyle($(UID['tabWheel_Refresh']), false);
-					setButtonStyle($(UID['tabWheel_Stop']), false, 'btn_off');
+					setButtonStyle(document.getElementById(UID['tabWheel_Choose']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Stop']), false, 'btn_off');
 					for (var r = 0; r < t.last_results.length; r++)
 						gatherObjstat(t.last_results[r].type, true);
 					MyAjax.saveMinigame(t.minigame_id, t.last_type, callback, false);
@@ -28193,11 +30714,11 @@
 							CalciumNotifications.showFortunaWin(translate('You won') + ' ' + translate(r.item.type));
 							SoundPlayer.PlaySound('fortuna');
 							gatherObjstat(r.item.type, true, true);
-							if ($(UID['tabWheel_played']))
-								$(UID['tabWheel_played']).innerHTML = '(' + translate('played this session') + ' <b>' + t.played + '</b>)';
+							if (document.getElementById(UID['tabWheel_played']))
+								document.getElementById(UID['tabWheel_played']).innerHTML = '(' + translate('played this session') + ' <b>' + t.played + '</b>)';
 							if (Data.options.wheel.auto_play && t.played < Data.options.wheel.max_auto) {
-								setButtonStyle($(UID['tabWheel_Refresh']), false);
-								setButtonStyle($(UID['tabWheel_Stop']), true, 'btn_off');
+								setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), false);
+								setButtonStyle(document.getElementById(UID['tabWheel_Stop']), true, 'btn_off');
 								t.delay = Data.options.wheel.delay * Data.options.wheel.unit;
 								t.timer = setTimeout(getPrizeList, (Data.options.wheel.delay * Data.options.wheel.unit) * 1000 + Math.randRange(10, 500));
 							} else {
@@ -28205,7 +30726,7 @@
 								display_grid();
 							}
 						} else {
-							setButtonStyle($(UID['tabWheel_Stop']), false, 'btn_off');
+							setButtonStyle(document.getElementById(UID['tabWheel_Stop']), false, 'btn_off');
 							consoleLog(translate('Error while retrieving the item won') + ' : ' + r.errmsg);
 						}
 					}
@@ -28216,9 +30737,9 @@
 					if (t.timer) clearTimeout(t.timer);
 					if (t.autoTimer) clearTimeout(t.autoTimer);
 					t.is_running = false;
-					setButtonStyle($(UID['tabWheel_Choose']), false);
-					setButtonStyle($(UID['tabWheel_Refresh']), false);
-					setButtonStyle($(UID['tabWheel_Stop']), false, 'btn_off');
+					setButtonStyle(document.getElementById(UID['tabWheel_Choose']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Refresh']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Stop']), false, 'btn_off');
 					for (var r = 0; r < t.last_results.length; r++)
 						gatherObjstat(t.last_results[r].type, true);
 					var dial = new ModalDialog(t.container, 300, 165, '', false, null);
@@ -28242,7 +30763,7 @@
 
 				function onPlay() {
 					var t = Tabs.Wheel;
-					setButtonStyle($(UID['tabWheel_Play']), false);
+					setButtonStyle(document.getElementById(UID['tabWheel_Play']), false);
 					t.played = 0;
 					checkRefreshTimer();
 					getPrizeList();
@@ -28258,7 +30779,7 @@
 
 				function refreshTick() {
 					var t = Tabs.Wheel,
-						wait = $(UID['tabWheel_wait']);
+						wait = document.getElementById(UID['tabWheel_wait']);
 					if (t.is_running && Data.options.wheel.auto_refresh) {
 						if (wait) wait.innerHTML = translate('Refresh in') + ' ' + t.delay + 's';
 						t.delay--;
@@ -28272,15 +30793,15 @@
 			/** STATS SUB-TAB ** */
 			tabWheelStats: function() {
 				var t = Tabs.Wheel;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabWheelStats']).className = 'selected';
-				$(UID['tabWheelStats']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabWheelStats']).className = 'selected';
+				document.getElementById(UID['tabWheelStats']).style.zIndex = 1;
 				t.lastSubTab = 'tabWheelStats';
 				t.contentType = 1;
 				var m = '<div id=' + setUID('tabWheel_stats') + ' style="height:655px">' + '<div class=' + UID['title'] + '>' + translate('Stats') + ' ' + translate('Fortuna\'s chance') + '</div>' + '<div class=' + UID['content'] + '>' + '	<table class=' + UID['table'] + ' style="margin-top:3px" width=100%>' + '		<tr valign=top align=left>' + '			<td width=5%><input type=radio name=' + UID['tabWheelStats_Type'] + ' value="regular" /></td>' + '			<td width=35% align=left><label>' + translate('FortunasTicket') + '</label></td>' + '			<td width=20%>&nbsp</td>' + '			<td width=5%><input type=radio name=' + UID['tabWheelStats_Type'] + ' value="golden" /></td>' + '			<td align=left width=35%><label>' + translate('FortunasGoldenTicket') + '</label></td>' + '		</tr>' + '	</table>' + '	<div id=' + setUID('tabWheelStats_Content') + ' style="padding-top:0px; height:580px; max-height:580px; overflow-y:auto"></div>' + '	<center><input id=' + setUID('tabWheelStats_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '</div></div>';
-				$(UID['tabWheel_Content']).innerHTML = m;
-				$(UID['tabWheelStats_Clear']).addEventListener('click', function() {
+				document.getElementById(UID['tabWheel_Content']).innerHTML = m;
+				document.getElementById(UID['tabWheelStats_Clear']).addEventListener('click', function() {
 					clearStats();
 					showStats();
 				}, false);
@@ -28319,7 +30840,7 @@
 					var total = toNum(Data.stats.wheel.total_grids[regular]);
 					var played = toNum(Data.stats.wheel.total_played[regular]);
 					var m = '<div id=' + setUID('tabWheelStats_Report') + ' class=' + UID['status_ticker'] + ' style="height:545px; max-height:545px; overflow-y:auto ; overflow-x:auto ; margin-top:1px !important">' + '<table class=' + UID['table'] + ' width=100%>' + '	<tr>' + '		<td class=right width=15%>' + translate('Total grids displayed') + ': </td>' + '		<td width=25%>' + numf(Math.round(total / 12)) + '</td>' + '		<td width=20%>&nbsp</td>' + '		<td class=right width=15%>' + translate('Total grids played') + ': </td>' + '		<td width=25%>' + numf(Math.round(played / 12)) + '</td>' + '	</tr>' + '</table>' + '<div id=' + setUID('tabWheelStats_ItemsWon') + ' style="height:75px; max-height:75px; overflow-y:auto; margin-top:1px !important"></div>' + '<div id=' + setUID('tabWheelStats_ItemsStats') + ' style="height:440px; max-height:440px; overflow-y:auto; margin-top:1px !important"></div>' + '</div>';
-					$(UID['tabWheelStats_Content']).innerHTML = m;
+					document.getElementById(UID['tabWheelStats_Content']).innerHTML = m;
 					var m = '<table class=' + UID['row_style'] + ' width=100%>' + '	</tr><tr class=' + UID['row_headers'] + '>' + '		<td width="60%">' + translate('Last items won') + '</td>' + '		<td width="40%">' + translate('Date') + '</td>' + '	</tr>';
 					var item_won = cloneProps(Data.stats.wheel.last_won[regular]);
 					item_won.sort(function(a, b) {
@@ -28328,7 +30849,7 @@
 					for (var i = 0; i < item_won.length; i++) {
 						m += '<tr><td class=left>' + translate(item_won[i].item, true) + '</td>' + '	<td align=right>' + new Date(item_won[i].at * 1000).myString() + '</td>' + '</tr>';
 					}
-					$(UID['tabWheelStats_ItemsWon']).innerHTML = m + '</table>';
+					document.getElementById(UID['tabWheelStats_ItemsWon']).innerHTML = m + '</table>';
 					var m = '<table class=' + UID['row_style'] + ' width=100%>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td valign=middle width=33%><b>' + translate('Items') + '</b></td>' + '		<td valign=middle width=20% colspan=2><b>' + translate('All grids') + '</b></td>' + '		<td valign=middle width=40% colspan=4><b>' + translate('Grids played') + '</b></td>' + '		<td valign=middle width=7% colspan=2><b>' + translate('Chance') + '</b></td>' + '	</tr>' + '	<tr class=' + UID['row_headers'] + '>' + '		<td valign=middle width=30%>&nbsp</td>' + '		<td valign=middle width=13%><b>' + translate('Displayed') + '</b></td>' + '		<td valign=middle width=7%><b>' + translate('%age') + '</b></td>' + '		<td valign=middle width=13%><b>' + translate('Played') + '</b></td>' + '		<td valign=middle width=7%><b>' + translate('%age') + '</b></td>' + '		<td valign=middle width=13%><b>' + translate('Won') + '</b></td>' + '		<td valign=middle width=7%><b>' + translate('%age') + '</b></td>'+'   			<td valign=middle width=7%><b>' + translate('to win') + '</b></td>' + '	</tr>';
 					var item_stats = [];
 					for (var item in Data.stats.wheel.items[regular]) {
@@ -28361,7 +30882,7 @@
 						var chance = ((won > 0) ? (Math.round(won / (tried * 12) * 10000) / 100) + '%' : '');
 						m += '<tr><td class=left>' + translate(item_stats[i].item, true) + '</td>' + '	<td align=right>' + numf(found) + '</td>' + '	<td align=right>' + pctf + '%</td>' + '	<td align=right>' + ((tried > 0) ? numf(tried) : '') + '</td>' + '	<td align=right>' + pctt + '</td>' + '	<td align=right>' + ((won > 0) ? numf(won) : '') + '</td>' + '	<td align=right>' + pctw + '</td>' + '	<td align=right>' + chance + '</td>' + '</tr>';
 					}
-					$(UID['tabWheelStats_ItemsStats']).innerHTML = m + '</table>';
+					document.getElementById(UID['tabWheelStats_ItemsStats']).innerHTML = m + '</table>';
 				}
 			},
 
@@ -28370,9 +30891,6 @@
 				if (t.refreshTimer) clearInterval(t.refreshTimer);
 			}
 		}
-		/******************************** Fortuna's Wheel Tab ************************/
-
-		/******************************** Options Tab ********************************/
 		Tabs.Options = {
 			tabOrder: OPTIONS_TAB_ORDER,
 			tabLabel: 'Opts',
@@ -28388,8 +30906,10 @@
 				t.own = Seed.player.alliance ? Seed.player.alliance.id : -1;
 
 				var selected = new Array(4);
+				var selectedRune = new Array(4);
 				for (var i = 0; i < selected.length; i++) {
 					selected[i] = '';
+					selectedRune[i] = '';
 				}
 				switch (Data.options.autoCollect.unit) {
 					case 1:
@@ -28407,14 +30927,33 @@
 					default:
 						seleacted[3] = 'selected';
 				}
+				switch (Data.options.autoCollectRune.unit) {
+					case 1:
+						selectedRune[1] = 'selected';
+						break;
+					case 60:
+						selectedRune[2] = 'selected';
+						break;
+					case 3600:
+						selectedRune[3] = 'selected';
+						break;
+					case 86400:
+						selectedRune[4] = 'selected';
+						break;
+					default:
+						selectedRune[3] = 'selected';
+				}
 				try {
 					m = '<div class=' + UID['title'] + ' style="margin-bottom:10px">' + translate('Options') + '</div>' 
 					+ '<div style="height:665px; max-height:665px; width:540px; max-width:540px; overflow-y:auto; overflow-x:auto; color:#000;">' 
 					+ '<table class=' + UID['table'] + '>' 
 					+ '	<tr valign=top>' 
 					+ '		<td><b>' + translate('Game Options') + ': </b></td>' 
-					+ '	</tr>' + '	<tr valign=top>' 
+					+ '	</tr><tr valign=top>' 
 					+ '		<td>' + '		<label>' + '		<input id=' + setUID('tabOptions_CB_Collect') + ' type=checkbox ' + (Data.options.autoCollect.enabled ? 'CHECKED ' : '') + ' /> ' + translate('Auto harvest resources from outposts every') + '		</label> ' + '		<input id=' + setUID('tabOptions_collectTime') + ' size=1 maxlength=2 type=text value="' + Data.options.autoCollect.delay + '" />' + '		<select id=' + setUID('tabOptions_collectUnit') + ' size=1>' + '			<option value=1 ' + selected[1] + '>' + translate('Seconds') + '</option>' + '			<option value=60 ' + selected[2] + '>' + translate('minutes') + '</option>' + '			<option value=3600 ' + selected[3] + '>' + translate('hours') + '</option>' + '			<option value=86400 ' + selected[4] + '>' + translate('days') + '</option>' + '		</select>' 
+					+ '		</td>' 
+					+ '	</tr><tr valign=top>' 
+					+ '		<td>' + '		<label>' + '		<input id=' + setUID('tabOptions_CB_CollectRune') + ' type=checkbox ' + (Data.options.autoCollectRune.enabled ? 'CHECKED ' : '') + ' /> ' + translate('Auto collect Eternal Rune every') + '		</label> ' + '		<input id=' + setUID('tabOptions_collectRuneTime') + ' size=1 maxlength=2 type=text value="' + Data.options.autoCollectRune.delay + '" />' + '		<select id=' + setUID('tabOptions_collectRuneUnit') + ' size=1>' + '			<option value=1 ' + selectedRune[1] + '>' + translate('Seconds') + '</option>' + '			<option value=60 ' + selectedRune[2] + '>' + translate('minutes') + '</option>' + '			<option value=3600 ' + selectedRune[3] + '>' + translate('hours') + '</option>' + '			<option value=86400 ' + selectedRune[4] + '>' + translate('days') + '</option>' + '		</select>' 
 					+ '		</td>' 
 					+ '	</tr><tr valign=top>' 
 					+ '		<td>' 
@@ -28579,12 +31118,6 @@
 					+ '		<label><input id=' + setUID('tabOptions_btnRefresh') + ' type=button value="' + translate('Refresh') + '" /></label>' 
 					+ '		</td>' 
 					+ '	</tr>'
-					/*+ '	<tr valign=top>' 
-					+ '		<td>' 
-					+ '		<label><input id=' + setUID('tabOptions_testCPT') + ' type=button value="Test CPT" /></label>' 
-					+ '		<input id=' + setUID('tabOptions_testtype') + ' type=text /><input id=' + setUID('tabOptions_testid') + ' type=text />'
-					+ '		</td>' 
-					+ '	</tr>'*/
 					+ '</table>' 
 					+ '<br>' 
 					+ '<table class=' + UID['table'] + ' width=100%>' 
@@ -28622,7 +31155,7 @@
 					+ '	</tr><tr valign=top><td style="font-size:2px">&nbsp</td>' 
 					+ '	</tr><tr valign=top>'
 					+ '		<td width=30%><label><input id=' + setUID('tabOptions_btnBackupManifest') + ' type=button value="' + translate('Save Man.') + '" title="' + translate('Save Manifest in a local file') + '" /></label></td>' 
-					+ '		<td width=30%>&nbsp;</td>' 
+					+ '		<td width=30%><label><input id=' + setUID('tabOptions_btnBackupSeed') + ' type=button value="' + translate('Save Seed') + '" title="' + translate('Save Seed in a local file') + '" /></label></td>' 
 					+ '		<td width=40%>&nbsp;</td>' 
 					+ '	</tr><tr valign=top><td style="font-size:2px">&nbsp</td>' 
 					+ '	</tr><tr valign=top>' 
@@ -28635,114 +31168,115 @@
 					+ '</div>';
 					t.container.innerHTML = m;
 
-					/*$(UID['tabOptions_testCPT']).observe('click', function(){
-						new MyAjax.searchCPT($(UID['tabOptions_testtype']).value, $(UID['tabOptions_testid']).value, function(rslt) {});
-					});*/
 					
-					$(UID['tabOptions_collectTime']).addEventListener('change', t.timeChanged, false);
-					$(UID['tabOptions_collectUnit']).addEventListener('change', t.unitChanged, false);
-					$(UID['tabOptions_refreshTime']).addEventListener('change', t.refreshTimeChanged, false);
-					$(UID['tabOptions_refreshUnit']).addEventListener('change', t.refreshUnitChanged, false);
-					$(UID['tabOptions_flashRefreshTime']).addEventListener('change', t.flashRefreshTimeChanged, false);
-					$(UID['tabOptions_flashRefreshUnit']).addEventListener('change', t.flashRefreshUnitChanged, false);
-					$(UID['tabOptions_language']).addEventListener('change', t.onChangeLanguage, false);
-					$(UID['tabOptions_CB_Drag']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_collectTime']).addEventListener('change', t.timeChanged, false);
+					document.getElementById(UID['tabOptions_collectUnit']).addEventListener('change', t.unitChanged, false);
+					document.getElementById(UID['tabOptions_collectRuneTime']).addEventListener('change', t.timeRuneChanged, false);
+					document.getElementById(UID['tabOptions_collectRuneUnit']).addEventListener('change', t.unitRuneChanged, false);
+					document.getElementById(UID['tabOptions_refreshTime']).addEventListener('change', t.refreshTimeChanged, false);
+					document.getElementById(UID['tabOptions_refreshUnit']).addEventListener('change', t.refreshUnitChanged, false);
+					document.getElementById(UID['tabOptions_flashRefreshTime']).addEventListener('change', t.flashRefreshTimeChanged, false);
+					document.getElementById(UID['tabOptions_flashRefreshUnit']).addEventListener('change', t.flashRefreshUnitChanged, false);
+					document.getElementById(UID['tabOptions_language']).addEventListener('change', t.onChangeLanguage, false);
+					document.getElementById(UID['tabOptions_CB_Drag']).addEventListener('click', function(event) {
 						Data.options.popUp.drag = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_Speedups']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_CB_Speedups']).addEventListener('click', function(event) {
 						Data.options.speedups_enabled = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_Speedups']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_CB_Speedups']).addEventListener('change', function(event) {
 						Data.options.speedups_enabled = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_SancHideMax']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_CB_SancHideMax']).addEventListener('click', function(event) {
 						Data.options.sanctuary.hideDrgMaxLevel = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_SancHideMax']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_CB_SancHideMax']).addEventListener('change', function(event) {
 						Data.options.sanctuary.hideDrgMaxLevel = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_Confirmation']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_CB_Confirmation']).addEventListener('click', function(event) {
 						Data.options.use_speedup_confirmation = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_Confirmation']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_CB_Confirmation']).addEventListener('change', function(event) {
 						Data.options.use_speedup_confirmation = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_JobsSpeedups']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_CB_JobsSpeedups']).addEventListener('click', function(event) {
 						Data.options.jobs_speedups_enabled = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_JobsSpeedups']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_CB_JobsSpeedups']).addEventListener('change', function(event) {
 						Data.options.jobs_speedups_enabled = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_JobsCancel_Confirmation']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_CB_JobsCancel_Confirmation']).addEventListener('click', function(event) {
 						Data.options.jobs_cancel_confirmation = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_JobsCancel_Confirmation']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_CB_JobsCancel_Confirmation']).addEventListener('change', function(event) {
 						Data.options.jobs_cancel_confirmation = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_UTCtime']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_CB_UTCtime']).addEventListener('click', function(event) {
 						Data.options.utc_time = event.target.checked
 					}, false);
-					$(UID['tabOptions_CB_UTCtime']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_CB_UTCtime']).addEventListener('change', function(event) {
 						Data.options.utc_time = event.target.checked
 					}, false);
-					$(UID['tabOptions_Wiki']).addEventListener('change', function() {
-						Data.options.wikiUrl = $(UID['tabOptions_Wiki']).value
+					document.getElementById(UID['tabOptions_Wiki']).addEventListener('change', function() {
+						Data.options.wikiUrl = document.getElementById(UID['tabOptions_Wiki']).value
 					}, false);
-					$(UID['tabOptions_Forum']).addEventListener('change', function() {
-						Data.options.forumUrl = $(UID['tabOptions_Forum']).value
+					document.getElementById(UID['tabOptions_Forum']).addEventListener('change', function() {
+						Data.options.forumUrl = document.getElementById(UID['tabOptions_Forum']).value
 					}, false);
-					$(UID['tabOptions_JobsSound']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_JobsSound']).addEventListener('change', function(event) {
 						Data.options.sound.enable_jobs = event.target.checked
 					}, false);
-					$(UID['tabOptions_FortunaSound']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_FortunaSound']).addEventListener('change', function(event) {
 						Data.options.sound.enable_fortuna = event.target.checked
 					}, false);
-					$(UID['tabOptions_btnRefresh']).addEventListener('click', t.onClickRefresh, false);
-					$(UID['tabOptions_btnSave']).addEventListener('click', t.onClickSaveSetting, false);
-					$(UID['tabOptions_btnClean']).addEventListener('click', t.onClickClearStorage, false);
-					$(UID['tabOptions_btnInspect']).addEventListener('click', t.onClickInspect, false);
-					$(UID['tabOptions_btnBackup']).addEventListener('click', t.onClickBackupFile, false);
-					$(UID['tabOptions_btnBackupMap']).addEventListener('click', t.onClickBackupMap, false);
-					$(UID['tabOptions_btnBackupManifest']).addEventListener('click', t.onClickBackupManifest, false);
-					$(UID['tabOptions_storage_file']).addEventListener('change', t.onChangeRestoreFile, false);
-					$(UID['tabOptions_CheckNotification']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_btnRefresh']).addEventListener('click', t.onClickRefresh, false);
+					document.getElementById(UID['tabOptions_btnSave']).addEventListener('click', t.onClickSaveSetting, false);
+					document.getElementById(UID['tabOptions_btnClean']).addEventListener('click', t.onClickClearStorage, false);
+					document.getElementById(UID['tabOptions_btnInspect']).addEventListener('click', t.onClickInspect, false);
+					document.getElementById(UID['tabOptions_btnBackup']).addEventListener('click', t.onClickBackupFile, false);
+					document.getElementById(UID['tabOptions_btnBackupMap']).addEventListener('click', t.onClickBackupMap, false);
+					document.getElementById(UID['tabOptions_btnBackupManifest']).addEventListener('click', t.onClickBackupManifest, false);
+					document.getElementById(UID['tabOptions_btnBackupSeed']).addEventListener('click', t.onClickBackupSeed, false);
+					document.getElementById(UID['tabOptions_storage_file']).addEventListener('change', t.onChangeRestoreFile, false);
+					document.getElementById(UID['tabOptions_CheckNotification']).addEventListener('click', function(event) {
 						CalciumNotifications.showNotification('Test', 'OK', 'tag', 'http://icdn.pro/images/fr/a/c/accepter-check-ok-oui-icone-4851-96.png');
 					}, false);
-					$(UID['tabOptions_NotificationFortuna']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_NotificationFortuna']).addEventListener('click', function(event) {
 						Data.options.enable_notifications_fortuna = event.target.checked
 					}, false);
-					$(UID['tabOptions_NotificationSpy']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_NotificationSpy']).addEventListener('click', function(event) {
 						Data.options.enable_notifications_spy = event.target.checked
 					}, false);
-					$(UID['tabOptions_NotificationAttack']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_NotificationAttack']).addEventListener('click', function(event) {
 						Data.options.enable_notifications_attack = event.target.checked
 					}, false);
-					$(UID['tabInboxTchatRealm_cbEnableNotif']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabInboxTchatRealm_cbEnableNotif']).addEventListener('click', function(event) {
 						Data.options.tchat.enable_notif_realm = event.target.checked
 					}, false);
-					$(UID['tabInboxTchatAlliance_cbEnableNotif']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabInboxTchatAlliance_cbEnableNotif']).addEventListener('click', function(event) {
 						Data.options.tchat.enable_notif_alliance = event.target.checked
 					}, false);
 					
-					$(UID['tabOptions_CB_Cheat']).addEventListener('click', function(event) {
+					document.getElementById(UID['tabOptions_CB_Cheat']).addEventListener('click', function(event) {
 						Data.options.cheat_enabled = event.target.checked;
 						if (Data.options.cheat_enabled)
 							transportable_resource_types = cloneProps(all_resource_types);
 						else
 							transportable_resource_types = cloneProps(transportable_resource_types);
 					}, false);
-					$(UID['tabOptions_CB_Cheat']).addEventListener('change', function(event) {
+					document.getElementById(UID['tabOptions_CB_Cheat']).addEventListener('change', function(event) {
 						Data.options.cheat_enabled = event.target.checked;
 						if (Data.options.cheat_enabled)
 							transportable_resource_types = cloneProps(all_resource_types);
 						else
 							transportable_resource_types = cloneProps(transportable_resource_types);
 					}, false);
-					$(UID['tabOptions_btnRestore']).addEventListener('click', function() {
-						debugLog($(UID['tabOptions_storage_file']));
-						$(UID['tabOptions_storage_file']).click();
+					document.getElementById(UID['tabOptions_btnRestore']).addEventListener('click', function() {
+						debugLog(document.getElementById(UID['tabOptions_storage_file']));
+						document.getElementById(UID['tabOptions_storage_file']).click();
 					}, false);
 					t.togOpt(UID['tabOptions_CB_Collect'], Data.options.autoCollect.enabled, AutoCollect.setEnable);
+					t.togOpt(UID['tabOptions_CB_CollectRune'], Data.options.autoCollectRune.enabled, AutoCollect.setEnableRune);
 					t.togOpt(UID['tabOptions_CB_Verbose'], Data.options.verboseLog.enabled, VerboseLog.setEnable);
 					t.togOpt(UID['tabOptions_CB_Background'], Data.options.background, t.onChangeBackground);
 					t.togOpt(UID['tabOptions_AutoRefresh'], Data.options.autoRefresh.enabled, t.setEnableRefresh);
@@ -28759,69 +31293,69 @@
 					t.togOpt(UID['tabOptions_TabWheel'], Data.options.disable_wheel, t.setEnableTab);
 					t.togOpt(UID['tabOptions_TabLog'], Data.options.disable_log, t.setEnableTab);
 
-					$(UID['tabOptions_BFile']).addEventListener('change', function() {
-						Data.options.sound.URL_building = $(UID['tabOptions_BFile']).value;
+					document.getElementById(UID['tabOptions_BFile']).addEventListener('change', function() {
+						Data.options.sound.URL_building = document.getElementById(UID['tabOptions_BFile']).value;
 					}, false);
-					$(UID['tabOptions_BPlay']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_BPlay']).addEventListener('click', function() {
 						t.playSound('building')
 					}, false);
-					$(UID['tabOptions_BStop']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_BStop']).addEventListener('click', function() {
 						t.stopSound('building')
 					}, false);
-					$(UID['tabOptions_BDefault']).addEventListener('click', function() {
-						$(UID['tabOptions_BFile']).value = SoundPlayer.DEFAULT_SOUND_URL.building;
+					document.getElementById(UID['tabOptions_BDefault']).addEventListener('click', function() {
+						document.getElementById(UID['tabOptions_BFile']).value = SoundPlayer.DEFAULT_SOUND_URL.building;
 						Data.options.sound.URL_building = SoundPlayer.DEFAULT_SOUND_URL.building;
 						t.playSound('building');
 					}, false);
-					$(UID['tabOptions_BStop']).disabled = true;
+					document.getElementById(UID['tabOptions_BStop']).disabled = true;
 
-					$(UID['tabOptions_TFile']).addEventListener('change', function() {
-						Data.options.sound.URL_units = $(UID['tabOptions_TFile']).value;
+					document.getElementById(UID['tabOptions_TFile']).addEventListener('change', function() {
+						Data.options.sound.URL_units = document.getElementById(UID['tabOptions_TFile']).value;
 					}, false);
-					$(UID['tabOptions_TPlay']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_TPlay']).addEventListener('click', function() {
 						t.playSound('units')
 					}, false);
-					$(UID['tabOptions_TStop']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_TStop']).addEventListener('click', function() {
 						t.stopSound('units')
 					}, false);
-					$(UID['tabOptions_TDefault']).addEventListener('click', function() {
-						$(UID['tabOptions_TFile']).value = SoundPlayer.DEFAULT_SOUND_URL.units;
+					document.getElementById(UID['tabOptions_TDefault']).addEventListener('click', function() {
+						document.getElementById(UID['tabOptions_TFile']).value = SoundPlayer.DEFAULT_SOUND_URL.units;
 						Data.options.sound.URL_units = SoundPlayer.DEFAULT_SOUND_URL.units;
 						t.playSound('units');
 					}, false);
-					$(UID['tabOptions_TStop']).disabled = true;
+					document.getElementById(UID['tabOptions_TStop']).disabled = true;
 
-					$(UID['tabOptions_RFile']).addEventListener('change', function() {
-						Data.options.sound.URL_research = $(UID['tabOptions_RFile']).value;
+					document.getElementById(UID['tabOptions_RFile']).addEventListener('change', function() {
+						Data.options.sound.URL_research = document.getElementById(UID['tabOptions_RFile']).value;
 					}, false);
-					$(UID['tabOptions_RPlay']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_RPlay']).addEventListener('click', function() {
 						t.playSound('research')
 					}, false);
-					$(UID['tabOptions_RStop']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_RStop']).addEventListener('click', function() {
 						t.stopSound('research')
 					}, false);
-					$(UID['tabOptions_RDefault']).addEventListener('click', function() {
-						$(UID['tabOptions_RFile']).value = SoundPlayer.DEFAULT_SOUND_URL.research;
+					document.getElementById(UID['tabOptions_RDefault']).addEventListener('click', function() {
+						document.getElementById(UID['tabOptions_RFile']).value = SoundPlayer.DEFAULT_SOUND_URL.research;
 						Data.options.sound.URL_research = SoundPlayer.DEFAULT_SOUND_URL.research;
 						t.playSound('research');
 					}, false);
-					$(UID['tabOptions_RStop']).disabled = true;
+					document.getElementById(UID['tabOptions_RStop']).disabled = true;
 
-					$(UID['tabOptions_FFile']).addEventListener('change', function() {
-						Data.options.sound.URL_fortuna = $(UID['tabOptions_FFile']).value;
+					document.getElementById(UID['tabOptions_FFile']).addEventListener('change', function() {
+						Data.options.sound.URL_fortuna = document.getElementById(UID['tabOptions_FFile']).value;
 					}, false);
-					$(UID['tabOptions_FPlay']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_FPlay']).addEventListener('click', function() {
 						t.playSound('fortuna')
 					}, false);
-					$(UID['tabOptions_FStop']).addEventListener('click', function() {
+					document.getElementById(UID['tabOptions_FStop']).addEventListener('click', function() {
 						t.stopSound('fortuna')
 					}, false);
-					$(UID['tabOptions_FDefault']).addEventListener('click', function() {
-						$(UID['tabOptions_FFile']).value = SoundPlayer.DEFAULT_SOUND_URL.fortuna;
+					document.getElementById(UID['tabOptions_FDefault']).addEventListener('click', function() {
+						document.getElementById(UID['tabOptions_FFile']).value = SoundPlayer.DEFAULT_SOUND_URL.fortuna;
 						Data.options.sound.URL_fortuna = SoundPlayer.DEFAULT_SOUND_URL.fortuna;
 						t.playSound('fortuna');
 					}, false);
-					$(UID['tabOptions_FStop']).disabled = true;
+					document.getElementById(UID['tabOptions_FStop']).disabled = true;
 				} catch (e) {
 					t.container.innerHTML = '<PRE>' + e.name + ' : ' + e.message + '</pre>';
 				}
@@ -28830,7 +31364,7 @@
 			show: function() {},
 			togOpt: function(checkboxId, optionVar, callEnable, callIsAvailable) {
 				var t = Tabs.Options;
-				var checkbox = $(checkboxId);
+				var checkbox = document.getElementById(checkboxId);
 				if (callIsAvailable && callIsAvailable() == false) {
 					checkbox.disabled = true;
 					return;
@@ -28850,20 +31384,32 @@
 				}
 			},
 			timeChanged: function(event) {
-				var etime = $(UID['tabOptions_collectTime']);
+				var etime = document.getElementById(UID['tabOptions_collectTime']);
 				var time = toNum(etime.value);
 				etime.value = time;
 				Data.options.autoCollect.delay = time;
 			},
 			unitChanged: function(event) {
-				var eunit = $(UID['tabOptions_collectUnit']);
+				var eunit = document.getElementById(UID['tabOptions_collectUnit']);
 				var unit = toNum(eunit.value);
 				eunit.value = unit;
 				Data.options.autoCollect.unit = unit;
 			},
+			timeRuneChanged: function(event) {
+				var etime = document.getElementById(UID['tabOptions_collectRuneTime']);
+				var time = toNum(etime.value);
+				etime.value = time;
+				Data.options.autoCollectRune.delay = time;
+			},
+			unitRuneChanged: function(event) {
+				var eunit = document.getElementById(UID['tabOptions_collectRuneUnit']);
+				var unit = toNum(eunit.value);
+				eunit.value = unit;
+				Data.options.autoCollectRune.unit = unit;
+			},
 			refreshTimeChanged: function(event) {
 				var t = Tabs.Options;
-				var etime = $(UID['tabOptions_refreshTime']);
+				var etime = document.getElementById(UID['tabOptions_refreshTime']);
 				var time = toNum(etime.value);
 				etime.value = time;
 				Data.options.autoRefresh.delay = time;
@@ -28871,7 +31417,7 @@
 			},
 			refreshUnitChanged: function(event) {
 				var t = Tabs.Options;
-				var eunit = $(UID['tabOptions_refreshUnit']);
+				var eunit = document.getElementById(UID['tabOptions_refreshUnit']);
 				var unit = toNum(eunit.value);
 				eunit.value = unit;
 				Data.options.autoRefresh.unit = unit;
@@ -28896,20 +31442,20 @@
 			},
 			setEnableRefresh: function() {
 				var t = Tabs.Options;
-				var cR = $(UID['tabOptions_AutoRefresh']);
+				var cR = document.getElementById(UID['tabOptions_AutoRefresh']);
 				Data.options.autoRefresh.enabled = cR.checked;
 				t.autoRefreshTick();
 			},
 			flashRefreshTimeChanged: function(event) {
 				var t = Tabs.Options;
-				var etime = $(UID['tabOptions_flashRefreshTime']);
+				var etime = document.getElementById(UID['tabOptions_flashRefreshTime']);
 				var time = toNum(etime.value);
 				etime.value = time;
 				Data.options.flashRefresh.delay = time;
 			},
 			flashRefreshUnitChanged: function(event) {
 				var t = Tabs.Options;
-				var eunit = $(UID['tabOptions_flashRefreshUnit']);
+				var eunit = document.getElementById(UID['tabOptions_flashRefreshUnit']);
 				var unit = toNum(eunit.value);
 				eunit.value = unit;
 				Data.options.flashRefresh.unit = unit;
@@ -28917,17 +31463,17 @@
 
 			setEnableTab: function() {
 				var t = Tabs.Options;
-				var cWa = $(UID['tabOptions_TabWave']);
-				var cMu = $(UID['tabOptions_TabMulti']);
-				var cSp = $(UID['tabOptions_TabSpy']);
-				var cBo = $(UID['tabOptions_TabBookmark']);
-				var cIn = $(UID['tabOptions_TabInbox']);
-				var cSe = $(UID['tabOptions_TabSearch']);
-				var cAl = $(UID['tabOptions_TabAlliance']);
-				var cLo = $(UID['tabOptions_TabLog']);
-				var cSi = $(UID['tabOptions_TabSingle']);
-				var cWl = $(UID['tabOptions_TabWall']);
-				var cWh = $(UID['tabOptions_TabWheel']);
+				var cWa = document.getElementById(UID['tabOptions_TabWave']);
+				var cMu = document.getElementById(UID['tabOptions_TabMulti']);
+				var cSp = document.getElementById(UID['tabOptions_TabSpy']);
+				var cBo = document.getElementById(UID['tabOptions_TabBookmark']);
+				var cIn = document.getElementById(UID['tabOptions_TabInbox']);
+				var cSe = document.getElementById(UID['tabOptions_TabSearch']);
+				var cAl = document.getElementById(UID['tabOptions_TabAlliance']);
+				var cLo = document.getElementById(UID['tabOptions_TabLog']);
+				var cSi = document.getElementById(UID['tabOptions_TabSingle']);
+				var cWl = document.getElementById(UID['tabOptions_TabWall']);
+				var cWh = document.getElementById(UID['tabOptions_TabWheel']);
 				Data.options.disable_wave = cWa.checked;
 				Data.options.disable_multi = cMu.checked;
 				Data.options.disable_spies = cSp.checked;
@@ -28941,7 +31487,7 @@
 				Data.options.disable_wheel = cWh.checked;
 			},
 			onChangeLanguage: function() {
-				var lang = $(UID['tabOptions_language']).value;
+				var lang = document.getElementById(UID['tabOptions_language']).value;
 				Data.options.user_language = lang;
 				setLanguage(lang);
 			},
@@ -29056,6 +31602,24 @@
 					function() {}, true
 				);
 			},
+			onClickBackupSeed: function() {
+				var t = Tabs.Options;
+				dialogConfirm(translate('Do you want to save Seed in local file') + ' ?',
+					function() {
+						try {
+							setTimeout(function() {
+								var json_Seed = '{"Seed":' + JSON.stringify(Seed) + '}';
+								downloadDataURI({
+									filename: "doa_realm" + [SERVER_ID, Seed.player.name].join('_') + "_Seed.txt",
+									data: "data:application/text;base64," + Base64.encode(json_Seed)
+								});
+							}, 1000);
+						} catch (e) {}
+					},
+					/* Cancel */
+					function() {}, true
+				);
+			},
 			onClickBackupMap: function() {
 				var t = Tabs.Options;
 				dialogConfirm(translate('Do you want to save Map Data in local file') + ' ?',
@@ -29081,7 +31645,7 @@
 			},
 			onChangeRestoreFile: function() {
 				var t = Tabs.Options;
-				var files = $(UID['tabOptions_storage_file']).files;
+				var files = document.getElementById(UID['tabOptions_storage_file']).files;
 				if (!files.length) return;
 				var reader = new FileReader();
 				reader.onload = function(event) {
@@ -29098,16 +31662,16 @@
 						dial.getContentDiv().innerHTML = '<B>' + translate('Restore') + ' ' + translate('Error') + ' : <br><br> ' + e + '</b>';
 					}
 					/* Clear the file container for the next change */
-					$(UID['tabOptions_storage_file']).files = [];
-					$(UID['tabOptions_storage_file']).value = '';
+					document.getElementById(UID['tabOptions_storage_file']).files = [];
+					document.getElementById(UID['tabOptions_storage_file']).value = '';
 				};
 				reader.onerror = function(event) {
 					var error = event.target.error.name;
 					debugLog(error);
 					if (error == "NOT_READABLE_ERR") {}
 					/* Clear the file container for the next change */
-					$(UID['tabOptions_storage_file']).files = [];
-					$(UID['tabOptions_storage_file']).value = '';
+					document.getElementById(UID['tabOptions_storage_file']).files = [];
+					document.getElementById(UID['tabOptions_storage_file']).value = '';
 				};
 				for (var i = 0, file; file = files[i]; i++) {
 					/* Read file into memory as UTF-8 */
@@ -29119,16 +31683,16 @@
 				var t = Tabs.Options;
 				switch (task) {
 					case 'building':
-						$(UID['tabOptions_BStop']).disabled = false;
+						document.getElementById(UID['tabOptions_BStop']).disabled = false;
 						break;
 					case 'units':
-						$(UID['tabOptions_TStop']).disabled = false;
+						document.getElementById(UID['tabOptions_TStop']).disabled = false;
 						break;
 					case 'research':
-						$(UID['tabOptions_RStop']).disabled = false;
+						document.getElementById(UID['tabOptions_RStop']).disabled = false;
 						break;
 					case 'fortuna':
-						$(UID['tabOptions_FStop']).disabled = false;
+						document.getElementById(UID['tabOptions_FStop']).disabled = false;
 						break;
 				}
 				SoundPlayer.PlaySound(task, true);
@@ -29140,24 +31704,21 @@
 				var t = Tabs.Options;
 				switch (task) {
 					case 'building':
-						$(UID['tabOptions_BStop']).disabled = true;
+						document.getElementById(UID['tabOptions_BStop']).disabled = true;
 						break;
 					case 'units':
-						$(UID['tabOptions_TStop']).disabled = true;
+						document.getElementById(UID['tabOptions_TStop']).disabled = true;
 						break;
 					case 'research':
-						$(UID['tabOptions_RStop']).disabled = true;
+						document.getElementById(UID['tabOptions_RStop']).disabled = true;
 						break;
 					case 'fortuna':
-						$(UID['tabOptions_FStop']).disabled = true;
+						document.getElementById(UID['tabOptions_FStop']).disabled = true;
 						break;
 				}
 				SoundPlayer.StopSound(task);
 			}
 		}
-		/******************************** Options Tab ********************************/
-
-		/******************************** Log Tab ************************************/
 		Tabs.Log = {
 			tabOrder: LOG_TAB_ORDER,
 			tabLabel: 'Log',
@@ -29175,14 +31736,14 @@
 				var t = Tabs.Log;
 				t.container = div;
 				div.innerHTML = '' + '<ul class=tabs>' + '	<li class="tab first"><a id=' + setUID('tabLogActions') + '>' + translate('Actions') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabLogConsole') + '>' + translate('Console') + '</a></li>' + '	<li class=tab><a id=' + setUID('tabLogRequest') + '>' + translate('Statistics') + '</a></li>' + '</ul>' + '<div id=' + setUID('tabLog_Title') + ' class=' + UID['title'] + '>' + translate('Action Log') + '</div>' + '<div id=' + setUID('tabLog_DivAction') + ' class=' + UID['status_ticker'] + ' style="height:665px; max-height:665px; overflow-y:auto;">' + '	<table id=' + setUID('tabLog_ContAction') + ' class=' + UID['table_console'] + ' cellspacing=1 width=100%>' + '	<tr>' + '		<td class=' + UID['underline'] + ' width=5%></td>' + '		<td class=' + UID['underline'] + ' width=95%></td>' + '	</tr>' + '	</table>' + '</div>' + '<div id=' + setUID('tabLog_DivConsole') + ' class=' + UID['status_ticker'] + ' style="height:665px; max-height:665px; overflow-y:auto;">' + '	<table id=' + setUID('tabLog_ContConsole') + ' class=' + UID['table_console'] + ' cellspacing=1 width=100%>' + '	<tr>' + '		<td class=' + UID['underline'] + ' width=5%></td>' + '		<td class=' + UID['underline'] + ' width=95%></td>' + '	</tr>' + '	</table>' + '</div>' + '<div id=' + setUID('tabLog_DivRequest') + ' class=' + UID['status_ticker'] + ' style="height:665px; max-height:665px; overflow-y:auto;">' + '	<div id=' + setUID('tabLog_ContRequest') + '>' + '	</div>' + '	<br/>' + '	<center><input id=' + setUID('tabLogRequest_Clear') + ' type=button value="' + translate('Clear Stats') + '" /></center>' + '	<br>'; + '</div>';
-				t.content.push($(UID['tabLog_ContAction']));
-				t.content.push($(UID['tabLog_ContConsole']));
-				t.content.push($(UID['tabLog_ContRequest']));
-				t.title = $(UID['tabLog_Title']);
-				$(UID['tabLogActions']).addEventListener('click', t.tabLogActions, false);
-				$(UID['tabLogConsole']).addEventListener('click', t.tabLogConsole, false);
-				$(UID['tabLogRequest']).addEventListener('click', t.tabLogRequest, false);
-				$(UID['tabLogRequest_Clear']).addEventListener('click', function() {
+				t.content.push(document.getElementById(UID['tabLog_ContAction']));
+				t.content.push(document.getElementById(UID['tabLog_ContConsole']));
+				t.content.push(document.getElementById(UID['tabLog_ContRequest']));
+				t.title = document.getElementById(UID['tabLog_Title']);
+				document.getElementById(UID['tabLogActions']).addEventListener('click', t.tabLogActions, false);
+				document.getElementById(UID['tabLogConsole']).addEventListener('click', t.tabLogConsole, false);
+				document.getElementById(UID['tabLogRequest']).addEventListener('click', t.tabLogRequest, false);
+				document.getElementById(UID['tabLogRequest_Clear']).addEventListener('click', function() {
 					t.clearRequestStats();
 					t.tabLogRequest();
 				}, false);
@@ -29200,11 +31761,10 @@
 			tabLogActions: function() {
 				var t = Tabs.Log;
 				clearTimeout(t.timer);
-				Translation;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabLogActions']).className = 'selected';
-				$(UID['tabLogActions']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabLogActions']).className = 'selected';
+				document.getElementById(UID['tabLogActions']).style.zIndex = 1;
 				t.lastSubTab = 'tabLogActions';
 				t.content[0].parentNode.style.display = 'block';
 				t.content[1].parentNode.style.display = 'none';
@@ -29214,11 +31774,10 @@
 			tabLogConsole: function() {
 				var t = Tabs.Log;
 				clearTimeout(t.timer);
-				Translation;
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabLogConsole']).className = 'selected';
-				$(UID['tabLogConsole']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabLogConsole']).className = 'selected';
+				document.getElementById(UID['tabLogConsole']).style.zIndex = 1;
 				t.lastSubTab = 'tabLogConsole';
 				t.content[1].parentNode.style.display = 'block';
 				t.content[0].parentNode.style.display = 'none';
@@ -29228,10 +31787,10 @@
 			tabLogRequest: function() {
 				var t = Tabs.Log;
 				clearTimeout(t.timer);
-				$(UID[t.lastSubTab]).className = '';
-				$(UID[t.lastSubTab]).style.zIndex = 0;
-				$(UID['tabLogRequest']).className = 'selected';
-				$(UID['tabLogRequest']).style.zIndex = 1;
+				document.getElementById(UID[t.lastSubTab]).className = '';
+				document.getElementById(UID[t.lastSubTab]).style.zIndex = 0;
+				document.getElementById(UID['tabLogRequest']).className = 'selected';
+				document.getElementById(UID['tabLogRequest']).style.zIndex = 1;
 				t.lastSubTab = 'tabLogRequest';
 				t.content[2].parentNode.style.display = 'block';
 				t.content[0].parentNode.style.display = 'none';
@@ -29389,14 +31948,6 @@
 					dragonHandle: {
 						time: [],
 						error: []
-					},
-					wilderness: {
-						time: [],
-						error: []
-					},
-                    other: {
-						time: [],
-						error: []
 					}
 				};
 			},
@@ -29435,7 +31986,7 @@
 				var err1 = (error_requests > 0) ? '&nbsp;(' + error_requests + ')' : '';
 				var err2 = (error_last_hour > 0) ? '&nbsp;(' + error_last_hour + ')' : '';
 				m += '	<tr><td colspan=2>&nbsp</td></tr>' + '	<tr><td>&nbsp</td><td colspan=3 align=center><hr></td></tr>' + '	<tr valign=top>' + '		<td class=right width=55%>' + translate('Total') + ' :</td>' + '		<td align=right width=16%><font color=red><b>' + numf(total_requests, ' ') + err1 + '</b></font></td>' + '		<td align=right width=13%>' + numf(perHour, ' ') + '</td>' + '		<td align=right width=16%><font color=red><b>' + numf(total_last_hour, ' ') + err2 + '</b></font></td>' + '	</tr>' + '	<tr><td colspan=4>&nbsp</td></tr>' + '	<tr valign=top>' + '		<td class=right width=55%>' + translate('Start Date') + ' :</td>' + '		<td align=left colspan=3>' + new Date(Data.stats.requests.start_at * 1000).myString() + '</td>' + '	</tr>' + '	<tr valign=top>' + '		<td class=right width=55%>' + translate('Run Time') + ' :</td>' + '		<td align=left colspan=3>' + timestr(Data.stats.requests.run_time, true) + '</td>' + '	</tr>' + '	<tr valign=top>' + '		<td class=right width=55%>' + translate('Number of one-hour-bans') + ' :</td>' + '		<td align=left colspan=3>' + numf(Data.stats.requests.count_block, ' ') + '</td>' + '	</tr>' + '	<tr valign=top>' + '		<td class=right width=55%>' + translate('Last Block') + ' :</td>' + '		<td align=left colspan=3>' + new Date(Data.stats.requests.last_block * 1000).myString() + '</td>' + '	</tr>' + '	<tr valign=top>' + '		<td class=right width=55%>' + translate('Not blocked since') + ' :</td>' + '		<td align=left colspan=3>' + timestr(not_blocked_since, true) + '</td>' + '	</tr>' + '</table>';
-				var element = $(UID['tabLog_ContRequest']);
+				var element = document.getElementById(UID['tabLog_ContRequest']);
 				if (element != null) element.innerHTML = m;
 			},
 			hide: function() {
@@ -29487,9 +32038,7 @@
 					ts: ts
 				});
 			}
-		}
-
-        /******************************** CPT Tab ************************************/
+		};
 		Tabs.Cpt = {
 			tabOrder: CPT_TAB_ORDER,
 			tabLabel: 'CPT',
@@ -29505,19 +32054,19 @@
                 + '	<li class="tab first"><a id=' + setUID('tabCptSearchPlayer') + '>' + translate('search') + ' ' + translate('players') + '</a></li>' 
                 + '	<li class=tab><a id=' + setUID('tabCptSearchAlliance') + '>' + translate('search') + ' ' + translate('alliances') + '</a></li>' 
                 + '</ul>' 
-                + '<div id=' + setUID('tabCpt_Content') + ' style="padding-top:0px; height:655px; max-height:655px; overflow-y:auto; width:540px; max-width:540px; overflow-x:auto"></div>';
+                + '<div id=' + setUID('tabCpt_Content') + ' class="' + UID['status_ticker'] + '" style="height:665px; max-height:665px; overflow-y:auto;"></div>';
 				t.container.innerHTML = m;
-				$(UID['tabCptSearchPlayer']).observe('click', t.tabCptSearchPlayer);
-				$(UID['tabCptSearchAlliance']).observe('click', t.tabCptSearchAlliance);
+				document.getElementById(UID['tabCptSearchPlayer']).addEventListener('click', t.tabCptSearchPlayer);
+				document.getElementById(UID['tabCptSearchAlliance']).addEventListener('click', t.tabCptSearchAlliance);
 				t.show();
 			},
 
 			tabCptSearchPlayer: function(lunchSearch, idUser) {
 				var t = Tabs.Cpt;
-                $(UID['tabCptSearchAlliance']).className = '';
-				$(UID['tabCptSearchAlliance']).style.zIndex = 0;
-				$(UID['tabCptSearchPlayer']).className = 'selected';
-				$(UID['tabCptSearchPlayer']).style.zIndex = 1;
+                document.getElementById(UID['tabCptSearchAlliance']).className = '';
+				document.getElementById(UID['tabCptSearchAlliance']).style.zIndex = 0;
+				document.getElementById(UID['tabCptSearchPlayer']).className = 'selected';
+				document.getElementById(UID['tabCptSearchPlayer']).style.zIndex = 1;
                 t.contentType = 0;
                 
                 var m =  '<div class=' + UID['title'] + '>' + translate('search') + ' ' + translate('players') + '</div>' 
@@ -29534,14 +32083,14 @@
                     + '   <div class=' + UID['subtitle'] + '>' + translate('view') + '</div>'
                     + '   <div id='+setUID('tabCPT_divPlayerDetail')+'></div>'
                     + '</div>';
-                $(UID['tabCpt_Content']).update(m);
+                document.getElementById(UID['tabCpt_Content']).innerHTML = (m);
                 
-                $(UID['tabCPT_btnSearch']).observe('click', searchPlayer);
+                document.getElementById(UID['tabCPT_btnSearch']).addEventListener('click', searchPlayer);
                 
                 function searchPlayer() {
-                    var strSearch = $(UID['tabCPT_playerToSearch']).value.trim();
+                    var strSearch = document.getElementById(UID['tabCPT_playerToSearch']).value.trim();
                     
-                    new MyAjax.searchCPT(( $(UID['tabCPT_playerSearchHisto']).checked ? CPT_SEARCH.playersHisto : CPT_SEARCH.players ), strSearch, function(rslt) {
+                    new MyAjax.searchCPT(( document.getElementById(UID['tabCPT_playerSearchHisto']).checked ? CPT_SEARCH.playersHisto : CPT_SEARCH.players ), strSearch, function(rslt) {
                         if(rslt.dat.result) {
                             var m = '<table class=' + UID['row_style'] + ' width=100%><tr>';
                             var tb = [];
@@ -29554,12 +32103,12 @@
                                 tb.push('tabCPT_' + rslt.dat.players[i].id);
                             }
                             m += '</tr></table>';
-                            $(UID['tabCPT_divResult']).update(m);
+                            document.getElementById(UID['tabCPT_divResult']).innerHTML = (m);
                             for(i=0; i < tb.length ; i++) {
-                                $(UID[tb[i]]).observe('click', searchDetailPlayer);
+                                document.getElementById(UID[tb[i]]).addEventListener('click', searchDetailPlayer);
                             }
                         } else {
-                            $(UID['tabCPT_divResult']).update(rslt.dat.msg);
+                            document.getElementById(UID['tabCPT_divResult']).innerHTML = (rslt.dat.msg);
                         }
                     });
                     
@@ -29592,17 +32141,17 @@
                                 bb.push('tabCpt_Bookmark_' + i);
                                }
                                m += '</table>';
-                            $(UID['tabCPT_divPlayerDetail']).update(m);
-                            $(UID['tabCPT_MsgUser']).observe('click', onClickMsg);
-                            $(UID['tabCPT_GoCptPlayer' + player.id]).observe('click', function(event) {
+                            document.getElementById(UID['tabCPT_divPlayerDetail']).innerHTML = (m);
+                            document.getElementById(UID['tabCPT_MsgUser']).addEventListener('click', onClickMsg);
+                            document.getElementById(UID['tabCPT_GoCptPlayer' + player.id]).addEventListener('click', function(event) {
                                 var id = event.target.getAttribute('ref');
                                 window.open('https://www.calcium-pro-tool.com/CPT/displayUser.php?id='+id+'&realmId='+SERVER_ID);
                             });
                             for(var j=0; j < bs.length; j++) {
-                            	$(UID[bs[j]]).observe('click', cptSpyNow);
+                            	document.getElementById(UID[bs[j]]).addEventListener('click', cptSpyNow);
                             }
                             for(var k=0; k < bb.length; k++) {
-                            	$(UID[bb[k]]).observe('click', addBookmark);
+                            	document.getElementById(UID[bb[k]]).addEventListener('click', addBookmark);
                             }
                             
                             function cptSpyNow(event) {
@@ -29627,17 +32176,17 @@
                                     args[3]);
                             }
                         } else {
-                            $(UID['tabCPT_divPlayerDetail']).update(rslt.dat.msg);
+                            document.getElementById(UID['tabCPT_divPlayerDetail']).innerHTML = (rslt.dat.msg);
                         }
                     });
                 }
 			},
 			tabCptSearchAlliance: function(lunchSearch, idAlliance) {
 				var t = Tabs.Cpt;
-                $(UID['tabCptSearchPlayer']).className = '';
-				$(UID['tabCptSearchPlayer']).style.zIndex = 0;
-				$(UID['tabCptSearchAlliance']).className = 'selected';
-				$(UID['tabCptSearchAlliance']).style.zIndex = 1;
+                document.getElementById(UID['tabCptSearchPlayer']).className = '';
+				document.getElementById(UID['tabCptSearchPlayer']).style.zIndex = 0;
+				document.getElementById(UID['tabCptSearchAlliance']).className = 'selected';
+				document.getElementById(UID['tabCptSearchAlliance']).style.zIndex = 1;
                 t.contentType = 1;
                 
                 var m =  '<div class=' + UID['title'] + '>' + translate('search') + ' ' + translate('alliances') + '</div>' 
@@ -29653,12 +32202,12 @@
                     + '   <div class=' + UID['subtitle'] + '>' + translate('view') + '</div>'
                     + '   <div id='+setUID('tabCPT_divAllianceDetail')+'></div>'
                     + '</div>';
-                $(UID['tabCpt_Content']).update(m);
+                document.getElementById(UID['tabCpt_Content']).innerHTML = (m);
                 
-                $(UID['tabCPT_btnAllianceSearch']).observe('click', searchAlliance);
+                document.getElementById(UID['tabCPT_btnAllianceSearch']).addEventListener('click', searchAlliance);
                 
                 function searchAlliance() {
-                    var strSearch = $(UID['tabCPT_allianceToSearch']).value.trim();
+                    var strSearch = document.getElementById(UID['tabCPT_allianceToSearch']).value.trim();
                     new MyAjax.searchCPT(CPT_SEARCH.alliances, strSearch, function(rslt) {
                         if(rslt.dat.result) {
                             var m = '<table class=' + UID['row_style'] + ' width=100%><tr>';
@@ -29672,12 +32221,12 @@
                                 tb.push('tabCPT_' + rslt.dat.alliances[i].id);
                             }
                             m += '</tr></table>';
-                            $(UID['tabCPT_divAllianceResult']).update(m);
+                            document.getElementById(UID['tabCPT_divAllianceResult']).innerHTML = (m);
                             for(i=0; i < tb.length ; i++) {
-                                $(UID[tb[i]]).observe('click', searchDetailAlliance);
+                                document.getElementById(UID[tb[i]]).addEventListener('click', searchDetailAlliance);
                             }
                         } else {
-                            $(UID['tabCPT_divAllianceResult']).update(rslt.dat.msg);
+                            document.getElementById(UID['tabCPT_divAllianceResult']).innerHTML = (rslt.dat.msg);
                         }
                     });
                     
@@ -29707,20 +32256,20 @@
                                 bm.push('tabCPT_MsgUser_'+i);
                             }
                             m += '</table>';
-                            $(UID['tabCPT_divAllianceDetail']).update(m);
+                            document.getElementById(UID['tabCPT_divAllianceDetail']).innerHTML = (m);
                             for(var j=0 ; j<tcpt.length ; j++) {
-                                $(UID[tcpt[j]]).observe('click', function(event) {
+                                document.getElementById(UID[tcpt[j]]).addEventListener('click', function(event) {
                                     var id = event.target.getAttribute('ref');
                                     window.open('https://www.calcium-pro-tool.com/CPT/displayUser.php?id='+id+'&realmId='+SERVER_ID);
                                 });
-                                $(UID[bm[j]]).observe('click', onClickMsg);
+                                document.getElementById(UID[bm[j]]).addEventListener('click', onClickMsg);
                             }
-                            $(UID['tabCPT_GoCptAlliance' + alliance.id]).observe('click', function(event) {
+                            document.getElementById(UID['tabCPT_GoCptAlliance' + alliance.id]).addEventListener('click', function(event) {
                                 var id = event.target.getAttribute('ref');
                                 window.open('https://www.calcium-pro-tool.com/CPT/displayAlliance.php?id='+id+'&realmId='+SERVER_ID);
                             });
                         } else {
-                            $(UID['tabCPT_divAllianceDetail']).update(rslt.dat.msg);
+                            document.getElementById(UID['tabCPT_divAllianceDetail']).innerHTML = (rslt.dat.msg);
                         }
                     });
                 }
@@ -29739,1199 +32288,281 @@
 						break;
 				}
 			}
-        }
+        };
+		Tabs.City = {
+			tabOrder: CITY_TAB_ORDER,
+			tabLabel: 'city',
+			tabDisabled: !CITY_TAB_ENABLE,
+			container: null,
+            contentType: 0,
 
-		function actionLog(msg) {
-			Tabs.Log.addMsg(msg, 0);
-		}
+			init: function(div) {
+				var t = Tabs.City;
+				t.container = div;
+				var m = '' 
+                + '<ul class=tabs>' 
+				+ '	<li class=tab><a id=' + setUID('tabCity_Capital') + '>' + Seed.cities[CAPITAL.id].name + '</a></li>'
+                + '	<li class="tab first"><a id=' + setUID('tabCity_LunarOutpost') + '>' + translate('luna-outpost') + '</a></li>' 
+                + '	<li class=tab><a id=' + setUID('tabCity_ColossusOutPost') + '>' + translate('colossus-outpost') + '</a></li>'
+                + '</ul>' 
+                + '<div id="' + setUID('tabCity_Content') + '" class="' + UID['status_ticker'] + '" style="height:665px; max-height:665px; overflow-y:auto;"></div>';
+				t.container.innerHTML = m;
+				document.getElementById(UID['tabCity_Capital']).addEventListener('click', t.tabCity_Capital);
+				document.getElementById(UID['tabCity_LunarOutpost']).addEventListener('click', t.tabCity_LunarOutpost);
+				document.getElementById(UID['tabCity_ColossusOutPost']).addEventListener('click', t.tabCity_ColossusOutPost);
+				t.show();
+			},
 
-		function consoleLog(msg) {
-			Tabs.Log.addMsg(msg, 1);
-		}
-
-		function verboseLog(msg) {
-			if (Data.options && Data.options.verboseLog.enabled) consoleLog(msg);
-		}
-		/******************************** Log Tab ************************************/
-
-		/***********************************************************************
-		 * MyAjaxRequest : Performs the following actions: - Places all
-		 * parameters into an object - Determines method - Sets maximum timeout -
-		 * Validates returned data and passes back results to originating
-		 * function
-		 * 
-		 * Returns the following data: - ok (boolean) - dat (object if present) -
-		 * errmsg (string if present)
-		 **********************************************************************/
-
-		function MyAjaxRequest(req_type, url, params, callback, isPost, binary) {
-
-			if (Data.stats.requests == null || !Data.stats.requests) {
-				Data.stats.requests = {
-					start_at: 0,
-					run_time: 0,
-					last_block: 0,
-					count_block: 0,
-					ajax_type: {}
-				};
-			}
-			if (Data.stats.requests.ajax_type == null || !Data.stats.requests.ajax_type) {
-				Data.stats.requests.ajax_type = {
-					binary: {
-						time: [],
-						error: []
-					},
-					versions: {
-						time: [],
-						error: []
-					},
-					locales: {
-						time: [],
-						error: []
-					},
-					cookie: {
-						time: [],
-						error: []
-					},
-					manifest: {
-						time: [],
-						error: []
-					},
-					player: {
-						time: [],
-						error: []
-					},
-					cities: {
-						time: [],
-						error: []
-					},
-					jobs: {
-						time: [],
-						error: []
-					},
-					dragons: {
-						time: [],
-						error: []
-					},
-					alliances: {
-						time: [],
-						error: []
-					},
-					membership: {
-						time: [],
-						error: []
-					},
-					activity: {
-						time: [],
-						error: []
-					},
-					map: {
-						time: [],
-						error: []
-					},
-					tile_at: {
-						time: [],
-						error: []
-					},
-					building: {
-						time: [],
-						error: []
-					},
-					research: {
-						time: [],
-						error: []
-					},
-					training: {
-						time: [],
-						error: []
-					},
-					resurrect: {
-						time: [],
-						error: []
-					},
-					canceljob: {
-						time: [],
-						error: []
-					},
-					marches: {
-						time: [],
-						error: []
-					},
-					cancelmarch: {
-						time: [],
-						error: []
-					},
-					reports: {
-						time: [],
-						error: []
-					},
-					reports_del: {
-						time: [],
-						error: []
-					},
-					reports_read: {
-						time: [],
-						error: []
-					},
-					message: {
-						time: [],
-						error: []
-					},
-					minigame: {
-						time: [],
-						error: []
-					},
-					save_minigame: {
-						time: [],
-						error: []
-					},
-					leaderboards: {
-						time: [],
-						error: []
-					},
-					collect: {
-						time: [],
-						error: []
-					},
-					claim: {
-						time: [],
-						error: []
-					},
-					defended: {
-						time: [],
-						error: []
-					},
-					defense: {
-						time: [],
-						error: []
-					},
-					items: {
-						time: [],
-						error: []
-					},
-					breeding: {
-						time: [],
-						error: []
-					},
-					feeding: {
-						time: [],
-						error: []
-					},
-					dragonHandle: {
-						time: [],
-						error: []
-					},
-					customization: {
-						time: [],
-						error: []
-					},
-					wilderness: {
-						time: [],
-						error: []
-					},
-					trade: {
-						time: [],
-						error: []
-					},
-					forge: {
-						time: [],
-						error: []
-					},
-                    other: {
-						time: [],
-						error: []
-					}
-				};
-			}
-
-			var options = {
-				onSuccess: onSuccess,
-				onFailure: onFailure,
-				on403: on403
-			};
-			var ajax, msg, headers = {};
-
-			options.method = (isPost || isPost == 1) ? 'POST' : 'GET';
-			options.parameters = params;
-			options.timeoutSecs = 60;
-			options.binary = binary;
-
-			function onSuccess(r) {
-				var success = true,
-					errmsg = '';
-				if (r.status === 200 && r.responseText) {
-					if (url.indexOf(".xml") !== -1 || binary) {
-						callback({
-							ok: true,
-							dat: r.responseText
-						});
-					} else {
-						var data = r.responseText;
-						try {
-							data = JSON.parse(r.responseText);
-							if (data.result) {
-								success = data.result.success;
-								if (!success && data.result.reason) errmsg = data.result.reason;
-								else if (!success && data.result && data.result.errors) {
-									if (typeof data.result.errors == "string")
-										errmsg = data.result.errors
-									else errmsg = data.result.errors.join(' ');
-								} else if (!success && !data.result && data.errors) {
-									if (typeof data.errors == "string")
-										errmsg = data.errors
-									else errmsg = data.errors.join(' ');
-								}
-							}
-						} catch (e) {
-							logit('could not parse responseText = ' + r.responseText);
-							success = false;
-							errmsg = r.responseText;
+			tabCity_Capital: function() {
+				var t = Tabs.City;
+                document.getElementById(UID['tabCity_ColossusOutPost']).className = '';
+				document.getElementById(UID['tabCity_ColossusOutPost']).style.zIndex = 0;
+				document.getElementById(UID['tabCity_Capital']).className = 'selected';
+				document.getElementById(UID['tabCity_Capital']).style.zIndex = 1;
+				document.getElementById(UID['tabCity_LunarOutpost']).className = '';
+				document.getElementById(UID['tabCity_LunarOutpost']).style.zIndex = 0;
+                t.contentType = 2;
+        
+				var m =  '' 
+					+ ' <div class=' + UID['content'] + '>'
+					+ '   <div id="'+setUID('tabCity_capitalDiv')+'">'
+					+ '		<div id="'+setUID('tabCapitalCity_challengesAccord')+'" ref="tabCapitalCity_challengesContent" class='+UID['title']+' style="text-align:center;color:#ffffff;background-color: rgb(60,60,60);">'+translate('competition')+ ' - <input class="'+UID['btn_black']+'" id="'+setUID('btnCityCapital_Challenges')+'" type="button" style="width:auto !important;" value="'+translate('Refresh')+'" /></div>'
+					+ '		<div class='+UID['content']+' id='+setUID('tabCapitalCity_challengesContent')+'></div>'
+					+ '		<div id="'+setUID('tabCapitalCity_loginMessageAccord')+'" ref="tabCapitalCity_loginMessage" class='+UID['title']+' style="text-align:center;color:#ffffff;background-color: rgb(60,60,60);">'+translate('newsfeed')+' - <input class="'+UID['btn_black']+'" id="'+setUID('btnCityCapital_LoginMessage')+'" type="button" style="width:auto !important;" value="'+translate('Refresh')+'" /></div>'
+					+ '		<div class='+UID['content']+' id='+setUID('tabCapitalCity_loginMessage')+'></div>'
+					+ '		<div id="'+setUID('tabCapitalCity_treasureAccord')+'" ref="tabCapitalCity_treasureContent" class='+UID['title']+' style="text-align:center;color:#ffffff;background-color: rgb(60,60,60);">'+translate('treasure-hold')+' - <input class="'+UID['btn_black']+'" id="'+setUID('btnCityCapital_TreasureHold')+'" type="button" style="width:auto !important;" value="'+translate('Refresh')+'" /></div>'
+					+ '		<div class='+UID['content']+' id='+setUID('tabCapitalCity_treasureContent')+'></div>'
+					+ '   </div>'
+                    + '</div>';
+                document.getElementById(UID['tabCity_Content']).innerHTML = (m);
+				updateLoginMessages();
+				updateChallenges();
+				document.getElementById(UID['btnCityCapital_Challenges']).addEventListener('click', clickToUpdateChallenges);
+				document.getElementById(UID['btnCityCapital_LoginMessage']).addEventListener('click', clickToUpdateLoginMessages);
+				
+				function updateChallenges() {
+					var m = '', tT = [], timeRemaining=0;
+					//SERVER_ID;
+					if(Seed.challenges.active) {
+						timeRemaining = ((Seed.challenges.active.end_time - serverTime()) > 0) ? timestr(Seed.challenges.active.end_time - serverTime()) : 0;
+						m+='<div challenge="active" challenge_id="'+Seed.challenges.active.challenge_id+'" ref="tabCapitalCity_text_challengesAccord_'+Seed.challenges.active.challenge_id+'" id="'+setUID('tabCapitalCity_title_challengesAccord_'+Seed.challenges.active.challenge_id)+'" class="'+UID['subtitle']+'">'+Seed.challenges.active.name+' - <font color=yellow>'+timeRemaining+'</font></div>';
+						m+='<div style="overflow: visible;display: none;" id="'+setUID('tabCapitalCity_text_challengesAccord_'+Seed.challenges.active.challenge_id)+'"></div>';
+						tT.push('tabCapitalCity_title_challengesAccord_'+Seed.challenges.active.challenge_id);
+						document.getElementById(UID['tabCapitalCity_challengesContent']).innerHTML = (m);
+						for(var i=0;i<tT.length;i++) {
+						  $(UID[tT[i]]).observe('click', updateChallengeText);
 						}
-						callback({
-							ok: success,
-							dat: data,
-							errmsg: errmsg
-						});
-					}
-				} else {
-					msg = 'The request was successful but no data was returned';
-					callback({
-						ok: false,
-						errmsg: msg
-					});
-				}
-			}
-
-			function onFailure(r) {
-				if (Data.stats.requests.ajax_type) {
-					if (Data.stats.requests.ajax_type[req_type]) Data.stats.requests.ajax_type[req_type].error.push(toNum(serverTime()));
-					else logit('MyAjaxRequest, ' + req_type + ' not defined in Data.stats.requests.ajax_type');
-				}
-				var res = {
-					ok: false,
-					status: r.status,
-					errmsg: r.statusText
-				};
-				if (r.status > 200 && r.responseText && !(/(404|429|502|509)/.test(r.status))) {
-					res.dat = r.responseText;
-					res.errmsg = r.responseText;
-				} else if (r.status == 404) {
-					res.errmsg = 'The page you were looking for doesn\'t exist (404)';
-				} else if (r.status == 429) {
-					if (!E429_TIMER || (E429_TIMER - toNum(serverTime())) < 0) {
-						E429_TIMER = toNum(serverTime()) + 3600;
-						Data.stats.requests.last_block = toNum(serverTime());
-						Data.stats.requests.count_block++;
-					}
-					res.errmsg = '<b>API </b>' + translate('<b>Rate Limit Exceeded</b>, too many requests!');
-				} else if (r.status == 502) {
-					res.errmsg = (r.statusText || 'Bad gateway');
-				} else if (r.status == 509) {
-					res.errmsg = translate('<b>Rate Limit Exceeded</b>, too many requests!');
-				} else {
-					res.errmsg = 'This browser is not compatible at this time';
-				}
-				callback(res);
-			}
-
-			function on403(r) {
-				dialogFatal('<b>' + kFatalSeedTitle + '</b><br><br>' + '<br>' + '<font color="#C00"><b> ' + r.statusText + '</b></font>' + '<br><br><div align=left>' + '<b>Previous Requirements</b><br><br>' + '<b>FIREFOX</b>' + '<ul><li>Download and install <a href="https://addons.mozilla.org/es-ES/firefox/addon/refcontrol/">RefControl</a>' + '</li><li>Once installed click Tools - RefControlOptions' + '</li><li>Click Add Site and type in <b>wonderhill.com</b>' + '</li><li>Check the Block - Send no referer radio box' + '</li><li>Click OK and then OK again' + '</li></ul><br>' + '<b>CHROME</b>' + '<ul><li>Right click on your "Chrome" icon (either on your Desktop or your Taskbar)' + '</li><li>Choose properties' + '</li><li>At the end of your target line, place these parameters: <b>--no-referrers</b>' + '</li><li>Click OK' + '</li></ul><br><br></div>' + '<a id="' + UID['support_link'] + '" href="" target="_blank">Bugs and Known Issues</a><br>');
-				var res = {
-					ok: false,
-					status: r.status,
-					errmsg: r.statusText
-				};
-				callback(res);
-			}
-
-			if (E429_TIMER && (E429_TIMER - toNum(serverTime())) > 0) {
-				onFailure({
-					status: 429,
-					statusText: 'lock by script'
-				});
-			} else {
-				if (Data.stats.requests.ajax_type) {
-					if (Data.stats.requests.ajax_type[req_type]) Data.stats.requests.ajax_type[req_type].time.push(toNum(serverTime()));
-					else logit('MyAjaxRequest, ' + req_type + ' not defined in Data.stats.requests.ajax_type');
-				}
-				ajax = new AjaxRequest(url, options, req_type);
-			}
-		}
-
-		/***********************************************************************
-		 * AjaxRequest : Performs the following actions: - Generates an
-		 * appropriate request header - Parses the request parameters - Sends
-		 * the actual request - Determines if request was successful based on
-		 * returned status only - Handles a request timed out condition
-		 * 
-		 * Returns the following data: - responseText (should be JSON but could
-		 * be almost anything) - status (integar) - statusText (string if
-		 * present) - ajax (raw ajax request)
-		 **********************************************************************/
-
-		function AjaxRequest(url, opts, req_type) {
-			var timer = null,
-				ajax, headers = {}, h, params, overrideMimeType;
-
-			function onreadystatechange(ajax) {
-				if (ajax.readyState === 4) {
-					clearTimeout(timer);
-					var response = {
-						responseText: ajax.responseText,
-						status: ajax.status,
-						statusText: ajax.statusText,
-						ajax: ajax
-					}
-					if ((ajax.status >= 200 && ajax.status < 300) || ajax.status === 304) {
-						if (opts.onSuccess) opts.onSuccess(response);
-					} else {
-						debugLog(url + ' Failed : ' + inspectObj(response, 8, 1));
-						if (opts.onFailure) opts.onFailure(response);
-						if (opts['on' + ajax.status])
-							opts['on' + ajax.status](response);
 					}
 				}
-			}
-			if(req_type == 'manifest') {
-				url = ((url.indexOf('http') == -1) ? C.attrs.apiServer.substring(0, C.attrs.apiServer.length-4) + '/' + url : url);
-			} else {
-				url = ((url.indexOf('http') == -1) ? C.attrs.apiServer + '/' + url : url);
-			}
-			/* Parse request parameters */
-			params = typeof opts === 'string' ? opts.parameters : Object.toQueryString(opts.parameters).replace(/\_/g, '%5F').replace(/\(/g, '%28').replace(/\)/g, '%29');
-
-			/* Change Accept request header based on browser */
-			headers['Accept'] = IsChrome ? '*/*' : 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8,*/*;q=0.6,*/*;q=0.4';
-			/* Add request header specific to POST request only */
-			if (opts.method == 'POST') {
-				headers['x-s3-aws'] = SHA1("Draoumculiasis" + params + "LandCrocodile" + url + "Bevar-Asp");
-				headers['content-type'] = 'application/x-www-form-urlencoded';
-			} else {
-				if (params.length > 0) url += (url.include('?') ? '&' : '?') + params;
-			}
-			if (opts && opts.headers && opts.headers.overrideMime) overrideMimeType = opts.headers.overrideMime;
-			/* change content-type and mime type if binary function */
-			if (opts.binary || req_type == 'manifest') {
-				headers['content-type'] = 'text/plain; charset=x-user-defined';
-				overrideMimeType = 'text/plain; charset=x-user-defined';
-			}
-
-			var isGM = typeof GM_info === 'object' && typeof GM_info.version === 'string' && typeof GM_getValue != 'undefined' && typeof GM_getValue('a', 'b') != 'undefined';
-			if (typeof GM_xmlhttpRequest === 'function' && isGM) {
-				GM_xmlhttpRequest({
-					method: opts.method,
-					url: url,
-					data: (opts.method === 'POST' ? params : null),
-					headers: headers,
-					overrideMimeType: overrideMimeType,
-					ontimeout: (opts.timeoutSecs ? opts.timeoutSecs * 1000 : 0),
-					onreadystatechange: onreadystatechange
-				});
-			} else {
-				ajax = new XMLHttpRequest();
-				if (overrideMimeType) ajax.overrideMimeType(overrideMimeType);
-				ajax.onreadystatechange = function() {
-					if (ajax.readyState === 4) {
-						clearTimeout(timer);
-						var response = {
-							responseText: ajax.responseText,
-							status: ajax.status,
-							statusText: ajax.statusText,
-							ajax: ajax
-						}
-						if ((ajax.status >= 200 && ajax.status < 300) || ajax.status === 304) {
-							if (opts.onSuccess) opts.onSuccess(response);
+				function updateChallengeTournamentText(chalDet, chalGlob, el) {
+					var m = '';
+					$(el).update(m);
+					Effect.toggle(el, 'blind', { duration: 1.0 });
+				}
+				function updateChallengeText(chalDet, chalGlob, el) {
+					var m = '';
+					$(el).update(m);
+					Effect.toggle(el, 'blind', { duration: 1.0 });
+				}
+				function updateChallengeText(event) {
+					function cb(challenge_id) {
+						if(chalGlob.tiers.length == 0) {
+							updateChallengeTournamentText(Seed.challenges[challenge_id], chalGlob, div_el);
 						} else {
-							if (opts.onFailure) opts.onFailure(response);
-							if (opts['on' + ajax.status])
-								opts['on' + ajax.status](response);
+							updateChallengeText(Seed.challenges[challenge_id], chalGlob, div_el);
 						}
-					}
-				}
-				ajax.open(opts.method, url, true);
-				/* Add request headers to ajax request */
-				for (h in headers) ajax.setRequestHeader(h, headers[h]);
-				if (opts.timeoutSecs) timer = setTimeout(function() {
-					ajax.abort();
-					if (opts.onFailure) {
-						/*
-						 * CHECK: 599 is custom error code. See if better option
-						 * exists.
-						 */
-						opts.onFailure({
-							responseText: null,
-							status: 599,
-							statusText: 'Request Timed Out',
-							ajax: ajax
-						});
-					}
-				}, opts.timeoutSecs * 1000);
-				/* Send request with params if POST otherwise just send request */
-				ajax.send((opts.method == 'POST') ? params : null);
-			}
-		}
-
-
-		/******************************** Modal dialog function ***********************/
-		var downloadDataURI = function(options) {
-			if (!options || !options.data) return;
-			if (options.data && !options.filename) options.filename = "download." + options.data.split(",")[0].split(";")[0].substring(5).split("/")[1];
-			if (!options.url) options.url = "https://download-data-uri.appspot.com/"; 
-			var t = '<FORM method="post" action="' + options.url + '" style="display:none">' + '<input type="hidden" name="filename" value="' + options.filename + '"/>' + '<input type="hidden" name="data" value="' + options.data + '"/>' + '<input id=xxpbButSubmit type=submit value=SUBMIT></form>';
-			var e = document.createElement('div');
-			e.innerHTML = t;
-			document.body.appendChild(e);
-			setTimeout(function() {
-				document.getElementById('xxpbButSubmit').click();
-			}, 0);
-		}
-
-		function dialogConfirm(msg, onContinue, onCancel, two_buttons) {
-			var save_popUp = {
-				x: Data.options.popUp.x,
-				y: Data.options.popUp.y
-			};
-			var confirmPop = new PopUp('newversion' + serverTime(), 800 + Math.randRange(1, 50), 300, 300, 150, true);
-			confirmPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + ' style="margin-top:5px; padding-top:5px;  padding-bottom:5px;"><center><b>' + scriptName + ': ' + translate('Confirmation') + '!</b></center></div>';
-			var layoutDiv = document.createElement('div');
-			layoutDiv.className = 'container';
-			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
-			layoutDiv.style.color = '#000';
-			layoutDiv.style.height = '100%';
-			var layout = '<table align=center valign=center style="height: 100%">' + '<tr align=center height=60%>' + '<td>' + msg + '</td>' + '</tr>' + '<tr align=center>' + '<td>' + '<input id=' + setUID('btn_ok') + ' type=button class=confirm_button value="' + translate('OK') + '" />';
-			if (two_buttons) {
-				layout += '	&nbsp; &nbsp;' + '<input id=' + setUID('btn_cancel') + ' type=button class=confirm_button value=' + translate('Cancel') + ' />';
-			}
-			layout += '</td></tr></table>';
-			if (confirmPop.getMainDiv().lastChild)
-				confirmPop.getMainDiv().removeChild(confirmPop.getMainDiv().lastChild);
-			confirmPop.getMainDiv().appendChild(layoutDiv);
-			layoutDiv.innerHTML = layout;
-
-			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
-				confirmPop.show(false);
-				Data.options.popUp = {
-					open: Data.options.popUp.open,
-					drag: Data.options.popUp.drag,
-					x: save_popUp.x,
-					y: save_popUp.y
-				};
-				if (onContinue && typeof(onContinue) == "function") onContinue();
-			}, false);
-
-			if (two_buttons) {
-				document.getElementById(UID['btn_cancel']).addEventListener('click', function() {
-					confirmPop.show(false);
-					Data.options.popUp = {
-						open: Data.options.popUp.open,
-						drag: Data.options.popUp.drag,
-						x: save_popUp.x,
-						y: save_popUp.y
-					};
-					if (onCancel && typeof(onCancel) == "function") onCancel();
-				}, false);
-			}
-			confirmPop.show(true);
-		}
-
-		function dialogCopyPaste() {
-			var save_popUp = {
-				x: Data.options.popUp.x,
-				y: Data.options.popUp.y
-			};
-			var copyPastePop = new PopUp('copyPaste', 100, 50, 500, 750, true);
-			copyPastePop.getTopDiv().innerHTML = '<div class=' + UID['title'] + ' style="width=90%; margin-top:5px; padding-top:5px;  padding-bottom:5px;"><center><b>' + scriptName + ': ' + translate('Message') + '!</b></center></div>';
-			var layoutDiv = document.createElement('div');
-			layoutDiv.className = 'container';
-			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
-			layoutDiv.style.color = '#000';
-			layoutDiv.style.height = '100%';
-			setUID('dcp_type');
-			var layout = '<br><table width=80% align=center><tr>' + '	<td width=15%><label>' + translate('View') + '</label></td>' + '	<td width=5%><input type=radio name=' + UID['dcp_type'] + ' value=0 /></td><td align=left width=30%><label>' + translate('All') + '</label></td>' + '	<td width=5%><input type=radio name=' + UID['dcp_type'] + ' value=1 /></td><td align=left width=30%><label>' + translate('Map data') + '</label></td>' + '</tr></table>' + '<br>' + '<table class=jewel valign=center width=100%>' + '<tr align=center>' + '<td><div id=' + setUID('div_data') + ' style="height:610px; max-height:610; overflow-y:auto"></div></td>' + '</tr>' + '</table>' + '<br>' + '<table width=100%>' + '<tr align=center>' + '<td><input id=' + setUID('btn_ok') + ' type=button class=confirm_button value="' + translate('Close') + '" /></td>' + '</tr></table>';
-			var child_found = true;
-			while (child_found) {
-				if (copyPastePop.getMainDiv().lastChild)
-					copyPastePop.getMainDiv().removeChild(copyPastePop.getMainDiv().lastChild);
-				else
-					child_found = false;
-			}
-			copyPastePop.getMainDiv().appendChild(layoutDiv);
-			layoutDiv.innerHTML = layout;
-			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
-				copyPastePop.show(false);
-				Data.options.popUp = {
-					open: Data.options.popUp.open,
-					drag: Data.options.popUp.drag,
-					x: save_popUp.x,
-					y: save_popUp.y
-				};
-			}, false);
-			var r = document.getElementsByName(UID['dcp_type']);
-			for (i = 0; i < r.length; i++) {
-				r[i].addEventListener('change', enableChanged, false);
-			}
-			r[0].checked = true;
-			show_all();
-
-			function enableChanged(event) {
-				if (toNum(event.target.value) == 1) show_map();
-				else show_all();
-			}
-
-			function show_map() {
-				try {
-					var json_data = '{"map":' + JSON.stringify(Data.map) + '}';
-				} catch (e) {}
-				document.getElementById(UID['div_data']).innerHTML = '<textarea cols="110" rows="50" wrap="PHYSICAL">' + json_data + '</TEXTAREA>';
-			}
-
-			function show_all() {
-				try {
-					var keys = getKeys(Data.defaults);
-					for (var i = 0; i < keys.length; i++) {
-						if (/(marches|requests)/i.test(keys[i]))
-							keys.splice(i, 1);
-					}
-					var json_data = '{';
-					for (var i = 0; i < keys.length; i++) {
-						var name = keys[i];
-						try {
-							json_data += '"' + name + '":' + JSON.stringify(Data[name]);
-						} catch (e) {
-							debugLog(e);
-						}
-						if (i < keys.length - 1) json_data += ','
-					}
-					json_data += '}';
-				} catch (e) {}
-				document.getElementById(UID['div_data']).innerHTML = '<textarea cols="110" rows="50" wrap="PHYSICAL">' + json_data + '</TEXTAREA>';
-			}
-			copyPastePop.show(true);
-		}
-
-		function dialogFatal(msg) {
-			var pop = new PopUp('fatal', 800 + Math.randRange(1, 50), 300, 400, 300, true);
-			pop.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ': ' + translate('Error') + '!</b></center></div>';
-			var layoutDiv = document.createElement('div');
-			layoutDiv.className = 'container';
-			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
-			layoutDiv.style.color = '#000';
-			layoutDiv.style.height = '100%';
-			var layout = '<div style="height:270px; max-height:270px; overflow-y:auto">' + '<table width=100%><tr align=center><td width=96%><BR>' + msg + '</td></tr></table></div>';
-			pop.getMainDiv().appendChild(layoutDiv);
-			layoutDiv.innerHTML = layout;
-			pop.show(true);
-			document.getElementById(UID['support_link']).addEventListener('click', redirect, false);
-
-			function redirect() {
-				window.open(scriptUrlError, 'www.calciumscript.net');
-			}
-		}
-
-		function dialogSendMsg(name, id, is_player) {
-			var save_popUp = {
-				x: Data.options.popUp.x,
-				y: Data.options.popUp.y
-			};
-			var MsgSendPop = new PopUp('send_msg', 800 + Math.randRange(1, 50), 300, 500, 250, true);
-			MsgSendPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + ' style="margin-top:5px; padding-top:5px;  padding-bottom:5px;"><center><b>' + scriptName + ': ' + translate('Message') + '</b></center></div>';
-			var layoutDiv = document.createElement('div');
-			layoutDiv.className = 'container';
-			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
-			layoutDiv.style.color = '#000';
-			layoutDiv.style.height = '100%';
-			var layout = '<table class=' + UID['table'] + ' width=100% style="color:#000;">' + '	<tr valign=top>' + '		<td><label>' + translate('To') + ' :</label></td>' + '		<td><label><b>' + name + '</b></td>' + '	</tr><tr valign=top>' + '		<td><label>' + translate('Subject') + ' :</label></td>' + '		<td><input id=' + setUID('Message_subject') + ' size=50 maxlength=160 type=text /></td>' + '	</tr><tr valign=top>' + '		<td><label>' + translate('Message') + ' :</label></td>' + '		<td><textarea id=' + setUID('Message_body') + ' cols="60" rows="8" wrap="PHYSICAL"></textarea></td>' + '	</tr><tr align=center>' + '		<td colspan=2><br><input id=' + setUID('btn_ok') + ' type=button class="confirm_button" value="' + translate('Send') + '" />&nbsp; &nbsp; &nbsp;' + '			<input id=' + setUID('btn_cancel') + ' type=button class="confirm_button" value=' + translate('Cancel') + ' /></td>' + '	</tr>' + '</table>';
-			if (MsgSendPop.getMainDiv().lastChild)
-				MsgSendPop.getMainDiv().removeChild(MsgSendPop.getMainDiv().lastChild);
-			MsgSendPop.getMainDiv().appendChild(layoutDiv);
-			layoutDiv.innerHTML = layout;
-			var butOk = document.getElementById(UID['btn_ok']);
-			butOk.disabled = true;
-			Element.removeClassName(butOk, "confirm_button");
-			Element.addClassName(butOk, UID['btn_disabled']);
-
-			function setButOk(event) {
-				var subject = document.getElementById(UID['Message_subject']);
-				var body = document.getElementById(UID['Message_body']);
-				var butOk = document.getElementById(UID['btn_ok']);
-				if (subject && body && subject.value != null && subject.value != '' && body.value != null && body.value != '') {
-					butOk.disabled = false;
-					Element.removeClassName(butOk, UID['btn_disabled']);
-					Element.addClassName(butOk, "confirm_button");
-				} else {
-					butOk.disabled = true;
-					Element.removeClassName(butOk, "confirm_button");
-					Element.addClassName(butOk, UID['btn_disabled']);
-				}
-			}
-			document.getElementById(UID['Message_subject']).addEventListener('change', setButOk, false);
-			document.getElementById(UID['Message_body']).addEventListener('change', setButOk, false);
-			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
-				var subject = document.getElementById(UID['Message_subject']);
-				var body = document.getElementById(UID['Message_body']);
-				if (subject && body && subject.value != null && subject.value != '' && body.value != null && body.value != '') {
-					MsgSendPop.show(false);
-					Data.options.popUp = {
-						open: Data.options.popUp.open,
-						drag: Data.options.popUp.drag,
-						x: save_popUp.x,
-						y: save_popUp.y
-					};
-					MyAjax.messageSend(subject.value, body.value, id, is_player);
-				}
-			}, false);
-			document.getElementById(UID['btn_cancel']).addEventListener('click', function() {
-				MsgSendPop.show(false);
-				Data.options.popUp = {
-					open: Data.options.popUp.open,
-					drag: Data.options.popUp.drag,
-					x: save_popUp.x,
-					y: save_popUp.y
-				};
-			}, false);
-			MsgSendPop.show(true);
-		}
-
-		function updaterConfirm(msg, onContinue, onCancel, two_buttons) {
-			var save_popUp = {
-				x: Data.options.popUp.x,
-				y: Data.options.popUp.y
-			};
-			updaterPop = new PopUp('updater', 800 + Math.randRange(1, 50), 300, 300, 150, true);
-			updaterPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ': ' + translate('Confirmation') + '!</b></center></div>';
-			var layoutDiv = document.createElement('div');
-			layoutDiv.className = 'container';
-			layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
-			layoutDiv.style.color = '#000';
-			layoutDiv.style.height = '100%';
-			var layout = '<table align=center valign=center style="height: 100%">' + '<tr align=center height=60%>' + '<td>' + msg + '</td>' + '</tr>' + '<tr align=center>' + '<td>' + '<input id=' + setUID('btn_ok') + ' type=button class=confirm_button value="' + translate('OK') + '" />';
-			if (two_buttons) {
-				layout += '	&nbsp; &nbsp;' + '<input id=' + setUID('btn_cancel') + ' type=button class=confirm_button value=' + translate('Cancel') + ' />';
-			}
-			layout += '</td></tr></table>';
-			if (updaterPop.getMainDiv().lastChild)
-				updaterPop.getMainDiv().removeChild(updaterPop.getMainDiv().lastChild);
-			updaterPop.getMainDiv().appendChild(layoutDiv);
-			layoutDiv.innerHTML = layout;
-
-			document.getElementById(UID['btn_ok']).addEventListener('click', function() {
-				updaterPop.show(false);
-				Data.options.popUp = {
-					open: Data.options.popUp.open,
-					drag: Data.options.popUp.drag,
-					x: save_popUp.x,
-					y: save_popUp.y
-				};
-				if (onContinue && typeof(onContinue) == "function") onContinue();
-			}, false);
-
-			if (two_buttons) {
-				document.getElementById(UID['btn_cancel']).addEventListener('click', function() {
-					updaterPop.show(false);
-					Data.options.popUp = {
-						open: Data.options.popUp.open,
-						drag: Data.options.popUp.drag,
-						x: save_popUp.x,
-						y: save_popUp.y
-					};
-					if (onCancel && typeof(onContinue) == "function") onCancel();
-				}, false);
-			}
-			updaterPop.show(true);
-		}
-
-		function ModalDialog(curtainDiv, width, height, styleName, allowClose, notifyClose) {
-			this.allowClose = function(onOff) {
-				if (onOff) document.getElementById(UID['ModalDialog_btnClose']).style.display = 'block';
-				else document.getElementById(UID['ModalDialog_btnClose']).style.display = 'none';
-			}
-			this.destroy = function() {
-				if (!this.destroyed) {
-					this.curtainDiv.removeChild(this.curtain);
-					this.curtainDiv.removeChild(this.div);
-				}
-			}
-			this.hide = function() {
-				this.curtainDiv.style.display = 'none';
-				this.curtainDiv.style.display = 'none';
-			}
-			this.show = function() {
-				this.curtainDiv.style.display = 'block';
-				this.curtainDiv.style.display = 'block';
-			}
-			this.getContentDiv = function() {
-				return document.getElementById(UID['ModalDialog_Close']);
-			}
-			this.getTopDiv = function() {
-				return document.getElementById(UID['ModalDialog_Top']);
-			}
-			var offset = Element.positionedOffset(curtainDiv);
-			this.curtainDiv = curtainDiv;
-			this.curtain = document.createElement('div');
-			this.curtain.style.top = (offset.top) + 'px';
-			this.curtain.style.left = (offset.left) + 'px';
-			this.curtain.style.width = curtainDiv.offsetWidth + 'px';
-			this.curtain.style.height = (curtainDiv.offsetHeight) + 'px';
-			this.curtain.style.backgroundColor = '#000';
-			this.curtain.style.opacity = '0.6';
-			this.curtain.style.zIndex = parseInt(curtainDiv.style.zIndex) + 1;
-			this.curtain.style.position = 'absolute';
-			this.curtain.style.margin = curtainDiv.style.margin;
-			this.curtain.style.padding = curtainDiv.style.padding;
-			curtainDiv.appendChild(this.curtain);
-
-			this.div = document.createElement('div');
-			if (styleName)
-				this.div.className = styleName;
-			else this.div.className = 'container';
-
-			this.div.style.backgroundColor = 'rgb(245,245,228)';
-			this.div.style.color = '#000';
-			this.div.style.width = width + 'px';
-			this.div.style.height = height + 'px';
-			this.div.style.position = 'absolute';
-			this.div.style.zindex = parseInt(curtainDiv.style.zIndex) + 2;
-			this.div.style.top = ((curtainDiv.offsetHeight - height) / 2 + offset.top) + 'px';
-			this.div.style.left = ((curtainDiv.offsetWidth - width) / 2 + offset.left) + 'px';
-			this.div.innerHTML = '' + '<table height=100% width=100%>' + '	<tr valign=middle height=10%>' + '		<td width=100% valign=top>' + '		<div id=' + setUID('ModalDialog_Top') + ' class="' + UID['popup_top'] + '"></div>' + '		</td>' + '	</tr>' + '	<tr valign=middle height=70%>' + '		<td>' + '		<div id=' + setUID('ModalDialog_Close') + ' style="text-align:center"></div>' + '		</td>' + '	</tr>' + '	<tr valign=middle align=center>' + '		<td width=100% align=center>' + '		<div style="text-align:center;"><center>' + '			<input id=' + setUID('ModalDialog_btnClose') + ' type=button value="' + translate('Close') + '" style="display:none" />' + '		</center></div>' + '		</td>' + '	</tr>' + '</table>';
-			curtainDiv.appendChild(this.div);
-			this.allowClose(allowClose);
-			this.notifyClose = notifyClose;
-			var t = this;
-			document.getElementById(UID['ModalDialog_btnClose']).addEventListener('click', function() {
-				t.destroyed = true;
-				t.curtainDiv.removeChild(t.curtain);
-				t.curtainDiv.removeChild(t.div);
-				if (t.notifyClose) notifyClose();
-			}, false);
-		}
-		/******************************** Modal dialog function ***********************/
-
-		/******************************** TabManager + WinManager + PopUp *************/
-		var tabManager = {
-			tabList: {},
-			/* {name, obj, div} */
-			currentTab: null,
-
-			init: function(mainDiv) {
-				var t = tabManager;
-				var sorter = [];
-				for (k in Tabs) {
-					if ((k == 'Waves' && nvl(Data.options.disable_wave, !WAVE_TAB_ENABLE)) ||
-						(k == 'Multiple' && nvl(Data.options.disable_multi, !MULTI_TAB_ENABLE)) ||
-						(k == 'Spies' && nvl(Data.options.disable_spies, !SPY_TAB_ENABLE)) ||
-						(k == 'Bookmarks' && nvl(Data.options.disable_bookmark, !BOOKMARK_TAB_ENABLE)) ||
-						(k == 'Inbox' && nvl(Data.options.disable_inbox, !INBOX_TAB_ENABLE)) ||
-						(k == 'Search' && nvl(Data.options.disable_search, !SEARCH_TAB_ENABLE)) ||
-						(k == 'Alliance' && nvl(Data.options.disable_alliance, !ALLIANCE_TAB_ENABLE)) ||
-						(k == 'Single' && nvl(Data.options.disable_single, !SINGLE_TAB_ENABLE)) ||
-						(k == 'Wall' && nvl(Data.options.disable_wall, !WALL_TAB_ENABLE)) ||
-						(k == 'Wheel' && nvl(Data.options.disable_wheel, !WHEEL_TAB_ENABLE)) ||
-						(k == 'Log' && nvl(Data.options.disable_log, !LOG_TAB_ENABLE)) ||
-                        (k == 'CPT' && nvl(Data.options.disable_cpt, !CPT_TAB_ENABLE)))
-						Tabs[k].tabDisabled = true;
-					else if (k == 'Waves' || k == 'Multiple' || k == 'Spies' || k == 'Search' || k == 'Alliance' ||
-						k == 'Single' || k == 'Wheel' || k == 'Inbox' || k == 'Log')
-						Tabs[k].tabDisabled = false;
-					if (!Tabs[k].tabDisabled) {
-						t.tabList[k] = {};
-						t.tabList[k].name = k;
-						t.tabList[k].uid = setUID('tab_' + k);
-						t.tabList[k].obj = Tabs[k];
-						if (Tabs[k].tabLabel != null)
-							t.tabList[k].label = translate(Tabs[k].tabLabel);
-						else t.tabList[k].label = k;
-						if (k == 'Inbox') {
-							var inbox_uid = setUID('tabInbox_UnreadCount');
-							t.tabList[k].label = '<div id=' + inbox_uid + '>' + translate(Tabs[k].tabLabel) + '&nbsp<span class=' + UID['red'] + '>0000</span></div>';
-						}
-						if (Tabs[k].tabOrder != null)
-							sorter.push([Tabs[k].tabOrder, t.tabList[k]]);
-						else sorter.push([1000, t.tabList[k]]);
-						t.tabList[k].div = document.createElement('div');
-					}
-				}
-
-				sorter.sort(function(a, b) {
-					return a[0] - b[0]
-				});
-
-				var ntabs = sorter.length;
-				if (ntabs > 9) {
-					var line1 = 9;
-					var addStyle = 'style="border-bottom:none; padding-bottom:0;"';
-					var addClass = ' line1';
-				} else {
-					var line1 = sorter.length;
-					var addStyle = '';
-					var addClass = '';
-				}
-
-				var m = '<div class=' + UID['title_main'] + ' style="padding-top:5px; padding-bottom:5px;"><table width=95% align=center>' + '	<tr align=center><td width=45% align=left>' + scriptName + ' by ' + mainAuthor + ' - v' + scriptVersion + '&nbsp(' + api_version + ')</td>' + '		<td width=33% align=center><SPAN id=' + setUID('tabManager_Alert') + '></span></td>' + '		<td width=22% align=left><SPAN id=' + setUID('tabManager_Time') + '></span></td>' + '	</tr></table></div>';
-
-				m += '<ul class=tabs ' + addStyle + '>';
-				m += '<li class="tab first' + addClass + '"><a id=' + sorter[0][1].uid + '>' + sorter[0][1].label + '</a></li>';
-				for (var i = 1; i < line1; i++)
-					m += '<li class="tab' + addClass + '"><a id=' + sorter[i][1].uid + '>' + sorter[i][1].label + '</a></li>';
-				m += '</ul>';
-				if (sorter.length > line1) {
-					header_2lines = true;
-					m += '<ul class="tabs line2">';
-					for (var i = line1; i < sorter.length; i++) {
-						if (i == line1) var addClass = ' first';
-						else var addClass = '';
-						m += '<li class="tab line2' + addClass + '"><a id=' + sorter[i][1].uid + '>' + sorter[i][1].label + '</a></li>';
-					}
-					m += '</ul>';
-				}
-				m += '<div id=' + div_player_attack + '></div>' + '<div id=' + div_player_spy + '></div>' + '<div id=' + div_player_building + '></div>' + '<div id=' + div_player_units + '></div>' + '<div id=' + div_player_research + '></div>' + '<div id=' + div_player_fortuna + '></div>';
-				mainPop.getTopDiv().innerHTML = m;
-
-				t.currentTab = null;
-				for (k in t.tabList) {
-					if (t.tabList[k].name == Data.options.currentTab)
-						t.currentTab = t.tabList[k];
-					document.getElementById(t.tabList[k].uid).addEventListener('click', this.e_clickedTab, false);
-					var div = t.tabList[k].div;
-					div.className = 'container';
-					div.style.display = 'none';
-					mainDiv.appendChild(div);
-					try {
-						t.tabList[k].obj.init(div);
-					} catch (e) {
-						div.innerHTML += "INIT ERROR: " + e;
-					}
-				}
-				if (t.currentTab == null)
-					t.currentTab = sorter[0][1];
-				t.setTabStyle(document.getElementById(t.currentTab.uid), true);
-				t.currentTab.div.style.display = 'block';
-				t.showClock();
-			},
-			hideTab: function() {
-				var t = tabManager;
-				t.currentTab.obj.hide();
-			},
-			showTab: function() {
-				var t = tabManager;
-				t.currentTab.obj.show();
-			},
-			setTabStyle: function(e, selected) {
-				if (selected) {
-					e.style.zIndex = 1;
-					e.className = 'tab selected';
-				} else {
-					e.style.zIndex = 0;
-					e.className = 'tab';
-				}
-			},
-			e_clickedTab: function(event) {
-				var t = tabManager,
-					element;
-				if (event.target.tagName == 'A')
-					element = event.target;
-				else {
-					var parentElement = event.target.parentNode;
-					while (parentElement.tagName != 'A')
-						parentElement = parentElement.parentNode;
-					element = parentElement;
-				}
-				var id = element.getAttribute('id');
-				for (k in t.tabList)
-					if (t.tabList[k].uid == element.id) {
-						var newTab = t.tabList[k];
-						break;
-					}
-				if (t.currentTab.name != newTab.name) {
-					t.setTabStyle(document.getElementById(newTab.uid), true);
-					t.setTabStyle(document.getElementById(t.currentTab.uid), false);
-					t.currentTab.obj.hide();
-					t.currentTab.div.style.display = 'none';
-					t.currentTab = newTab;
-					newTab.div.style.display = 'block';
-					Data.options.currentTab = newTab.name;
-				}
-				if (document.getElementById(UID['tabInbox_UnreadCount'])) {
-					if (newTab.name == 'Inbox') color = 'yellow';
-					else color = 'red';
-					document.getElementById(UID['tabInbox_UnreadCount']).innerHTML = translate('Inbox') + (Messages.unread_count > 0 ? '&nbsp<font color=' + color + '>' + Messages.unread_count + '</font>' : '');
-				}
-				newTab.obj.show();
-			},
-			showClock: function() {
-				var t = tabManager;
-				var now = new Date();
-				now.setTime(now.getTime() + ((Data.options.utc_time) ? (now.getTimezoneOffset() * 60000) : 0));
-				document.getElementById(UID['tabManager_Time']).innerHTML = '<font color="#FFFFFF"><b>' + now.toTimeString().substring(0, 8) + ' ' + ((Data.options.utc_time) ? ' UTC' : '') + '</b></font>';
-				document.getElementById(UID['tabManager_Alert']).innerHTML = SoundPlayer.shortString;
-				if (document.getElementById(UID['short_alerts']))
-					document.getElementById(UID['short_alerts']).addEventListener('click', function() {
-						SoundPlayer.StopSound('attack');
-						SoundPlayer.StopSound('spy');
-						if (SoundPlayer.attack_repeat_timer) {
-							clearTimeout(SoundPlayer.attack_repeat_timer);
-							SoundPlayer.attack_repeat_timer = null;
-						}
-						if (SoundPlayer.spy_repeat_timer) {
-							clearTimeout(SoundPlayer.spy_repeat_timer);
-							SoundPlayer.spy_repeat_timer = null;
-						}
-						var t = tabManager;
-						for (k in t.tabList)
-							if (t.tabList[k].name == 'Tower') {
-								var newTab = t.tabList[k];
-								break;
+						var m='<table><tr>';
+						var chalDet = Seed.challenges[challenge_id];
+						var tiers = (chalGlob.tiers.length == 0 ? chalGlob.tournament_tiers : chalGlob.tiers);
+						for(var i=0;i<tiers.length;i++) {
+							m +='<td>'+tiers[i].score+'<br/>';
+							for(var j=0;j<tiers[i].prizes;j++) {
+								m +=tiers[i].prizes[j].quantity+'x '+translate(tiers[i].prizes[j].item_type);
 							}
-						if (t.currentTab.name != newTab.name) {
-							t.setTabStyle(document.getElementById(newTab.uid), true);
-							t.setTabStyle(document.getElementById(t.currentTab.uid), false);
-							t.currentTab.obj.hide();
-							t.currentTab.div.style.display = 'none';
-							t.currentTab = newTab;
-							newTab.div.style.display = 'block';
-							Data.options.currentTab = newTab.name;
+							m +='</td>';
 						}
-						newTab.obj.show();
-						Tabs.Tower.tabTowerWall();
-					}, false);
-				setTimeout(t.showClock, 1000);
-			}
-		}
-		var WinManager = {
-			wins: {},
-			/* prefix : PopUp obj */
-			get: function(prefix) {
-				var t = WinManager;
-				return t.wins[prefix];
-			},
-			add: function(prefix, pop) {
-				var t = WinManager;
-				t.wins[prefix] = pop;
-			},
-			del: function(prefix) {
-				var t = WinManager;
-				delete t.wins[prefix];
-			}
-		}
-
-			function PopUp(prefix, x, y, width, height, enableDrag, onClose) {
-				var pop = WinManager.get(prefix);
-				if (pop) {
-					pop.show(false);
-					return pop;
+						m+='</tr></table>';
+						$(div_el).update(m);
+						
+					}
+					var element = event.target;
+					var chalGlob = Seed.challenges[element.getAttribute('challenge')];
+					var div_el = document.getElementById(UID[element.getAttribute('ref')]);
+					
+					if(!Element.visible(div_el)) {
+						MyAjax.getChallenge(element.getAttribute('challenge_id'), cb);
+					} else {
+						Effect.toggle(div_el, 'blind', { duration: 1.0 });
+					}
+					
 				}
-				this.BASE_ZINDEX = 100;
-
-				/* protos ... */
-				this.show = show;
-				this.toggleHide = toggleHide;
-				this.getTopDiv = getTopDiv;
-				this.getMainDiv = getMainDiv;
-				this.getLayer = getLayer;
-				this.setLayer = setLayer;
-				this.setEnableDrag = setEnableDrag;
-				this.getLocation = getLocation;
-				this.setLocation = setLocation;
-				this.focusMe = focusMe;
-				this.unfocusMe = unfocusMe;
-				this.centerMe = centerMe;
-				this.destroy = destroy;
-				this.setModal = setModal;
-				this.setHeight = setHeight;
-
-				/* object vars ... */
-				this.div = document.createElement('div');
-				document.body.appendChild(this.div);
-
-				this.prefix = prefix;
-				this.onClose = onClose;
-
-				if (x < 0 || x > document.body.offsetWidth) x = 0;
-				if (y < 0 || y > document.body.offsetHeight) y = 0;
-
-				/* Scramble */
-				rndPopup = ['outer', 'bar', 'top', 'main', 'close'];
-				for (var s = 0; s < rndPopup.length; s++) {
-					rndPopup[rndPopup[s]] = setUID(prefix + '_' + rndPopup[s]);
+				function clickToUpdateChallenges() {
+					MyAjax.allChallenges(updateChallenges);
 				}
-				var t = this;
-				this.div.id = rndPopup['outer'];
-				this.div.className = UID['popup_outer'];
-				this.div.style.zIndex = this.BASE_ZINDEX;
-				this.div.style.position = 'absolute';
-				this.div.style.display = 'none';
-				this.div.style.width = width + 'px';
-				this.div.style.height = height + 'px';
-				this.div.style.top = (y || 0) + 'px';
-				this.div.style.left = (x || 0) + 'px';
+				function updateLoginMessages() {
+					var m = '';
+					var tT = [];
+					for(var i=0;i<Seed.loginMessages.length;i++) {
+						var timeRemaining = ((Seed.loginMessages[i].end_time - serverTime()) > 0) ? timestr(Seed.loginMessages[i].end_time - serverTime()) : 0;
+						m+='<div ref="tabCapitalCity_text_loginMessageAccord_'+Seed.loginMessages[i].id+'" id="'+setUID('tabCapitalCity_title_loginMessageAccord_'+Seed.loginMessages[i].id)+'" class="'+UID['subtitle']+'">'+Seed.loginMessages[i].title+' - <font color=yellow>'+timeRemaining+'</font></div>';
+						m+='<div style="overflow: visible;display: none;" id="'+setUID('tabCapitalCity_text_loginMessageAccord_'+Seed.loginMessages[i].id)+'">'+(Seed.loginMessages[i].text != '' ? Seed.loginMessages[i].text.replace(/\n/g, '<br>') : '')+'</div>';
+						tT.push('tabCapitalCity_title_loginMessageAccord_'+Seed.loginMessages[i].id);
+					}
+					document.getElementById(UID['tabCapitalCity_loginMessage']).innerHTML = (m);
+					for(var i=0;i<tT.length;i++) {
+					  $(UID[tT[i]]).observe('click', toggleHideShow);
+					}
+				}
+				function clickToUpdateLoginMessages() {
+					MyAjax.loginMessages(updateLoginMessages);
+				}
+				function toggleHideShow(event) {
+					var element = event.target;
+					if(element.tagName == 'INPUT')
+						return;
+					
+					var div_el = document.getElementById(UID[element.getAttribute('ref')]);
+					Effect.toggle(div_el, 'blind', { duration: 1.0 });
+				}
+			},
+			tabCity_LunarOutpost: function() {
+				var t = Tabs.City;
+				document.getElementById(UID['tabCity_Capital']).className = '';
+				document.getElementById(UID['tabCity_Capital']).style.zIndex = 0;
+                document.getElementById(UID['tabCity_ColossusOutPost']).className = '';
+				document.getElementById(UID['tabCity_ColossusOutPost']).style.zIndex = 0;
+				document.getElementById(UID['tabCity_LunarOutpost']).className = 'selected';
+				document.getElementById(UID['tabCity_LunarOutpost']).style.zIndex = 1;
+                t.contentType = 0;
+                
+                //var luna_buildings = ['DragonKeep', 'LunaCathedral', 'LunaDepot', 'LunaForge', 'LunaGreenhouse', 'LunaLibrary', 'LunaWorkshop', 'LunaShrine'];
+                
+                var levelShrine = Buildings.getLevel(LUNA_OUTPOST.id, 'LunaShrine').max;
+                var maxEnergyLunar = Manifest.lunaData.shrine.capacity[levelShrine];
+                var btSum=[], tbNbSum=[];
 
-				var m = '<span id=' + rndPopup['close'] + ' class="' + UID['popup_close'] + '">X</span>\
-			<TABLE cellspacing=0 width=100% height=100%>\
-			<TR id="' + rndPopup['bar'] + '" class="' + UID['popup_bar'] + '">\
-				<TD width=100% valign=bottom>\
-				<SPAN id="' + rndPopup['top'] + '" class="' + UID['popup_top'] + '"></span></td>\
-			</tr>\
-			<TR><TD height=100% valign=top colspan=2 id="' + rndPopup['main'] + '" class="' + UID['popup_main'] + '" style="background-image:url(\'' + urlBackgroundImage + '\')"></td></tr></table>';
-				this.div.innerHTML = m;
-				document.getElementById(rndPopup['close']).addEventListener('click', e_XClose, false);
-				document.getElementById(rndPopup['bar']).addEventListener('dblclick', function() {
-					toggleHideBody(rndPopup['main'], height)
-				}, false);
+                var m =  '<div class=' + UID['title'] + '>' + translate('luna-outpost') + ' - ' + translate('lunar-energy') + ' : ' + numf(Seed.luna.lunar_energy) + ' / ' + numf(maxEnergyLunar) + '</div>' 
+                    + ' <div class=' + UID['content'] + '>'
+                    + '   <div id='+setUID('tabCity_lunaDiv')+'>'
+                    + '		<table class='+UID['table']+' style="width:100%">';
+                for(var i=0;i<luna_buildings.length;i++) {
+                	if(luna_buildings[i] != 'DragonKeep' && luna_buildings[i] != 'LunaShrine') {
+                		var tmpTroop = Manifest.lunaData.troops[luna_buildings[i]];
+                		var tmpLevel = Buildings.getLevel(LUNA_OUTPOST.id, luna_buildings[i]).max;
+                		var tmpnbSummon = Manifest.lunaData.capacity[tmpLevel];
+                		var totalTroop = 0;
+                		m += '<tr><td colspan=3><div class='+UID['subtitle']+' style="text-align:center;color:#ffffff;background-color: rgb(60,60,60);">'+translate(luna_buildings[i].toLowerCase())+' ('+translate('level') + ' ' + tmpLevel + ' : ' + translate('maximum') + ' ' + numf(tmpnbSummon) +  ')</div></td></tr>';
+                		m += '<tr class='+UID['row_top_headers']+'><td width="20%">'+translate('troops')+'</td><td width="20%">'+translate('luna-troopssummoned')+'</td><td width="60%">'+translate('actions')+'</td>';
+                		for(var j in tmpTroop) {
+                			if(parseInt(j)<=parseInt(tmpLevel)) {
+                				var tmpNbLunaUnit = 0;
+                				if(Seed.luna.units[tmpTroop[j]]) {
+                					tmpNbLunaUnit = Seed.luna.units[tmpTroop[j]];
+                					totalTroop += tmpNbLunaUnit;
+                				}
+                				m += '<tr>' 
+                					+ '<td>'+translate(tmpTroop[j].toLowerCase())+'</td>' 
+                					+ '<td>'+numf(tmpNbLunaUnit)+'</td>' 
+                					+ '<td>' 
+                					+ '	<input ref="'+tmpTroop[j]+'" id='+setUID('tbNbCityLuna_'+tmpTroop[j])+' type="text" style="width: 65px; border: 1px solid grey;">'
+                					+ '	<input ref="'+tmpTroop[j]+'" class="'+UID['btn_purple']+' thin" id="'+setUID('btnCityLuna_'+tmpTroop[j])+'" type="button" style="width:auto !important;" value="'+translate('summon')+'"' 
+                					+ '</td></tr>';
 
-				if (enableDrag) {
-					this.dragger = new Draggable(this.div, {
-						handle: rndPopup['bar'],
-						scroll: window,
-						onEnd: function(dragger, event) {
-							var el = dragger.element;
-							var offset = Element.cumulativeOffset(el);
-							Data.options.popUp.x = offset.left;
-							Data.options.popUp.y = offset.top;
+                				btSum.push('btnCityLuna_'+tmpTroop[j]);
+                				tbNbSum.push('tbNbCityLuna_'+tmpTroop[j]);
+                			}
+                		}
+                		m += '<tr><td>'+translate('total')+'</td><td colpan=2>' + numf(totalTroop) + ' / ' + numf(tmpnbSummon) +  '</td></tr>';
+					}
+				}
+				m += '		</table>'
+					+ '   </div><br />'
+					+ '</div>';
+				
+				document.getElementById(UID['tabCity_Content']).innerHTML = (m);
+
+				function checkRequirements(event) {
+					var reqs = Tabs.Jobs.checkRequirements({
+						reqs_type: 'unit',
+						city_idx: LUNA_OUTPOST.id,
+						unit_type: troopType,
+						unit_quantity: troopQty
+					});
+
+				}
+                
+			},
+			tabCity_ColossusOutPost: function() {
+				var t = Tabs.City;
+                document.getElementById(UID['tabCity_Capital']).className = '';
+				document.getElementById(UID['tabCity_Capital']).style.zIndex = 0;
+				document.getElementById(UID['tabCity_ColossusOutPost']).className = 'selected';
+				document.getElementById(UID['tabCity_ColossusOutPost']).style.zIndex = 1;
+				document.getElementById(UID['tabCity_LunarOutpost']).className = '';
+				document.getElementById(UID['tabCity_LunarOutpost']).style.zIndex = 0;
+                t.contentType = 1;
+                
+                var m =  '<div class=' + UID['title'] + '>' + translate('colossus-outpost') + '</div>' 
+                    + ' <div class=' + UID['content'] + '>'
+                    + '   <div id='+setUID('tabCity_colossusDiv')+'>'
+                    + '   </div><br />'
+                    + '</div>';
+                document.getElementById(UID['tabCity_Content']).innerHTML = (m);
+                
+			},
+			
+			hide: function() {
+				var t = Tabs.City;
+			},
+			show: function() {
+				var t = Tabs.City;
+                switch (toNum(t.contentType)) {
+					case 0:
+						t.tabCity_LunarOutpost();
+						break;
+					case 1:
+						t.tabCity_ColossusOutPost();
+						break;
+					case 2:
+						t.tabCity_Capital();
+						break;
+				}
+			}
+    };
+
+		/** ********** Prototype Functions ************* */
+		Object.defineProperty(Object.prototype, "cleanRemoved", {
+			enumerable: false,
+			value: function() {
+				/* Create a new array from the contents of arguments */
+				var args = Array.prototype.slice.call(arguments);
+				var obj = this,
+					from = args.shift(),
+					max_depth = 0,
+					path,
+					depth = 0;
+				if (typeof(from) == 'undefined') return;
+				if (typeof(args[0]) == 'number') max_depth = args.shift();
+				if (typeof(args[0]) == 'number') depth = args.shift();
+				path = args[0] || '';
+				if (max_depth) {
+					if (depth >= max_depth) return;
+					depth++;
+				}
+				if (typeof(obj) == "object" && typeof(from) == "object") {
+					Object.getOwnPropertyNames(obj).forEach(function(name) {
+						if (obj[name] != null && typeof(obj[name]) == "object" && typeof(from[name]) == "object") {
+							obj[name].cleanRemoved(from[name], max_depth, depth, path + name + '.');
+						} else if (typeof(from[name]) == 'undefined') {
+							var msg = path + name + '  DELETED!';
+							debugLog(msg);
+							delete obj[name];
 						}
 					});
 				}
-
-				this.div.addEventListener('mousedown', e_divClicked, false);
-				WinManager.add(prefix, this);
-
-				function setModal(onOff) {}
-
-				function e_divClicked() {
-					t.focusMe();
-				}
-
-				function e_XClose() {
-					t.show(false);
-					if (t.onClose != null) t.onClose();
-				}
-
-				function focusMe() {
-					t.setLayer(15);
-				} /* old = 5 */
-
-				function unfocusMe() {
-					t.setLayer(-15);
-				} /* old = -5 */
-
-				function getLocation() {
-					return {
-						x: toNum(this.div.style.left),
-						y: toNum(this.div.style.top)
-					};
-				}
-
-				function setLocation(loc) {
-					t.div.style.left = loc.x + 'px';
-					t.div.style.top = loc.y + 'px';
-				}
-
-				function destroy() {
-					document.body.removeChild(t.div);
-					WinManager.del(t.prefix);
-				}
-
-				function centerMe(parent) {
-					if (parent == null)
-						var coords = Element.cumulativeOffset(document.body);
-					else var coords = Element.cumulativeOffset(parent);
-					var left = ((document.body.offsetWidth - toNum(t.div.style.width)) / 2) + coords.left;
-					var top = ((document.body.offsetHeight - toNum(t.div.style.height)) / 2) + coords.top;
-					if (left < 0) left = 0;
-					if (top < 0) top = 0;
-					t.div.style.left = x + 'px';
-					t.div.style.top = y + 'px';
-				}
-
-				function setEnableDrag(b) {
-					Data.options.popUp.drag = b;
-				}
-
-				function setHeight(h) {
-					t.div.style.height = h + 'px';
-				}
-
-				function setLayer(zi) {
-					t.div.style.zIndex = '' + (this.BASE_ZINDEX + zi);
-				}
-
-				function getLayer() {
-					return parseInt(t.div.style.zIndex) - this.BASE_ZINDEX;
-				}
-
-				function getTopDiv() {
-					return document.getElementById(rndPopup['top']);
-				}
-
-				function getMainDiv() {
-					return document.getElementById(rndPopup['main']);
-				}
-
-				function show(b) {
-					if (b) {
-						// t.div.style.display = 'block';
-						$(t.div.id).blindDown();
-						t.focusMe();
-					} else {
-						t.div.style.display = 'none';
-					}
-					return b;
-				}
-
-				function toggleHide(t) {
-					if (t.div.style.display == 'block')
-						return t.show(false);
-					else return t.show(true);
-				}
-
-				function toggleHideBody(id, height) {
-					var element = document.getElementById(id);
-					if (element.style.display == 'block') {
-						element.style.display = 'none';
-						element.style.height = '0px';
-						t.setHeight((header_2lines ? '72' : '52'));
-					} else {
-						element.style.display = 'block';
-						element.style.height = '100%';
-						t.setHeight(height);
-					}
-				}
+				return this;
 			}
-			/******************************** TabManager + WinManager + PopUp *************/
-
-
-			/** ********** Prototype Functions ************* */
-			Object.defineProperty(Object.prototype, "cleanRemoved", {
-				enumerable: false,
-				value: function() {
-					/* Create a new array from the contents of arguments */
-					var args = Array.prototype.slice.call(arguments);
-					var obj = this,
-						from = args.shift(),
-						max_depth = 0,
-						path,
-						depth = 0;
-					if (typeof(from) == 'undefined') return;
-					if (typeof(args[0]) == 'number') max_depth = args.shift();
-					if (typeof(args[0]) == 'number') depth = args.shift();
-					path = args[0] || '';
-					if (max_depth) {
-						if (depth >= max_depth) return;
-						depth++;
-					}
-					if (typeof(obj) == "object" && typeof(from) == "object") {
-						Object.getOwnPropertyNames(obj).forEach(function(name) {
-							if (obj[name] != null && typeof(obj[name]) == "object" && typeof(from[name]) == "object") {
-								obj[name].cleanRemoved(from[name], max_depth, depth, path + name + '.');
-							} else if (typeof(from[name]) == 'undefined') {
-								var msg = path + name + '  DELETED!';
-								debugLog(msg);
-								delete obj[name];
-							}
-						});
-					}
-					return this;
-				}
-			});
+		});
 		Object.defineProperty(Object.prototype, "mergeWith", {
 			enumerable: false,
 			value: function() {
@@ -30980,7 +32611,7 @@
 				if (this[i] !== testArr[i]) return false;
 			}
 			return true;
-		}
+		};
 		Array.prototype.shuffle = function() {
 			for (var i = 0; i < this.length; i++) {
 				var a = this[i];
@@ -30988,26 +32619,28 @@
 				this[i] = this[b];
 				this[b] = a;
 			}
-		}
+		};
 		Date.prototype.myString = function() {
 			return this.toDateString() + ' ' + this.toTimeString().substr(0, 8);
-		}
+			//
+		};
 		Date.prototype.formatTime = function() {
 			var curr_hour = this.getHours();
 			var curr_min = this.getMinutes();
 			var curr_sec = this.getSeconds();
 			return (curr_hour < 10 ? '0' : '') + curr_hour + gFormatTime + (curr_min < 10 ? '0' : '') + curr_min + gFormatTime + (curr_sec < 10 ? '0' : '') + curr_sec;
-		}
+		};
 		Date.prototype.formatDate = function() {
 			var curr_day = this.getDate();
 			var curr_month = this.getMonth();
 			curr_month++;
 			var curr_year = this.getFullYear();
 			return (curr_day < 10 ? '0' : '') + curr_day + gFormatDate + (curr_month < 10 ? '0' : '') + curr_month + gFormatDate + curr_year;
-		}
+		};
 		Math.randRange = function(from, to) {
 			return Math.floor((Math.random() * (to - from + 1)) + from);
-		}
+			//
+		};
 		Number.prototype.intToCommas = function() {
 			var nStr = toNum(this) + '';
 			var rgx = /(\d+)(\d{3})/;
@@ -31015,789 +32648,23 @@
 				nStr = nStr.replace(rgx, '$1' + ',' + '$2');
 			}
 			return nStr;
-		}
+		};
 		String.prototype.escapeHTML = function() {
 			return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');
-		}
+		};
 		String.prototype.intToCommas = function() {
 			return toNum(this);
-		}
+		};
 		String.prototype.nowrap = function() {
 			return this.replace(/\s/g, '&nbsp;');
-		}
+		};
 		String.prototype.strip = function() {
 			return this.replace(/^\s+/, '').replace(/\s+$/, '');
-		}
+		};
 		String.prototype.initCap = function() {
 			return this.charAt(0).toUpperCase() + this.substring(1).toLowerCase();
-		}
-
-		/** ********** Functions ************* */
-
-		function addScript(scriptText) {
-			var scr = document.createElement('script');
-			scr.innerHTML = scriptText;
-			document.body.appendChild(scr);
-		}
-
-		function addStyle(css) {
-			var target = document.getElementsByTagName('head')[0];
-			if (target.getElementsByTagName('style').length > 0)
-				target.removeChild(target.getElementsByTagName('style')[0]);
-			var obj = document.createElement('style');
-			obj.type = 'text/css';
-			obj.appendChild(document.createTextNode(css));
-			target.appendChild(obj);
-		}
-
-		function checkDelay() {
-			MAP_DELAY = 750;
-			MIN_DELAY = 10;
-			MIN_DELAY_BETWEEN_WAVE = 10;
-		}
-
-		function clearAndReload() {
-			var localStorageVersion = localStorage.getItem('118446_version');
-			if (!localStorageVersion || localStorageVersion != scriptVersion) {
-				localStorage.setItem('118446_sendMessage', 'yes');
-				dialogConfirm(translate('New version has been installed...') + '<br>' + translate('Do you want to delete existing Permanent Data') + ' ?<br><br>' + translate('This should not clear map and alliance data.'),
-					function() {
-						try {
-							Data.clearStorage(true);
-							Data.setDefaultValues('all');
-						} catch (e) {}
-						localStorage.setItem('118446_version', scriptVersion);
-						setTimeout(reloadTools, 2000);
-					},
-					function() {
-						localStorage.setItem('118446_version', scriptVersion);
-					}, true
-				);
-			}
-		}
-
-		function cloneProps(src) {
-			var newObj = (src instanceof Array) ? [] : {};
-			for (i in src) {
-				if (matTypeof(src[i]) == 'function') continue;
-				if (src[i] && typeof src[i] == 'object') {
-					newObj[i] = cloneProps(src[i]);
-				} else
-					newObj[i] = src[i];
-			}
-			return newObj;
-		}
-
-		function decodeEntity(str) {
-			var ta = document.createElement('textarea');
-			ta.innerHTML = str;
-			return ta.value;
-		}
-
-		function dispError(msg, target) {
-			var target = target != undefined ? target : document.body;
-			var dial = new ModalDialog(target, 300, 150, '', true);
-			dial.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + translate('Error') + '</b></center></div>';
-			dial.getContentDiv().innerHTML = msg;
-		}
-
-		function findSimilarWord(word, source) {
-			var pattern = new RegExp(RegExp.escape(word) + '[\\w]+', 'i');
-			var match = source.match(pattern);
-			return match ? match[0].capitalize() : word;
-		}
-
-		function getDistance(d, f, c, e) { /*
-											 * Pythagorean theorum for the
-											 * hypotenuse of a right triangle
-											 */
-			var a = 750;
-			var g = a / 2;
-			var b = Math.abs(c - d);
-			if (b > g) b = a - b;
-			var h = Math.abs(e - f);
-			if (h > g) h = a - h;
-			return Math.round(100 * Math.sqrt(b * b + h * h)) / 100;
-		}
-
-		function getKeys(obj) {
-			var arr = new Array();
-			for (var key in obj) {
-				if (obj.hasOwnProperty(key)) arr.push(key);
-			}
-			return arr;
-		}
-
-		function implodeUrlArgs(obj) {
-			var a = [];
-			for (var k in obj)
-				a.push(k + '=' + encodeURI(obj[k]));
-			return a.join('&');
-		}
-
-		function inspectObj(obj, maxLevels, level, doFunctions) {
-			var str = '',
-				type, msg;
-			if (level == null) level = 0;
-			if (maxLevels == null) maxLevels = 1;
-			if (maxLevels < 1) return 'Inspect Error: Levels number must be > 0';
-			if (obj == null) return 'ERROR: Object is NULL\n';
-			var indent = '';
-			for (var i = 0; i < level; i++)
-				indent += ' ';
-			for (property in obj) {
-				try {
-					type = matTypeof(obj[property]);
-					if (doFunctions == true && (type == 'function')) {
-						str += indent + '(' + type + ') ' + property + "[FUNCTION]\n";
-					} else if (type != 'function') {
-						str += indent + '(' + type + ') ' + property + ((obj[property] == null) ? (': null') : ('')) + ' = ' + obj[property] + "\n";
-					}
-					if ((type == 'object' || type == 'array') && (obj[property] != null) && (level + 1 < maxLevels))
-						str += inspectObj(obj[property], maxLevels, level + 1, doFunctions); /* recurse */
-				} catch (err) {
-					if (typeof(err) == 'string') msg = err;
-					else if (err.message) msg = err.message;
-					else if (err.description) msg = err.description;
-					else msg = 'Unknown';
-					str += '(Error) ' + property + ': ' + msg + "\n";
-				}
-			}
-			str += "\n";
-			return str;
-		}
-
-		function is_null(obj) {
-			if (!obj || obj == undefined || obj == null || obj == '') return true;
-			else return false;;
-		}
-
-		function logit(msg) {
-			var serverID = SERVER_ID;
-			var now = new Date();
-			debugLog(serverID + ' @ ' + now.toTimeString().substring(0, 8) + '.' + now.getMilliseconds() + ': ' + msg);
-			if (Data.log) consoleLog(msg.replace(/\n/g, '<br/>'));
-		}
-
-		function makeRandomTitle() {
-			scriptTitle = scriptName.split('');
-			var tags = ['SPAN', 'FONT', 'BDO', 'CENTER', 'DIV', 'LABEL', 'B', 'STRONG', 'P', 'TD'];
-			var len = tags.length - 1;
-			var newTitle = [];
-			for (var i = 0; i < scriptTitle.length; i++) {
-				if (scriptTitle[i] == ' ') newTitle.push('&nbsp;');
-				var t = tags[Math.ceil(Math.random() * len)];
-				newTitle.push('<' + t + '>' + scriptTitle[i] + '</' + t + '>');
-			}
-			scriptTitle = '<span class=' + UID['title'] + '>' + newTitle.join('') + '<span>';
-		}
-
-		function matTypeof(v) {
-			if (v == undefined)
-				return 'undefined';
-			if (typeof(v) == 'object') {
-				if (!v)
-					return 'null';
-				else if (v.constructor.toString().indexOf("Array") >= 0 && typeof(v.splice) == 'function')
-					return 'array';
-				else return 'object';
-			}
-			return typeof(v);
-		}
-
-		function numf(nNombre, separateurMilliers) {
-			var sNombre = String(nNombre);
-			var i;
-			if (separateurMilliers == undefined) separateurMilliers = ' ';
-
-			function separeMilliers(_sNombre) {
-				var sRetour = "";
-				while (_sNombre.length % 3 != 0) {
-					_sNombre = "0" + _sNombre;
-				}
-				for (i = 0; i < _sNombre.length; i += 3) {
-					if (i == _sNombre.length - 1) separateurMilliers = '';
-					sRetour += _sNombre.substr(i, 3) + separateurMilliers;
-				}
-				while (sRetour.substr(0, 1) == "0") {
-					sRetour = sRetour.substr(1);
-				}
-				return sRetour.substr(0, sRetour.lastIndexOf(separateurMilliers));
-			}
-			return nvl(separeMilliers(sNombre), '0');
-		}
-
-		function nvl(obj, val) {
-			if (typeof obj == 'undefined' || obj === undefined || obj === null || obj === '') return val;
-			return obj;
-		}
-
-		function reloadTools() {
-			var serverId = SERVER_ID;
-			var go_to= '';
-			if (serverId == '??') window.location.reload(true);
-			if (REALM_URL.indexOf("kabam.com") >= 0) {
-				go_to = REALM_URL;
-			} else {
-				go_to = REALM_URL + serverId;
-			}
-			var t = '<FORM target="_top" action="' + go_to + '" method=post><INPUT id=xxpbButReload type=submit value=RELOAD><INPUT type=hidden name=s value="' + serverId + '"</form>';
-			var e = document.createElement('div');
-			e.innerHTML = t;
-			document.body.appendChild(e);
-			setTimeout(function() {
-				document.getElementById('xxpbButReload').click();
-			}, 0);
-		}
-
-		function searchDOM(node, condition, maxLevel, doMult) {
-			var found = [];
-			eval('var compFunc = function (node) { return (' + condition + ') }');
-			doOne(node, 1);
-			if (!doMult) {
-				if (found.length == 0) return null;
-				return found[0];
-			}
-			return found;
-
-			function doOne(node, curLevel) {
-				try {
-					if (compFunc(node)) found.push(node);
-				} catch (e) {}
-
-				if (!doMult && found.length > 0) return;
-				if (++curLevel < maxLevel && node.childNodes != undefined) {
-					for (var c = 0; c < node.childNodes.length; c++) {
-						doOne(node.childNodes[c], curLevel);
-					}
-				}
-			}
-		}
-
-		function sendNewVersionMsg() {
-			var localStorageVersion = localStorage.getItem('118446_sendMessage');
-			if (!localStorageVersion || localStorageVersion == 'yes') {
-				localStorage.setItem('118446_sendMessage', 'no');
-				try {
-					var lang = (is_null(Data.options.user_language) ? LANG_CODE : Data.options.user_language).toLowerCase(),
-						subject = '',
-						body = '';
-					if (lang == 'fr') {
-						subject = 'Nouveautés de la v' + scriptVersion;
-						body = 'Merci ' + Seed.player.name + ' d\'avoir installé la version <b>' + scriptVersion + '</b> de <b>' + scriptName + '</b>.<br><br>' + 'N\'hésites pas à venir nous voir<br>' + '<br><b>Sur Facebook :</b>' + '<br>- <a href="https://www.facebook.com/groups/DoAscripts/" target="_blank"><u>DOA Scripts</u></a>' + '<br><b>Sur Userscripts :</b>' + '<br>- <a href="http://userscripts.org/scripts/show/' + scriptId + '" target="_blank"><u>' + scriptName + '</u></a><br>';
-					} else {
-						subject = 'News in the v' + scriptVersion;
-						body = 'Thanks ' + Seed.player.name + ' to have installed the release <b>' + scriptVersion + '</b> of <b>' + scriptName + '</b>.<br>' + 'Please fill free to visit us<br>' + '<br><b>On Facebook :</b>' + '<br>- <a href="https://www.facebook.com/groups/DoAscripts/" target="_blank"><u>DOA Scripts</u></a>' + '<br><b>On Userscripts :</b>' + '<br>- <a href="http://userscripts.org:8080/scripts/show/' + scriptId + ' target="_blank"><u>' + scriptName + '</u></a><br>';
-					}
-					body += '<br><br><b>' + mainAuthor + '</b>';
-					MyAjax.messageSend(subject, body, Seed.player.id, true);
-				} catch (e) {}
-			}
-		}
-
-		function serverTime() {
-			return toNum(new Date().getTime() / 1000) + Seed.serverTimeOffset;
-		}
-
-		function SHA1(msg) {
-			function rotate_left(n, s) {
-				var t4 = (n << s) | (n >>> (32 - s));
-				return t4;
-			};
-
-			function lsb_hex(val) {
-				var str = "";
-				var i;
-				var vh;
-				var vl;
-				for (i = 0; i <= 6; i += 2) {
-					vh = (val >>> (i * 4 + 4)) & 0x0f;
-					vl = (val >>> (i * 4)) & 0x0f;
-					str += vh.toString(16) + vl.toString(16);
-				}
-				return str;
-			};
-
-			function cvt_hex(val) {
-				var str = "";
-				var i;
-				var v;
-				for (i = 7; i >= 0; i--) {
-					v = (val >>> (i * 4)) & 0x0f;
-					str += v.toString(16);
-				}
-				return str;
-			};
-
-			function Utf8Encode(string) {
-				string = string.replace(/\r\n/g, "\n");
-				var utftext = "";
-				for (var n = 0; n < string.length; n++) {
-					var c = string.charCodeAt(n);
-					if (c < 128) {
-						utftext += String.fromCharCode(c);
-					} else if ((c > 127) && (c < 2048)) {
-						utftext += String.fromCharCode((c >> 6) | 192);
-						utftext += String.fromCharCode((c & 63) | 128);
-					} else {
-						utftext += String.fromCharCode((c >> 12) | 224);
-						utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-						utftext += String.fromCharCode((c & 63) | 128);
-					}
-				}
-				return utftext;
-			};
-			var blockstart;
-			var i, j;
-			var W = new Array(80);
-			var H0 = 0x67452301;
-			var H1 = 0xEFCDAB89;
-			var H2 = 0x98BADCFE;
-			var H3 = 0x10325476;
-			var H4 = 0xC3D2E1F0;
-			var A, B, C, D, E;
-			var temp;
-			msg = Utf8Encode(msg);
-			var msg_len = msg.length;
-
-			var word_array = new Array();
-			for (i = 0; i < msg_len - 3; i += 4) {
-				j = msg.charCodeAt(i) << 24 | msg.charCodeAt(i + 1) << 16 |
-					msg.charCodeAt(i + 2) << 8 | msg.charCodeAt(i + 3);
-				word_array.push(j);
-			}
-			switch (msg_len % 4) {
-				case 0:
-					i = 0x080000000;
-					break;
-				case 1:
-					i = msg.charCodeAt(msg_len - 1) << 24 | 0x0800000;
-					break;
-				case 2:
-					i = msg.charCodeAt(msg_len - 2) << 24 | msg.charCodeAt(msg_len - 1) << 16 | 0x08000;
-					break;
-				case 3:
-					i = msg.charCodeAt(msg_len - 3) << 24 | msg.charCodeAt(msg_len - 2) << 16 | msg.charCodeAt(msg_len - 1) << 8 | 0x80;
-					break;
-			}
-			word_array.push(i);
-			while ((word_array.length % 16) != 14) word_array.push(0);
-			word_array.push(msg_len >>> 29);
-			word_array.push((msg_len << 3) & 0x0ffffffff);
-
-			for (blockstart = 0; blockstart < word_array.length; blockstart += 16) {
-				for (i = 0; i < 16; i++) W[i] = word_array[blockstart + i];
-				for (i = 16; i <= 79; i++) W[i] = rotate_left(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
-				A = H0;
-				B = H1;
-				C = H2;
-				D = H3;
-				E = H4;
-				for (i = 0; i <= 19; i++) {
-					temp = (rotate_left(A, 5) + ((B & C) | (~B & D)) + E + W[i] + 0x5A827999) & 0x0ffffffff;
-					E = D;
-					D = C;
-					C = rotate_left(B, 30);
-					B = A;
-					A = temp;
-				}
-				for (i = 20; i <= 39; i++) {
-					temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & 0x0ffffffff;
-					E = D;
-					D = C;
-					C = rotate_left(B, 30);
-					B = A;
-					A = temp;
-				}
-				for (i = 40; i <= 59; i++) {
-					temp = (rotate_left(A, 5) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC) & 0x0ffffffff;
-					E = D;
-					D = C;
-					C = rotate_left(B, 30);
-					B = A;
-					A = temp;
-				}
-				for (i = 60; i <= 79; i++) {
-					temp = (rotate_left(A, 5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & 0x0ffffffff;
-					E = D;
-					D = C;
-					C = rotate_left(B, 30);
-					B = A;
-					A = temp;
-				}
-				H0 = (H0 + A) & 0x0ffffffff;
-				H1 = (H1 + B) & 0x0ffffffff;
-				H2 = (H2 + C) & 0x0ffffffff;
-				H3 = (H3 + D) & 0x0ffffffff;
-				H4 = (H4 + E) & 0x0ffffffff;
-			}
-			var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
-			return temp.toLowerCase();
-		}
-
-		function TimeStampToDate(xmlDate) {
-			var dt = new Date();
-			var dtS = xmlDate.slice(xmlDate.indexOf('T') + 1, xmlDate.indexOf('.'));
-			var TimeArray = dtS.split(":");
-			dt.setUTCHours(TimeArray[0], TimeArray[1], TimeArray[2]);
-			dtS = xmlDate.slice(0, xmlDate.indexOf('T'))
-			TimeArray = dtS.split("-");
-			dt.setUTCFullYear(TimeArray[0], TimeArray[1], TimeArray[2]);
-			return dt;
-		}
-
-		function timestrh(time) {
-			time = toNum(time);
-			var m = [];
-			var t = time;
-			if (t < 61) return t + 's';
-			if (t > 86400) {
-				t %= 86400;
-			}
-			if (t > 3600 || time > 3600) {
-				m.push(toNum(t / 3600));
-				m.push('h ');
-				t %= 3600;
-			}
-			m.push(toNum(t / 60));
-			m.push('m ');
-			m.push(t % 60);
-			m.push('s');
-			var str = m.join('');
-			if (str[str.length - 1] == ' ')
-				str = str.substring(0, str.length - 1);
-			return str;
-		}
-
-		function timestr(time, full) {
-			time = toNum(time);
-			var m = [];
-			var t = time;
-			if (t < 61) return t + 's';
-			if (t > 86400) {
-				m.push(toNum(t / 86400));
-				m.push('d ');
-				t %= 86400;
-			}
-			if (t > 3600 || time > 3600) {
-				m.push(toNum(t / 3600));
-				m.push('h ');
-				t %= 3600;
-			}
-			m.push(toNum(t / 60));
-			m.push('m');
-			if (full || time <= 3600) {
-				m.push(' ');
-				m.push(t % 60);
-				m.push('s');
-			}
-			var str = m.join('');
-			if (str[str.length - 1] == ' ')
-				str = str.substring(0, str.length - 1);
-			return str;
-		}
-
-		function timestrShort(time) {
-			time = toNum(time);
-			if (time > 86400) {
-				var m = [];
-				time /= 3600;
-				m.push(toNum(time / 24));
-				m.push('d ');
-				m.push(toNum(time % 24));
-				m.push('h');
-				return m.join('');
-			} else return timestr(time);
-		}
-
-		function toggleFlash() {
-			logit('toggleFlash');
-			var cont = document.getElementById('container');
-			if (cont.style.display == 'none') {
-				if (!IsChrome && SWF_CONTAINER && SWF_CONTAINER_INNERHTML) SWF_CONTAINER.innerHTML = SWF_CONTAINER_INNERHTML;
-				cont.style.display = 'block';
-				if (swf_object) setTimeout(function() {
-					logit('Mute sound');
-					swf_object.musicMute();
-				}, 15000);
-			} else {
-				if (!IsChrome && SWF_CONTAINER && SWF_CONTAINER_INNERHTML) SWF_CONTAINER.innerHTML = '';
-				cont.style.display = 'none';
-			}
-		}
-
-		function toNum(n, min) {
-			var x = parseInt(n, 10);
-			if (!n || n == '' || n == null || n == undefined || isNaN(x)) x = 0;
-			if (min && !isNaN(min) && x < min) x = min;
-			return x;
-		}
-
-		var AutoUpdater = {
-			days: 1,
-			name: "DoA Power Tools Plus III From Jawz(modded by Calcium)",
-			shortname: scriptName,
-			version: scriptVersion,
-			manualChk: false,
-			time: new Date().getTime(),
-			call: function(response, secure) {
-				if (GM_xmlhttpRequest) {
-					GM_xmlhttpRequest({
-						method: 'GET',
-						url: 'http' + (secure ? 's' : '') + '://userscripts.org/scripts/source/' + scriptId + '.meta.js',
-						onload: function(xpr) {
-							AutoUpdater.compare(xpr, response);
-						},
-						onerror: function(xpr) {
-							if (secure) AutoUpdater.call(response, false);
-						}
-					});
-				} else {
-					function myOwnHttpRequest(details) {
-						var xml_http = null;
-						xml_http = new XMLHttpRequest();
-						if (!xml_http) {
-							if (details.onerror) details.onerror({
-								responseText: '',
-								readyState: 4,
-								status: 0,
-								statusText: 'GM_xmlhttpRequest failed (missing xml_http object)',
-								finalUrl: details.url
-							});
-							else logit('GM_xmlhttpRequest failed (missing xml_http object), URL: ' + details.url);
-							return;
-						}
-						xml_http.onreadystatechange = function() {
-							var ready_state = xml_http.readyState;
-							var status3or4 = (ready_state == 3 || ready_state == 4);
-							var http_response = {
-								responseText: (status3or4 ? xml_http.responseText : ''),
-								readyState: ready_state,
-								status: (status3or4 ? xml_http.status : null),
-								statusText: (status3or4 ? xml_http.statusText : null),
-								finalUrl: (ready_state == 4 ? details.url : null)
-							};
-							if (details.onreadystatechange) details.onreadystatechange(http_response);
-							if (ready_state == 4) {
-								if (xml_http.status >= 200 && xml_http.status < 300) {
-									if (details.onload) details.onload(http_response);
-								} else {
-									if (details.onerror) details.onerror(http_response);
-								}
-							}
-						};
-						xml_http.open(details.method, details.url, true);
-						if (details.headers)
-							for (var this_header in details.headers) xml_http.setRequestHeader(this_header, details.headers[this_header]);
-						try {
-							xml_http.send(details.data);
-						} catch (e) {
-							if (details.onerror) details.onerror({
-								responseText: '',
-								readyState: 4,
-								responseHeaders: '',
-								status: 403,
-								statusText: 'Forbidden',
-								finalUrl: details.url
-							});
-							else logit('GM_xmlhttpRequest failed (forbidden), URL: ' + details.url);
-						}
-					};
-					myOwnHttpRequest({
-						method: 'GET',
-						url: 'http' + (secure ? 's' : '') + '://userscripts.org/scripts/source/' + scriptId + '.meta.js',
-						onload: function(xpr) {
-							AutoUpdater.compare(xpr, response);
-						},
-						onerror: function(xpr) {
-							if (secure) AutoUpdater.call(response, false);
-						}
-					});
-				}
-			},
-
-			enable: function() {
-				debugLog('Enable ' + this.shortname + ' updates');
-				localStorage.setItem('118446_updater', new Date().getTime() + '');
-				AutoUpdater.call(true, true);
-			},
-			compareVersion: function(r_version, l_version) {
-				var r_parts = r_version.split('.'),
-					l_parts = l_version.split('.'),
-					r_len = r_parts.length,
-					l_len = l_parts.length,
-					r = l = 0;
-				for (var i = 0, len = (r_len > l_len ? r_len : l_len); i < len && r == l; ++i) {
-					r = +(r_parts[i] || '0');
-					l = +(l_parts[i] || '0');
-				}
-				return (r !== l) ? r > l : false;
-			},
-			compare: function(xpr, response) {
-				this.xversion = /\/\/\s*@version\s+(.+)\s*\n/i.exec(xpr.responseText);
-				this.xname = /\/\/\s*@name\s+(.+)\s*\n/i.exec(xpr.responseText);
-				if ((this.xversion) && (this.xname[1] == this.name)) {
-					this.xversion = this.xversion[1];
-					this.xname = this.xname[1];
-				} else {
-					if ((xpr.responseText.match("the page you requested doesn't exist")) || (this.xname[1] != this.name))
-						localStorage.setItem('118446_updater', 'off');
-					return false;
-				}
-				var updated = this.compareVersion(this.xversion, this.version);
-				if (updated) {
-					if (CHROME_EXT) {
-						updaterConfirm(translate('A new version of') + ' ' + this.shortname + ' ' + translate('is available.\nGo to your Chrome extensions \n(') + chrome_extensions + translate('),\nenable the developer mode and click on the button to update extensions'), function() {}, null, false);
-					} else {
-						updaterConfirm(translate('A new version of') + ' ' + this.shortname + ' ' + translate('is available.\nDo you wish to install the latest version ?'),
-							function() {
-								try {
-									location.href = userscripts_src;
-								} catch (e) {}
-							},
-							function() {}, true
-						);
-					}
-				} else {
-					if (AutoUpdater.manualChk) updaterConfirm(translate('No new version of') + ' ' + this.shortname + ' ' + translate('available').toLowerCase() + '.', function() {}, null, false);
-				}
-			},
-			manualCheck: function() {
-				/*
-				 * localStorage.setItem('118446_updater', new Date().getTime() +
-				 * ''); AutoUpdater.manualChk = true; AutoUpdater.call(true,
-				 * true);
-				 */
-			},
-			check: function() {
-				try {
-					if (localStorage.getItem('118446_updater') == "off") {
-						/* this.enable(); */
-					}
-					else {
-						/*
-						 * if (+this.time >
-						 * (+localStorage.getItem('118446_updater') + 1000 *
-						 * 86400 * this.days)) {
-						 * localStorage.setItem('118446_updater', this.time +
-						 * ''); this.call(false, true); } debugLog('Check ' +
-						 * this.shortname + ' for updates');
-						 * localStorage.setItem('118446_updater', new
-						 * Date().getTime() + ''); AutoUpdater.call(true, true);
-						 */
-					}
-				} catch (e) {
-					debugLog('AutoUpdater Check error : ' + e);
-					logit(inspectObj(e, 8, 1));
-				}
-			}
 		};
-
-		/** ***************** progressBar ************ */
-		var progressBar = {
-			steps: 0,
-			step: 0,
-			delay: 10000,
-			totalTime: 0,
-			currentTime: 0,
-			timer: 0,
-			title: '',
-			stepText: '',
-			displayed: false,
-			by_count: false,
-
-			init: function(x, y, width, height, title, bar_width, modal, container) {
-				var t = progressBar;
-				if (modal)
-					progressBarPop = new ModalDialog(container, width, height, '', false);
-				else progressBarPop = new PopUp('progress_bar', x, y, width, height, function() {
-					tabManager.hideTab();
-				});
-				progressBarPop.getTopDiv().innerHTML = '<div class=' + UID['title'] + '><center><b>' + scriptName + ' : ' + title + '</b></center></div>';
-				var layoutDiv = document.createElement('div');
-				layoutDiv.className = 'container';
-				layoutDiv.style.backgroundColor = 'rgb(245,245,228)';
-				layoutDiv.style.color = '#000';
-				layoutDiv.style.height = '100%';
-				var layout = '<center><BR><B><div id=' + setUID('initTitle') + '></div></B>' + '<br><div id=' + setUID('initProgressBar') + ' style="width:' + bar_width + 'px"></div>' + '<br><div class=jewel id=' + setUID('initStepText') + '></div></center>';
-				if (modal)
-					progressBarPop.getContentDiv().appendChild(layoutDiv);
-				else progressBarPop.getMainDiv().appendChild(layoutDiv);
-				t.hideshow(true);
-				t.displayed = true;
-				layoutDiv.innerHTML = layout;
-			},
-			hideshow: function(onOff) {
-				var t = progressBar;
-				if (!onOff && t.displayed) {
-					progressBarPop.show(false);
-					t.displayed = false;
-					if (t.timer) clearInterval(t.timer);
-				}
-				if (onOff && !t.displayed) {
-					progressBarPop.show(true);
-					t.displayed = true;
-				}
-			},
-			start: function(options) {
-				var t = progressBar;
-				t.hideshow(true);
-				t.steps = options.steps;
-				t.delay = options.delay || t.delay;
-				t.title = options.title || t.title;
-				t.stepText = options.stepText || t.stepText;
-				t.by_count = options.byCount || t.by_count;
-				t.totalTime = t.steps * t.delay;
-				t.step = 0;
-				t.currentTime = 0;
-				document.getElementById(UID['initTitle']).innerHTML = t.title;
-				document.getElementById(UID['initStepText']).innerHTML = t.stepText;
-				if (!t.by_count) {
-					clearInterval(t.timer);
-					t.timer = setInterval(t._progress, 500);
-				}
-			},
-			stop: function() {
-				var t = progressBar;
-				t.delay = 10000;
-				if (t.timer) clearInterval(t.timer);
-			},
-			pause: function() {
-				var t = progressBar;
-				if (t.timer) clearInterval(t.timer);
-			},
-			resume: function() {
-				var t = progressBar;
-				if (!t.timer) t.timer = setInterval(t._progress, 250);
-			},
-			update: function(options) {
-				var t = progressBar;
-				t.hideshow(true);
-				t.step = options.step;
-				t.title = options.title || t.title;
-				t.stepText = options.stepText || t.stepText;
-				t.currentTime = t.delay * t.step;
-				if (document.getElementById(UID['initTitle'])) document.getElementById(UID['initTitle']).innerHTML = t.title;
-				if (document.getElementById(UID['initStepText'])) document.getElementById(UID['initStepText']).innerHTML = t.stepText;
-				if (t.by_count) t._progress();
-			},
-
-			_progress: function() {
-				var t = progressBar;
-				if (!t.by_count) t.currentTime += 500;
-				var perc = toNum((t.currentTime / t.totalTime) * 200);
-				if (perc > 200) perc = 200;
-				var _progressBar = '<table class=progress_bar><tr>';
-				for (var n = 0; n < perc; n++)
-					_progressBar += '<td class=progress_on></td>';
-				for (var n = perc; n < 200; n++)
-					_progressBar += '<td class=progress_off></td>';
-				_progressBar += '</tr></table>';
-				if (document.getElementById(UID['initProgressBar'])) document.getElementById(UID['initProgressBar']).innerHTML = _progressBar;
-				if (perc >= 200) t.stop();
-			}
-		}
-		/** ***************** END progressBar ************ */
+		/** ********** Functions ************* */
 
 		/********************************** Base64 ********************************************/
 		var Base64 = {
@@ -31884,7 +32751,6 @@
 				return string;
 			}
 		};
-		/********************************** END Base64 ****************************************/
 
 		/********************************** XML.ObjTree ***************************************/
 		/*
@@ -31892,13 +32758,10 @@
 		 * http://www.kawa.net/works/js/xml/objtree-e.html
 		 */
 		if (typeof(XML) == 'undefined') XML = function() {};
-		/* constructor */
 		XML.ObjTree = function() {
 			return this;
 		};
-		/* class variables */
 		XML.ObjTree.VERSION = "0.24";
-		/* object prototype */
 		XML.ObjTree.prototype.xmlDecl = '<?xml version="1.0" encoding="UTF-8" ?>\n';
 		XML.ObjTree.prototype.attr_prefix = '-';
 		XML.ObjTree.prototype.overrideMimeType = 'text/xml';
@@ -31918,7 +32781,6 @@
 			if (!root) return;
 			return this.parseDOM(root);
 		};
-		/* method:parseHTTP(url, options, callback) */
 		XML.ObjTree.prototype.parseHTTP = function(url, options, callback) {
 			var myopt = {};
 			for (var key in options) {
@@ -31964,8 +32826,7 @@
 			} else if (trans && trans.responseText) {
 				return this.parseXML(trans.responseText);
 			}
-		}
-		/* method:parseDOM(documentroot) */
+		};
 		XML.ObjTree.prototype.parseDOM = function(root) {
 			if (!root) return;
 			this.__force_array = {};
@@ -31985,7 +32846,6 @@
 			}
 			return json;
 		};
-		/* method:parseElement(element) */
 		XML.ObjTree.prototype.parseElement = function(elem) {
 			if (elem.nodeType == 7) {
 				return;
@@ -32038,7 +32898,6 @@
 			}
 			return retval;
 		};
-		/* method:addNode(hash, key, count, value) */
 		XML.ObjTree.prototype.addNode = function(hash, key, cnts, val) {
 			if (this.__force_array[key]) {
 				if (cnts == 1) hash[key] = [];
@@ -32051,12 +32910,10 @@
 				hash[key][hash[key].length] = val;
 			}
 		};
-		/* method:writeXML(tree) */
 		XML.ObjTree.prototype.writeXML = function(tree) {
 			var xml = this.hash_to_xml(null, tree);
 			return this.xmlDecl + xml;
 		};
-		/* method:hash_to_xml(tagName, tree) */
 		XML.ObjTree.prototype.hash_to_xml = function(name, tree) {
 			var elem = [];
 			var attr = [];
@@ -32090,7 +32947,6 @@
 			}
 			return jelem;
 		};
-		/* method:array_to_xml(tagName, array) */
 		XML.ObjTree.prototype.array_to_xml = function(name, array) {
 			var out = [];
 			for (var i = 0; i < array.length; i++) {
@@ -32107,7 +32963,6 @@
 			}
 			return out.join("");
 		};
-		/* method:scalar_to_xml(tagName, text) */
 		XML.ObjTree.prototype.scalar_to_xml = function(name, text) {
 			if (name == "#text") {
 				return this.xml_escape(text);
@@ -32115,19 +32970,13 @@
 				return "<" + name + ">" + this.xml_escape(text) + "</" + name + ">\n";
 			}
 		};
-		/* method:xml_escape(text) */
 		XML.ObjTree.prototype.xml_escape = function(text) {
 			return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 		};
-		/********************************** END XML.ObjTree ***********************************/
-
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('k 1o;1o={1V:m(e){e=e.4p(/\\r\\n/g,"\\n");k t="";J(k n=0;n<e.B;n++){k r=e.1W(n);q(r<V){t+=1i.1j(r)}z q(r>Y&&r<4A){t+=1i.1j(r>>6|4q);t+=1i.1j(r&63|V)}z{t+=1i.1j(r>>12|37);t+=1i.1j(r>>6&63|V);t+=1i.1j(r&63|V)}}j t},2J:m(e){k t="";k n=0;k r,i,s,o;r=i=s=0;1H(n<e.B){r=e.1W(n);q(r<V){t+=1i.1j(r);n++}z q(r>4g&&r<37){s=e.1W(n+1);t+=1i.1j((r&31)<<6|s&63);n+=2}z{s=e.1W(n+1);o=e.1W(n+2);t+=1i.1j((r&15)<<12|(s&63)<<6|o&63);n+=3}}j t}};k 3p=1;k 3V=0;k 30="3u";k 1E,v,X,P,1K;k 1Y;k 1p,1k,1L,1d;k 2R,3y,E,1Z;k 1M;1d=m(e,t){b.4U=e;b.4F=t};1d.x=w 4t;1d.x.1P=1d;k 1L=m(e){1d.1u(b,e,"1L")};1L.x=w 1d;1L.x.1P=1L;k 1p=m(e){1d.1u(b,e,"1p")};1p.x=w 1d;1p.x.1P=1p;k 1k=m(e){1d.1u(b,e,"1k")};1k.x=w 1d;1k.x.1P=1k;E=m(){b.1w={};b.1w[E.28]=[];b.1w[E.O]=[]};E.28="2v";E.O="33";E.x={1T:m(e,t){k n=2R(b.1w[t],e);q(n>=0){j n}q(!b.2V(e)){j G}b.1m(e,t);j G},1m:m(e,t){q(!b.2V(e)){j G}b.1w[t].W(e);j e},1C:m(e,t){q(!b.1w.4O(t)){j G}k n=b.1w[t].B;q(e>=n){j G}q(!n){j G}j b.1w[t][e]},2V:m(e){q(e===1t||M e=="2v"&&!e.B){j G}j D}};1Y=m(e){q(M e!=="Q"){q(e S 1S){b.U=e}z{b.U=w 1S(e)}}z{b.U=w 1S(0,D)}};1Y.x={4b:m(){j b.U.4L()},2X:m(){j b.U.4I()},34:m(){j b.U.4H()},2x:m(e){j b.U.1N(e,Q,"1o")},Z:m(e){j b.U.4D(e)},3X:m(e){j b.U.4C(e)},4E:m(e){j b.U.4N(e)},3C:m(e){j b.U.2Z(e,Q,"1o")},1N:m(){j b.U.1N(b.U.K,0)}};1E={2D:{},1n:m(e,t,n,r){r=M r=="Q"?3V:r;k i=w 1Y;k s=w X(i,r);j s.1n(e,D,t,n)},1s:m(e,t){k n=w 1Y(e);k r=w P(n);q(3N.1V(4S)!="4W=="||3N.1V(4f)!="4r==")j;j r.1s(t)},4w:m(e){j b.1s(e)},4x:m(e,t){j b.1n(e,D,Q,t)},4i:m(e,t){b.2D[e]=t},3v:m(e){q(!(e H b.2D)){j 1t}j b.2D[e]}};v={2r:0,2b:1,2s:2,2e:3,2l:4,1X:5,2g:6,3m:7,2h:8,2n:9,2p:10,3j:11,2a:12,4h:13,4j:14,4k:15,4o:16,4n:17,4l:0,L:1,3T:V,3S:4T,3L:4R,2H:4P,2E:-3q,4Q:m(){j D},4e:m(e){q(!e){j D}k t=0;J(k n H e){q(n!=t){j G}t++}j D}};1K=m(e){b.I=e;b.N=w E};1K.x={3R:m(e){2c(D){A M e=="Q":j v.2r;A e===1t:j v.2b;A e===D||e===G:j e?v.2e:v.2s;A M e=="1B"&&e%1===0:q(e<v.2E||e>v.2H){j v.1X}j v.2l;A M e=="1B"&&e%1!==0:j v.1X;A M e=="2v":j v.2g;A e S 39:j v.2h;A e S 1M:j v.2a;A e S 1r:j v.2n;A M e=="33":j v.2p;A M e=="m":T w 1L("3k 1n a m");2q:j 1t}}};X=m(e,t){b.3Y=t;1K.1u(b,e)};X.x=w 1K;X.x.1P=X;X.x.1n=m(e,t,n,r){q(M n=="Q")n=D;q(M t=="Q")t=D;k i=r?r:b.3R(e);q(n){b.I.Z(i)}2c(i){A v.2r:A v.2b:A v.2s:A v.2e:1y;A v.2l:b.1a(e);1y;A v.1X:b.3K(e);1y;A v.2g:b.1x(e);1y;A v.2h:b.3B(e);1y;A v.2n:b.3A(e);1y;A v.2p:b.4d(e);1y;A v.2a:b.44(e);1y;2q:T w 1p("4V 1E 2Y ["+i+"]")}q(t){j b.I.1N()}};X.x.1a=m(e){q(e<v.2E||e>v.2H){T w 1p("4Z 2K 2G 4Y: "+e)}e&=4X;q(e<v.3T){b.I.Z(e)}z q(e<v.3S){b.I.Z(e>>7&Y|V);b.I.Z(e&Y)}z q(e<v.3L){b.I.Z(e>>14&Y|V);b.I.Z(e>>7&Y|V);b.I.Z(e&Y)}z{b.I.Z(e>>22&Y|V);b.I.Z(e>>15&Y|V);b.I.Z(e>>8&Y|V);b.I.Z(e&19)}};X.x.3K=m(e){b.I.3X(e)};X.x.1x=m(e,t){t=M t=="Q"?D:t;q(t){k n=b.N.1T(e,E.28);q(n!==G){b.1a(n<<1);j}}k r=1o.1V(e);b.1a(r.B<<1|1);b.I.3C(e)};X.x.3B=m(e){k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}b.1n(e.4G(),G,D,v.1X)};X.x.3A=m(e){k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}k n=1t;k r=v.4e(e);q(r){b.1a(e.B<<1|v.L);b.1x("");J(k i H e){n=e[i];b.1n(n,G)}}z{b.1a(1);J(k s H e){n=e[s];b.1x(s,G);b.1n(n)}b.1x("")}};X.x.4d=m(e){k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}k n=e;q(1Z.3n(e)){e=e.3o()}k r=1Z.3s(e);b.1a(11);b.1x(1Z.3t(n,b.3Y),G);q(r.B>0){J(k i H r){k s=r[i];k o=e[s];b.1x(s,G);b.1n(o,G)}}b.1x("")};X.x.44=m(e){q(!("25"H e)){T w 1p("4B 1M 2B 4u")}k t=b.N.1T(e,E.O);q(t!==G){b.1a(t<<1);j}b.1a(e.25().B<<1|v.L);b.I.3J(e.25())};P=m(e){1K.1u(b,e)};P.x=w 1K;P.x.1P=P;P.x.1s=m(e){k t=b.I.4b(e);2c(1U(t)){A v.2r:j Q;A v.2b:j 1t;A v.2s:j G;A v.2e:j D;A v.2l:j b.1l();A v.1X:j b.3w();A v.2g:j b.1D();A v.2h:j b.36();A v.2n:j b.3c();A v.2p:j b.35();A v.2a:j b.3d();A v.3m:j b.3e();A v.3j:j b.3g();2q:T w 1k("3k 1s 2Y: "+t+" ;y 4J="+b.I.U.3h())}};P.x.1l=m(){k e=0;k t=0;k n=b.I.34();1H((n&V)!==0&&t<3){e<<=7;e|=n&Y;n=b.I.34();t++}q(t<3){e<<=7;e|=n}z{e<<=8;e|=n;q((e&3q)!==0){e|=4K}}j e};P.x.3w=m(){j b.I.2X()};P.x.1D=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.28)}k t=e>>v.L;k n=b.I.2x(t);b.N.1m(n,E.28);j n};P.x.36=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=b.I.2X();k n=w 39(t);b.N.1m(n,E.O);j n};P.x.3c=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=[];b.N.1m(n,E.O);k r=b.1D();1H(r.B>0){n[r]=b.1s();r=b.1D()}J(k i=0;i<t;i++){n.W(b.1s())}j n};P.x.35=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=b.1D();k n={};b.N.1m(n,E.O);k r={};k i=b.1D();1H(i.B){r[i]=b.1s();i=b.1D()}q(t&&t.B>0){k s=1E.3v(t);q(!s){T w 1k("50 "+t+" 3b 3a 4s. 4m 4y a 4v 4z.")}n=w s;q("2y"H n&&M n.2y=="m"){n.2y(r)}z{2P(n,r)}}z{2P(n,r)}j n};k 2P=m(e,t){4M{J(k n H t){k r=t[n];e[n]=r}}5a(i){T w 1k("5T \'"+n+"\' 3b 3a 1z 5S 5R \'"+M e+"\'")}};P.x.3d=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=b.I.21(t);k r=w 1M(n);b.N.1m(r,E.O);j r};P.x.3e=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=b.I.2x(t);b.N.1m(n,E.O);j n};P.x.3g=m(){k e=b.1l();q((e&v.L)===0){e>>=v.L;j b.N.1C(e,E.O)}k t=e>>v.L;k n=b.I.2x(t);b.N.1m(n,E.O);j n};2R=m(e,t,n){q(e===Q||e===1t){T w 2m(\'"5U" 1G 1t 5V 2t 5Y\')}k r=e.B>>>0;n=+n||0;q(C.3x(n)===1A){n=0}q(n<0){n+=r;q(n<0){n=0}}J(;n<r;n++){q(e[n]===t){j n}}j-1};3y={5X:m(e){k t=11;k n=52;k r=(1<<t-1)-1,i,s,o,u,a,f,l,c;q(3W(e)){s=(1<<r)-1;o=C.1g(2,n-1);i=0}z q(e===1A||e===-1A){s=(1<<r)-1;o=0;i=e<0?1:0}z q(e===0){s=0;o=0;i=1/e===-1A?1:0}z{i=e<0;e=C.3x(e);q(e>=C.1g(2,1-r)){u=C.5W(C.1q(C.3G(e)/C.3H),r);s=u+r;o=C.3r(e*C.1g(2,n-u)-C.1g(2,n))}z{s=0;o=C.3r(e/C.1g(2,1-r-n))}}f=[];J(a=n;a;a-=1){f.W(o%2?1:0);o=C.1q(o/2)}J(a=t;a;a-=1){f.W(s%2?1:0);s=C.1q(s/2)}f.W(i?1:0);f.2d();l=f.3l("");c=[];1H(l.B){c.W(1U(l.20(0,8),2));l=l.20(8)}j c},5Q:m(e){k t=11;k n=52;k r=[],i,s,o,u,a,f,l,c;J(i=e.B;i;i-=1){o=e[i-1];J(s=8;s;s-=1){r.W(o%2?1:0);o=o>>1}}r.2d();u=r.3l("");a=(1<<t-1)-1;f=1U(u.20(0,1),2)?-1:1;l=1U(u.20(1,1+t),2);c=1U(u.20(1+t),2);q(l===(1<<t)-1){j c!==0?2F:f*1A}z q(l>0){j f*C.1g(2,l-a)*(1+c/C.1g(2,n))}z q(c!==0){j f*C.1g(2,-(a-1))*(c/C.1g(2,n))}z{j f<0?-0:0}}};1Z={3n:m(e){q(!e){j G}j"3o"H e&&"2y"H e},3t:m(e,t){q(M e==="33"&&1E.30 H e){j t&1E.3p?e.3u:""}j""},3s:m(e){q(!e){j[]}k t=[];J(k n H e){q(n==1E.30){38}q(M e[n]=="m"){38}t.W(n)}j t}};1M=m(e){b.2B=e};1M.x={25:m(){j b.2B},5P:m(e){b.2B=e},2S:m(){j b.25()}};k 1S;1S=m(e){"5J 5I";m s(e,t){j!t&&e S 1r?e:1r.x.1J.1u(e)}m o(e,t){j e!==Q?e:t}m u(e,n,r,i,s){q(e S u){k a=e.1J(r,r+i);a.1b=o(s,a.1b);j a}q(!(b S u)){j w u(e,n,r,i,s)}b.y=e=u.2L(e);b.1f=o(n,G);b.1I=t.18&&e S 18;b.2f=t.26&&b.1I;q(!b.1I&&!(e S 1r)){T w 2m("1S y 5H 5G 5K 2Y")}b.1b=!!s;k f="F"H e?e.F:e.B;b.R=r=o(r,0);b.F=i=o(i,f-r);b.K=b.1v=0;q(!b.2f){b.27(r,i,f)}z{b.29=w 26(e,r,i)}b.3Z=b.2f?b.41:b.1I?b.42:b.49}m a(e){k n=t.18?1e:1r,r=w n(e.B);J(k i=0,s=e.B;i<s;i++){r[i]=e.1W(i)&19}j r}m f(e){j e>=0&&e<31?1<<e:f[e]||(f[e]=C.1g(2,e))}m l(e,t){b.1Q=e;b.1F=t}m c(e,t){l.2C(b,1R)}k t={26:"26"H e,18:"18"H e};k n=e.5L;k r=e.60;k i={5N:1,5M:2,5Z:4,6c:1,6d:2,6g:4,6a:4,6b:8};u.2L=m(e){2c(M e){A"1B":q(t.18){e=(w 1e(e)).y}z{e=w 1r(e);J(k n=0;n<e.B;n++){e[n]=0}}j e;A"2v":e=a(e);2q:q("B"H e&&!(t.18&&e S 18)){q(t.18){q(!(e S 18)){e=(w 1e(e)).y;q(!(e S 18)){e=(w 1e(s(e,D))).y}}}z{e=s(e)}}j e}};u.62=m(){j u.2L(1R)};u.51=l;l.x={2j:m(){j b.1Q+f(32)*b.1F},2S:m(){j 65.x.2S.2C(b.2j(),1R)}};l.2z=m(e){k t=C.1q(e/f(32)),n=e-t*f(32);j w l(n,t)};u.66=c;c.x="3f"H 3i?3i.3f(l.x):w l;c.x.2j=m(){q(b.1F<f(31)){j l.x.2j.2C(b,1R)}j-(f(32)-b.1Q+f(32)*(f(32)-1-b.1F))};c.2z=m(e){k t,n;q(e>=0){k r=l.2z(e);t=r.1Q;n=r.1F}z{n=C.1q(e/f(32));t=e-n*f(32);n+=f(32)}j w c(t,n)};k h=u.x={69:t,2i:10*3U,68:m(e){q(M e==="Q"){b.1f=!b.1f}z{q(M e==="67"){b.1f=e}}},64:m(){j b.1f},3h:m(){j b.K},3D:m(e){b.27(e,0);j b.K=e},4c:m(e){j b.3D(b.K+e)},1J:m(e,t,n){m r(e,t){j e<0?e+t:e}e=r(e,b.F);t=r(o(t,b.F),b.F);j n?w u(b.21(t-e,e,D,D),b.1f,Q,Q,b.1b):w u(b.y,b.1f,b.R+e,t-e,b.1b)},6f:m(e){b.1v=0;q(o(e,1)!==1){j b.4c(e-(b.K%e||e))}z{j b.K}},6e:m(e,t,n,r){q(!(e S u)){e=w u(e)}n=o(n,e.K);t=o(t,b.K);r=o(r,e.F-n);r=t+r<=b.F?r:b.F-t;b.1h(e.21(r,n),t)},5O:m(e){q(!(e S u)){e=w u(e)}k t={2O:D,2k:[]};k n,r,i=0;n=r="F"H b.y?b.y.F:b.y.B;k s="F"H e.y?e.y.F:e.y.B;q(s!==r){t.2O=G;q(s<r){t.2k.W("2u 1G 5E;b="+r+";2u="+s);n=s}z{t.2k.W("2u 1G 5f;b="+r+";2u="+s)}}n-=b.R;J(k o=0;o<n;o++){k a=b.1c(1,o)[0];k f=e.1c(1,o)[0];q(a!==f){i++}}q(i>0){t.2O=G;t.2k.W(i+" 2U H 5e")}j t},3z:m(e){k n,r,i;q(!b.1f){T w 2o("y 2t 1f.")}q(e<b.R){T w 2o("w 5d 1G 2K 2G 4a.")}k r="F"H b.y?b.y.F:b.y.B;q(M e==="1B"){e=(1U(e/b.2i)+(e%b.2i?1:0))*b.2i;q(t.18){n=w 1e(e);n.1z((w 1e(b.y)).5g(0,r<e?r:e));i=w 1e(e);i.1z(n);b.y=i.y}z{b.y.B=e;i=b.y;J(k s=r;s<b.y.B;s++){b.y[s]=0}}k o="F"H b.y?b.y.F:b.y.B;q(b.F===r-b.R){b.F=o-b.R}q(b.K>b.F){b.K=b.F}q(b.2f){b.29=w 26(b.y,b.R,b.F)}}},1O:m(e,t){q(!b.1f)j;e=o(e,b.K);k n="F"H b.y?b.y.F:b.y.B;q(b.R+e+t>n){b.3z(b.R+e+t)}},27:m(e,t,n){q(M e!=="1B"){T w 2m("5h 1G 2t a 1B.")}q(M t!=="1B"){T w 2m("5k 1G 2t a 1B.")}q(t<0){T w 2o("5j 1G 5F.")}q(e<0||e+t>o(n,b.F)){T w 2o("5c 5b 2K 2G 4a.")}},2W:m(e,t,n,r,i){j b.3Z(e,t,o(n,b.K),o(r,b.1b),i)},41:m(e,t,n,r,s){b.1O(n,i[e]);b.K=n+i[e];j t?b.29["3F"+e](n,r):b.29["1z"+e](n,s,r)},42:m(t,n,r,s,u){k a=i[t],f=e[t+"1r"],l;b.1O(r,a);s=o(s,b.1b);q(a===1||(b.R+r)%a===0&&s){l=w f(b.y,b.R+r,1);b.K=r+a;j n?l[0]:l[0]=u}z{k c=w 1e(n?b.21(a,r,s,D):a);l=w f(c.y,0,1);q(n){j l[0]}z{l[0]=u;b.1h(c,r,s)}}},49:m(e,t,n,r,s){b.1O(n,i[e]);j t?b["55"+e](n,r):b["54"+e](s,n,r)},2I:m(e,t,n,r,i){k s=e<0?1:0,o,u,a=~(-1<<r-1),l=1-a;q(e<0){e=-e}q(e===0){o=0;u=0}z q(3W(e)){o=2*a+1;u=1}z q(e===1A){o=2*a+1;u=0}z{o=C.1q(C.3G(e)/C.3H);q(o>=l&&o<=a){u=C.1q((e*f(-o)-1)*f(n));o+=a}z{u=C.1q(e/f(l-n));o=0}}k c=[];1H(n>=8){c.W(u%3I);u=C.1q(u/3I);n-=8}o=o<<n|u;r+=n;1H(r>=8){c.W(o&19);o>>>=8;r-=8}c.W(s<<r|o);b.1h(c,t,i)},2M:m(e,t){k n=(o(t,b.K)<<3)+b.1v,r=n+e,i=n>>>3,s=r+7>>>3,u=b.1c(s-i,i,D),a=0;q(b.1v=r&7){b.1v-=8}J(k f=0,l=u.B;f<l;f++){a=a<<8|u[f]}j{3E:i,2U:u,2T:a}},1c:m(e,t,n){n=o(n,b.1b);t=o(t,b.K);e=o(e,b.F-t);b.27(t,e);t+=b.R;b.K=t-b.R+e;k r=b.1I?w 1e(b.y,t,e):(b.y.1J||1r.x.1J).1u(b.y,t,t+e);j n||e<=1?r:s(r).2d()},21:m(e,t,n,r){k i=b.1c(e,t,o(n,D));j r?s(i):i},1h:m(e,t,n){k r=e.B;q(r===0){j}n=o(n,b.1b);t=o(t,b.K);b.27(t,r);q(!n&&r>1){e=s(e,D).2d()}t+=b.R;q(b.1I){(w 1e(b.y,t,r)).1z(e)}z{J(k i=0;i<r;i++){b.y[t+i]=e[i]}}b.K=t-b.R+r},3J:m(e,t,n){b.1O(t,e.B);b.1h(e,t,o(n,D))},1N:m(e,t,n){k i=b.1c(e,t,D);n=n==="1o"?"2A-8":n||"2w";q(r&&n!=="2w"){j(w r(n)).2J(b.1I?i:w 1e(i))}k s="";e=i.B;J(k o=0;o<e;o++){s+=1i.1j(i[o])}q(n==="2A-8"){s=1o.2J(s)}j s},2Z:m(e,t,r){r=r==="1o"?"2A-8":r||"2w";k i;q(n&&r!=="2w"){i=(w n(r)).1V(e)}z{q(r==="2A-8"){e=1o.1V(e)}i=a(e)}b.1O(t,i.B);b.1h(i,t,D)},53:m(e){j b.1N(1,e)},56:m(e,t){b.2Z(e,t)},57:m(e,t){k n=b.1c(8,e,t),r=1-2*(n[7]>>7),i=((n[7]<<1&19)<<3|n[6]>>4)-((1<<10)-1),s=(n[6]&15)*f(48)+n[5]*f(40)+n[4]*f(32)+n[3]*f(24)+n[2]*f(16)+n[1]*f(8)+n[0];q(i===3U){q(s!==0){j 2F}z{j r*1A}}q(i===-5l){j r*s*f(-5m-52)}j r*(1+s*f(-52))*f(i)},5z:m(e,t,n){b.2I(e,t,52,11,n)},5x:m(e,t){k n=b.1c(4,e,t),r=1-2*(n[3]>>7),i=(n[3]<<1&19|n[2]>>7)-Y,s=(n[2]&Y)<<16|n[1]<<8|n[0];q(i===V){q(s!==0){j 2F}z{j r*1A}}q(i===-Y){j r*s*f(-5B-23)}j r*(1+s*f(-23))*f(i)},5C:m(e,t,n){b.2I(e,t,23,8,n)},2Q:m(e,t,n){n=o(n,b.1b);t=o(t,b.K);k r=n?[0,4]:[4,0];J(k i=0;i<2;i++){r[i]=b.5v(t+r[i],n)}b.K=t+8;j w e(r[0],r[1])},2N:m(e,t,n,r){q(!(t S e)){t=e.2z(t)}r=o(r,b.1b);n=o(n,b.K);k i=r?{1Q:0,1F:4}:{1Q:4,1F:0};J(k s H i){b.5p(n+i[s],t[s],r)}b.K=n+8},5o:m(e,t){j b.2Q(c,e,t)},5n:m(e,t,n){b.2N(c,e,t,n)},5q:m(e,t){j b.2Q(l,e,t)},5r:m(e,t,n){b.2N(l,e,t,n)},3Q:m(e,t){k n=b.1c(4,e,t);j n[3]<<24|n[2]<<16|n[1]<<8|n[0]},5u:m(e,t){j b.3Q(e,t)>>>0},43:m(e,t,n){b.1h([e&19,e>>>8&19,e>>>16&19,e>>>24],t,n)},5t:m(e,t){j b.3M(e,t)<<16>>16},3M:m(e,t){k n=b.1c(2,e,t);j n[1]<<8|n[0]},47:m(e,t,n){b.1h([e&19,e>>>8&19],t,n)},5s:m(e){j b.3O(e)<<24>>24},3O:m(e){j b.1c(1,e)[0]},45:m(e,t){b.1h([e&19],t)},5i:m(e,t){k n=32-e;j b.3P(e,t)<<n>>n},3P:m(e,t){k n=b.2M(e,t).2T>>>-b.1v;j e<32?n&~(-1<<e):n},46:m(e,t,n){k r=b.2M(n,t),i=r.2T,s=r.2U;i&=~(~(-1<<n)<<-b.1v);i|=(n<32?e&~(-1<<n):e)<<-b.1v;J(k o=s.B-1;o>=0;o--){s[o]=i&19;i>>>=8}b.1h(s,r.3E,D)}};J(k p H i){(m(e){h["3F"+e]=m(t,n){j b.2W(e,D,t,n)};h["1z"+e]=m(t,n,r){b.2W(e,G,n,r,t)}})(p)}h.5w=h.43;h.5D=h.47;h.5A=h.45;h.5y=h.46;J(k d H h){q(d.1J(0,3)==="1z"){(m(e){h["58"+e]=m(){1r.x.59.1u(1R,Q);b["1z"+e].2C(b,1R)}})(d.1J(3))}}j u}(61)',62,389,'|||||||||||this||||||||return|var||function||||if|||||Spec|new|prototype|buffer|else|case|length|Math|true|ReferenceStore|byteLength|false|in|stream|for|_0|REFERENCE_BIT|typeof|referenceStore|TYPE_OBJECT|Deserializer|undefined|byteOffset|instanceof|throw|buff|128|push|Serializer|127|writeByte|||||||||ArrayBuffer|255|serializeInt|_1|_2|Exception|Uint8Array|dynamic|pow|_3|String|fromCharCode|DeserializationException|deserializeInt|addReference|serialize|utf8|SerializationException|floor|Array|deserialize|null|call|_4|store|serializeString|break|set|Infinity|number|getByReference|deserializeString|AMF|hi|is|while|_5|slice|BaseSerializer|NotSupportedException|ByteArray|getString|_6|constructor|lo|arguments|jDataView|getReference|parseInt|encode|charCodeAt|AMF3_DOUBLE|Buffer|ObjectUtil|substring|getBytes||||getData|DataView|_7|TYPE_STRING|_9|AMF3_BYTE_ARRAY|AMF3_NULL|switch|reverse|AMF3_TRUE|_8|AMF3_STRING|AMF3_DATE|blocksize|valueOf|diff|AMF3_INT|TypeError|AMF3_ARRAY|RangeError|AMF3_OBJECT|default|AMF3_UNDEFINED|AMF3_FALSE|not|other|string|binary|readUTFBytes|importData|fromNumber|utf|data|apply|classMappings|MIN_INT|NaN|of|MAX_INT|_10|decode|out|wrapBuffer|_14|_11|equal|applyDataToInstance|_12|indexOf|toString|wideValue|bytes|validate|_13|readDouble|type|setString|CLASS_MAPPING_FIELD|||object|readUnsignedByte|deserializeObject|deserializeDate|224|continue|Date|be|cannot|deserializeArray|deserializeByteArray|deserializeXMLDoc|create|deserializeXML|tell|Object|AMF3_XML|Cannot|join|AMF3_XML_DOC|isSerializable|exportData|CLASS_MAPPING|268435456|round|getObjectKeys|getClassName|_21|getClassByAlias|deserializeDouble|abs|float64|resize|serializeArray|serializeDate|writeUTFBytes|seek|start|get|log|LN2|256|setBytes|serializeDouble|MIN_4_BYTE_INT|_17|Base64|_25|getUnsigned|_23|getDataType|MIN_3_BYTE_INT|MIN_2_BYTE_INT|1024|DEFAULT_OPTIONS|isNaN|writeDouble|options|_22||_20|_15|_19|serializeByteArray|_24|setUnsigned|_16||_18|bounds|readByte|skip|serializeObject|isDenseArray|mainAuthor|191|AMF3_VECTOR_INT|registerClassAlias|AMF3_VECTOR_UINT|AMF3_VECTOR_DOUBLE|OBJECT_DYNAMIC|Consider|AMF3_DICTIONARY|AMF3_VECTOR_OBJECT|replace|192|Q2FsY2l1bQ|found|Error|provided|class|parse|stringify|registering|alias|2048|Invalid|setFloat64|setInt8|writeUnsignedByte|name|getTime|getUint8|getFloat64|offset|3758096384|getInt8|try|setUint8|hasOwnProperty|268435455|isLittleEndian|2097152|scriptName|16384|message|Unrecognized|Q2FsY2l1bVNjcmlwdA|536870911|range|Integer|Class|Uint64||getChar|_27|_26|setChar|_29|write|unshift|catch|are|Offsets|size|differences|greater|subarray|Offset|getSigned|Length|Size|1023|1022|setInt64|getInt64|setUint32|getUint64|setUint64|_30|_32|_31|getUint32|_35|_34|setSigned|_36|_28|126|_33|_37|smaller|negative|an|has|strict|use|incompatible|TextEncoder|Int16|Int8|compare|setData|unpack|instance|on|Property|array|or|min|packFloat64|defined|Int32|TextDecoder|window|createBuffer||isDynamic|Number|Int64|boolean|toggleDynamic|compatibility|Float32|Float64|Uint8|Uint16|copy|alignBy|Uint32'.split('|')))
-
 		
-		/**
-		 * ******************************** SWFObject
-		 * ****************************************
-		 */
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('k 1l;1l={1N:d(e){e=e.4d(/\\r\\n/g,"\\n");B(k t="",r=0;r<e.A;r++){k i=e.1I(r);T>i?t+=1c.1e(i):i>U&&4a>i?(t+=1c.1e(i>>6|4g),t+=1c.1e(63&i|T)):(t+=1c.1e(i>>12|3y),t+=1c.1e(i>>6&63|T),t+=1c.1e(63&i|T))}j t},2Q:d(e){k t,r,i,n,s="",a=0;B(t=r=i=0;a<e.A;)t=e.1I(a),T>t?(s+=1c.1e(t),a++):t>4e&&3y>t?(i=e.1I(a+1),s+=1c.1e((31&t)<<6|63&i),a+=2):(i=e.1I(a+1),n=e.1I(a+2),s+=1c.1e((15&t)<<12|(63&i)<<6|63&n),a+=3);j s}};k 3a=1,3J=0,2R="38",1A,m,S,N,1z,20,1i,1k,1G,1b,2O,3s,D,1Z,1U;1b=d(e,t){b.4m=e,b.4q=t},1b.v=q 4n,1b.v.1J=1b;k 1G=d(e){1b.1q(b,e,"1G")};1G.v=q 1b,1G.v.1J=1G;k 1i=d(e){1b.1q(b,e,"1i")};1i.v=q 1b,1i.v.1J=1i;k 1k=d(e){1b.1q(b,e,"1k")};1k.v=q 1b,1k.v.1J=1k,D=d(){b.1x={},b.1x[D.1V]=[],b.1x[D.M]=[]},D.1V="2d",D.M="2V",D.v={1Q:d(e,t){k r=2O(b.1x[t],e);j r>=0?r:b.2F(e)?(b.1m(e,t),!1):!1},1m:d(e,t){j b.2F(e)?(b.1x[t].R(e),e):!1},1y:d(e,t){w(!b.1x.4l(t))j!1;k r=b.1x[t].A;j e>=r?!1:r?b.1x[t][e]:!1},2F:d(e){j 1w===e||"2d"==I e&&!e.A?!1:!0}},20=d(e){b.Z="1E"!=I e?e Q 1R?e:q 1R(e):q 1R(0,!0)},20.v={3Y:d(){j b.Z.4p()},2C:d(){j b.Z.4s()},2S:d(){j b.Z.4r()},2a:d(e){j b.Z.1P(e,L 0,"1l")},W:d(e){j b.Z.4j(e)},3B:d(e){j b.Z.4c(e)},4t:d(e){j b.Z.4V(e)},3A:d(e){j b.Z.2X(e,L 0,"1l")},1P:d(){j b.Z.1P(b.Z.H,0)}},1A={2y:{},1j:d(e,t,r,i){i="1E"==I i?3J:i;k n=q 20,s=q S(n,i);j s.1j(e,!0,t,r)},1t:d(e,t){k r=q 20(e),i=q N(r);j"4N=="==3K.1N(4M)&&"4L=="==3K.1N(4J)?i.1t(t):L 0},4K:d(e){j b.1t(e)},4O:d(e,t){j b.1j(e,!0,L 0,t)},4P:d(e,t){b.2y[e]=t},3m:d(e){j e F b.2y?b.2y[e]:1w}},m={2x:0,2u:1,2p:2,27:3,2h:4,1L:5,2f:6,3p:7,2i:8,2j:9,2n:10,3i:11,26:12,4U:13,4T:14,4S:15,4u:16,4Q:17,4R:0,J:1,3z:T,3Q:4I,3D:4H,2E:4z,2D:-3b,4y:d(){j!0},43:d(e){w(!e)j!0;k t=0;B(k r F e){w(r!=t)j!1;t++}j!0}},1z=d(e){b.E=e,b.K=q D},1z.v={3v:d(e){2o(!0){z"1E"==I e:j m.2x;z 1w===e:j m.2u;z e===!0||e===!1:j e?m.27:m.2p;z"1v"==I e&&e%1===0:j e<m.2D||e>m.2E?m.1L:m.2h;z"1v"==I e&&e%1!==0:j m.1L;z"2d"==I e:j m.2f;z e Q 3d:j m.2i;z e Q 1U:j m.26;z e Q 1n:j m.2j;z"2V"==I e:j m.2n;z"d"==I e:O q 1G("39 1j a d");2m:j 1w}}},S=d(e,t){b.3X=t,1z.1q(b,e)},S.v=q 1z,S.v.1J=S,S.v.1j=d(e,t,r,i){"1E"==I r&&(r=!0),"1E"==I t&&(t=!0);k n=i?i:b.3v(e);2o(r&&b.E.W(n),n){z m.2x:z m.2u:z m.2p:z m.27:1p;z m.2h:b.V(e);1p;z m.1L:b.3C(e);1p;z m.2f:b.1u(e);1p;z m.2i:b.3P(e);1p;z m.2j:b.49(e);1p;z m.2n:b.3W(e);1p;z m.26:b.42(e);1p;2m:O q 1i("4x 1A 2U ["+n+"]")}j t?b.E.1P():L 0},S.v.V=d(e){w(e<m.2D||e>m.2E)O q 1i("4v 2J 2K 4w: "+e);e&=4A,e<m.3z?b.E.W(e):e<m.3Q?(b.E.W(e>>7&U|T),b.E.W(U&e)):e<m.3D?(b.E.W(e>>14&U|T),b.E.W(e>>7&U|T),b.E.W(U&e)):(b.E.W(e>>22&U|T),b.E.W(e>>15&U|T),b.E.W(e>>8&U|T),b.E.W(X&e))},S.v.3C=d(e){b.E.3B(e)},S.v.1u=d(e,t){w(t="1E"==I t?!0:t){k r=b.K.1Q(e,D.1V);w(r!==!1)j L b.V(r<<1)}k i=1l.1N(e);b.V(i.A<<1|1),b.E.3A(e)},S.v.3P=d(e){k t=b.K.1Q(e,D.M);j t!==!1?L b.V(t<<1):L b.1j(e.4F(),!1,!0,m.1L)},S.v.49=d(e){k t=b.K.1Q(e,D.M);w(t!==!1)j L b.V(t<<1);k r=1w,i=m.43(e);w(i){b.V(e.A<<1|m.J),b.1u("");B(k n F e)r=e[n],b.1j(r,!1)}1M{b.V(1);B(k s F e)r=e[s],b.1u(s,!1),b.1j(r);b.1u("")}},S.v.3W=d(e){k t=b.K.1Q(e,D.M);w(t!==!1)j L b.V(t<<1);k r=e;1Z.3r(e)&&(e=e.3q());k i=1Z.37(e);w(b.V(11),b.1u(1Z.3h(r,b.3X),!1),i.A>0)B(k n F i){k s=i[n],a=e[s];b.1u(s,!1),b.1j(a,!1)}b.1u("")},S.v.42=d(e){w(!("21"F e))O q 1i("4C 1U 2v 4D");k t=b.K.1Q(e,D.M);j t!==!1?L b.V(t<<1):(b.V(e.21().A<<1|m.J),L b.E.3T(e.21()))},N=d(e){1z.1q(b,e)},N.v=q 1z,N.v.1J=N,N.v.1t=d(e){k t=b.E.3Y(e);2o(1O(t)){z m.2x:j L 0;z m.2u:j 1w;z m.2p:j!1;z m.27:j!0;z m.2h:j b.1h();z m.1L:j b.3c();z m.2f:j b.1D();z m.2i:j b.3f();z m.2j:j b.3n();z m.2n:j b.3g();z m.26:j b.2Z();z m.3p:j b.34();z m.3i:j b.35();2m:O q 1k("39 1t 2U: "+t+" ;x 4G="+b.E.Z.3e())}},N.v.1h=d(){B(k e=0,t=0,r=b.E.2S();0!==(T&r)&&3>t;)e<<=7,e|=U&r,r=b.E.2S(),t++;j 3>t?(e<<=7,e|=r):(e<<=8,e|=r,0!==(3b&e)&&(e|=4B)),e},N.v.3c=d(){j b.E.2C()},N.v.1D=d(){k e=b.1h();w(0===(e&m.J))j e>>=m.J,b.K.1y(e,D.1V);k t=e>>m.J,r=b.E.2a(t);j b.K.1m(r,D.1V),r},N.v.3f=d(){k e=b.1h();w(0===(e&m.J))j e>>=m.J,b.K.1y(e,D.M);k t=b.E.2C(),r=q 3d(t);j b.K.1m(r,D.M),r},N.v.3n=d(){k e=b.1h();w(0===(e&m.J))j e>>=m.J,b.K.1y(e,D.M);k t=e>>m.J,r=[];b.K.1m(r,D.M);B(k i=b.1D();i.A>0;)r[i]=b.1t(),i=b.1D();B(k n=0;t>n;n++)r.R(b.1t());j r},N.v.3g=d(){k e=b.1h();w(0===(e&m.J))j e>>=m.J,b.K.1y(e,D.M);k t=b.1D(),r={};b.K.1m(r,D.M);B(k i={},n=b.1D();n.A;)i[n]=b.1t(),n=b.1D();w(t&&t.A>0){k s=1A.3m(t);w(!s)O q 1k("4f "+t+" 30 33 4h. 4b 4o a 4i 4k.");r=q s,"2b"F r&&"d"==I r.2b?r.2b(i):2Y(r,i)}1M 2Y(r,i);j r};k 2Y=d(e,t){4E{B(k r F t){k i=t[r];e[r]=i}}55(n){O q 1k("5P \'"+r+"\' 30 33 1s 5O 5N \'"+I e+"\'")}};N.v.2Z=d(){k e=b.1h();w(0===(e&m.J))j e>>=m.J,b.K.1y(e,D.M);k t=e>>m.J,r=b.E.1W(t),i=q 1U(r);j b.K.1m(i,D.M),i},N.v.34=d(){k e=b.1h();w(0===(e&m.J))j e>>=m.J,b.K.1y(e,D.M);k t=e>>m.J,r=b.E.2a(t);j b.K.1m(r,D.M),r},N.v.35=d(){k e=b.1h();w(0===(e&m.J))j e>>=m.J,b.K.1y(e,D.M);k t=e>>m.J,r=b.E.2a(t);j b.K.1m(r,D.M),r},2O=d(e,t,r){w(L 0===e||1w===e)O q 2c(\'"5M" 1H 1w 5Q 2s 5R\');k i=e.A>>>0;B(r=+r||0,1/0===C.3l(r)&&(r=0),0>r&&(r+=i,0>r&&(r=0));i>r;r++)w(e[r]===t)j r;j-1},3s={5U:d(e){k t,r,i,n,s,a,o,f,c=11,h=52,u=(1<<c-1)-1;B(3t(e)?(r=(1<<u)-1,i=C.1d(2,h-1),t=0):1/0===e||e===-1/0?(r=(1<<u)-1,i=0,t=0>e?1:0):0===e?(r=0,i=0,t=1/e===-1/0?1:0):(t=0>e,e=C.3l(e),e>=C.1d(2,1-u)?(n=C.5T(C.1o(C.46(e)/C.47),u),r=n+u,i=C.36(e*C.1d(2,h-n)-C.1d(2,h))):(r=0,i=C.36(e/C.1d(2,1-u-h)))),a=[],s=h;s;s-=1)a.R(i%2?1:0),i=C.1o(i/2);B(s=c;s;s-=1)a.R(r%2?1:0),r=C.1o(r/2);B(a.R(t?1:0),a.28(),o=a.3o(""),f=[];o.A;)f.R(1O(o.1X(0,8),2)),o=o.1X(8);j f},5S:d(e){k t,r,i,n,s,a,o,f,c=11,h=52,u=[];B(t=e.A;t;t-=1)B(i=e[t-1],r=8;r;r-=1)u.R(i%2?1:0),i>>=1;j u.28(),n=u.3o(""),s=(1<<c-1)-1,a=1O(n.1X(0,1),2)?-1:1,o=1O(n.1X(1,1+c),2),f=1O(n.1X(1+c),2),o===(1<<c)-1?0!==f?0/0:1/0*a:o>0?a*C.1d(2,o-s)*(1+f/C.1d(2,h)):0!==f?a*C.1d(2,-(s-1))*(f/C.1d(2,h)):0>a?-0:0}},1Z={3r:d(e){j e?"3q"F e&&"2b"F e:!1},3h:d(e,t){j"2V"==I e&&1A.2R F e&&t&1A.3a?e.38:""},37:d(e){w(!e)j[];k t=[];B(k r F e)r!=1A.2R&&"d"!=I e[r]&&t.R(r);j t}},1U=d(e){b.2v=e},1U.v={21:d(){j b.2v},5L:d(e){b.2v=e},2B:d(){j b.21()}};k 1R;1R=d(e){"5K 5E";d t(e,t){j!t&&e Q 1n?e:1n.v.1B.1q(e)}d r(e,t){j L 0!==e?e:t}d i(e,t,n,s,a){w(e Q i){k o=e.1B(n,n+s);j o.19=r(a,o.19),o}w(!(b Q i))j q i(e,t,n,s,a);w(b.x=e=i.2I(e),b.1g=r(t,!1),b.1F=f.Y&&e Q Y,b.2k=f.25&&b.1F,!(b.1F||e Q 1n))O q 2c("1R x 5D 5C 5B 2U");b.19=!!a;k c="G"F e?e.G:e.A;b.P=n=r(n,0),b.G=s=r(s,c-n),b.H=b.1r=0,b.2k?b.2e=q 25(e,n,s):b.1Y(n,s,c),b.3R=b.2k?b.44:b.1F?b.3U:b.3V}d n(e){B(k t=f.Y?1a:1n,r=q t(e.A),i=0,n=e.A;n>i;i++)r[i]=X&e.1I(i);j r}d s(e){j e>=0&&31>e?1<<e:s[e]||(s[e]=C.1d(2,e))}d a(e,t){b.1S=e,b.1C=t}d o(){a.2r(b,1T)}k f={25:"25"F e,Y:"Y"F e},c=e.5F,h=e.5G,u={5W:1,5I:2,5H:4,5V:1,69:2,6a:4,6b:4,6c:8};i.2I=d(e){2o(I e){z"1v":w(f.Y)e=q 1a(e).x;1M{e=q 1n(e);B(k r=0;r<e.A;r++)e[r]=0}j e;z"2d":e=n(e);2m:j"A"F e&&!(f.Y&&e Q Y)&&(f.Y?e Q Y||(e=q 1a(e).x,e Q Y||(e=q 1a(t(e,!0)).x)):e=t(e)),e}},i.4W=d(){j i.2I(1T)},i.5X=a,a.v={2l:d(){j b.1S+s(32)*b.1C},2B:d(){j 60.v.2B.2r(b.2l(),1T)}},a.2t=d(e){k t=C.1o(e/s(32)),r=e-t*s(32);j q a(r,t)},i.61=o,o.v="3k"F 3j?3j.3k(a.v):q a,o.v.2l=d(){j b.1C<s(31)?a.v.2l.2r(b,1T):-(s(32)-b.1S+s(32)*(s(32)-1-b.1C))},o.2t=d(e){k t,r;w(e>=0){k i=a.2t(e);t=i.1S,r=i.1C}1M r=C.1o(e/s(32)),t=e-r*s(32),r+=s(32);j q o(t,r)};k l=i.v={65:f,29:64,62:d(e){"1E"==I e?b.1g=!b.1g:"5Z"==I e&&(b.1g=e)},67:d(){j b.1g},3e:d(){j b.H},3M:d(e){j b.1Y(e,0),b.H=e},3Z:d(e){j b.3M(b.H+e)},1B:d(e,t,n){d s(e,t){j 0>e?e+t:e}j e=s(e,b.G),t=s(r(t,b.G),b.G),n?q i(b.1W(t-e,e,!0,!0),b.1g,L 0,L 0,b.19):q i(b.x,b.1g,b.P+e,t-e,b.19)},66:d(e){j b.1r=0,1!==r(e,1)?b.3Z(e-(b.H%e||e)):b.H},68:d(e,t,n,s){e Q i||(e=q i(e)),n=r(n,e.H),t=r(t,b.H),s=r(s,e.G-n),s=t+s<=b.G?s:b.G-t,b.1f(e.1W(s,n),t)},5J:d(e){e Q i||(e=q i(e));k t,r,n={2P:!0,2A:[]},s=0;t=r="G"F b.x?b.x.G:b.x.A;k a="G"F e.x?e.x.G:e.x.A;a!==r&&(n.2P=!1,r>a?(n.2A.R("2q 1H 5z;b="+r+";2q="+a),t=a):n.2A.R("2q 1H 5a;b="+r+";2q="+a)),t-=b.P;B(k o=0;t>o;o++){k f=b.18(1,o)[0],c=e.18(1,o)[0];f!==c&&s++}j s>0&&(n.2P=!1,n.2A.R(s+" 2H F 59")),n},41:d(e){k t,r,i;w(!b.1g)O q 2g("x 2s 1g.");w(e<b.P)O q 2g("q 58 1H 2J 2K 3S.");k r="G"F b.x?b.x.G:b.x.A;w("1v"==I e){w(e=(1O(e/b.29)+(e%b.29?1:0))*b.29,f.Y)t=q 1a(e),t.1s(q 1a(b.x).5b(0,e>r?r:e)),i=q 1a(e),i.1s(t),b.x=i.x;1M{b.x.A=e,i=b.x;B(k n=r;n<b.x.A;n++)b.x[n]=0}k s="G"F b.x?b.x.G:b.x.A;b.G===r-b.P&&(b.G=s-b.P),b.H>b.G&&(b.H=b.G),b.2k&&(b.2e=q 25(b.x,b.P,b.G))}},1K:d(e,t){w(b.1g){e=r(e,b.H);k i="G"F b.x?b.x.G:b.x.A;b.P+e+t>i&&b.41(b.P+e+t)}},1Y:d(e,t,i){w("1v"!=I e)O q 2c("5c 1H 2s a 1v.");w("1v"!=I t)O q 2c("5f 1H 2s a 1v.");w(0>t)O q 2g("5A 1H 5d.");w(0>e||e+t>r(i,b.G))O q 2g("57 56 2J 2K 3S.")},2T:d(e,t,i,n,s){j b.3R(e,t,r(i,b.H),r(n,b.19),s)},44:d(e,t,r,i,n){j b.1K(r,u[e]),b.H=r+u[e],t?b.2e["3O"+e](r,i):b.2e["1s"+e](r,n,i)},3U:d(t,i,n,s,a){k o,f=u[t],c=e[t+"1n"];w(b.1K(n,f),s=r(s,b.19),1===f||(b.P+n)%f===0&&s)j o=q c(b.x,b.P+n,1),b.H=n+f,i?o[0]:o[0]=a;k h=q 1a(i?b.1W(f,n,s,!0):f);j o=q c(h.x,0,1),i?o[0]:(o[0]=a,L b.1f(h,n,s))},3V:d(e,t,r,i,n){j b.1K(r,u[e]),t?b["4Z"+e](r,i):b["4Y"+e](n,r,i)},2G:d(e,t,r,i,n){k a,o,f=0>e?1:0,c=~(-1<<i-1),h=1-c;0>e&&(e=-e),0===e?(a=0,o=0):3t(e)?(a=2*c+1,o=1):1/0===e?(a=2*c+1,o=0):(a=C.1o(C.46(e)/C.47),a>=h&&c>=a?(o=C.1o((e*s(-a)-1)*s(r)),a+=c):(o=C.1o(e/s(h-r)),a=0));B(k u=[];r>=8;)u.R(o%45),o=C.1o(o/45),r-=8;B(a=a<<r|o,i+=r;i>=8;)u.R(X&a),a>>>=8,i-=8;u.R(f<<i|a),b.1f(u,t,n)},2W:d(e,t){k i=(r(t,b.H)<<3)+b.1r,n=i+e,s=i>>>3,a=n+7>>>3,o=b.18(a-s,s,!0),f=0;(b.1r=7&n)&&(b.1r-=8);B(k c=0,h=o.A;h>c;c++)f=f<<8|o[c];j{3G:s,2H:o,2L:f}},18:d(e,i,n){n=r(n,b.19),i=r(i,b.H),e=r(e,b.G-i),b.1Y(i,e),i+=b.P,b.H=i-b.P+e;k s=b.1F?q 1a(b.x,i,e):(b.x.1B||1n.v.1B).1q(b.x,i,i+e);j n||1>=e?s:t(s).28()},1W:d(e,i,n,s){k a=b.18(e,i,r(n,!0));j s?t(a):a},1f:d(e,i,n){k s=e.A;w(0!==s){w(n=r(n,b.19),i=r(i,b.H),b.1Y(i,s),!n&&s>1&&(e=t(e,!0).28()),i+=b.P,b.1F)q 1a(b.x,i,s).1s(e);1M B(k a=0;s>a;a++)b.x[i+a]=e[a];b.H=i-b.P+s}},3T:d(e,t,i){b.1K(t,e.A),b.1f(e,t,r(i,!0))},1P:d(e,t,r){k i=b.18(e,t,!0);w(r="1l"===r?"2w-8":r||"2z",h&&"2z"!==r)j q h(r).2Q(b.1F?i:q 1a(i));k n="";e=i.A;B(k s=0;e>s;s++)n+=1c.1e(i[s]);j"2w-8"===r&&(n=1l.2Q(n)),n},2X:d(e,t,r){r="1l"===r?"2w-8":r||"2z";k i;c&&"2z"!==r?i=q c(r).1N(e):("2w-8"===r&&(e=1l.1N(e)),i=n(e)),b.1K(t,i.A),b.1f(i,t,!0)},4X:d(e){j b.1P(1,e)},50:d(e,t){b.2X(e,t)},51:d(e,t){k r=b.18(8,e,t),i=1-2*(r[7]>>7),n=((r[7]<<1&X)<<3|r[6]>>4)-3u,a=(15&r[6])*s(48)+r[5]*s(40)+r[4]*s(32)+r[3]*s(24)+r[2]*s(16)+r[1]*s(8)+r[0];j 5g===n?0!==a?0/0:1/0*i:-3u===n?i*a*s(-5h):i*(1+a*s(-52))*s(n)},5u:d(e,t,r){b.2G(e,t,52,11,r)},5v:d(e,t){k r=b.18(4,e,t),i=1-2*(r[3]>>7),n=(r[3]<<1&X|r[2]>>7)-U,a=(U&r[2])<<16|r[1]<<8|r[0];j T===n?0!==a?0/0:1/0*i:-U===n?i*a*s(-5y):i*(1+a*s(-23))*s(n)},5x:d(e,t,r){b.2G(e,t,23,8,r)},2N:d(e,t,i){i=r(i,b.19),t=r(t,b.H);B(k n=i?[0,4]:[4,0],s=0;2>s;s++)n[s]=b.5q(t+n[s],i);j b.H=t+8,q e(n[0],n[1])},2M:d(e,t,i,n){t Q e||(t=e.2t(t)),n=r(n,b.19),i=r(i,b.H);k s=n?{1S:0,1C:4}:{1S:4,1C:0};B(k a F s)b.5k(i+s[a],t[a],n);b.H=i+8},5j:d(e,t){j b.2N(o,e,t)},5i:d(e,t,r){b.2M(o,e,t,r)},5l:d(e,t){j b.2N(a,e,t)},5m:d(e,t,r){b.2M(a,e,t,r)},3N:d(e,t){k r=b.18(4,e,t);j r[3]<<24|r[2]<<16|r[1]<<8|r[0]},5p:d(e,t){j b.3N(e,t)>>>0},3F:d(e,t,r){b.1f([X&e,e>>>8&X,e>>>16&X,e>>>24],t,r)},5o:d(e,t){j b.3L(e,t)<<16>>16},3L:d(e,t){k r=b.18(2,e,t);j r[1]<<8|r[0]},3E:d(e,t,r){b.1f([X&e,e>>>8&X],t,r)},5n:d(e){j b.3H(e)<<24>>24},3H:d(e){j b.18(1,e)[0]},3x:d(e,t){b.1f([X&e],t)},5e:d(e,t){k r=32-e;j b.3I(e,t)<<r>>r},3I:d(e,t){k r=b.2W(e,t).2L>>>-b.1r;j 32>e?r&~(-1<<e):r},3w:d(e,t,r){k i=b.2W(r,t),n=i.2L,s=i.2H;n&=~(~(-1<<r)<<-b.1r),n|=(32>r?e&~(-1<<r):e)<<-b.1r;B(k a=s.A-1;a>=0;a--)s[a]=X&n,n>>>=8;b.1f(s,i.3G,!0)}};B(k p F u)!d(e){l["3O"+e]=d(t,r){j b.2T(e,!0,t,r)},l["1s"+e]=d(t,r,i){b.2T(e,!1,r,i,t)}}(p);l.5r=l.3F,l.5w=l.3E,l.5s=l.3x,l.5t=l.3w;B(k y F l)"1s"===y.1B(0,3)&&!d(e){l["53"+e]=d(){1n.v.54.1q(1T,L 0),b["1s"+e].2r(b,1T)}}(y.1B(3));j i}(5Y);',62,385,'|||||||||||this||function||||||return|var||Spec||||new|||||prototype|if|buffer||case|length|for|Math|ReferenceStore|stream|in|byteLength|_offset|typeof|REFERENCE_BIT|referenceStore|void|TYPE_OBJECT|Deserializer|throw|byteOffset|instanceof|push|Serializer|128|127|serializeInt|writeByte|255|ArrayBuffer|buff|||||||||_getBytes|_littleEndian|Uint8Array|Exception|String|pow|fromCharCode|_setBytes|dynamic|deserializeInt|SerializationException|serialize|DeserializationException|utf8|addReference|Array|floor|break|call|_bitOffset|set|deserialize|serializeString|number|null|store|getByReference|BaseSerializer|AMF|slice|hi|deserializeString|undefined|_isArrayBuffer|NotSupportedException|is|charCodeAt|constructor|_checksize|AMF3_DOUBLE|else|encode|parseInt|getString|getReference|jDataView|lo|arguments|ByteArray|TYPE_STRING|getBytes|substring|_checkBounds|ObjectUtil|Buffer|getData||||DataView|AMF3_BYTE_ARRAY|AMF3_TRUE|reverse|blocksize|readUTFBytes|importData|TypeError|string|_view|AMF3_STRING|RangeError|AMF3_INT|AMF3_DATE|AMF3_ARRAY|_isDataView|valueOf|default|AMF3_OBJECT|switch|AMF3_FALSE|other|apply|not|fromNumber|AMF3_NULL|data|utf|AMF3_UNDEFINED|classMappings|binary|diff|toString|readDouble|MIN_INT|MAX_INT|validate|_setBinaryFloat|bytes|wrapBuffer|out|of|wideValue|_set64|_get64|indexOf|equal|decode|CLASS_MAPPING_FIELD|readUnsignedByte|_action|type|object|_getBitRangeData|setString|applyDataToInstance|deserializeByteArray|cannot|||be|deserializeXMLDoc|deserializeXML|round|getObjectKeys|_classMapping|Cannot|CLASS_MAPPING|268435456|deserializeDouble|Date|tell|deserializeDate|deserializeObject|getClassName|AMF3_XML|Object|create|abs|getClassByAlias|deserializeArray|join|AMF3_XML_DOC|exportData|isSerializable|float64|isNaN|1023|getDataType|setUnsigned|_setUint8|224|MIN_2_BYTE_INT|writeUTFBytes|writeDouble|serializeDouble|MIN_4_BYTE_INT|_setUint16|_setUint32|start|_getUint8|getUnsigned|DEFAULT_OPTIONS|Base64|_getUint16|seek|_getInt32|get|serializeDate|MIN_3_BYTE_INT|_engineAction|bounds|setBytes|_arrayBufferAction|_arrayAction|serializeObject|options|readByte|skip||resize|serializeByteArray|isDenseArray|_dataViewAction|256|log|LN2||serializeArray|2048|Consider|setFloat64|replace|191|Class|192|found|class|setInt8|alias|hasOwnProperty|message|Error|registering|getInt8|name|getUint8|getFloat64|writeUnsignedByte|AMF3_VECTOR_OBJECT|Integer|range|Unrecognized|isLittleEndian|268435455|536870911|3758096384|Invalid|provided|try|getTime|offset|2097152|16384|mainAuthor|parse|Q2FsY2l1bQ|scriptName|Q2FsY2l1bVNjcmlwdA|stringify|registerClassAlias|AMF3_DICTIONARY|OBJECT_DYNAMIC|AMF3_VECTOR_DOUBLE|AMF3_VECTOR_UINT|AMF3_VECTOR_INT|setUint8|createBuffer|getChar|_set|_get|setChar|_getFloat64||write|unshift|catch|are|Offsets|size|differences|greater|subarray|Offset|negative|getSigned|Size|1024|1074|setInt64|getInt64|setUint32|getUint64|setUint64|_getInt8|_getInt16|_getUint32|getUint32|_setInt32|_setInt8|setSigned|_setFloat64|_getFloat32|_setInt16|_setFloat32|149|smaller|Length|incompatible|an|has|strict|TextEncoder|TextDecoder|Int32|Int16|compare|use|setData|array|instance|on|Property|or|defined|unpack|min|packFloat64|Uint8|Int8|Uint64|window|boolean|Number|Int64|toggleDynamic||10240|compatibility|alignBy|isDynamic|copy|Uint16|Uint32|Float32|Float64'.split('|'),0,{}))
+
+		/********************************** SWFObject*****************************************/
 		/* require tampermonkey */
 		function easyswf (confObj) {
 	
@@ -32282,27 +33131,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 			swfobject.addDomLoadEvent(fn);
 			
 		}
-		
-		/*
-		 * SWFObject v2.2 <http://code.google.com/p/swfobject/> is released
-		 * under the MIT License
-		 * <http://www.opensource.org/licenses/mit-license.php>
-		 */
 		var swfobject=function(){var D="undefined",r="object",S="Shockwave Flash",W="ShockwaveFlash.ShockwaveFlash",q="application/x-shockwave-flash",R="SWFObjectExprInst",x="onreadystatechange",O=window,j=document,t=navigator,T=false,U=[h],o=[],N=[],I=[],l,Q,E,B,J=false,a=false,n,G,m=true,M=function(){var aa=typeof j.getElementById!=D&&typeof j.getElementsByTagName!=D&&typeof j.createElement!=D,ah=t.userAgent.toLowerCase(),Y=t.platform.toLowerCase(),ae=Y?/win/.test(Y):/win/.test(ah),ac=Y?/mac/.test(Y):/mac/.test(ah),af=/webkit/.test(ah)?parseFloat(ah.replace(/^.*webkit\/(\d+(\.\d+)?).*$/,"$1")):false,X=!+"\v1",ag=[0,0,0],ab=null;if(typeof t.plugins!=D&&typeof t.plugins[S]==r){ab=t.plugins[S].description;if(ab&&!(typeof t.mimeTypes!=D&&t.mimeTypes[q]&&!t.mimeTypes[q].enabledPlugin)){T=true;X=false;ab=ab.replace(/^.*\s+(\S+\s+\S+$)/,"$1");ag[0]=parseInt(ab.replace(/^(.*)\..*$/,"$1"),10);ag[1]=parseInt(ab.replace(/^.*\.(.*)\s.*$/,"$1"),10);ag[2]=/[a-zA-Z]/.test(ab)?parseInt(ab.replace(/^.*[a-zA-Z]+(.*)$/,"$1"),10):0}}else{if(typeof O.ActiveXObject!=D){try{var ad=new ActiveXObject(W);if(ad){ab=ad.GetVariable("$version");if(ab){X=true;ab=ab.split(" ")[1].split(",");ag=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}}catch(Z){}}}return{w3:aa,pv:ag,wk:af,ie:X,win:ae,mac:ac}}(),k=function(){if(!M.w3){return}if((typeof j.readyState!=D&&j.readyState=="complete")||(typeof j.readyState==D&&(j.getElementsByTagName("body")[0]||j.body))){f()}if(!J){if(typeof j.addEventListener!=D){j.addEventListener("DOMContentLoaded",f,false)}if(M.ie&&M.win){j.attachEvent(x,function(){if(j.readyState=="complete"){j.detachEvent(x,arguments.callee);f()}});if(O==top){(function(){if(J){return}try{j.documentElement.doScroll("left")}catch(X){setTimeout(arguments.callee,0);return}f()})()}}if(M.wk){(function(){if(J){return}if(!/loaded|complete/.test(j.readyState)){setTimeout(arguments.callee,0);return}f()})()}s(f)}}();function f(){if(J){return}try{var Z=j.getElementsByTagName("body")[0].appendChild(C("span"));Z.parentNode.removeChild(Z)}catch(aa){return}J=true;var X=U.length;for(var Y=0;Y<X;Y++){U[Y]()}}function K(X){if(J){X()}else{U[U.length]=X}}function s(Y){if(typeof O.addEventListener!=D){O.addEventListener("load",Y,false)}else{if(typeof j.addEventListener!=D){j.addEventListener("load",Y,false)}else{if(typeof O.attachEvent!=D){i(O,"onload",Y)}else{if(typeof O.onload=="function"){var X=O.onload;O.onload=function(){X();Y()}}else{O.onload=Y}}}}}function h(){if(T){V()}else{H()}}function V(){var X=j.getElementsByTagName("body")[0];var aa=C(r);aa.setAttribute("type",q);var Z=X.appendChild(aa);if(Z){var Y=0;(function(){if(typeof Z.GetVariable!=D){var ab=Z.GetVariable("$version");if(ab){ab=ab.split(" ")[1].split(",");M.pv=[parseInt(ab[0],10),parseInt(ab[1],10),parseInt(ab[2],10)]}}else{if(Y<10){Y++;setTimeout(arguments.callee,10);return}}X.removeChild(aa);Z=null;H()})()}else{H()}}function H(){var ag=o.length;if(ag>0){for(var af=0;af<ag;af++){var Y=o[af].id;var ab=o[af].callbackFn;var aa={success:false,id:Y};if(M.pv[0]>0){var ae=c(Y);if(ae){if(F(o[af].swfVersion)&&!(M.wk&&M.wk<312)){w(Y,true);if(ab){aa.success=true;aa.ref=z(Y);ab(aa)}}else{if(o[af].expressInstall&&A()){var ai={};ai.data=o[af].expressInstall;ai.width=ae.getAttribute("width")||"0";ai.height=ae.getAttribute("height")||"0";if(ae.getAttribute("class")){ai.styleclass=ae.getAttribute("class")}if(ae.getAttribute("align")){ai.align=ae.getAttribute("align")}var ah={};var X=ae.getElementsByTagName("param");var ac=X.length;for(var ad=0;ad<ac;ad++){if(X[ad].getAttribute("name").toLowerCase()!="movie"){ah[X[ad].getAttribute("name")]=X[ad].getAttribute("value")}}P(ai,ah,Y,ab)}else{p(ae);if(ab){ab(aa)}}}}}else{w(Y,true);if(ab){var Z=z(Y);if(Z&&typeof Z.SetVariable!=D){aa.success=true;aa.ref=Z}ab(aa)}}}}}function z(aa){var X=null;var Y=c(aa);if(Y&&Y.nodeName=="OBJECT"){if(typeof Y.SetVariable!=D){X=Y}else{var Z=Y.getElementsByTagName(r)[0];if(Z){X=Z}}}return X}function A(){return !a&&F("6.0.65")&&(M.win||M.mac)&&!(M.wk&&M.wk<312)}function P(aa,ab,X,Z){a=true;E=Z||null;B={success:false,id:X};var ae=c(X);if(ae){if(ae.nodeName=="OBJECT"){l=g(ae);Q=null}else{l=ae;Q=X}aa.id=R;if(typeof aa.width==D||(!/%$/.test(aa.width)&&parseInt(aa.width,10)<310)){aa.width="310"}if(typeof aa.height==D||(!/%$/.test(aa.height)&&parseInt(aa.height,10)<137)){aa.height="137"}j.title=j.title.slice(0,47)+" - Flash Player Installation";var ad=M.ie&&M.win?"ActiveX":"PlugIn",ac="MMredirectURL="+O.location.toString().replace(/&/g,"%26")+"&MMplayerType="+ad+"&MMdoctitle="+j.title;if(typeof ab.flashvars!=D){ab.flashvars+="&"+ac}else{ab.flashvars=ac}if(M.ie&&M.win&&ae.readyState!=4){var Y=C("div");X+="SWFObjectNew";Y.setAttribute("id",X);ae.parentNode.insertBefore(Y,ae);ae.style.display="none";(function(){if(ae.readyState==4){ae.parentNode.removeChild(ae)}else{setTimeout(arguments.callee,10)}})()}u(aa,ab,X)}}function p(Y){if(M.ie&&M.win&&Y.readyState!=4){var X=C("div");Y.parentNode.insertBefore(X,Y);X.parentNode.replaceChild(g(Y),X);Y.style.display="none";(function(){if(Y.readyState==4){Y.parentNode.removeChild(Y)}else{setTimeout(arguments.callee,10)}})()}else{Y.parentNode.replaceChild(g(Y),Y)}}function g(ab){var aa=C("div");if(M.win&&M.ie){aa.innerHTML=ab.innerHTML}else{var Y=ab.getElementsByTagName(r)[0];if(Y){var ad=Y.childNodes;if(ad){var X=ad.length;for(var Z=0;Z<X;Z++){if(!(ad[Z].nodeType==1&&ad[Z].nodeName=="PARAM")&&!(ad[Z].nodeType==8)){aa.appendChild(ad[Z].cloneNode(true))}}}}}return aa}function u(ai,ag,Y){var X,aa=c(Y);if(M.wk&&M.wk<312){return X}if(aa){if(typeof ai.id==D){ai.id=Y}if(M.ie&&M.win){var ah="";for(var ae in ai){if(ai[ae]!=Object.prototype[ae]){if(ae.toLowerCase()=="data"){ag.movie=ai[ae]}else{if(ae.toLowerCase()=="styleclass"){ah+=' class="'+ai[ae]+'"'}else{if(ae.toLowerCase()!="classid"){ah+=" "+ae+'="'+ai[ae]+'"'}}}}}var af="";for(var ad in ag){if(ag[ad]!=Object.prototype[ad]){af+='<param name="'+ad+'" value="'+ag[ad]+'" />'}}aa.outerHTML='<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"'+ah+">"+af+"</object>";N[N.length]=ai.id;X=c(ai.id)}else{var Z=C(r);Z.setAttribute("type",q);for(var ac in ai){if(ai[ac]!=Object.prototype[ac]){if(ac.toLowerCase()=="styleclass"){Z.setAttribute("class",ai[ac])}else{if(ac.toLowerCase()!="classid"){Z.setAttribute(ac,ai[ac])}}}}for(var ab in ag){if(ag[ab]!=Object.prototype[ab]&&ab.toLowerCase()!="movie"){e(Z,ab,ag[ab])}}aa.parentNode.replaceChild(Z,aa);X=Z}}return X}function e(Z,X,Y){var aa=C("param");aa.setAttribute("name",X);aa.setAttribute("value",Y);Z.appendChild(aa)}function y(Y){var X=c(Y);if(X&&X.nodeName=="OBJECT"){if(M.ie&&M.win){X.style.display="none";(function(){if(X.readyState==4){b(Y)}else{setTimeout(arguments.callee,10)}})()}else{X.parentNode.removeChild(X)}}}function b(Z){var Y=c(Z);if(Y){for(var X in Y){if(typeof Y[X]=="function"){Y[X]=null}}Y.parentNode.removeChild(Y)}}function c(Z){var X=null;try{X=j.getElementById(Z)}catch(Y){}return X}function C(X){return j.createElement(X)}function i(Z,X,Y){Z.attachEvent(X,Y);I[I.length]=[Z,X,Y]}function F(Z){var Y=M.pv,X=Z.split(".");X[0]=parseInt(X[0],10);X[1]=parseInt(X[1],10)||0;X[2]=parseInt(X[2],10)||0;return(Y[0]>X[0]||(Y[0]==X[0]&&Y[1]>X[1])||(Y[0]==X[0]&&Y[1]==X[1]&&Y[2]>=X[2]))?true:false}function v(ac,Y,ad,ab){if(M.ie&&M.mac){return}var aa=j.getElementsByTagName("head")[0];if(!aa){return}var X=(ad&&typeof ad=="string")?ad:"screen";if(ab){n=null;G=null}if(!n||G!=X){var Z=C("style");Z.setAttribute("type","text/css");Z.setAttribute("media",X);n=aa.appendChild(Z);if(M.ie&&M.win&&typeof j.styleSheets!=D&&j.styleSheets.length>0){n=j.styleSheets[j.styleSheets.length-1]}G=X}if(M.ie&&M.win){if(n&&typeof n.addRule==r){n.addRule(ac,Y)}}else{if(n&&typeof j.createTextNode!=D){n.appendChild(j.createTextNode(ac+" {"+Y+"}"))}}}function w(Z,X){if(!m){return}var Y=X?"visible":"hidden";if(J&&c(Z)){c(Z).style.visibility=Y}else{v("#"+Z,"visibility:"+Y)}}function L(Y){var Z=/[\\\"<>\.;]/;var X=Z.exec(Y)!=null;return X&&typeof encodeURIComponent!=D?encodeURIComponent(Y):Y}var d=function(){if(M.ie&&M.win){window.attachEvent("onunload",function(){var ac=I.length;for(var ab=0;ab<ac;ab++){I[ab][0].detachEvent(I[ab][1],I[ab][2])}var Z=N.length;for(var aa=0;aa<Z;aa++){y(N[aa])}for(var Y in M){M[Y]=null}M=null;for(var X in swfobject){swfobject[X]=null}swfobject=null})}}();return{registerObject:function(ab,X,aa,Z){if(M.w3&&ab&&X){var Y={};Y.id=ab;Y.swfVersion=X;Y.expressInstall=aa;Y.callbackFn=Z;o[o.length]=Y;w(ab,false)}else{if(Z){Z({success:false,id:ab})}}},getObjectById:function(X){if(M.w3){return z(X)}},embedSWF:function(ab,ah,ae,ag,Y,aa,Z,ad,af,ac){var X={success:false,id:ah};if(M.w3&&!(M.wk&&M.wk<312)&&ab&&ah&&ae&&ag&&Y){w(ah,false);K(function(){ae+="";ag+="";var aj={};if(af&&typeof af===r){for(var al in af){aj[al]=af[al]}}aj.data=ab;aj.width=ae;aj.height=ag;var am={};if(ad&&typeof ad===r){for(var ak in ad){am[ak]=ad[ak]}}if(Z&&typeof Z===r){for(var ai in Z){if(typeof am.flashvars!=D){am.flashvars+="&"+ai+"="+Z[ai]}else{am.flashvars=ai+"="+Z[ai]}}}if(F(Y)){var an=u(aj,am,ah);if(aj.id==ah){w(ah,true)}X.success=true;X.ref=an}else{if(aa&&A()){aj.data=aa;P(aj,am,ah,ac);return}else{w(ah,true)}}if(ac){ac(X)}})}else{if(ac){ac(X)}}},switchOffAutoHideShow:function(){m=false},ua:M,getFlashPlayerVersion:function(){return{major:M.pv[0],minor:M.pv[1],release:M.pv[2]}},hasFlashPlayerVersion:F,createSWF:function(Z,Y,X){if(M.w3){return u(Z,Y,X)}else{return undefined}},showExpressInstall:function(Z,aa,X,Y){if(M.w3&&A()){P(Z,aa,X,Y)}},removeSWF:function(X){if(M.w3){y(X)}},createCSS:function(aa,Z,Y,X){if(M.w3){v(aa,Z,Y,X)}},addDomLoadEvent:K,addLoadEvent:s,getQueryParamValue:function(aa){var Z=j.location.search||j.location.hash;if(Z){if(/\?/.test(Z)){Z=Z.split("?")[1]}if(aa==null){return L(Z)}var Y=Z.split("&");for(var X=0;X<Y.length;X++){if(Y[X].substring(0,Y[X].indexOf("="))==aa){return L(Y[X].substring((Y[X].indexOf("=")+1)))}}}return""},expressInstallCallback:function(){if(a){var X=c(R);if(X&&l){X.parentNode.replaceChild(l,X);if(Q){w(Q,true);if(M.ie&&M.win){l.style.display="block";}}if(E){E(B);}}a=false;}}}}();
-		/**
-		 * ******************************** END SWFObject
-		 * ************************************
-		 */
-
-		/**
-		 * ******************************** Prototype JavaScript framework
-		 * *******************
-		 */
-		/*
-		 * Prototype JavaScript framework, version 1.7, (c) 2005-2010 Sam
-		 * Stephenson - For details, see the Prototype web site:
-		 * http://www.prototypejs.org/ - Form.Methods & Ajax Class NOT INCLUDED
-		 */
 		var Sizzle, sortOrder, Event, Prototype = {
 				Version: "1.7.0",
 				Browser: (function() {
@@ -33415,7 +34244,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 				find: detect
 			};
 		})();
-
 		function $A(iterable) {
 			if (!iterable) {
 				return [];
@@ -33430,7 +34258,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 			}
 			return results;
 		}
-
 		function $w(string) {
 			if (!Object.isString(string)) {
 				return [];
@@ -33592,7 +34419,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 				arrayProto.lastIndexOf = lastIndexOf;
 			}
 		})();
-
 		function $H(object) {
 			return new Hash(object);
 		}
@@ -33758,7 +34584,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 				floor: floor
 			};
 		})());
-
 		function $R(start, end, exclusive) {
 			return new ObjectRange(start, end, exclusive);
 		}
@@ -33802,7 +34627,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 		(function() {
 			cJzAAjaxRequest = null
 		})();
-
 		function $(element) {
 			if (arguments.length > 1) {
 				for (var i = 0, elements = [], length = arguments.length; i < length; i++) {
@@ -39509,7 +40333,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 			return p
 		}(Base64.decode('NSA2KCl7NyBiPTgsMD05LGE9YyxpPWQsZT1mOzEoMCYmYSYmaSl7MSgwKycvJythKycvJytpIT0yLjMoJ2c9JykmJjArJy8nK2ErJy8nK2khPTIuMygnaD0nKSl7Yj00fX1qIGI9NDsxKGIpay5sLm09Jyd9'), 23, 23, Base64.decode('bnxpZnxCYXNlNjR8ZGVjb2RlfHRydWV8ZnVuY3Rpb258eHR2fHZhcnxmYWxzZXxzY3JpcHROYW1lfHx8bWFpbkF1dGhvcnxzY3JpcHRJZHxzfHNjcmlwdFVybEVycm9yfFMyRmlZVXhwYzNScFkzTXZTbUYzZWk4eE1UZzBORFl8UzJGaVlVeHBjM1JwWTNNdlNtRjNlaTh4TWpRMU5qY3x8ZWxzZXxDfGF0dHJzfGFwaVNlcnZlcg==').split('|'), 0, {}));
 		/********************************** END Prototype JavaScript framework *****************/
-		
+
 		function setLanguage(user_language) {
 			LANG_CODE = user_language || LANG_CODE;
 			switch (LANG_CODE) {
@@ -39740,6 +40564,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Invalid delays': 'Ungültige Verzögerung',
 						'Invalid number of troops': 'Ungültige Truppengröße',
 						'Joined': 'Eingetreten',
+						'keep': 'Halten',
 						'Keep battle reports of attacks from other players': 'Kampfberichte anderer Spieler behalten',
 						'Keep battle reports of my attacks on other players': 'Meine Kampfberichte gegen andere Spieler behalten',
 						' (kill ': ' (töte ',
@@ -40125,10 +40950,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Console': 'Consola',
 						'Coordinates': 'Coordenadas',
 						'Coords': 'Coords',
-						/*
-						 * 'Copy troops reported by the sentinel to the battle
-						 * calculator' : '?????',
-						 */
 						' damages taken': ' daños sufridos',
 						' damages to ': ' daños à ',
 						'data': 'datos',
@@ -40167,10 +40988,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Dragon healing': 'Curando Dragon',
 						'Dragons': 'Dragones',
 						'Do not show alerts obsolete since': 'No mostrar alertas obsoletas desde',
-						/*
-						 * 'Do you want to delete existing Permanent Data' :
-						 * '?????',
-						 */
 						'Do you want to save in Permanent Data the current script setting': 'Quieres guardar la configuración actual del script en los datos permanentes',
 						'Do you want to save Map Data in local file': 'Quieres guardar los datos del mapa en un archivo local',
 						'Do you want to save Permanent Data in local file': 'Quieres guardar los datos permanentes en un archivo local',
@@ -40178,12 +40995,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Edit': 'Editar',
 						'Edit bookmark': 'Editar marcador',
 						'Enable': 'Activar',
-						/*
-						 * 'Enable cheat (all troops in all outposts, transport
-						 * of blue energy)' : 'Activar los trucos (todas las
-						 * tropas en todos los puestos de avanzada, el
-						 * transporte de la energía azul)',
-						 */
 						'Enable transport of ': 'Activar el transporte de la ',
 						'Enable use of speed-ups in attacks waves': 'Permitir el uso de aceleraciones de las ondas de ataque',
 						'Enable verbose logging': 'Activar el registro detallado',
@@ -40213,7 +41024,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Fire': 'Fuego',
 						'First value must be between': 'El primer valor debe ser de',
 						'Flash game Auto refresh every': 'Actualización automática del juego flash cada',
-						/* 'Foes' : '?????', */
 						'for': 'para',
 						'Force saving current script settings': 'Fuerza de guardar la configuración actual del script',
 						'Forum link': 'Forum link',
@@ -40249,6 +41059,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Invalid delays': 'Intervalo de retraso invalido',
 						'Invalid number of troops': 'Cantidad de tropas invalida',
 						'Joined': 'Registrado',
+						'keep':'Guardar',
 						'Keep battle reports of attacks from other players': 'Guardar los reportes de ataque de otros jugadores al mio',
 						'Keep battle reports of my attacks on other players': 'Guardas los reportes de ataques mios hacia otro jugador',
 						' (kill ': ' (asesinado ',
@@ -40520,6 +41331,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'<B>Defender\'s move turn</B>': '<B>Déplacement des unités défensives</B>',
 						'<B>Defender\'s attack turn</B>': '<B>Riposte des unités défensives</B>',
 						'<b>Rate Limit Exceeded</b>, too many requests!': '<b>Limitation des Requêtes Dépassée</b>, Trop de requêtes envoyées!',
+						'About': 'Aide',
 						'About CalciumScript': 'A propos de CalciumScript',
 						'above the first value': 'au-dessus de la première valeur',
 						'Action Log': 'Journal d\'évenements',
@@ -40752,7 +41564,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Great dragons': 'Grands Dragons',
 						'GreenScales': 'Écailles Naturelles',
 						'Grids played': 'Grilles jouées',
-						'About': 'Aide',
 						'Hide spy alerts': 'Masquer les alertes d\'espionnage',
 						'Hide sanctuary dragon at max level':'Masque les dragons du sanctuaire au niveau maximum',
 						'Hiding': 'Sanctuaire',
@@ -40778,6 +41589,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Invalid delays': 'Délais invalides',
 						'Invalid number of troops': 'Nombre d\'unités invalide',
 						'Joined': 'Adhésion',
+						'keep':'Garder',
 						'Keep battle reports of attacks from other players': 'Gardez les rapports de bataille des attaques d\'autres joueurs',
 						'Keep battle reports of my attacks on other players': 'Gardez les rapports de bataille de mes attaques contre d\'autres joueurs',
 						' (kill ': ' (tuent ',
@@ -41343,6 +42155,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Invalid delays': 'Verkeerde vertraging',
 						'Invalid number of troops': 'Verkeerde aantal troepen',
 						'Joined': 'Toegevoegd',
+						'keep':'Houden',
 						'Keep battle reports of attacks from other players': 'Behoud strijdrapporten van aanvallen van andere spelers',
 						'Keep battle reports of my attacks on other players': 'Behoud strijdrapporten van mijn aanvallen met andere spelers',
 						' (kill ': ' (dood ',
@@ -41778,7 +42591,6 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Fire': 'Eld',
 						'First value must be between': 'Första värdet måste ligga mellan',
 						'Flash game Auto refresh every': 'Autorefresh av Flashspel varje',
-						/* 'Foes' : '?????', */
 						'for': 'för',
 						'Force saving current script settings': 'Spara samtliga skript-inställningar',
 						'Forum link': 'Forum länk',
@@ -41814,6 +42626,7 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'Invalid delays': 'Ogiltig fördröjning',
 						'Invalid number of troops': 'Inkorrekt antal av trupper',
 						'Joined': 'Anslöt',
+						'keep':'hålla',
 						'Keep battle reports of attacks from other players': 'Spara stridsrapporter av attacker från andra spelare',
 						'Keep battle reports of my attacks on other players': 'Spara stridsrapporter av mina attacker på andra spelare',
 						' (kill ': ' (Döda ',
@@ -42333,6 +43146,58 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 	}\
 	.' + UID['information'] + ' {\
 		background:url(http://doa.wygopro.com/images/information.png) no-repeat top left;\
+		background-position:center center;\
+		color: white;\
+		padding-right: 10px;\
+		margin: 0 auto;\
+	}\
+	.' + UID['warningblack'] + ' {\
+		background:url(http://doa.wygopro.com/images/warning39_small_black.png) no-repeat top left;\
+		background-position:center center;\
+		color: white;\
+		padding-right: 10px;\
+		margin: 0 auto;\
+	}\
+	.' + UID['number1'] + ' {\
+		background:url(http://doa.wygopro.com/images/number1.png) no-repeat top left;\
+		background-position:center center;\
+		color: white;\
+		padding-right: 16px;\
+		padding-top: 4px;\
+		margin: 0 auto;\
+	}\
+	.' + UID['number2'] + ' {\
+		background:url(http://doa.wygopro.com/images/number2.png) no-repeat top left;\
+		background-position:center center;\
+		color: white;\
+		padding-right: 16px;\
+		padding-top: 4px;\
+		margin: 0 auto;\
+	}\
+	.' + UID['number3'] + ' {\
+		background:url(http://doa.wygopro.com/images/number3.png) no-repeat top left;\
+		background-position:center center;\
+		color: white;\
+		padding-right: 16px;\
+		padding-top: 4px;\
+		margin: 0 auto;\
+	}\
+	.' + UID['warningred'] + ' {\
+		background:url(http://doa.wygopro.com/images/warning39_small_red.png) no-repeat top left;\
+		background-position:center center;\
+		color: white;\
+		padding-right: 10px;\
+		margin: 0 auto;\
+	}\
+	.' + UID['warninggreen'] + ' {\
+		background:url(http://doa.wygopro.com/images/warning39_small_green.png) no-repeat top left;\
+		background-position:center center;\
+		color: white;\
+		padding-right: 10px;\
+		margin: 0 auto;\
+	}\
+	.' + UID['warningorange'] + ' {\
+		background:url(http://doa.wygopro.com/images/warning39_small_orange.png) no-repeat top left;\
 		background-position:center center;\
 		color: white;\
 		padding-right: 10px;\
